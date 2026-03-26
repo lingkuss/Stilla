@@ -1,0 +1,81 @@
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## User-specific
+*.xcuserdatad
+*.xcuserstate
+
+## Swift Package Manager
+.build/
+
+## Playgrounds
+*.app_contexts
+
+## Derived Data
+build/
+DerivedData/
+
+## Unit tests
+*.xccheckout
+*.xctestplan
+
+## Various settings
+*.xcscheme
+!default.xcscheme
+*.macruby
+*.ipa
+*.bundle
+*.framework
+*.dSYM
+
+## CocoaPods
+#
+# It is a common debate whether to commit the Pods directory or not.
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+#
+# Pods/
+# *.xcworkspace
+
+## Carthage
+#
+# It is a common debate whether to commit the Carthage/Build directory or not.
+# https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#build-artifacts
+#
+# Carthage/Build
+
+## AccuRev
+.accurev/
+
+## Fastlane
+#
+# It is a common practice to have the fastlane directory committed to source control.
+# However, you may want to ignore the 'report.xml' and 'screenshots' directory.
+#
+# fastlane/report.xml
+# fastlane/Preview.html
+# fastlane/screenshots
+# fastlane/test_output
+
+## Code Injection
+.xtrace
+
+## AppCode
+.idea/
+
+## GNUstep
+.GNUstep/
+
+## Other
+.DS_Store
+*.swp
+*~
+executable
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+*.pyo
