@@ -1,8 +1,10 @@
 import Foundation
 import SwiftUI
 import UIKit
+import UserNotifications
 
 /// Central state manager for the meditation timer.
+@MainActor
 @Observable
 final class MeditationManager {
     /// Shared instance for Siri intents to access.
@@ -15,6 +17,13 @@ final class MeditationManager {
         case idle
         case meditating
         case complete
+    }
+
+    enum BreathingCueMode: String, CaseIterable {
+        case off = "Off"
+        case haptic = "Haptic"
+        case sound = "Sound"
+        case both = "Both"
     }
 
     private(set) var state: TimerState = .idle
@@ -91,6 +100,102 @@ final class MeditationManager {
         }
     }
 
+    var breathingCueMode: BreathingCueMode {
+        get {
+            access(keyPath: \.breathingCueMode)
+            let raw = UserDefaults.standard.string(forKey: "breathingCueMode") ?? BreathingCueMode.off.rawValue
+            return BreathingCueMode(rawValue: raw) ?? .off
+        }
+        set {
+            withMutation(keyPath: \.breathingCueMode) {
+                UserDefaults.standard.set(newValue.rawValue, forKey: "breathingCueMode")
+            }
+        }
+    }
+
+    var dailyReminderEnabled: Bool {
+        get {
+            access(keyPath: \.dailyReminderEnabled)
+            return UserDefaults.standard.bool(forKey: "dailyReminderEnabled")
+        }
+        set {
+            withMutation(keyPath: \.dailyReminderEnabled) {
+                UserDefaults.standard.set(newValue, forKey: "dailyReminderEnabled")
+            }
+        }
+    }
+
+    var dailyReminderTime: Date {
+        get {
+            access(keyPath: \.dailyReminderTime)
+            let raw = UserDefaults.standard.double(forKey: "dailyReminderTime")
+            if raw == 0 {
+                // Default to 8:00 AM
+                var components = DateComponents()
+                components.hour = 8
+                components.minute = 0
+                return Calendar.current.date(from: components) ?? Date()
+            }
+            return Date(timeIntervalSince1970: raw)
+        }
+        set {
+            withMutation(keyPath: \.dailyReminderTime) {
+                UserDefaults.standard.set(newValue.timeIntervalSince1970, forKey: "dailyReminderTime")
+            }
+        }
+    }
+
+    var hasSeenOnboarding: Bool {
+        get {
+            access(keyPath: \.hasSeenOnboarding)
+            return UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        }
+        set {
+            withMutation(keyPath: \.hasSeenOnboarding) {
+                UserDefaults.standard.set(newValue, forKey: "hasSeenOnboarding")
+            }
+        }
+    }
+
+    func updateDailyReminder() {
+        if dailyReminderEnabled {
+            NotificationManager.shared.scheduleDailyReminder(at: dailyReminderTime)
+        } else {
+            NotificationManager.shared.cancelAllReminders()
+        }
+    }
+
+    func playBreathingCue(phase: String, duration: Double) {
+        let hasSoundAccess = StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
+
+        switch breathingCueMode {
+        case .off:
+            break
+        case .haptic:
+            if phase == "Inhale" || phase == "Exhale" {
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            }
+        case .sound:
+            guard hasSoundAccess else { return }
+            if phase == "Inhale" {
+                soundEngine.playInhaleBreath(duration: duration)
+            } else if phase == "Exhale" {
+                soundEngine.playExhaleBreath(duration: duration)
+            }
+        case .both:
+            if phase == "Inhale" || phase == "Exhale" {
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            }
+            if hasSoundAccess {
+                if phase == "Inhale" {
+                    soundEngine.playInhaleBreath(duration: duration)
+                } else if phase == "Exhale" {
+                    soundEngine.playExhaleBreath(duration: duration)
+                }
+            }
+        }
+    }
+
     // MARK: - History (persisted)
 
     var meditationHistory: [String: Int] {
@@ -132,6 +237,133 @@ final class MeditationManager {
         let today = todayKey
         history[today] = (history[today] ?? 0) + seconds
         meditationHistory = history
+    }
+
+    var currentStreak: Int {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        var streak = 0
+        var checkDate = calendar.startOfDay(for: Date())
+
+        while true {
+            let key = formatter.string(from: checkDate)
+            if (meditationHistory[key] ?? 0) > 0 {
+                streak += 1
+                guard let prev = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+                checkDate = prev
+            } else {
+                break
+            }
+        }
+        return streak
+    }
+
+    var averageSessionSeconds: Int {
+        let activeDays = meditationHistory.values.filter { $0 > 0 }.count
+        guard activeDays > 0 else { return 0 }
+        return totalSecondsMeditated / activeDays
+    }
+
+    var bestSessionSeconds: Int {
+        meditationHistory.values.max() ?? 0
+    }
+
+    var bestStreakDays: Int {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+
+        let sortedDates = meditationHistory
+            .filter { $0.value > 0 }
+            .keys
+            .compactMap { formatter.date(from: $0) }
+            .sorted()
+
+        guard !sortedDates.isEmpty else { return 0 }
+
+        var best = 1
+        var current = 1
+
+        for i in 1..<sortedDates.count {
+            let diff = calendar.dateComponents([.day], from: sortedDates[i-1], to: sortedDates[i]).day ?? 0
+            if diff == 1 {
+                current += 1
+                best = max(best, current)
+            } else {
+                current = 1
+            }
+        }
+        return best
+    }
+
+    /// Returns (dayLabel, seconds) for the last 7 days, Mon–Sun aligned to current week
+    var weeklyData: [(label: String, seconds: Int)] {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dayLabels = ["M", "T", "W", "T", "F", "S", "S"]
+
+        let today = calendar.startOfDay(for: Date())
+        // weekday: 1=Sun, 2=Mon, ..., 7=Sat
+        let weekday = calendar.component(.weekday, from: today)
+        let mondayOffset = (weekday == 1) ? -6 : -(weekday - 2)
+        guard let monday = calendar.date(byAdding: .day, value: mondayOffset, to: today) else { return [] }
+
+        return (0..<7).map { offset in
+            let date = calendar.date(byAdding: .day, value: offset, to: monday)!
+            let key = formatter.string(from: date)
+            return (label: dayLabels[offset], seconds: meditationHistory[key] ?? 0)
+        }
+    }
+
+    // MARK: - Techniques (persisted)
+
+    var selectedTechnique: BreathingTechnique {
+        get {
+            access(keyPath: \.selectedTechnique)
+            if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
+               let technique = try? JSONDecoder().decode(BreathingTechnique.self, from: data) {
+                return technique
+            }
+            return .defaultTechnique
+        }
+        set {
+            withMutation(keyPath: \.selectedTechnique) {
+                if let data = try? JSONEncoder().encode(newValue) {
+                    UserDefaults.standard.set(data, forKey: "selectedTechnique")
+                }
+            }
+        }
+    }
+
+    var userCustomTechniques: [BreathingTechnique] {
+        get {
+            access(keyPath: \.userCustomTechniques)
+            guard let data = UserDefaults.standard.data(forKey: "userCustomTechniques") else { return [] }
+            let decoded: [BreathingTechnique]? = try? JSONDecoder().decode([BreathingTechnique].self, from: data)
+            return decoded ?? []
+        }
+        set {
+            withMutation(keyPath: \.userCustomTechniques) {
+                if let data = try? JSONEncoder().encode(newValue) {
+                    UserDefaults.standard.set(data, forKey: "userCustomTechniques")
+                }
+            }
+        }
+    }
+
+    func addCustomTechnique(_ technique: BreathingTechnique) {
+        var techniques = userCustomTechniques
+        techniques.append(technique)
+        userCustomTechniques = techniques
+    }
+
+    func removeCustomTechnique(_ id: String) {
+        userCustomTechniques = userCustomTechniques.filter { $0.id != id }
+        if selectedTechnique.id == id {
+            selectedTechnique = .defaultTechnique
+        }
     }
 
     // MARK: - Durations
@@ -317,5 +549,63 @@ final class MeditationManager {
 private extension Int {
     func clamped(to range: ClosedRange<Int>) -> Int {
         return Swift.max(range.lowerBound, Swift.min(self, range.upperBound))
+    }
+}
+
+// MARK: - Notification Manager
+
+@MainActor
+class NotificationManager: ObservableObject {
+    static let shared = NotificationManager()
+    
+    @Published var isAuthorized = false
+    
+    private init() {
+        checkAuthorization()
+    }
+    
+    func checkAuthorization() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                self.isAuthorized = settings.authorizationStatus == .authorized
+            }
+        }
+    }
+    
+    func requestAuthorization() async -> Bool {
+        do {
+            let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
+            self.isAuthorized = granted
+            return granted
+        } catch {
+            print("Notification authorization error: \(error)")
+            return false
+        }
+    }
+    
+    func scheduleDailyReminder(at date: Date) {
+        // Cancel existing
+        cancelAllReminders()
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Time for your breath"
+        content.body = "Take a few minutes for yourself with MeditationTimer."
+        content.sound = .default
+        
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        let request = UNNotificationRequest(identifier: "daily_reminder", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification: \(error)")
+            }
+        }
+    }
+    
+    func cancelAllReminders() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
     }
 }

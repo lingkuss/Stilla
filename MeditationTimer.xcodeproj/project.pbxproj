@@ -17,9 +17,12 @@
 		A10008 /* StopMeditationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10008 /* StopMeditationIntent.swift */; };
 		A10009 /* MeditationShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10009 /* MeditationShortcuts.swift */; };
 		A10010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10010 /* Assets.xcassets */; };
+		A10011 /* BreathingTechnique.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10013 /* BreathingTechnique.swift */; };
+		A10012 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10014 /* StoreKitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		640598A62F76CAF500B0F381 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		B10001 /* MeditationTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationTimerApp.swift; sourceTree = "<group>"; };
 		B10002 /* MeditationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationManager.swift; sourceTree = "<group>"; };
 		B10003 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
@@ -32,6 +35,8 @@
 		B10010 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B10011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B10012 /* MeditationTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeditationTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10013 /* BreathingTechnique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingTechnique.swift; sourceTree = "<group>"; };
+		B10014 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +53,7 @@
 		D10001 = {
 			isa = PBXGroup;
 			children = (
+				640598A62F76CAF500B0F381 /* Products.storekit */,
 				D10002 /* MeditationTimer */,
 				D10005 /* Products */,
 			);
@@ -61,6 +67,8 @@
 				B10003 /* SoundEngine.swift */,
 				D10003 /* Views */,
 				D10004 /* Intents */,
+				D10006 /* Models */,
+				D10007 /* Store */,
 				B10010 /* Assets.xcassets */,
 				B10011 /* Info.plist */,
 			);
@@ -93,6 +101,22 @@
 				B10012 /* MeditationTimer.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D10006 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B10013 /* BreathingTechnique.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D10007 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				B10014 /* StoreKitManager.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +197,8 @@
 				A10007 /* StartMeditationIntent.swift in Sources */,
 				A10008 /* StopMeditationIntent.swift in Sources */,
 				A10009 /* MeditationShortcuts.swift in Sources */,
+				A10011 /* BreathingTechnique.swift in Sources */,
+				A10012 /* StoreKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,66 @@
+{
+  "identifier" : "B2C9A7E1",
+  "non_renewing_subscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "A1B2C3D4",
+      "localizations" : [
+        {
+          "description" : "Unlock the full library of breathing techniques.",
+          "displayName" : "Technique Library",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "technique.library",
+      "referenceName" : "Technique Library",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "E5F6G7H8",
+      "localizations" : [
+        {
+          "description" : "Unlock advanced meditation statistics and charts.",
+          "displayName" : "Advanced Stats",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "advanced.stats",
+      "referenceName" : "Advanced Stats",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "I9J0K1L2",
+      "localizations" : [
+        {
+          "description" : "Unlock the ability to create custom techniques.",
+          "displayName" : "Custom Editor",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "custom.editor",
+      "referenceName" : "Custom Editor",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_type" : "8"
+  },
+  "subscription_groups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

@@ -137,6 +137,71 @@ final class SoundEngine {
         playBuffer(buffer, format: format)
     }
 
+    // MARK: - Breathing Cue Sounds
+
+    /// Play a rising breath-like whoosh for inhale phase
+    func playInhaleBreath(duration: Double) {
+        playBreathSound(duration: duration, isInhale: true)
+    }
+
+    /// Play a falling breath-like whoosh for exhale phase
+    func playExhaleBreath(duration: Double) {
+        playBreathSound(duration: duration, isInhale: false)
+    }
+
+    private func playBreathSound(duration: Double, isInhale: Bool) {
+        let sampleRate: Double = 44100
+        let clampedDuration = max(0.5, duration)
+        let frameCount = Int(sampleRate * clampedDuration)
+
+        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frameCount)) else { return }
+        buffer.frameLength = AVAudioFrameCount(frameCount)
+
+        let data = buffer.floatChannelData![0]
+
+        // Simple low-pass filter state
+        var filtered: Double = 0
+        let volume: Double = 0.08
+
+        for i in 0..<frameCount {
+            let t = Double(i) / sampleRate
+            let progress = t / clampedDuration  // 0.0 -> 1.0
+
+            // White noise source
+            let white = Double.random(in: -1.0...1.0)
+
+            // Envelope: inhale rises then fades, exhale starts strong then fades
+            let envelope: Double
+            if isInhale {
+                // Gentle rise to peak at ~70%, then soft fade
+                envelope = sin(progress * .pi) * pow(progress, 0.3)
+            } else {
+                // Starts strong, gentle fall
+                envelope = sin(progress * .pi) * pow(1.0 - progress, 0.3)
+            }
+
+            // Filter cutoff shifts: inhale goes higher pitch, exhale goes lower
+            let cutoff: Double
+            if isInhale {
+                cutoff = 0.02 + progress * 0.08  // Low to mid
+            } else {
+                cutoff = 0.10 - progress * 0.07  // Mid to low
+            }
+
+            // Simple one-pole low-pass filter
+            filtered = filtered + cutoff * (white - filtered)
+
+            // Fade edges to avoid clicks
+            let fadeIn = min(1.0, t / 0.03)
+            let fadeOut = min(1.0, (clampedDuration - t) / 0.03)
+
+            data[i] = Float(filtered * envelope * volume * fadeIn * fadeOut)
+        }
+
+        playBuffer(buffer, format: format)
+    }
+
     // MARK: - Rain Ambience
 
     private func playRainAmbience() {

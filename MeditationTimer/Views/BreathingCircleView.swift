@@ -1,16 +1,29 @@
 import SwiftUI
 
-/// The breathing circle animation — expands and contracts to guide breathing.
+/// The breathing circle animation — expands and contracts based on the selected technique.
 struct BreathingCircleView: View {
     let isActive: Bool
     let progress: Double
+    let technique: BreathingTechnique
+    var onPhaseChange: ((_ phase: String, _ duration: Double) -> Void)? = nil
 
-    @State private var breatheIn = false
-
-    private let breatheDuration: Double = 4.0
+    @State private var scale: CGFloat = 0.85
+    @State private var status: String = ""
+    @State private var animationTask: Task<Void, Never>?
 
     var body: some View {
         ZStack {
+            // Status Text
+            if isActive {
+                Text(status)
+                    .font(.system(size: 14, weight: .light, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.4))
+                    .textCase(.uppercase)
+                    .tracking(4)
+                    .offset(y: -140)
+                    .transition(.opacity)
+            }
+
             // Outer glow
             Circle()
                 .fill(
@@ -25,7 +38,7 @@ struct BreathingCircleView: View {
                     )
                 )
                 .frame(width: 300, height: 300)
-                .scaleEffect(breatheIn ? 1.1 : 0.85)
+                .scaleEffect(scale)
                 .blur(radius: 30)
 
             // Middle ring
@@ -42,7 +55,7 @@ struct BreathingCircleView: View {
                     lineWidth: 3
                 )
                 .frame(width: 200, height: 200)
-                .scaleEffect(breatheIn ? 1.15 : 0.9)
+                .scaleEffect(scale * 1.1)
                 .opacity(isActive ? 0.8 : 0.3)
 
             // Progress ring
@@ -77,7 +90,7 @@ struct BreathingCircleView: View {
                     )
                 )
                 .frame(width: 180, height: 180)
-                .scaleEffect(breatheIn ? 1.12 : 0.92)
+                .scaleEffect(scale * 1.05)
 
             // Center dot
             Circle()
@@ -86,19 +99,60 @@ struct BreathingCircleView: View {
                 .shadow(color: Color(hue: 0.55, saturation: 0.6, brightness: 1.0).opacity(0.7), radius: 10)
                 .opacity(isActive ? 1.0 : 0.4)
         }
-        .animation(
-            isActive
-                ? .easeInOut(duration: breatheDuration).repeatForever(autoreverses: true)
-                : .easeInOut(duration: 1.0),
-            value: breatheIn
-        )
-        .onAppear {
-            if isActive {
-                breatheIn = true
+        .onChange(of: isActive, initial: true) { _, active in
+            if active {
+                startAnimation()
+            } else {
+                stopAnimation()
             }
         }
-        .onChange(of: isActive) { _, active in
-            breatheIn = active
+    }
+
+    private func startAnimation() {
+        stopAnimation()
+        animationTask = Task {
+            while !Task.isCancelled {
+                // Inhale
+                status = "Inhale"
+                onPhaseChange?("Inhale", technique.inhale)
+                withAnimation(.easeInOut(duration: technique.inhale)) {
+                    scale = 1.15
+                }
+                try? await Task.sleep(for: .seconds(technique.inhale))
+                if Task.isCancelled { return }
+
+                // Hold
+                if technique.holdIn > 0 {
+                    status = "Hold"
+                    try? await Task.sleep(for: .seconds(technique.holdIn))
+                }
+                if Task.isCancelled { return }
+
+                // Exhale
+                status = "Exhale"
+                onPhaseChange?("Exhale", technique.exhale)
+                withAnimation(.easeInOut(duration: technique.exhale)) {
+                    scale = 0.85
+                }
+                try? await Task.sleep(for: .seconds(technique.exhale))
+                if Task.isCancelled { return }
+
+                // Hold
+                if technique.holdOut > 0 {
+                    status = "Hold"
+                    try? await Task.sleep(for: .seconds(technique.holdOut))
+                }
+            }
+        }
+    }
+
+    private func stopAnimation() {
+        animationTask?.cancel()
+        animationTask = nil
+        withAnimation(.easeInOut(duration: 1.0)) {
+            scale = 0.85
+            status = ""
         }
     }
 }
+
