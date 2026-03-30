@@ -3,6 +3,7 @@ import SwiftUI
 import AVFoundation
 import UIKit
 import UserNotifications
+import Observation
 
 /// Central state manager for the meditation timer.
 @MainActor
@@ -36,210 +37,83 @@ final class MeditationManager {
         durationMinutes == 0
     }
 
-    // MARK: - Settings (persisted)
+    // MARK: - Settings (Stored & Persisted)
 
     var durationMinutes: Int {
-        get {
-            access(keyPath: \.durationMinutes)
-            return UserDefaults.standard.integer(forKey: "durationMinutes").clamped(to: 0...180)
-        }
-        set {
-            withMutation(keyPath: \.durationMinutes) {
-                UserDefaults.standard.set(newValue, forKey: "durationMinutes")
-            }
-        }
+        didSet { UserDefaults.standard.set(durationMinutes, forKey: "durationMinutes") }
     }
 
     var startSound: SoundEngine.Sound {
-        get {
-            access(keyPath: \.startSound)
-            let raw = UserDefaults.standard.string(forKey: "startSound") ?? SoundEngine.Sound.singingBowl.rawValue
-            return SoundEngine.Sound(rawValue: raw) ?? .singingBowl
-        }
-        set {
-            withMutation(keyPath: \.startSound) {
-                UserDefaults.standard.set(newValue.rawValue, forKey: "startSound")
-            }
-        }
+        didSet { UserDefaults.standard.set(startSound.rawValue, forKey: "startSound") }
     }
 
     var endSound: SoundEngine.Sound {
-        get {
-            access(keyPath: \.endSound)
-            let raw = UserDefaults.standard.string(forKey: "endSound") ?? SoundEngine.Sound.gentleChime.rawValue
-            return SoundEngine.Sound(rawValue: raw) ?? .gentleChime
-        }
-        set {
-            withMutation(keyPath: \.endSound) {
-                UserDefaults.standard.set(newValue.rawValue, forKey: "endSound")
-            }
-        }
+        didSet { UserDefaults.standard.set(endSound.rawValue, forKey: "endSound") }
     }
 
     var ambientRainEnabled: Bool {
-        get {
-            access(keyPath: \.ambientRainEnabled)
-            return UserDefaults.standard.bool(forKey: "ambientRainEnabled")
-        }
-        set {
-            withMutation(keyPath: \.ambientRainEnabled) {
-                UserDefaults.standard.set(newValue, forKey: "ambientRainEnabled")
-            }
-        }
+        didSet { UserDefaults.standard.set(ambientRainEnabled, forKey: "ambientRainEnabled") }
     }
 
     var hapticEnabled: Bool {
-        get {
-            access(keyPath: \.hapticEnabled)
-            if UserDefaults.standard.object(forKey: "hapticEnabled") == nil { return true }
-            return UserDefaults.standard.bool(forKey: "hapticEnabled")
-        }
-        set {
-            withMutation(keyPath: \.hapticEnabled) {
-                UserDefaults.standard.set(newValue, forKey: "hapticEnabled")
-            }
-        }
+        didSet { UserDefaults.standard.set(hapticEnabled, forKey: "hapticEnabled") }
     }
 
     var breathingCueMode: BreathingCueMode {
-        get {
-            access(keyPath: \.breathingCueMode)
-            let raw = UserDefaults.standard.string(forKey: "breathingCueMode") ?? BreathingCueMode.off.rawValue
-            return BreathingCueMode(rawValue: raw) ?? .off
-        }
-        set {
-            withMutation(keyPath: \.breathingCueMode) {
-                UserDefaults.standard.set(newValue.rawValue, forKey: "breathingCueMode")
-            }
-        }
+        didSet { UserDefaults.standard.set(breathingCueMode.rawValue, forKey: "breathingCueMode") }
     }
 
     var dailyReminderEnabled: Bool {
-        get {
-            access(keyPath: \.dailyReminderEnabled)
-            return UserDefaults.standard.bool(forKey: "dailyReminderEnabled")
-        }
-        set {
-            withMutation(keyPath: \.dailyReminderEnabled) {
-                UserDefaults.standard.set(newValue, forKey: "dailyReminderEnabled")
-            }
+        didSet { 
+            UserDefaults.standard.set(dailyReminderEnabled, forKey: "dailyReminderEnabled")
+            updateDailyReminder()
         }
     }
 
     var dailyReminderTime: Date {
-        get {
-            access(keyPath: \.dailyReminderTime)
-            let raw = UserDefaults.standard.double(forKey: "dailyReminderTime")
-            if raw == 0 {
-                // Default to 8:00 AM
-                var components = DateComponents()
-                components.hour = 8
-                components.minute = 0
-                return Calendar.current.date(from: components) ?? Date()
-            }
-            return Date(timeIntervalSince1970: raw)
-        }
-        set {
-            withMutation(keyPath: \.dailyReminderTime) {
-                UserDefaults.standard.set(newValue.timeIntervalSince1970, forKey: "dailyReminderTime")
-            }
+        didSet { 
+            UserDefaults.standard.set(dailyReminderTime.timeIntervalSince1970, forKey: "dailyReminderTime")
+            updateDailyReminder()
         }
     }
 
     var hasSeenOnboarding: Bool {
-        get {
-            access(keyPath: \.hasSeenOnboarding)
-            return UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
-        }
-        set {
-            withMutation(keyPath: \.hasSeenOnboarding) {
-                UserDefaults.standard.set(newValue, forKey: "hasSeenOnboarding")
-            }
-        }
+        didSet { UserDefaults.standard.set(hasSeenOnboarding, forKey: "hasSeenOnboarding") }
     }
 
     var isGuruEnabled: Bool {
-        get {
-            access(keyPath: \.isGuruEnabled)
-            return UserDefaults.standard.bool(forKey: "isGuruEnabled")
-        }
-        set {
-            withMutation(keyPath: \.isGuruEnabled) {
-                UserDefaults.standard.set(newValue, forKey: "isGuruEnabled")
-            }
-        }
+        didSet { UserDefaults.standard.set(isGuruEnabled, forKey: "isGuruEnabled") }
     }
 
     var kaiVoiceIdentifier: String {
-        get {
-            access(keyPath: \.kaiVoiceIdentifier)
-            if let id = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") {
-                return id
-            }
-            // Auto-select best voice on first use
-            let bestId = GuruManager.shared.findBestAvailableVoice()?.identifier ?? ""
-            UserDefaults.standard.set(bestId, forKey: "kaiVoiceIdentifier")
-            return bestId
-        }
-        set {
-            withMutation(keyPath: \.kaiVoiceIdentifier) {
-                UserDefaults.standard.set(newValue, forKey: "kaiVoiceIdentifier")
-            }
-        }
+        didSet { UserDefaults.standard.set(kaiVoiceIdentifier, forKey: "kaiVoiceIdentifier") }
     }
-
-    func updateDailyReminder() {
-        if dailyReminderEnabled {
-            NotificationManager.shared.scheduleDailyReminder(at: dailyReminderTime)
-        } else {
-            NotificationManager.shared.cancelAllReminders()
-        }
-    }
-
-    func playBreathingCue(phase: String, duration: Double) {
-        let hasSoundAccess = StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
-
-        switch breathingCueMode {
-        case .off:
-            break
-        case .haptic:
-            if phase == "Inhale" || phase == "Exhale" {
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-            }
-        case .sound:
-            guard hasSoundAccess else { return }
-            if phase == "Inhale" {
-                soundEngine.playInhaleBreath(duration: duration)
-            } else if phase == "Exhale" {
-                soundEngine.playExhaleBreath(duration: duration)
-            }
-        case .both:
-            if phase == "Inhale" || phase == "Exhale" {
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-            }
-            if hasSoundAccess {
-                if phase == "Inhale" {
-                    soundEngine.playInhaleBreath(duration: duration)
-                } else if phase == "Exhale" {
-                    soundEngine.playExhaleBreath(duration: duration)
-                }
-            }
-        }
-    }
-
-    // MARK: - History (persisted)
 
     var meditationHistory: [String: Int] {
-        get {
-            access(keyPath: \.meditationHistory)
-            return (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
-        }
-        set {
-            withMutation(keyPath: \.meditationHistory) {
-                UserDefaults.standard.set(newValue, forKey: "meditationHistory")
+        didSet { UserDefaults.standard.set(meditationHistory, forKey: "meditationHistory") }
+    }
+
+    var selectedTechnique: BreathingTechnique {
+        didSet {
+            if let data = try? JSONEncoder().encode(selectedTechnique) {
+                UserDefaults.standard.set(data, forKey: "selectedTechnique")
             }
         }
     }
+
+    var userCustomTechniques: [BreathingTechnique] {
+        didSet {
+            if let data = try? JSONEncoder().encode(userCustomTechniques) {
+                UserDefaults.standard.set(data, forKey: "userCustomTechniques")
+            }
+        }
+    }
+
+    var customDurations: [Int] {
+        didSet { UserDefaults.standard.set(customDurations, forKey: "customDurations") }
+    }
+
+    // MARK: - Computed Properties
 
     var totalSecondsMeditated: Int {
         meditationHistory.values.reduce(0, +)
@@ -328,7 +202,6 @@ final class MeditationManager {
         return best
     }
 
-    /// Returns (dayLabel, seconds) for the last 7 days, Mon–Sun aligned to current week
     var weeklyData: [(label: String, seconds: Int)] {
         let calendar = Calendar.current
         let formatter = DateFormatter()
@@ -336,7 +209,6 @@ final class MeditationManager {
         let dayLabels = ["M", "T", "W", "T", "F", "S", "S"]
 
         let today = calendar.startOfDay(for: Date())
-        // weekday: 1=Sun, 2=Mon, ..., 7=Sat
         let weekday = calendar.component(.weekday, from: today)
         let mondayOffset = (weekday == 1) ? -6 : -(weekday - 2)
         guard let monday = calendar.date(byAdding: .day, value: mondayOffset, to: today) else { return [] }
@@ -348,46 +220,10 @@ final class MeditationManager {
         }
     }
 
-    // MARK: - Techniques (persisted)
-
-    var selectedTechnique: BreathingTechnique {
-        get {
-            access(keyPath: \.selectedTechnique)
-            if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
-               let technique = try? JSONDecoder().decode(BreathingTechnique.self, from: data) {
-                return technique
-            }
-            return .defaultTechnique
-        }
-        set {
-            withMutation(keyPath: \.selectedTechnique) {
-                if let data = try? JSONEncoder().encode(newValue) {
-                    UserDefaults.standard.set(data, forKey: "selectedTechnique")
-                }
-            }
-        }
-    }
-
-    var userCustomTechniques: [BreathingTechnique] {
-        get {
-            access(keyPath: \.userCustomTechniques)
-            guard let data = UserDefaults.standard.data(forKey: "userCustomTechniques") else { return [] }
-            let decoded: [BreathingTechnique]? = try? JSONDecoder().decode([BreathingTechnique].self, from: data)
-            return decoded ?? []
-        }
-        set {
-            withMutation(keyPath: \.userCustomTechniques) {
-                if let data = try? JSONEncoder().encode(newValue) {
-                    UserDefaults.standard.set(data, forKey: "userCustomTechniques")
-                }
-            }
-        }
-    }
+    // MARK: - Techniques
 
     func addCustomTechnique(_ technique: BreathingTechnique) {
-        var techniques = userCustomTechniques
-        techniques.append(technique)
-        userCustomTechniques = techniques
+        userCustomTechniques.append(technique)
     }
 
     func removeCustomTechnique(_ id: String) {
@@ -401,19 +237,6 @@ final class MeditationManager {
 
     static let builtInDurations = [1, 3, 5, 10, 15, 20, 30]
 
-    var customDurations: [Int] {
-        get {
-            access(keyPath: \.customDurations)
-            return (UserDefaults.standard.array(forKey: "customDurations") as? [Int]) ?? []
-        }
-        set {
-            withMutation(keyPath: \.customDurations) {
-                UserDefaults.standard.set(newValue, forKey: "customDurations")
-            }
-        }
-    }
-
-    /// All durations (built-in + custom), sorted and deduplicated.
     var allDurations: [Int] {
         let merged = Set(Self.builtInDurations).union(customDurations)
         return merged.sorted()
@@ -428,7 +251,6 @@ final class MeditationManager {
 
     func removeCustomDuration(_ minutes: Int) {
         customDurations = customDurations.filter { $0 != minutes }
-        // If the deleted duration was the selected one, fall back to 10
         if durationMinutes == minutes {
             durationMinutes = 10
         }
@@ -438,31 +260,93 @@ final class MeditationManager {
         customDurations.contains(minutes)
     }
 
-    // MARK: - Private
-
+    // MARK: - Private state
     private let soundEngine = SoundEngine()
     private var timer: Timer?
 
     init() {
-        // Set default duration if not set
-        if UserDefaults.standard.integer(forKey: "durationMinutes") == 0 {
-            UserDefaults.standard.set(10, forKey: "durationMinutes")
+        // Load duration
+        let duration = UserDefaults.standard.integer(forKey: "durationMinutes")
+        self.durationMinutes = (duration == 0) ? 10 : duration.clamped(to: 0...180)
+        
+        // Load sounds
+        let sSound = UserDefaults.standard.string(forKey: "startSound") ?? SoundEngine.Sound.singingBowl.rawValue
+        self.startSound = SoundEngine.Sound(rawValue: sSound) ?? .singingBowl
+        
+        let eSound = UserDefaults.standard.string(forKey: "endSound") ?? SoundEngine.Sound.gentleChime.rawValue
+        self.endSound = SoundEngine.Sound(rawValue: eSound) ?? .gentleChime
+        
+        // Load other settings
+        self.ambientRainEnabled = UserDefaults.standard.bool(forKey: "ambientRainEnabled")
+        
+        if UserDefaults.standard.object(forKey: "hapticEnabled") == nil {
+            self.hapticEnabled = true
+        } else {
+            self.hapticEnabled = UserDefaults.standard.bool(forKey: "hapticEnabled")
+        }
+        
+        let bcMode = UserDefaults.standard.string(forKey: "breathingCueMode") ?? BreathingCueMode.off.rawValue
+        self.breathingCueMode = BreathingCueMode(rawValue: bcMode) ?? .off
+        
+        self.dailyReminderEnabled = UserDefaults.standard.bool(forKey: "dailyReminderEnabled")
+        
+        let drTime = UserDefaults.standard.double(forKey: "dailyReminderTime")
+        if drTime == 0 {
+            var components = DateComponents()
+            components.hour = 8
+            components.minute = 0
+            self.dailyReminderTime = Calendar.current.date(from: components) ?? Date()
+        } else {
+            self.dailyReminderTime = Date(timeIntervalSince1970: drTime)
+        }
+        
+        self.hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        self.isGuruEnabled = UserDefaults.standard.bool(forKey: "isGuruEnabled")
+        
+        self.kaiVoiceIdentifier = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") ?? ""
+        
+        self.meditationHistory = (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
+        
+        // Load techniques
+        if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
+           let technique = try? JSONDecoder().decode(BreathingTechnique.self, from: data) {
+            self.selectedTechnique = technique
+        } else {
+            self.selectedTechnique = .defaultTechnique
+        }
+        
+        if let data = UserDefaults.standard.data(forKey: "userCustomTechniques"),
+           let decoded = try? JSONDecoder().decode([BreathingTechnique].self, from: data) {
+            self.userCustomTechniques = decoded
+        } else {
+            self.userCustomTechniques = []
+        }
+        
+        self.customDurations = (UserDefaults.standard.array(forKey: "customDurations") as? [Int]) ?? []
+        
+        // One-time auto-select voice if empty
+        if self.kaiVoiceIdentifier.isEmpty {
+            self.kaiVoiceIdentifier = GuruManager.shared.findBestAvailableVoice()?.identifier ?? ""
         }
     }
 
     // MARK: - Public API
 
-    /// Start meditation with the configured duration.
+    func updateDailyReminder() {
+        if dailyReminderEnabled {
+            NotificationManager.shared.scheduleDailyReminder(at: dailyReminderTime)
+        } else {
+            NotificationManager.shared.cancelAllReminders()
+        }
+    }
+
     func start() {
         start(durationMinutes: durationMinutes)
     }
 
-    /// Start meditation with a specific duration in minutes.
     func start(durationMinutes minutes: Int) {
         guard state != .meditating else { return }
-
         self.durationMinutes = minutes
-
         if minutes == 0 {
             totalSeconds = 0
             remainingSeconds = 0
@@ -473,45 +357,34 @@ final class MeditationManager {
             remainingSeconds = totalSeconds
             elapsedSeconds = 0
         }
-
         state = .meditating
-
-        // Play start sound
         soundEngine.playSound(startSound)
-
-        // Start ambient rain after a brief delay
         if ambientRainEnabled {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
                 guard self?.state == .meditating else { return }
                 self?.soundEngine.startAmbientRain()
             }
         }
-
-        // Haptic
         if hapticEnabled {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
-
-        // Guru Guidance
         if isGuruEnabled {
             let script = MeditationScript.sample(for: minutes)
             GuruManager.shared.play(script: script)
         }
-
-        // Timer
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.tick()
+            Task { @MainActor in
+                self?.tick()
+            }
         }
     }
 
-    /// Stop meditation early.
     func stop() {
         guard state == .meditating else { return }
         finish()
     }
 
-    /// Dismiss the completion state and return to idle.
     func reset() {
         state = .idle
         remainingSeconds = 0
@@ -519,8 +392,6 @@ final class MeditationManager {
         soundEngine.stopAll()
         GuruManager.shared.stop()
     }
-
-    // MARK: - Formatted Time
 
     var formattedTime: String {
         if isOpenEnded {
@@ -540,14 +411,40 @@ final class MeditationManager {
         return 1.0 - (Double(remainingSeconds) / Double(totalSeconds))
     }
 
-    // MARK: - Private
+    func playBreathingCue(phase: String, duration: Double) {
+        let hasSoundAccess = StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
+        switch breathingCueMode {
+        case .off: break
+        case .haptic:
+            if phase == "Inhale" || phase == "Exhale" {
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            }
+        case .sound:
+            guard hasSoundAccess else { return }
+            if phase == "Inhale" {
+                soundEngine.playInhaleBreath(duration: duration)
+            } else if phase == "Exhale" {
+                soundEngine.playExhaleBreath(duration: duration)
+            }
+        case .both:
+            if phase == "Inhale" || phase == "Exhale" {
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            }
+            if hasSoundAccess {
+                if phase == "Inhale" {
+                    soundEngine.playInhaleBreath(duration: duration)
+                } else if phase == "Exhale" {
+                    soundEngine.playExhaleBreath(duration: duration)
+                }
+            }
+        }
+    }
 
     private func tick() {
         guard state == .meditating else {
             timer?.invalidate()
             return
         }
-
         if isOpenEnded {
             elapsedSeconds += 1
         } else {
@@ -561,29 +458,18 @@ final class MeditationManager {
     private func finish() {
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
         logMeditationSession(seconds: sessionSeconds)
-
         timer?.invalidate()
         timer = nil
         state = .complete
-        
-        if !isOpenEnded {
-            remainingSeconds = 0
-        }
-
-        // Stop ambient, play end sound, stop guru
+        if !isOpenEnded { remainingSeconds = 0 }
         soundEngine.stopAll()
         soundEngine.playSound(endSound)
         GuruManager.shared.stop()
-
-        // Haptic
         if hapticEnabled {
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
     }
 }
-
-// MARK: - Helpers
 
 private extension Int {
     func clamped(to range: ClosedRange<Int>) -> Int {
@@ -591,18 +477,11 @@ private extension Int {
     }
 }
 
-// MARK: - Notification Manager
-
 @MainActor
 class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
-    
     @Published var isAuthorized = false
-    
-    private init() {
-        checkAuthorization()
-    }
-    
+    private init() { checkAuthorization() }
     func checkAuthorization() {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
@@ -610,7 +489,6 @@ class NotificationManager: ObservableObject {
             }
         }
     }
-    
     func requestAuthorization() async -> Bool {
         do {
             let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
@@ -621,29 +499,22 @@ class NotificationManager: ObservableObject {
             return false
         }
     }
-    
     func scheduleDailyReminder(at date: Date) {
-        // Cancel existing
         cancelAllReminders()
-        
         let content = UNMutableNotificationContent()
         content.title = "Time for your breath"
         content.body = "Take a few minutes for yourself with MeditationTimer."
         content.sound = .default
-        
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute], from: date)
-        
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
         let request = UNNotificationRequest(identifier: "daily_reminder", content: content, trigger: trigger)
-        
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 print("Error scheduling notification: \(error)")
             }
         }
     }
-    
     func cancelAllReminders() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
     }

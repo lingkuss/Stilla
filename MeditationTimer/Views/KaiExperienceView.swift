@@ -8,6 +8,7 @@ struct KaiExperienceView: View {
     @State private var moodText: String = ""
     @State private var selectedDuration: Int = 10
     @State private var isGenerating: Bool = false
+    @State private var kaiPulse: Bool = false
     @State private var showingError: Bool = false
     
     private let speechManager = SpeechManager.shared
@@ -44,6 +45,9 @@ struct KaiExperienceView: View {
                     moodText = newValue
                 }
             }
+            .onAppear {
+                // Initial pulse state
+            }
         }
     }
     
@@ -51,82 +55,101 @@ struct KaiExperienceView: View {
         ScrollView {
             VStack(spacing: 32) {
                 // Intro
-                VStack(spacing: 8) {
-                    Text("How are you feeling, truly?")
-                        .font(.title2.weight(.medium))
-                    Text("Speak or type your mood. Kai will create your session.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                VStack(spacing: 12) {
+                    Text("How are you feeling?")
+                        .font(.system(size: 24, weight: .light, design: .serif))
+                        .italic()
+                    Text("Speak or type your mood. Kai will curate your path.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.white.opacity(0.4))
                 }
                 .multilineTextAlignment(.center)
                 .padding(.top, 40)
                 
                 // Voice / Text Input Box
-                VStack(spacing: 16) {
+                VStack(spacing: 24) {
                     ZStack(alignment: .topTrailing) {
                         TextField("e.g. Anxious about tomorrow's presentation...", text: $moodText, axis: .vertical)
                             .lineLimit(4...8)
-                            .padding(20)
-                            .background(
-                                RoundedRectangle(cornerRadius: 24)
-                                    .fill(Color.white.opacity(0.05))
+                            .padding(24)
+                            .background {
+                                RoundedRectangle(cornerRadius: 32)
+                                    .fill(Color.white.opacity(0.03))
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 24)
-                                            .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
+                                        RoundedRectangle(cornerRadius: 32)
+                                            .strokeBorder(Color.white.opacity(0.05), lineWidth: 1)
                                     )
-                            )
+                            }
                         
                         if !moodText.isEmpty {
                             Button { moodText = "" } label: {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.secondary)
-                                    .padding(12)
+                                    .foregroundStyle(.white.opacity(0.2))
+                                    .padding(16)
                             }
                         }
                     }
                     
-                    // Voice Button
-                    Button {
+                    // Voice Button & Aura
+                    ZStack {
+                        // Breathing Aura (Visible when recording)
                         if speechManager.isRecording {
-                            speechManager.stopRecording()
-                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        } else {
-                            do {
-                                speechManager.requestPermissions()
-                                try speechManager.startRecording()
+                            Circle()
+                                .fill(Color.blue.opacity(0.15))
+                                .frame(width: 120, height: 120)
+                                .scaleEffect(kaiPulse ? 1.4 : 0.8)
+                                .opacity(kaiPulse ? 0.0 : 0.4)
+                            
+                            Circle()
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(width: 100, height: 100)
+                                .scaleEffect(kaiPulse ? 1.2 : 0.9)
+                        }
+                        
+                        Button {
+                            if speechManager.isRecording {
+                                speechManager.stopRecording()
                                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            } catch {
-                                showingError = true
+                            } else {
+                                do {
+                                    speechManager.requestPermissions()
+                                    try speechManager.startRecording()
+                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                    withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                                        kaiPulse = true
+                                    }
+                                } catch {
+                                    showingError = true
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(speechManager.isRecording ? Color.red.opacity(0.2) : Color.white.opacity(0.1))
+                                    .frame(width: 72, height: 72)
+                                    .overlay(Circle().strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
+                                
+                                Image(systemName: speechManager.isRecording ? "stop.fill" : "mic.fill")
+                                    .font(.system(size: 24, weight: .light))
+                                    .foregroundStyle(.white)
                             }
                         }
-                    } label: {
-                        HStack {
-                            Image(systemName: speechManager.isRecording ? "stop.fill" : "mic.fill")
-                                .font(.system(size: 18, weight: .semibold))
-                            Text(speechManager.isRecording ? "Listening..." : "Speak Mood")
-                                .font(.subheadline.weight(.medium))
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .background(
-                            Capsule()
-                                .fill(speechManager.isRecording ? Color.red.opacity(0.3) : Color.blue.opacity(0.3))
-                        )
-                        .overlay(
-                            Capsule()
-                                .strokeBorder(speechManager.isRecording ? Color.red.opacity(0.5) : Color.blue.opacity(0.5), lineWidth: 1)
-                        )
-                        .scaleEffect(speechManager.isRecording ? 1.05 : 1.0)
-                        .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: speechManager.isRecording)
+                        .buttonStyle(.plain)
                     }
+                    .padding(.top, 10)
+                    
+                    Text(speechManager.isRecording ? "Listening to your heart..." : "Tap to Speak")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.4))
                 }
                 .padding(.horizontal, 24)
                 
                 // Presets
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Or choose a preset")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("INTENTIONS")
+                        .font(.system(size: 10, weight: .bold))
+                        .kerning(1)
+                        .foregroundStyle(.white.opacity(0.4))
                         .padding(.horizontal, 24)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -137,12 +160,15 @@ struct KaiExperienceView: View {
                                     UISelectionFeedbackGenerator().selectionChanged()
                                 } label: {
                                     Text(preset)
-                                        .font(.subheadline)
+                                        .font(.system(size: 13, weight: .medium))
                                         .padding(.horizontal, 16)
-                                        .padding(.vertical, 8)
-                                        .background(Capsule().strokeBorder(Color.white.opacity(moodText == preset ? 0.4 : 0.1), lineWidth: 1))
-                                        .background(Capsule().fill(Color.white.opacity(moodText == preset ? 0.1 : 0.05)))
-                                        .foregroundStyle(moodText == preset ? .white : .white.opacity(0.5))
+                                        .padding(.vertical, 10)
+                                        .background {
+                                            Capsule()
+                                                .fill(moodText == preset ? Color.white.opacity(0.2) : Color.white.opacity(0.05))
+                                                .overlay(Capsule().strokeBorder(Color.white.opacity(moodText == preset ? 0.3 : 0.05), lineWidth: 1))
+                                        }
+                                        .foregroundStyle(moodText == preset ? .white : .white.opacity(0.6))
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -152,10 +178,11 @@ struct KaiExperienceView: View {
                 }
                 
                 // Duration
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Duration")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("DURATION")
+                        .font(.system(size: 10, weight: .bold))
+                        .kerning(1)
+                        .foregroundStyle(.white.opacity(0.4))
                         .padding(.horizontal, 24)
                     
                     HStack(spacing: 12) {
@@ -165,18 +192,15 @@ struct KaiExperienceView: View {
                                 UISelectionFeedbackGenerator().selectionChanged()
                             } label: {
                                 Text("\(mins)m")
-                                    .font(.subheadline.weight(.bold))
+                                    .font(.system(size: 14, weight: .medium))
                                     .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(
+                                    .padding(.vertical, 14)
+                                    .background {
                                         RoundedRectangle(cornerRadius: 16)
                                             .fill(selectedDuration == mins ? Color.white.opacity(0.15) : Color.white.opacity(0.05))
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .strokeBorder(Color.white.opacity(selectedDuration == mins ? 0.3 : 0.1), lineWidth: 1)
-                                    )
-                                    .foregroundStyle(selectedDuration == mins ? .white : .white.opacity(0.5))
+                                            .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Color.white.opacity(selectedDuration == mins ? 0.2 : 0.05), lineWidth: 1))
+                                    }
+                                    .foregroundStyle(selectedDuration == mins ? .white : .white.opacity(0.4))
                             }
                             .buttonStyle(.plain)
                         }
@@ -189,44 +213,49 @@ struct KaiExperienceView: View {
                     generateMeditation()
                 } label: {
                     Text("Create Meditation")
-                        .font(.headline)
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
+                        .padding(.vertical, 20)
                         .background(Capsule().fill(.white))
                         .padding(.horizontal, 24)
+                        .shadow(color: .white.opacity(0.1), radius: 20, x: 0, y: 10)
                 }
                 .disabled(moodText.isEmpty)
-                .opacity(moodText.isEmpty ? 0.5 : 1.0)
+                .opacity(moodText.isEmpty ? 0.3 : 1.0)
                 .padding(.top, 20)
-                .padding(.bottom, 40)
+                .padding(.bottom, 60)
             }
         }
     }
     
     private var generatingView: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 48) {
             Spacer()
             
-            // Breathing Circle
+            // Spirit Animation
             ZStack {
-                Circle()
-                    .stroke(Color.white.opacity(0.1), lineWidth: 2)
-                    .frame(width: 120, height: 120)
+                ForEach(0..<3) { i in
+                    Circle()
+                        .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .frame(width: 100, height: 100)
+                        .blur(radius: 40)
+                        .offset(x: isGenerating ? CGFloat.random(in: -30...30) : 0, y: isGenerating ? CGFloat.random(in: -30...30) : 0)
+                        .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true).delay(Double(i) * 0.5), value: isGenerating)
+                }
                 
                 Circle()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(width: 80, height: 80)
-                    .scaleEffect(isGenerating ? 1.5 : 1.0)
-                    .animation(.easeInOut(duration: 4).repeatForever(autoreverses: true), value: isGenerating)
+                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .frame(width: 140, height: 140)
             }
             
-            VStack(spacing: 12) {
-                Text("Kai is crafting your path...")
-                    .font(.title3.weight(.medium))
-                Text("Aligning your mood with your breath.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            VStack(spacing: 16) {
+                Text("Kai is crafting your path")
+                    .font(.system(size: 20, weight: .light, design: .serif))
+                    .italic()
+                Text("Aligning your heart with your breath.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.4))
             }
             .multilineTextAlignment(.center)
             

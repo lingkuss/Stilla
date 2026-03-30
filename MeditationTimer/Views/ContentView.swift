@@ -9,6 +9,9 @@ struct ContentView: View {
     @State private var showKaiExperience = false
     @State private var showAddDuration = false
     @State private var customDurationText = ""
+    @State private var kaiShimmer = false
+    @State private var kaiPulse = false
+    @State private var currentPhase = ""
 
     var body: some View {
         ZStack {
@@ -18,63 +21,109 @@ struct ContentView: View {
 
             VStack(spacing: 0) {
                 // Header
-                HStack {
+                HStack(spacing: 0) {
+                    // Left: Stats
                     Button(action: { showStats = true }) {
                         Image(systemName: "chart.bar.fill")
-                            .font(.system(size: 20))
+                            .font(.system(size: 18))
                             .foregroundStyle(.white.opacity(0.6))
+                            .frame(width: 44, height: 44)
                     }
-                    
+
                     Spacer()
-                    
-                    Text("STILL")
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
-                        .kerning(4)
-                        .foregroundStyle(.white.opacity(0.8))
-                    
-                    Spacer()
-                    
-                    Button(action: { showSettings = true }) {
-                        Image(systemName: "gearshape.fill")
-                            .font(.system(size: 20))
-                            .foregroundStyle(.white.opacity(0.6))
+
+                    // Right: Technique & Settings
+                    HStack(spacing: 8) {
+                        Button(action: { showTechniques = true }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "wind")
+                                    .font(.system(size: 12))
+                                Text(manager.selectedTechnique.name)
+                                    .font(.system(size: 12, weight: .medium))
+                            }
+                            .foregroundStyle(.white.opacity(0.8))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Capsule().fill(Color.white.opacity(0.1)))
+                        }
+
+                        Button(action: { showSettings = true }) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 18))
+                                .foregroundStyle(.white.opacity(0.6))
+                                .frame(width: 44, height: 44)
+                        }
                     }
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 16)
+                .padding(.horizontal, 12)
+                .padding(.top, 4) // Reduced from 8
+                .layoutPriority(1)
 
                 if manager.state == .idle {
-                    // Kai Experience Promo Card
+                    // Kai Experience Promo Card (Premium Overhaul)
                     Button(action: { 
                         showKaiExperience = true 
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     }) {
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 6) { // Reduced spacing
                             HStack {
-                                Label("Personalize with Kai", systemImage: "quote.bubble.fill")
-                                    .font(.system(size: 12, weight: .bold))
+                                HStack(spacing: 8) {
+                                    Image(systemName: "sparkles")
+                                        .font(.system(size: 10, weight: .bold))
+                                    Text("PERSONALIZED")
+                                        .font(.system(size: 9, weight: .bold))
+                                        .kerning(1)
+                                }
+                                .foregroundStyle(.white.opacity(0.8))
+                                
                                 Spacer()
-                                Image(systemName: "sparkles")
-                                    .font(.system(size: 12))
+                                
+                                Image(systemName: "arrow.up.right")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundStyle(.white.opacity(0.4))
                             }
                             
-                            Text("Tell Kai how you feel. We'll build your session.")
-                                .font(.system(size: 11))
-                                .foregroundStyle(.white.opacity(0.6))
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text("Kai Journey")
+                                    .font(.system(size: 16, weight: .light, design: .serif))
+                                    .italic()
+                                    .foregroundStyle(.white)
+                                
+                                Text("Describe your mood. Kai will curate your path.")
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
                         }
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.white.opacity(0.06))
-                        )
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 14) // Reduced from 20
+                        .background {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(.ultraThinMaterial)
+                                
+                                LinearGradient(
+                                    colors: [.indigo.opacity(0.2), .purple.opacity(0.05), .clear],
+                                    startPoint: kaiShimmer ? .topLeading : .bottomTrailing,
+                                    endPoint: kaiShimmer ? .bottomTrailing : .topLeading
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .animation(.easeInOut(duration: 4).repeatForever(autoreverses: true), value: kaiShimmer)
+                            }
+                        }
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
                                 .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
                         )
+                        .scaleEffect(kaiPulse ? 1.01 : 1.0)
+                        .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: kaiPulse)
                     }
                     .buttonStyle(.plain)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 12)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12) // Reduced from 24
+                    .onAppear {
+                        kaiShimmer = true
+                        kaiPulse = true
+                    }
                     .transition(.move(edge: .top).combined(with: .opacity))
                 }
 
@@ -82,7 +131,7 @@ struct ContentView: View {
 
                 // Status label
                 statusLabel
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 12) // Reduced from 20
 
                 // Breathing circle
                 BreathingCircleView(
@@ -90,6 +139,7 @@ struct ContentView: View {
                     progress: manager.progress,
                     technique: manager.selectedTechnique,
                     onPhaseChange: { phase, duration in
+                        currentPhase = phase
                         manager.playBreathingCue(phase: phase, duration: duration)
                     }
                 )
@@ -99,38 +149,39 @@ struct ContentView: View {
                     .font(.system(size: 64, weight: .ultraLight, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
-                    .padding(.top, 24)
+                    .padding(.top, 12) // Reduced from 24
                     .contentTransition(.numericText())
 
                 if manager.state == .idle {
                     guruControls
-                        .padding(.top, 10)
+                        .padding(.top, 6) // Reduced from 10
                     
                     durationPicker
-                        .padding(.top, 16)
+                        .padding(.top, 10) // Reduced from 16
                 }
 
                 Spacer()
 
-                // Action button
-                actionButton
-                    .padding(.bottom, 20)
-
-                // Siri hint
-                if manager.state == .idle {
-                    Button {
-                        showTechniques = true
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(techniqueTimings)
-                                .font(.system(size: 11, design: .monospaced))
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 8, weight: .bold))
+                // Action button & Siri hint
+                VStack(spacing: 12) {
+                    actionButton
+                    
+                    if manager.state == .idle {
+                        Button {
+                            showTechniques = true
+                        } label: {
+                            HStack(spacing: 6) {
+                                Text(techniqueTimings)
+                                    .font(.system(size: 11, design: .monospaced))
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 8, weight: .bold))
+                            }
+                            .foregroundStyle(.white.opacity(0.35))
                         }
-                        .foregroundStyle(.white.opacity(0.35))
                     }
-                    .padding(.bottom, 20)
                 }
+                .padding(.bottom, 16) // Combined bottom padding
+                .layoutPriority(1)
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
@@ -218,7 +269,7 @@ struct ContentView: View {
     private var statusText: String {
         switch manager.state {
         case .idle: return "READY"
-        case .meditating: return "BREATHE"
+        case .meditating: return currentPhase.isEmpty ? "BREATHE" : currentPhase.uppercased()
         case .complete: return "NAMASTE"
         }
     }

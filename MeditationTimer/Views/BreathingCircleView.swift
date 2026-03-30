@@ -13,17 +13,6 @@ struct BreathingCircleView: View {
 
     var body: some View {
         ZStack {
-            // Status Text
-            if isActive {
-                Text(status)
-                    .font(.system(size: 14, weight: .light, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.4))
-                    .textCase(.uppercase)
-                    .tracking(4)
-                    .offset(y: -140)
-                    .transition(.opacity)
-            }
-
             // Outer glow
             Circle()
                 .fill(
@@ -33,11 +22,11 @@ struct BreathingCircleView: View {
                             Color.clear,
                         ],
                         center: .center,
-                        startRadius: 60,
-                        endRadius: 160
+                        startRadius: 50,
+                        endRadius: 140
                     )
                 )
-                .frame(width: 300, height: 300)
+                .frame(maxWidth: 260, maxHeight: 260)
                 .scaleEffect(scale)
                 .blur(radius: 30)
 
@@ -54,7 +43,7 @@ struct BreathingCircleView: View {
                     ),
                     lineWidth: 3
                 )
-                .frame(width: 200, height: 200)
+                .frame(maxWidth: 180, maxHeight: 180)
                 .scaleEffect(scale * 1.1)
                 .opacity(isActive ? 0.8 : 0.3)
 
@@ -72,7 +61,7 @@ struct BreathingCircleView: View {
                     ),
                     style: StrokeStyle(lineWidth: 4, lineCap: .round)
                 )
-                .frame(width: 200, height: 200)
+                .frame(maxWidth: 180, maxHeight: 180)
                 .rotationEffect(.degrees(-90))
                 .opacity(isActive ? 1 : 0)
 
@@ -86,10 +75,10 @@ struct BreathingCircleView: View {
                         ],
                         center: .center,
                         startRadius: 20,
-                        endRadius: 90
+                        endRadius: 80
                     )
                 )
-                .frame(width: 180, height: 180)
+                .frame(maxWidth: 160, maxHeight: 160)
                 .scaleEffect(scale * 1.05)
 
             // Center dot
