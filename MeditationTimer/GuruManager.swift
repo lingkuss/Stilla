@@ -24,12 +24,48 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         self.isPlaying = true
         speakNextStep()
     }
-    
+
+    func previewVoice(identifier: String) {
+        stop()
+        let utterance = AVSpeechUtterance(string: "Hello, I am Kai. This is my voice. I look forward to our practice together.")
+        utterance.rate = 0.35
+        utterance.pitchMultiplier = 0.9
+        if let voice = AVSpeechSynthesisVoice(identifier: identifier) {
+            utterance.voice = voice
+        }
+        synthesizer.speak(utterance)
+    }
+
     func stop() {
         isPlaying = false
         synthesizer.stopSpeaking(at: .immediate)
         timer?.invalidate()
         timer = nil
+    }
+
+    func findBestAvailableVoice() -> AVSpeechSynthesisVoice? {
+        let allVoices = AVSpeechSynthesisVoice.speechVoices()
+        let enVoices = allVoices.filter { $0.language.contains("en") } // en-US, en-GB, etc.
+        
+        // Priority: Premium > Enhanced > Default
+        if let premium = enVoices.first(where: { $0.quality == .premium }) {
+            return premium
+        }
+        if let enhanced = enVoices.first(where: { $0.quality == .enhanced }) {
+            return enhanced
+        }
+        return enVoices.first // Fallback
+    }
+
+    var availableHighQualityVoices: [AVSpeechSynthesisVoice] {
+        return AVSpeechSynthesisVoice.speechVoices()
+            .filter { $0.language.contains("en") && $0.quality != .default }
+            .sorted { v1, v2 in
+                if v1.quality != v2.quality {
+                    return v1.quality.rawValue > v2.quality.rawValue // Premium first
+                }
+                return v1.name < v2.name
+            }
     }
     
     private func speakNextStep() {
@@ -47,9 +83,12 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         utterance.pitchMultiplier = 0.9 // Grounded and deep
         utterance.volume = 1.0
         
-        // Select a preferred natural voice if available
-        if let voice = AVSpeechSynthesisVoice(language: "en-US") {
+        // Select the chosen voice via MeditationManager
+        let voiceId = MeditationManager.shared.kaiVoiceIdentifier
+        if let voice = AVSpeechSynthesisVoice(identifier: voiceId) {
             utterance.voice = voice
+        } else if let bestVoice = findBestAvailableVoice() {
+            utterance.voice = bestVoice
         }
         
         synthesizer.speak(utterance)

@@ -182,6 +182,24 @@ final class MeditationManager {
         }
     }
 
+    var kaiVoiceIdentifier: String {
+        get {
+            access(keyPath: \.kaiVoiceIdentifier)
+            if let id = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") {
+                return id
+            }
+            // Auto-select best voice on first use
+            let bestId = GuruManager.shared.findBestAvailableVoice()?.identifier ?? ""
+            UserDefaults.standard.set(bestId, forKey: "kaiVoiceIdentifier")
+            return bestId
+        }
+        set {
+            withMutation(keyPath: \.kaiVoiceIdentifier) {
+                UserDefaults.standard.set(newValue, forKey: "kaiVoiceIdentifier")
+            }
+        }
+    }
+
     func updateDailyReminder() {
         if dailyReminderEnabled {
             NotificationManager.shared.scheduleDailyReminder(at: dailyReminderTime)

@@ -21,6 +21,7 @@
 		A10012 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10014 /* StoreKitManager.swift */; };
 		A10015 /* MeditationScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10017 /* MeditationScript.swift */; };
 		A10016 /* GuruManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10018 /* GuruManager.swift */; };
+		A10017 /* VoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10019 /* VoiceSelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		B10014 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		B10017 /* MeditationScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationScript.swift; sourceTree = "<group>"; };
 		B10018 /* GuruManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuruManager.swift; sourceTree = "<group>"; };
+		B10019 /* VoiceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				B10004 /* ContentView.swift */,
 				B10005 /* SettingsView.swift */,
 				B10006 /* BreathingCircleView.swift */,
+				B10019 /* VoiceSelectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				A10012 /* StoreKitManager.swift in Sources */,
 				A10015 /* MeditationScript.swift in Sources */,
 				A10016 /* GuruManager.swift in Sources */,
+				A10017 /* VoiceSelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

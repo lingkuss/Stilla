@@ -305,7 +305,7 @@ struct ContentView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "quote.bubble.fill")
                         .font(.system(size: 14))
-                    Text("GURU")
+                    Text("KAI")
                         .font(.system(size: 12, weight: .bold))
                 }
                 .foregroundStyle(manager.isGuruEnabled ? .white : .white.opacity(0.4))

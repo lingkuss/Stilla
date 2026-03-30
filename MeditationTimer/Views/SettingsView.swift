@@ -108,6 +108,27 @@ struct SettingsView: View {
                     Text("Receive a gentle notification to help you stay consistent.")
                 }
 
+                // Kai's Voice
+                Section {
+                    NavigationLink {
+                        VoiceSelectionView()
+                    } label: {
+                        HStack {
+                            Label("Kai's Voice", systemImage: "quote.bubble.fill")
+                            Spacer()
+                            if let voice = AVSpeechSynthesisVoice(identifier: manager.kaiVoiceIdentifier) {
+                                Text(voice.name)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                } header: {
+                    Label("Voice Guide", systemImage: "person.wave.2.fill")
+                } footer: {
+                    Text("Choose a high-quality natural voice for Kai.")
+                }
+
                 // Siri Tips
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
