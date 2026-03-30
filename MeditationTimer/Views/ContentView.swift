@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var showSettings = false
     @State private var showStats = false
     @State private var showTechniques = false
+    @State private var showKaiExperience = false
     @State private var showAddDuration = false
     @State private var customDurationText = ""
 
@@ -45,24 +46,64 @@ struct ContentView: View {
                                 Capsule()
                                     .fill(Color.white.opacity(0.1))
                                     .overlay(
-                                        Capsule()
-                                            .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
-                                    )
-                            )
-                        }
+                    Button(action: { showStats = true }) {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white.opacity(0.6))
                     }
-
+                    
                     Spacer()
-                    Button {
-                        showSettings = true
-                    } label: {
+                    
+                    Text("STILL")
+                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                        .kerning(4)
+                        .foregroundStyle(.white.opacity(0.8))
+                    
+                    Spacer()
+                    
+                    Button(action: { showSettings = true }) {
                         Image(systemName: "gearshape.fill")
-                            .font(.title3)
+                            .font(.system(size: 20))
                             .foregroundStyle(.white.opacity(0.6))
                     }
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 8)
+                .padding(.top, 16)
+
+                if manager.state == .idle {
+                    // Kai Experience Promo Card
+                    Button(action: { 
+                        showKaiExperience = true 
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    }) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Label("Personalize with Kai", systemImage: "quote.bubble.fill")
+                                    .font(.system(size: 12, weight: .bold))
+                                Spacer()
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 12))
+                            }
+                            
+                            Text("Tell Kai how you feel. We'll build your session.")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white.opacity(0.6))
+                        }
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.white.opacity(0.06))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 12)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
 
                 Spacer()
 
@@ -131,11 +172,12 @@ struct ContentView: View {
             TechniqueLibraryView()
                 .environment(manager)
         }
-        .fullScreenCover(isPresented: Binding(
-            get: { !manager.hasSeenOnboarding },
-            set: { _ in }
-        )) {
+        .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView()
+                .environment(manager)
+        }
+        .sheet(isPresented: $showKaiExperience) {
+            KaiExperienceView()
                 .environment(manager)
         }
         .alert("Custom Duration", isPresented: $showAddDuration) {

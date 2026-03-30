@@ -22,6 +22,9 @@
 		A10015 /* MeditationScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10017 /* MeditationScript.swift */; };
 		A10016 /* GuruManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10018 /* GuruManager.swift */; };
 		A10017 /* VoiceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10019 /* VoiceSelectionView.swift */; };
+		A10018 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10020 /* SpeechManager.swift */; };
+		A10019 /* KaiBrainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10021 /* KaiBrainService.swift */; };
+		A10020 /* KaiExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10022 /* KaiExperienceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +46,9 @@
 		B10017 /* MeditationScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationScript.swift; sourceTree = "<group>"; };
 		B10018 /* GuruManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuruManager.swift; sourceTree = "<group>"; };
 		B10019 /* VoiceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSelectionView.swift; sourceTree = "<group>"; };
+		B10020 /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
+		B10021 /* KaiBrainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaiBrainService.swift; sourceTree = "<group>"; };
+		B10022 /* KaiExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaiExperienceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,7 @@
 				B10010 /* Assets.xcassets */,
 				B10011 /* Info.plist */,
 				B10018 /* GuruManager.swift */,
+				D10008 /* Services */,
 			);
 			path = MeditationTimer;
 			sourceTree = "<group>";
@@ -89,6 +96,7 @@
 				B10005 /* SettingsView.swift */,
 				B10006 /* BreathingCircleView.swift */,
 				B10019 /* VoiceSelectionView.swift */,
+				B10022 /* KaiExperienceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -126,6 +134,15 @@
 				B10014 /* StoreKitManager.swift */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		D10008 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B10020 /* SpeechManager.swift */,
+				B10021 /* KaiBrainService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +228,9 @@
 				A10015 /* MeditationScript.swift in Sources */,
 				A10016 /* GuruManager.swift in Sources */,
 				A10017 /* VoiceSelectionView.swift in Sources */,
+				A10018 /* SpeechManager.swift in Sources */,
+				A10019 /* KaiBrainService.swift in Sources */,
+				A10020 /* KaiExperienceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
