@@ -170,19 +170,6 @@ final class MeditationManager {
         }
     }
 
-    var selectedFocus: MeditationScript.MeditationFocus {
-        get {
-            access(keyPath: \.selectedFocus)
-            let raw = UserDefaults.standard.string(forKey: "selectedFocus") ?? MeditationScript.MeditationFocus.calm.rawValue
-            return MeditationScript.MeditationFocus(rawValue: raw) ?? .calm
-        }
-        set {
-            withMutation(keyPath: \.selectedFocus) {
-                UserDefaults.standard.set(newValue.rawValue, forKey: "selectedFocus")
-            }
-        }
-    }
-
     var kaiVoiceIdentifier: String {
         get {
             access(keyPath: \.kaiVoiceIdentifier)
@@ -507,7 +494,7 @@ final class MeditationManager {
 
         // Guru Guidance
         if isGuruEnabled {
-            let script = MeditationScript.sample(for: minutes, focus: selectedFocus)
+            let script = MeditationScript.sample(for: minutes)
             GuruManager.shared.play(script: script)
         }
 

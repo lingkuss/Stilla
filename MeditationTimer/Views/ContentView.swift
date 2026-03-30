@@ -295,7 +295,7 @@ struct ContentView: View {
 
     private var guruControls: some View {
         HStack(spacing: 16) {
-            // Guru Enable Toggle
+            // Kai Enable Toggle
             Button {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                     manager.isGuruEnabled.toggle()
@@ -323,38 +323,6 @@ struct ContentView: View {
                 )
             }
             .buttonStyle(.plain)
-
-            if manager.isGuruEnabled {
-                // Focus Selection
-                HStack(spacing: 8) {
-                    ForEach(MeditationScript.MeditationFocus.allCases, id: \.self) { focus in
-                        Button {
-                            manager.selectedFocus = focus
-                            UISelectionFeedbackGenerator().selectionChanged()
-                        } label: {
-                            Image(systemName: focus.icon)
-                                .font(.system(size: 14))
-                                .foregroundStyle(manager.selectedFocus == focus ? .white : .white.opacity(0.3))
-                                .frame(width: 36, height: 36)
-                                .background(
-                                    Circle()
-                                        .fill(manager.selectedFocus == focus ? .white.opacity(0.15) : .clear)
-                                )
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal, 8)
-                .background(
-                    Capsule()
-                        .fill(Color.white.opacity(0.05))
-                )
-                .overlay(
-                    Capsule()
-                        .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
-                )
-                .transition(.move(edge: .trailing).combined(with: .opacity))
-            }
         }
         .frame(height: 44)
     }

@@ -9,41 +9,25 @@ struct ScriptStep: Identifiable, Codable {
 struct MeditationScript: Identifiable, Codable {
     let id = UUID()
     let title: String
-    let focus: MeditationFocus
     let durationMinutes: Int
     let steps: [ScriptStep]
-    
-    enum MeditationFocus: String, Codable, CaseIterable {
-        case calm = "Calm"
-        case sleep = "Sleep"
-        case focus = "Focus"
-        
-        var icon: String {
-            switch self {
-            case .calm: return "wind"
-            case .sleep: return "moon.stars"
-            case .focus: return "bolt.shield"
-            }
-        }
-    }
 }
 
 extension MeditationScript {
-    static func sample(for minutes: Int, focus: MeditationFocus) -> MeditationScript {
+    static func sample(for minutes: Int) -> MeditationScript {
         switch minutes {
         case 1:
-            return quickReset(focus: focus)
+            return quickReset()
         case 3...5:
-            return deepCalm(focus: focus)
+            return deepCalm()
         default:
-            return stillnessJourney(focus: focus)
+            return stillnessJourney()
         }
     }
     
-    private static func quickReset(focus: MeditationFocus) -> MeditationScript {
+    private static func quickReset() -> MeditationScript {
         MeditationScript(
             title: "Quick Reset",
-            focus: focus,
             durationMinutes: 1,
             steps: [
                 ScriptStep(text: "Welcome, I am Kai. Close your eyes and settle in for this quick reset.", pauseDuration: 3),
@@ -57,10 +41,9 @@ extension MeditationScript {
         )
     }
     
-    private static func deepCalm(focus: MeditationFocus) -> MeditationScript {
+    private static func deepCalm() -> MeditationScript {
         MeditationScript(
             title: "Deep Calm",
-            focus: focus,
             durationMinutes: 5,
             steps: [
                 ScriptStep(text: "Hello, I am Kai. Let's begin by finding a comfortable position. Allow your shoulders to drop.", pauseDuration: 5),
@@ -74,10 +57,9 @@ extension MeditationScript {
         )
     }
     
-    private static func stillnessJourney(focus: MeditationFocus) -> MeditationScript {
+    private static func stillnessJourney() -> MeditationScript {
         MeditationScript(
             title: "Stillness Journey",
-            focus: focus,
             durationMinutes: 10,
             steps: [
                 ScriptStep(text: "Welcome to this longer journey into stillness. I am Kai, and I will be your guide.", pauseDuration: 8),

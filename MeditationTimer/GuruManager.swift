@@ -28,7 +28,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
     func previewVoice(identifier: String) {
         stop()
         let utterance = AVSpeechUtterance(string: "Hello, I am Kai. This is my voice. I look forward to our practice together.")
-        utterance.rate = 0.35
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9
         if let voice = AVSpeechSynthesisVoice(identifier: identifier) {
             utterance.voice = voice
@@ -92,7 +92,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         let utterance = AVSpeechUtterance(string: step.text)
         
         // Zen voice settings
-        utterance.rate = 0.35 // Slow and calm
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9 // Grounded and deep
         utterance.volume = 1.0
         
