@@ -1,4 +1,5 @@
 import SwiftUI
+import AVFoundation
 
 struct SettingsView: View {
     @Environment(MeditationManager.self) private var manager
