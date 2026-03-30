@@ -252,7 +252,7 @@ struct KaiExperienceView: View {
                 // Update MeditationManager state
                 manager.durationMinutes = selectedDuration
                 manager.isGuruEnabled = true
-                manager.startMeditation()
+                manager.start()
                 
                 dismiss()
             } catch {

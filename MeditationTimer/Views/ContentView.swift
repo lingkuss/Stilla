@@ -17,35 +17,8 @@ struct ContentView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Top bar
+                // Header
                 HStack {
-                    HStack(spacing: 16) {
-                        Button {
-                            showStats = true
-                        } label: {
-                            Image(systemName: "chart.bar.fill")
-                                .font(.title3)
-                                .foregroundStyle(.white.opacity(0.6))
-                        }
-
-                        Button {
-                            showTechniques = true
-                        } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "wind")
-                                    .font(.caption)
-                                Text(manager.selectedTechnique.name)
-                                    .font(.caption.weight(.medium))
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 9, weight: .bold))
-                            }
-                            .foregroundStyle(.white.opacity(0.8))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(
-                                Capsule()
-                                    .fill(Color.white.opacity(0.1))
-                                    .overlay(
                     Button(action: { showStats = true }) {
                         Image(systemName: "chart.bar.fill")
                             .font(.system(size: 20))
@@ -172,7 +145,10 @@ struct ContentView: View {
             TechniqueLibraryView()
                 .environment(manager)
         }
-        .fullScreenCover(isPresented: $showOnboarding) {
+        .fullScreenCover(isPresented: Binding(
+            get: { !manager.hasSeenOnboarding },
+            set: { _ in }
+        )) {
             OnboardingView()
                 .environment(manager)
         }
