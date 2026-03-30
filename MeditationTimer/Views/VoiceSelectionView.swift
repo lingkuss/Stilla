@@ -37,9 +37,14 @@ struct VoiceSelectionView: View {
                             } label: {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text(voice.name)
-                                            .font(.headline)
-                                            .foregroundStyle(.primary)
+                                        HStack(spacing: 6) {
+                                            Image(systemName: voice.gender == .female ? "person.fill.viewfinder" : "person.fill")
+                                                .font(.caption2)
+                                                .foregroundStyle(.secondary)
+                                            Text(voice.name)
+                                                .font(.headline)
+                                                .foregroundStyle(.primary)
+                                        }
                                         Text(voice.language)
                                             .font(.caption)
                                             .foregroundStyle(.secondary)

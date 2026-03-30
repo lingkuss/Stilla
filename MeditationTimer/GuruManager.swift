@@ -47,13 +47,26 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         let allVoices = AVSpeechSynthesisVoice.speechVoices()
         let enVoices = allVoices.filter { $0.language.contains("en") } // en-US, en-GB, etc.
         
-        // Priority: Premium > Enhanced > Default
+        // Priority 1: Premium Female
+        if let premiumFemale = enVoices.first(where: { $0.quality == .premium && $0.gender == .female }) {
+            return premiumFemale
+        }
+        
+        // Priority 2: Enhanced Female (e.g. Samantha Enhanced)
+        if let enhancedFemale = enVoices.first(where: { $0.quality == .enhanced && $0.gender == .female }) {
+            return enhancedFemale
+        }
+        
+        // Priority 3: Any Premium
         if let premium = enVoices.first(where: { $0.quality == .premium }) {
             return premium
         }
+        
+        // Priority 4: Any Enhanced
         if let enhanced = enVoices.first(where: { $0.quality == .enhanced }) {
             return enhanced
         }
+        
         return enVoices.first // Fallback
     }
 
