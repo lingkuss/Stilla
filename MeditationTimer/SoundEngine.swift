@@ -13,7 +13,21 @@ final class SoundEngine {
         case none = "None"
     }
 
-    init() {}
+    init() {
+        configureAudioSession()
+    }
+
+    private func configureAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            // .mixWithOthers allows us to play ambient sounds alongside the Guru's voice.
+            // .duckOthers lowers the volume of other sounds (like our own ambient loops) when the Guru speaks.
+            try session.setCategory(.playback, mode: .default, options: [.mixWithOthers, .duckOthers])
+            try session.setActive(true)
+        } catch {
+            print("Failed to configure audio session: \(error)")
+        }
+    }
 
     // MARK: - Public API
 

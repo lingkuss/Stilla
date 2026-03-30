@@ -89,6 +89,9 @@ struct ContentView: View {
                     .contentTransition(.numericText())
 
                 if manager.state == .idle {
+                    guruControls
+                        .padding(.top, 10)
+                    
                     durationPicker
                         .padding(.top, 16)
                 }
@@ -288,6 +291,72 @@ struct ContentView: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 8)
         }
+    }
+
+    private var guruControls: some View {
+        HStack(spacing: 16) {
+            // Guru Enable Toggle
+            Button {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    manager.isGuruEnabled.toggle()
+                }
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "quote.bubble.fill")
+                        .font(.system(size: 14))
+                    Text("GURU")
+                        .font(.system(size: 12, weight: .bold))
+                }
+                .foregroundStyle(manager.isGuruEnabled ? .white : .white.opacity(0.4))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(
+                    Capsule()
+                        .fill(manager.isGuruEnabled 
+                            ? Color(hue: 0.55, saturation: 0.6, brightness: 0.8).opacity(0.4)
+                            : Color.white.opacity(0.05))
+                )
+                .overlay(
+                    Capsule()
+                        .strokeBorder(Color.white.opacity(manager.isGuruEnabled ? 0.3 : 0.1), lineWidth: 1)
+                )
+            }
+            .buttonStyle(.plain)
+
+            if manager.isGuruEnabled {
+                // Focus Selection
+                HStack(spacing: 8) {
+                    ForEach(MeditationScript.MeditationFocus.allCases, id: \.self) { focus in
+                        Button {
+                            manager.selectedFocus = focus
+                            UISelectionFeedbackGenerator().selectionChanged()
+                        } label: {
+                            Image(systemName: focus.icon)
+                                .font(.system(size: 14))
+                                .foregroundStyle(manager.selectedFocus == focus ? .white : .white.opacity(0.3))
+                                .frame(width: 36, height: 36)
+                                .background(
+                                    Circle()
+                                        .fill(manager.selectedFocus == focus ? .white.opacity(0.15) : .clear)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 8)
+                .background(
+                    Capsule()
+                        .fill(Color.white.opacity(0.05))
+                )
+                .overlay(
+                    Capsule()
+                        .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
+                )
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+            }
+        }
+        .frame(height: 44)
     }
 
     private func durationPill(mins: Int, label: String) -> some View {

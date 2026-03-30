@@ -19,6 +19,8 @@
 		A10010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10010 /* Assets.xcassets */; };
 		A10011 /* BreathingTechnique.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10013 /* BreathingTechnique.swift */; };
 		A10012 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10014 /* StoreKitManager.swift */; };
+		A10015 /* MeditationScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10017 /* MeditationScript.swift */; };
+		A10016 /* GuruManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10018 /* GuruManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		B10012 /* MeditationTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeditationTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10013 /* BreathingTechnique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingTechnique.swift; sourceTree = "<group>"; };
 		B10014 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		B10017 /* MeditationScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationScript.swift; sourceTree = "<group>"; };
+		B10018 /* GuruManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuruManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +75,7 @@
 				D10007 /* Store */,
 				B10010 /* Assets.xcassets */,
 				B10011 /* Info.plist */,
+				B10018 /* GuruManager.swift */,
 			);
 			path = MeditationTimer;
 			sourceTree = "<group>";
@@ -107,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				B10013 /* BreathingTechnique.swift */,
+				B10017 /* MeditationScript.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,6 +205,8 @@
 				A10009 /* MeditationShortcuts.swift in Sources */,
 				A10011 /* BreathingTechnique.swift in Sources */,
 				A10012 /* StoreKitManager.swift in Sources */,
+				A10015 /* MeditationScript.swift in Sources */,
+				A10016 /* GuruManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

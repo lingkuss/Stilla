@@ -157,6 +157,31 @@ final class MeditationManager {
         }
     }
 
+    var isGuruEnabled: Bool {
+        get {
+            access(keyPath: \.isGuruEnabled)
+            return UserDefaults.standard.bool(forKey: "isGuruEnabled")
+        }
+        set {
+            withMutation(keyPath: \.isGuruEnabled) {
+                UserDefaults.standard.set(newValue, forKey: "isGuruEnabled")
+            }
+        }
+    }
+
+    var selectedFocus: MeditationScript.MeditationFocus {
+        get {
+            access(keyPath: \.selectedFocus)
+            let raw = UserDefaults.standard.string(forKey: "selectedFocus") ?? MeditationScript.MeditationFocus.calm.rawValue
+            return MeditationScript.MeditationFocus(rawValue: raw) ?? .calm
+        }
+        set {
+            withMutation(keyPath: \.selectedFocus) {
+                UserDefaults.standard.set(newValue.rawValue, forKey: "selectedFocus")
+            }
+        }
+    }
+
     func updateDailyReminder() {
         if dailyReminderEnabled {
             NotificationManager.shared.scheduleDailyReminder(at: dailyReminderTime)
@@ -461,6 +486,12 @@ final class MeditationManager {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
 
+        // Guru Guidance
+        if isGuruEnabled {
+            let script = MeditationScript.sample(for: minutes, focus: selectedFocus)
+            GuruManager.shared.play(script: script)
+        }
+
         // Timer
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -480,6 +511,7 @@ final class MeditationManager {
         remainingSeconds = 0
         elapsedSeconds = 0
         soundEngine.stopAll()
+        GuruManager.shared.stop()
     }
 
     // MARK: - Formatted Time
@@ -532,9 +564,10 @@ final class MeditationManager {
             remainingSeconds = 0
         }
 
-        // Stop ambient, play end sound
+        // Stop ambient, play end sound, stop guru
         soundEngine.stopAll()
         soundEngine.playSound(endSound)
+        GuruManager.shared.stop()
 
         // Haptic
         if hapticEnabled {
