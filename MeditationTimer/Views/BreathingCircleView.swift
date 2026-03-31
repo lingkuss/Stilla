@@ -113,6 +113,7 @@ struct BreathingCircleView: View {
                 // Hold
                 if technique.holdIn > 0 {
                     status = "Hold"
+                    onPhaseChange?("Hold", technique.holdIn)
                     try? await Task.sleep(for: .seconds(technique.holdIn))
                 }
                 if Task.isCancelled { return }
@@ -129,6 +130,7 @@ struct BreathingCircleView: View {
                 // Hold
                 if technique.holdOut > 0 {
                     status = "Hold"
+                    onPhaseChange?("Hold", technique.holdOut)
                     try? await Task.sleep(for: .seconds(technique.holdOut))
                 }
             }

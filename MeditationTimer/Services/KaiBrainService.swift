@@ -43,7 +43,7 @@ class KaiBrainService {
         """
         
         let body: [String: Any] = [
-            "model": "gpt-4o",
+            "model": "gpt-4o-mini",
             "messages": [
                 ["role": "system", "content": systemPrompt],
                 ["role": "user", "content": "Generate a \(durationMinutes) minute meditation for someone feeling \(mood)."]

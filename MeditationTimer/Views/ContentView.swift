@@ -132,6 +132,7 @@ struct ContentView: View {
 
                 // Status label
                 statusLabel
+                    .padding(.top, 30) // Push down slightly
                     .padding(.bottom, 12) // Reduced from 20
 
                 // Breathing circle
