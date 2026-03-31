@@ -4,6 +4,7 @@ struct ContentView: View {
     @Environment(MeditationManager.self) private var manager
 
     @State private var showSettings = false
+    @State private var showSoundLibrary = false
     @State private var showStats = false
     @State private var showTechniques = false
     @State private var showKaiExperience = false
@@ -46,6 +47,13 @@ struct ContentView: View {
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
                             .background(Capsule().fill(Color.white.opacity(0.1)))
+                        }
+
+                        Button(action: { showSoundLibrary = true }) {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .font(.system(size: 18))
+                                .foregroundStyle(.white.opacity(0.6))
+                                .frame(width: 44, height: 44)
                         }
 
                         Button(action: { showSettings = true }) {
@@ -222,6 +230,21 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
                 .environment(manager)
+        }
+        .fullScreenCover(isPresented: $showSoundLibrary) {
+            NavigationStack {
+                SoundSelectionView(mode: .ambience)
+                    .environment(manager)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") { showSoundLibrary = false }
+                                .fontWeight(.medium)
+                        }
+                    }
+                    .preferredColorScheme(.dark)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.10).ignoresSafeArea())
+            }
         }
         .fullScreenCover(isPresented: $showStats) {
             StatisticsView()

@@ -11,6 +11,22 @@ final class StoreKitManager {
     static let customTechniqueEditorID = "custom.editor"
     static let advancedStatsID = "advanced.stats"
 
+    // Sound Library IDs
+    static let soundBundleID = "premium.sounds.bundle"
+    static let soundZenWoodblockID = "sound.zenwoodblock"
+    static let soundBambooChimeID = "sound.bamboochime"
+    static let soundTempleBellID = "sound.templebell"
+    static let ambientBinauralDeltaID = "ambient.binaural.delta"
+    static let ambientBinauralAlphaID = "ambient.binaural.alpha"
+    static let ambientBinauralBetaID = "ambient.binaural.beta"
+    
+    // New Ambient IDs
+    static let ambientNoiseWhiteID = "ambient.noise.white"
+    static let ambientNoisePinkID = "ambient.noise.pink"
+    static let ambientNoiseBrownID = "ambient.noise.brown"
+    static let ambientSolfeggioNatureID = "ambient.solfeggio.nature"
+    static let ambientSolfeggioLoveID = "ambient.solfeggio.love"
+
     private(set) var purchasedProductIDs: Set<String> = []
     private(set) var products: [Product] = []
 
@@ -29,6 +45,18 @@ final class StoreKitManager {
     }
 
     func isPurchased(_ productID: String) -> Bool {
+        // If they own the bundle, they own all sounds automatically
+        if purchasedProductIDs.contains(Self.soundBundleID) {
+            let soundIDs: Set<String> = [
+                Self.soundZenWoodblockID, Self.soundBambooChimeID, Self.soundTempleBellID,
+                Self.ambientBinauralDeltaID, Self.ambientBinauralAlphaID, Self.ambientBinauralBetaID,
+                Self.ambientNoiseWhiteID, Self.ambientNoisePinkID, Self.ambientNoiseBrownID,
+                Self.ambientSolfeggioNatureID, Self.ambientSolfeggioLoveID
+            ]
+            if soundIDs.contains(productID) {
+                return true
+            }
+        }
         return purchasedProductIDs.contains(productID)
     }
 
@@ -37,7 +65,19 @@ final class StoreKitManager {
             self.products = try await Product.products(for: [
                 Self.techniqueLibraryID,
                 Self.customTechniqueEditorID,
-                Self.advancedStatsID
+                Self.advancedStatsID,
+                Self.soundBundleID,
+                Self.soundZenWoodblockID,
+                Self.soundBambooChimeID,
+                Self.soundTempleBellID,
+                Self.ambientBinauralDeltaID,
+                Self.ambientBinauralAlphaID,
+                Self.ambientBinauralBetaID,
+                Self.ambientNoiseWhiteID,
+                Self.ambientNoisePinkID,
+                Self.ambientNoiseBrownID,
+                Self.ambientSolfeggioNatureID,
+                Self.ambientSolfeggioLoveID
             ])
         } catch {
             print("Failed to load products: \(error)")

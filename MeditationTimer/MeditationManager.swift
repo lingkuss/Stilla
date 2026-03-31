@@ -53,8 +53,27 @@ final class MeditationManager {
         didSet { UserDefaults.standard.set(endSound.rawValue, forKey: "endSound") }
     }
 
-    var ambientRainEnabled: Bool {
-        didSet { UserDefaults.standard.set(ambientRainEnabled, forKey: "ambientRainEnabled") }
+    var ambientSound: SoundEngine.AmbientSound {
+        didSet {
+            UserDefaults.standard.set(ambientSound.rawValue, forKey: "ambientSound")
+            if state == .meditating {
+                soundEngine.startAmbientSound(ambientSound)
+            }
+        }
+    }
+    
+    var ambientVolume: Float {
+        didSet {
+            UserDefaults.standard.set(ambientVolume, forKey: "ambientVolume")
+            soundEngine.ambientVolume = ambientVolume
+        }
+    }
+    
+    var toneVolume: Float {
+        didSet {
+            UserDefaults.standard.set(toneVolume, forKey: "toneVolume")
+            soundEngine.toneVolume = toneVolume
+        }
     }
 
     var hapticEnabled: Bool {
@@ -294,7 +313,7 @@ final class MeditationManager {
     }
 
     // MARK: - Private state
-    private let soundEngine = SoundEngine()
+    let soundEngine = SoundEngine()
     private var timer: Timer?
 
     init() {
@@ -310,7 +329,20 @@ final class MeditationManager {
         self.endSound = SoundEngine.Sound(rawValue: eSound) ?? .gentleChime
         
         // Load other settings
-        self.ambientRainEnabled = UserDefaults.standard.bool(forKey: "ambientRainEnabled")
+        let aSound = UserDefaults.standard.string(forKey: "ambientSound") ?? SoundEngine.AmbientSound.none.rawValue
+        self.ambientSound = SoundEngine.AmbientSound(rawValue: aSound) ?? .none
+        
+        if UserDefaults.standard.object(forKey: "ambientVolume") == nil {
+            self.ambientVolume = 0.5
+        } else {
+            self.ambientVolume = UserDefaults.standard.float(forKey: "ambientVolume")
+        }
+        
+        if UserDefaults.standard.object(forKey: "toneVolume") == nil {
+            self.toneVolume = 0.5
+        } else {
+            self.toneVolume = UserDefaults.standard.float(forKey: "toneVolume")
+        }
         
         if UserDefaults.standard.object(forKey: "hapticEnabled") == nil {
             self.hapticEnabled = true
@@ -368,6 +400,10 @@ final class MeditationManager {
         if self.kaiVoiceIdentifier.isEmpty {
             self.kaiVoiceIdentifier = GuruManager.shared.findBestAvailableVoice()?.identifier ?? ""
         }
+        
+        // Pass volume directly to engine setup
+        soundEngine.ambientVolume = self.ambientVolume
+        soundEngine.toneVolume = self.toneVolume
     }
 
     // MARK: - Public API
@@ -400,11 +436,8 @@ final class MeditationManager {
         state = .meditating
         sessionStartDate = Date()
         soundEngine.playSound(startSound)
-        if ambientRainEnabled {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
-                guard self?.state == .meditating else { return }
-                self?.soundEngine.startAmbientRain()
-            }
+        if ambientSound != .none {
+            soundEngine.startAmbientSound(ambientSound)
         }
         if hapticEnabled {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()

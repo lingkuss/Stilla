@@ -12,21 +12,94 @@ struct SettingsView: View {
             List {
                 // Sounds
                 Section {
-                    soundPicker(title: "Start Sound", selection: $manager.startSound)
-                    soundPicker(title: "End Sound", selection: $manager.endSound)
+                    NavigationLink {
+                        SoundSelectionView(mode: .start)
+                    } label: {
+                        HStack {
+                            Text("Start Sound")
+                            Spacer()
+                            Text(manager.startSound.rawValue)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    
+                    NavigationLink {
+                        SoundSelectionView(mode: .end)
+                    } label: {
+                        HStack {
+                            Text("End Sound")
+                            Spacer()
+                            Text(manager.endSound.rawValue)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 } header: {
                     Label("Chimes", systemImage: "bell.fill")
                 }
 
                 // Ambient
                 Section {
-                    Toggle(isOn: $manager.ambientRainEnabled) {
-                        Label("Rain Ambience", systemImage: "cloud.rain.fill")
+                    NavigationLink {
+                        SoundSelectionView(mode: .ambience)
+                    } label: {
+                        HStack {
+                            Text("Ambience")
+                            Spacer()
+                            Text(manager.ambientSound.rawValue)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 } header: {
                     Label("During Meditation", systemImage: "waveform")
                 } footer: {
-                    Text("Plays gentle rain sounds during your session")
+                    Text("Plays gentle rain or binaural beats during your session")
+                }
+
+                // Volume Mix
+                Section {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Chimes & Cues")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        HStack(spacing: 12) {
+                            Image(systemName: "speaker.wave.1")
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+                            
+                            Slider(value: Bindable(manager).toneVolume, in: 0...1) { editing in
+                                if !editing { manager.soundEngine.playSound(manager.startSound) }
+                            }
+                            
+                            Image(systemName: "speaker.wave.3")
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Ambience")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        HStack(spacing: 12) {
+                            Image(systemName: "speaker.wave.1")
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+                            
+                            Slider(value: Bindable(manager).ambientVolume, in: 0...1) { editing in
+                                if !editing { manager.soundEngine.startAmbientSound(manager.ambientSound) }
+                            }
+                            
+                            Image(systemName: "speaker.wave.3")
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                } header: {
+                    Label("Volume Mix", systemImage: "slider.horizontal.3")
+                } footer: {
+                    Text("Balance the levels of your meditation tones against your continuous ambient sounds.")
                 }
 
                 // Haptics
@@ -162,15 +235,7 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Sound Picker
-
-    private func soundPicker(title: String, selection: Binding<SoundEngine.Sound>) -> some View {
-        Picker(title, selection: selection) {
-            ForEach(SoundEngine.Sound.allCases, id: \.self) { sound in
-                Text(sound.rawValue).tag(sound)
-            }
-        }
-    }
+    // MARK: - Legacy Sound Picker Removed
 
     // MARK: - Voice Command Row
 
@@ -183,5 +248,304 @@ struct SettingsView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+}
+import SwiftUI
+import StoreKit
+
+enum SoundSelectionMode {
+    case start
+    case end
+    case ambience
+}
+
+struct SoundSelectionView: View {
+    let mode: SoundSelectionMode
+    
+    @Environment(MeditationManager.self) private var manager
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var storeManager = StoreKitManager.shared
+    @State private var previewTimer: Timer?
+    @State private var showingPurchaseSheet = false
+    @State private var selectedLockedSoundID: String? = nil
+    @State private var selectedLockedSoundName: String = ""
+    
+    private let premiumTones: [SoundEngine.Sound: String] = [
+        .zenWoodblock: StoreKitManager.soundZenWoodblockID,
+        .bambooChime: StoreKitManager.soundBambooChimeID,
+        .templeBell: StoreKitManager.soundTempleBellID
+    ]
+    
+    private let premiumAmbiences: [SoundEngine.AmbientSound: String] = [
+        .delta: StoreKitManager.ambientBinauralDeltaID,
+        .alpha: StoreKitManager.ambientBinauralAlphaID,
+        .beta: StoreKitManager.ambientBinauralBetaID,
+        .whiteNoise: StoreKitManager.ambientNoiseWhiteID,
+        .pinkNoise: StoreKitManager.ambientNoisePinkID,
+        .brownNoise: StoreKitManager.ambientNoiseBrownID,
+        .solfeggioLove: StoreKitManager.ambientSolfeggioLoveID,
+        .solfeggioNature: StoreKitManager.ambientSolfeggioNatureID
+    ]
+    
+    private let ambientDescriptions: [SoundEngine.AmbientSound: String] = [
+        .delta: "Promotes deep sleep and physical healing.",
+        .alpha: "Encourages relaxed focus and creative problem-solving.",
+        .beta: "Enhances concentration and active thinking.",
+        .rain: "Plays gentle rain sounds during your session.",
+        .whiteNoise: "Bright static that masks distracting background sounds.",
+        .pinkNoise: "Balanced static, like a soothing distant waterfall.",
+        .brownNoise: "Deep, warm static, like a distant rolling ocean.",
+        .solfeggioLove: "528 Hz - The 'Miracle' tone, promotes repair and harmony.",
+        .solfeggioNature: "432 Hz - Mathematical tuning aligned with nature."
+    ]
+    
+    var body: some View {
+        List {
+            if mode == .start || mode == .end {
+                Section {
+                    ForEach(SoundEngine.Sound.allCases, id: \.self) { sound in
+                        toneRow(sound)
+                    }
+                } footer: {
+                    Text("These gentle tones mark the beginning and end of your meditation.")
+                }
+            } else {
+                Section("Nature & Noise") {
+                    ambientRow(.none)
+                    ambientRow(.rain)
+                    ambientRow(.brownNoise)
+                    ambientRow(.pinkNoise)
+                    ambientRow(.whiteNoise)
+                }
+
+                Section {
+                    ambientRow(.delta)
+                    ambientRow(.alpha)
+                    ambientRow(.beta)
+                } header: {
+                    Text("Binaural Beats")
+                } footer: {
+                    Text("Binaural beats use two slightly different frequencies to guide your brainwaves into specific mental states.")
+                }
+
+                Section("Solfeggio Frequencies") {
+                    ambientRow(.solfeggioNature)
+                    ambientRow(.solfeggioLove)
+                }
+            }
+        }
+        .navigationTitle(titleForMode())
+        .navigationBarTitleDisplayMode(.inline)
+        .onDisappear {
+            stopPreview()
+        }
+        .sheet(isPresented: $showingPurchaseSheet) {
+            premiumPurchaseModal
+        }
+    }
+    
+    private func titleForMode() -> String {
+        switch mode {
+        case .start: return "Start Sound"
+        case .end: return "End Sound"
+        case .ambience: return "Ambience"
+        }
+    }
+    
+    // MARK: - Row Views
+    
+    private func toneRow(_ sound: SoundEngine.Sound) -> some View {
+        let isSelected = (mode == .start && manager.startSound == sound) || (mode == .end && manager.endSound == sound)
+        let productID = premiumTones[sound]
+        let isPremium = productID != nil
+        let isLocked = isPremium && !storeManager.isPurchased(productID!)
+        
+        return Button {
+            handleToneTap(sound, isLocked: isLocked, productID: productID)
+        } label: {
+            HStack {
+                Text(sound.rawValue)
+                    .foregroundStyle(isSelected ? .blue : .primary)
+                Spacer()
+                if isLocked {
+                    Image(systemName: "lock.fill")
+                        .foregroundStyle(.secondary)
+                } else if isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.blue)
+                }
+            }
+        }
+    }
+    
+    private func ambientRow(_ ambient: SoundEngine.AmbientSound) -> some View {
+        let isSelected = manager.ambientSound == ambient
+        let productID = premiumAmbiences[ambient]
+        let isPremium = productID != nil
+        let isLocked = isPremium && !storeManager.isPurchased(productID!)
+        
+        return Button {
+            handleAmbientTap(ambient, isLocked: isLocked, productID: productID)
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(ambient.rawValue)
+                        .foregroundStyle(isSelected ? .blue : .primary)
+                    if let desc = ambientDescriptions[ambient], ambient != .none {
+                        Text(desc)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                Spacer()
+                if isLocked {
+                    Image(systemName: "lock.fill")
+                        .foregroundStyle(.secondary)
+                } else if isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.blue)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Event Handlers
+    
+    private func handleToneTap(_ sound: SoundEngine.Sound, isLocked: Bool, productID: String?) {
+        // Always preview
+        startPreviewTimer()
+        manager.soundEngine.playSound(sound)
+        
+        if isLocked {
+            selectedLockedSoundID = productID
+            selectedLockedSoundName = sound.rawValue
+            showingPurchaseSheet = true
+        } else {
+            if mode == .start {
+                manager.startSound = sound
+            } else {
+                manager.endSound = sound
+            }
+            UISelectionFeedbackGenerator().selectionChanged()
+        }
+    }
+    
+    private func handleAmbientTap(_ ambient: SoundEngine.AmbientSound, isLocked: Bool, productID: String?) {
+        // Always preview
+        startPreviewTimer()
+        manager.soundEngine.startAmbientSound(ambient)
+        
+        if isLocked {
+            selectedLockedSoundID = productID
+            selectedLockedSoundName = ambient.rawValue
+            showingPurchaseSheet = true
+        } else {
+            manager.ambientSound = ambient
+            UISelectionFeedbackGenerator().selectionChanged()
+        }
+    }
+    
+    // MARK: - Playback
+    
+    private func startPreviewTimer() {
+        previewTimer?.invalidate()
+        // Only auto-stop if we are NOT in an active meditation session.
+        // If meditating, let the sound continue as part of the session.
+        if manager.state != .meditating {
+            previewTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                manager.soundEngine.stopAll()
+            }
+        }
+    }
+    
+    private func stopPreview() {
+        previewTimer?.invalidate()
+        // Only stop everything if we aren't in a real meditation session.
+        if manager.state != .meditating {
+            manager.soundEngine.stopAll()
+        }
+    }
+    
+    // MARK: - Purchase Modal
+    
+    private var premiumPurchaseModal: some View {
+        NavigationStack {
+            VStack(spacing: 32) {
+                Spacer()
+                
+                Image(systemName: "waveform.circle.fill")
+                    .font(.system(size: 64))
+                    .foregroundStyle(.blue)
+                
+                VStack(spacing: 8) {
+                    Text("Unlock ")
+                        .font(.title2) +
+                    Text(selectedLockedSoundName)
+                        .font(.title2.bold())
+                    
+                    Text("Premium procedural audio. Pure, rich, and generated instantly.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                
+                VStack(spacing: 16) {
+                    if let id = selectedLockedSoundID {
+                        Button {
+                            Task {
+                                await storeManager.purchase(id)
+                                if storeManager.isPurchased(id) {
+                                    showingPurchaseSheet = false
+                                }
+                            }
+                        } label: {
+                            Text("Unlock Single Sound - $0.99")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.white.opacity(0.1))
+                                .clipShape(Capsule())
+                        }
+                        .foregroundStyle(.white)
+                    }
+                    
+                    Button {
+                        Task {
+                            await storeManager.purchase(StoreKitManager.soundBundleID)
+                            if storeManager.isPurchased(StoreKitManager.soundBundleID) {
+                                showingPurchaseSheet = false
+                            }
+                        }
+                    } label: {
+                        Text("Unlock Premium Library - $4.99")
+                            .font(.headline)
+                            .foregroundStyle(.black)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(Capsule())
+                            .shadow(radius: 10)
+                    }
+                }
+                .padding(.horizontal, 32)
+                
+                Spacer()
+            }
+            .navigationTitle("Premium Audio")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Close") {
+                        showingPurchaseSheet = false
+                        stopPreview()
+                    }
+                }
+            }
+            .preferredColorScheme(.dark)
+            .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.10).ignoresSafeArea())
+        }
+        .presentationDetents([.fraction(0.6)])
     }
 }

@@ -1,66 +1,242 @@
 {
-  "identifier" : "B2C9A7E1",
-  "non_renewing_subscriptions" : [
-
-  ],
-  "products" : [
+  "identifier": "B2C9A7E1",
+  "non_renewing_subscriptions": [],
+  "products": [
     {
-      "displayPrice" : "1.99",
-      "familyShareable" : false,
-      "internalID" : "A1B2C3D4",
-      "localizations" : [
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "A1B2C3D4",
+      "localizations": [
         {
-          "description" : "Unlock the full library of breathing techniques.",
-          "displayName" : "Technique Library",
-          "locale" : "en_US"
+          "description": "Unlock the full library of breathing techniques.",
+          "displayName": "Technique Library",
+          "locale": "en_US"
         }
       ],
-      "productID" : "technique.library",
-      "referenceName" : "Technique Library",
-      "type" : "NonConsumable"
+      "productID": "technique.library",
+      "referenceName": "Technique Library",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "E5F6G7H8",
-      "localizations" : [
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "E5F6G7H8",
+      "localizations": [
         {
-          "description" : "Unlock advanced meditation statistics and charts.",
-          "displayName" : "Advanced Stats",
-          "locale" : "en_US"
+          "description": "Unlock advanced meditation statistics and charts.",
+          "displayName": "Advanced Stats",
+          "locale": "en_US"
         }
       ],
-      "productID" : "advanced.stats",
-      "referenceName" : "Advanced Stats",
-      "type" : "NonConsumable"
+      "productID": "advanced.stats",
+      "referenceName": "Advanced Stats",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "I9J0K1L2",
-      "localizations" : [
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "I9J0K1L2",
+      "localizations": [
         {
-          "description" : "Unlock the ability to create custom techniques.",
-          "displayName" : "Custom Editor",
-          "locale" : "en_US"
+          "description": "Unlock the ability to create custom techniques.",
+          "displayName": "Custom Editor",
+          "locale": "en_US"
         }
       ],
-      "productID" : "custom.editor",
-      "referenceName" : "Custom Editor",
-      "type" : "NonConsumable"
+      "productID": "custom.editor",
+      "referenceName": "Custom Editor",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "PREMIUMSOUNDSBUNDLE",
+      "localizations": [
+        {
+          "description": "Premium Audio Bundle",
+          "displayName": "Premium Audio Bundle",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "premium.sounds.bundle",
+      "referenceName": "Premium Audio Bundle",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "SOUNDCRYSTALBOWL",
+      "localizations": [
+        {
+          "description": "A clean, percussive block strike for a grounded start.",
+          "displayName": "Zen Woodblock",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "sound.zenwoodblock",
+      "referenceName": "Zen Woodblock",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "SOUNDDEEPOM",
+      "localizations": [
+        {
+          "description": "Organic, woody clacks that scatter gently.",
+          "displayName": "Bamboo Chime",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "sound.bamboochime",
+      "referenceName": "Bamboo Chime",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "SOUNDTEMPLEBELL",
+      "localizations": [
+        {
+          "description": "Temple Bell",
+          "displayName": "Temple Bell",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "sound.templebell",
+      "referenceName": "Temple Bell",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTBINAURALDELTA",
+      "localizations": [
+        {
+          "description": "Deep Sleep (Delta)",
+          "displayName": "Deep Sleep (Delta)",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.binaural.delta",
+      "referenceName": "Deep Sleep (Delta)",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTBINAURALALPHA",
+      "localizations": [
+        {
+          "description": "Creativity (Alpha)",
+          "displayName": "Creativity (Alpha)",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.binaural.alpha",
+      "referenceName": "Creativity (Alpha)",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTBINAURALBETA",
+      "localizations": [
+        {
+          "description": "Focus (Beta)",
+          "displayName": "Focus (Beta)",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.binaural.beta",
+      "referenceName": "Focus (Beta)",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTNOISEWHITE",
+      "localizations": [
+        {
+          "description": "White Noise",
+          "displayName": "White Noise",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.noise.white",
+      "referenceName": "White Noise",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTNOISEPINK",
+      "localizations": [
+        {
+          "description": "Pink Noise",
+          "displayName": "Pink Noise",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.noise.pink",
+      "referenceName": "Pink Noise",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTNOISEBROWN",
+      "localizations": [
+        {
+          "description": "Brown Noise",
+          "displayName": "Brown Noise",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.noise.brown",
+      "referenceName": "Brown Noise",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTSOLFEGGIONATURE",
+      "localizations": [
+        {
+          "description": "Nature's Pitch (432 Hz)",
+          "displayName": "Nature's Pitch (432 Hz)",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.solfeggio.nature",
+      "referenceName": "Nature's Pitch (432 Hz)",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "AMBIENTSOLFEGGIOLOVE",
+      "localizations": [
+        {
+          "description": "Love Frequency (528 Hz)",
+          "displayName": "Love Frequency (528 Hz)",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "ambient.solfeggio.love",
+      "referenceName": "Love Frequency (528 Hz)",
+      "type": "NonConsumable"
     }
   ],
-  "settings" : {
-    "_failTransactionsEnabled" : false,
-    "_locale" : "en_US",
-    "_storefront" : "USA",
-    "_type" : "8"
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_type": "8"
   },
-  "subscription_groups" : [
-
-  ],
-  "version" : {
-    "major" : 3,
-    "minor" : 0
+  "subscription_groups": [],
+  "version": {
+    "major": 3,
+    "minor": 0
   }
 }
