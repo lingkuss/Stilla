@@ -11,12 +11,89 @@ class KaiBrainService {
     
     /// Generates a personalized meditation script based on mood and duration.
     func generateScript(mood: String, durationMinutes: Int) async throws -> MeditationScript {
-        // Simulate "Thinking" time for the AI
-        try await Task.sleep(for: .seconds(2))
+        let apiKey = Secrets.openAIKey
         
-        // This is a placeholder for a real LLM API call (OpenAI/Claude).
-        // For now, we use a sophisticated template system to provide an "AI-like" experience.
+        // If no API key is provided in Secrets.swift, fallback to the template system.
+        if apiKey == "YOUR_KEY_HERE" || apiKey.isEmpty {
+            return generateTemplateScript(mood: mood, durationMinutes: durationMinutes)
+        }
         
+        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let systemPrompt = """
+        You are Kai, a Zen meditation guide. Create a personalized meditation script in JSON format.
+        The JSON must follow this structure exactly:
+        {
+          "title": "A short, poetic title",
+          "durationMinutes": \(durationMinutes),
+          "steps": [
+            { "text": "The words to speak", "pauseDuration": 5.0 }
+          ]
+        }
+        Guidelines:
+        - The user is feeling: \(mood).
+        - Total duration: \(durationMinutes) minutes.
+        - Ensure the sum of pauseDurations plus reading time (~150 words per minute) roughly equals the total duration.
+        - Be poetic, compassionate, and grounded.
+        - Respond ONLY with the raw JSON. No markdown, no filler.
+        """
+        
+        let body: [String: Any] = [
+            "model": "gpt-4o",
+            "messages": [
+                ["role": "system", "content": systemPrompt],
+                ["role": "user", "content": "Generate a \(durationMinutes) minute meditation for someone feeling \(mood)."]
+            ],
+            "response_format": ["type": "json_object"],
+            "temperature": 0.7
+        ]
+        
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ KAI ERROR: No HTTP Response")
+            throw BrainError.generationFailed
+        }
+        
+        print("🌐 KAI Status: \(httpResponse.statusCode)")
+        
+        if httpResponse.statusCode != 200 {
+            if let errorString = String(data: data, encoding: .utf8) {
+                print("❌ KAI API Error: \(errorString)")
+            }
+            throw BrainError.generationFailed
+        }
+        
+        do {
+            let json = try JSONDecoder().decode(OpenAIResponse.self, from: data)
+            guard let content = json.choices.first?.message.content else {
+                print("❌ KAI ERROR: No content in OpenAI response")
+                throw BrainError.invalidResponse
+            }
+            
+            print("📝 KAI Raw Script: \(content)")
+            
+            guard let contentData = content.data(using: .utf8) else {
+                throw BrainError.invalidResponse
+            }
+            
+            return try JSONDecoder().decode(MeditationScript.self, from: contentData)
+        } catch let decodingError as DecodingError {
+            print("❌ KAI Decoding Error: \(decodingError)")
+            throw BrainError.invalidResponse
+        } catch {
+            print("❌ KAI Unknown Error: \(error)")
+            throw BrainError.generationFailed
+        }
+    }
+    
+    private func generateTemplateScript(mood: String, durationMinutes: Int) -> MeditationScript {
         let introMood = mood.lowercased()
         let steps: [ScriptStep]
         
@@ -53,9 +130,21 @@ class KaiBrainService {
         }
         
         return MeditationScript(
-            title: "Kai's Personalized Session",
+            title: "Kai's Session: \(mood.capitalized)",
             durationMinutes: durationMinutes,
             steps: steps
         )
     }
+}
+
+// MARK: - OpenAI Internal Models
+
+struct OpenAIResponse: Codable {
+    struct Choice: Codable {
+        struct Message: Codable {
+            let content: String
+        }
+        let message: Message
+    }
+    let choices: [Choice]
 }

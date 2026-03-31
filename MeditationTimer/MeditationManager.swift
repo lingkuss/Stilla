@@ -113,6 +113,32 @@ final class MeditationManager {
         didSet { UserDefaults.standard.set(customDurations, forKey: "customDurations") }
     }
 
+    var savedMeditations: [MeditationScript] {
+        didSet {
+            if let data = try? JSONEncoder().encode(savedMeditations) {
+                UserDefaults.standard.set(data, forKey: "savedMeditations")
+            }
+        }
+    }
+
+    /// The script currently being played (or just finished). 
+    /// Used for the "Save" feature at the end of a session.
+    var currentScript: MeditationScript?
+
+    var isCurrentScriptSaved: Bool {
+        guard let current = currentScript else { return false }
+        return savedMeditations.contains(where: { $0.id == current.id })
+    }
+
+    func saveCurrentScript() {
+        guard let current = currentScript, !isCurrentScriptSaved else { return }
+        savedMeditations.append(current)
+    }
+
+    func removeSavedMeditation(_ id: UUID) {
+        savedMeditations.removeAll(where: { $0.id == id })
+    }
+
     // MARK: - Computed Properties
 
     var totalSecondsMeditated: Int {
@@ -324,6 +350,13 @@ final class MeditationManager {
         
         self.customDurations = (UserDefaults.standard.array(forKey: "customDurations") as? [Int]) ?? []
         
+        if let data = UserDefaults.standard.data(forKey: "savedMeditations"),
+           let decoded = try? JSONDecoder().decode([MeditationScript].self, from: data) {
+            self.savedMeditations = decoded
+        } else {
+            self.savedMeditations = []
+        }
+        
         // One-time auto-select voice if empty
         if self.kaiVoiceIdentifier.isEmpty {
             self.kaiVoiceIdentifier = GuruManager.shared.findBestAvailableVoice()?.identifier ?? ""
@@ -369,7 +402,7 @@ final class MeditationManager {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
         if isGuruEnabled {
-            let script = MeditationScript.sample(for: minutes)
+            let script = currentScript ?? MeditationScript.sample(for: minutes)
             GuruManager.shared.play(script: script)
         }
         timer?.invalidate()

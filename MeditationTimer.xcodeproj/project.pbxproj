@@ -16,6 +16,8 @@
 		A10007 /* StartMeditationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10007 /* StartMeditationIntent.swift */; };
 		A10008 /* StopMeditationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10008 /* StopMeditationIntent.swift */; };
 		A10009 /* MeditationShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10009 /* MeditationShortcuts.swift */; };
+		A1000B /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000B /* Secrets.swift */; };
+		A1000C /* SavedMeditationsLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000C /* SavedMeditationsLibraryView.swift */; };
 		A10010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10010 /* Assets.xcassets */; };
 		A10011 /* BreathingTechnique.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10013 /* BreathingTechnique.swift */; };
 		A10012 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10014 /* StoreKitManager.swift */; };
@@ -49,6 +51,8 @@
 		B10020 /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
 		B10021 /* KaiBrainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaiBrainService.swift; sourceTree = "<group>"; };
 		B10022 /* KaiExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaiExperienceView.swift; sourceTree = "<group>"; };
+		F1000B /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		F1000C /* SavedMeditationsLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedMeditationsLibraryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,7 @@
 				B10010 /* Assets.xcassets */,
 				B10011 /* Info.plist */,
 				B10018 /* GuruManager.swift */,
+				F1000B /* Secrets.swift */,
 				D10008 /* Services */,
 			);
 			path = MeditationTimer;
@@ -97,6 +102,7 @@
 				B10006 /* BreathingCircleView.swift */,
 				B10019 /* VoiceSelectionView.swift */,
 				B10022 /* KaiExperienceView.swift */,
+				F1000C /* SavedMeditationsLibraryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -223,6 +229,8 @@
 				A10007 /* StartMeditationIntent.swift in Sources */,
 				A10008 /* StopMeditationIntent.swift in Sources */,
 				A10009 /* MeditationShortcuts.swift in Sources */,
+				A1000B /* Secrets.swift in Sources */,
+				A1000C /* SavedMeditationsLibraryView.swift in Sources */,
 				A10011 /* BreathingTechnique.swift in Sources */,
 				A10012 /* StoreKitManager.swift in Sources */,
 				A10015 /* MeditationScript.swift in Sources */,

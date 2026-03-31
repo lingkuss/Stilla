@@ -227,6 +227,11 @@ struct KaiExperienceView: View {
                 .padding(.bottom, 60)
             }
         }
+        .alert("Kai is resting", isPresented: $showingError) {
+            Button("I understand") { }
+        } message: {
+            Text("I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment.")
+        }
     }
     
     private var generatingView: some View {
@@ -264,6 +269,7 @@ struct KaiExperienceView: View {
         }
     }
     
+    @MainActor
     private func generateMeditation() {
         isGenerating = true
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
@@ -278,10 +284,13 @@ struct KaiExperienceView: View {
                 // Set the script in GuruManager and start
                 GuruManager.shared.play(script: script)
                 
+                // Track current script for saving later
+                manager.currentScript = script
+                
                 // Update MeditationManager state
                 manager.durationMinutes = selectedDuration
                 manager.isGuruEnabled = true
-                manager.start()
+                manager.start(durationMinutes: selectedDuration)
                 
                 dismiss()
             } catch {

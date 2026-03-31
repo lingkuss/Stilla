@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var kaiShimmer = false
     @State private var kaiPulse = false
     @State private var currentPhase = ""
+    @State private var showSavedMeditations = false
 
     var body: some View {
         ZStack {
@@ -163,7 +164,27 @@ struct ContentView: View {
                 Spacer()
 
                 // Action button & Siri hint
-                VStack(spacing: 12) {
+                VStack(spacing: 16) {
+                    if manager.state == .complete, manager.currentScript != nil, !manager.isCurrentScriptSaved {
+                        Button {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                manager.saveCurrentScript()
+                            }
+                            UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "heart.fill")
+                                Text("Save to Favorites")
+                            }
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.8))
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Capsule().strokeBorder(Color.white.opacity(0.2), lineWidth: 1))
+                        }
+                        .transition(.scale.combined(with: .opacity))
+                    }
+
                     actionButton
                     
                     if manager.state == .idle {
@@ -205,6 +226,10 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showKaiExperience) {
             KaiExperienceView()
+                .environment(manager)
+        }
+        .sheet(isPresented: $showSavedMeditations) {
+            SavedMeditationsLibraryView()
                 .environment(manager)
         }
         .alert("Custom Duration", isPresented: $showAddDuration) {
@@ -390,6 +415,20 @@ struct ContentView: View {
                     Capsule()
                         .strokeBorder(Color.white.opacity(manager.isGuruEnabled ? 0.3 : 0.1), lineWidth: 1)
                 )
+            }
+            .buttonStyle(.plain)
+            
+            // Library Button
+            Button {
+                showSavedMeditations = true
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            } label: {
+                Image(systemName: "books.vertical.fill")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white.opacity(0.4))
+                    .frame(width: 44, height: 44)
+                    .background(Circle().fill(Color.white.opacity(0.05)))
+                    .overlay(Circle().strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
             }
             .buttonStyle(.plain)
         }

@@ -1,16 +1,24 @@
 import Foundation
 
 struct ScriptStep: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let text: String
     let pauseDuration: TimeInterval
+    
+    enum CodingKeys: String, CodingKey {
+        case text, pauseDuration
+    }
 }
 
 struct MeditationScript: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let title: String
     let durationMinutes: Int
     let steps: [ScriptStep]
+    
+    enum CodingKeys: String, CodingKey {
+        case title, durationMinutes, steps
+    }
 }
 
 extension MeditationScript {
