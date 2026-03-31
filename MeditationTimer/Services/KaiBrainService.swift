@@ -36,8 +36,9 @@ class KaiBrainService {
         }
         Guidelines:
         - The user is feeling: \(mood).
-        - Total duration: \(durationMinutes) minutes.
-        - Ensure the sum of pauseDurations plus reading time (~150 words per minute) roughly equals the total duration.
+        - Total duration: \(durationMinutes) minutes (\(durationMinutes * 60) seconds).
+        - The "pauseDuration" field is in SECONDS. You must provide generous pauses between steps.
+        - Ensure the sum of pauseDurations plus reading time (~150 words per minute) roughly equals the total duration of \(durationMinutes * 60) seconds.
         - Be poetic, compassionate, and grounded.
         - Respond ONLY with the raw JSON. No markdown, no filler.
         """
@@ -83,7 +84,8 @@ class KaiBrainService {
                 throw BrainError.invalidResponse
             }
             
-            return try JSONDecoder().decode(MeditationScript.self, from: contentData)
+            let rawScript = try JSONDecoder().decode(MeditationScript.self, from: contentData)
+            return stretchScriptToFit(rawScript)
         } catch let decodingError as DecodingError {
             print("❌ KAI Decoding Error: \(decodingError)")
             throw BrainError.invalidResponse
@@ -134,6 +136,43 @@ class KaiBrainService {
             durationMinutes: durationMinutes,
             steps: steps
         )
+    }
+    
+    /// Guarantees that the generated script actually covers the requested duration.
+    /// LLMs are notoriously bad at summing pauses. This function detects any shortfall in
+    /// total elapsed time and pads the `pauseDuration` of every step evenly.
+    private func stretchScriptToFit(_ script: MeditationScript) -> MeditationScript {
+        let targetSeconds = Double(script.durationMinutes * 60)
+        
+        // Count words to estimate reading time
+        var totalWords = 0
+        var totalPauses: Double = 0
+        for step in script.steps {
+            totalWords += step.text.split(separator: " ").count
+            totalPauses += step.pauseDuration
+        }
+        
+        // Assume roughly 150 words per minute -> 2.5 words per sec limit -> 0.4s per word
+        let estimatedReadingSeconds = Double(totalWords) * 0.4
+        let currentTotalSeconds = estimatedReadingSeconds + totalPauses
+        
+        let shortfall = targetSeconds - currentTotalSeconds
+        if shortfall > 0, !script.steps.isEmpty {
+            let extraPausePerStep = shortfall / Double(script.steps.count)
+            let stretchedSteps = script.steps.map { step -> ScriptStep in
+                ScriptStep(
+                    text: step.text,
+                    pauseDuration: step.pauseDuration + extraPausePerStep
+                )
+            }
+            return MeditationScript(
+                title: script.title,
+                durationMinutes: script.durationMinutes,
+                steps: stretchedSteps
+            )
+        }
+        
+        return script
     }
 }
 
