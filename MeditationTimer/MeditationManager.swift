@@ -4,6 +4,8 @@ import AVFoundation
 import UIKit
 import UserNotifications
 import Observation
+import HealthKit
+import ActivityKit
 
 /// Central state manager for the meditation timer.
 @MainActor
@@ -100,6 +102,9 @@ final class MeditationManager {
             }
         }
     }
+
+    /// The current sentence being spoken by Kai (for in-app display)
+    private(set) var currentKaiPhrase: String = ""
 
     var userCustomTechniques: [BreathingTechnique] {
         didSet {
@@ -261,6 +266,8 @@ final class MeditationManager {
 
     // MARK: - Durations
 
+    private var currentActivity: Activity<LiveTimerAttributes>?
+
     static let builtInDurations = [1, 3, 5, 10, 15, 20, 30]
 
     var allDurations: [Int] {
@@ -391,6 +398,7 @@ final class MeditationManager {
             elapsedSeconds = 0
         }
         state = .meditating
+        sessionStartDate = Date()
         soundEngine.playSound(startSound)
         if ambientRainEnabled {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
@@ -401,16 +409,113 @@ final class MeditationManager {
         if hapticEnabled {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
+        
+        let script = currentScript ?? MeditationScript.sample(for: minutes)
+        
+        // Start Live Activity before speech begins so updates find an active activity
+        startLiveActivity(initialPhrase: script.steps.first?.text ?? "Focusing inward...")
+        
         if isGuruEnabled {
-            let script = currentScript ?? MeditationScript.sample(for: minutes)
             GuruManager.shared.play(script: script)
         }
+        
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.tick()
             }
         }
+    }
+    
+    // MARK: - Live Activities
+    
+    private var activeActivityEndTime: Date?
+
+    private func startLiveActivity(initialPhrase: String = "Focusing inward...") {
+        guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+        
+        let title = currentScript?.title ?? "Meditation Journey"
+        let attributes = LiveTimerAttributes(title: title)
+        
+        let endSeconds = isOpenEnded ? 0 : totalSeconds
+        let endDate = Date().addingTimeInterval(TimeInterval(endSeconds))
+        self.activeActivityEndTime = endDate
+        self.currentKaiPhrase = initialPhrase
+        
+        let contentState = LiveTimerAttributes.ContentState(
+            currentPhrase: "", // Empty as we are hiding it from the widget
+            estimatedEndTime: endDate
+        )
+        
+        do {
+            // Clean up any existing stale activities of this type first
+            for activity in Activity<LiveTimerAttributes>.activities {
+                Task { await activity.end(dismissalPolicy: .immediate) }
+            }
+            
+            if #available(iOS 16.2, *) {
+                let content = ActivityContent(state: contentState, staleDate: nil)
+                currentActivity = try Activity.request(attributes: attributes, content: content)
+            } else {
+                currentActivity = try Activity.request(attributes: attributes, contentState: contentState, pushType: nil)
+            }
+            print("🚀 Started Live Activity: \(currentActivity?.id ?? "unknown")")
+        } catch {
+            print("❌ Failed to start Live Activity: \(error)")
+        }
+    }
+    
+    func updateLiveActivity(phrase: String) {
+        // Stabilize end time: use the one we calculated at the start
+        let endDate = activeActivityEndTime ?? Date()
+        self.currentKaiPhrase = phrase
+        
+        let contentState = LiveTimerAttributes.ContentState(
+            currentPhrase: "", // Empty as we are hiding it from the widget
+            estimatedEndTime: endDate
+        )
+        
+        // Re-attachment Logic: If currentActivity is nil or lost, find it in the global list
+        if currentActivity == nil {
+            currentActivity = Activity<LiveTimerAttributes>.activities.first
+        }
+        
+        guard let activity = currentActivity else { 
+            print("⚠️ No Live Activity found to update.")
+            return 
+        }
+        
+        Task.detached(priority: .userInitiated) {
+            if #available(iOS 16.2, *) {
+                let content = ActivityContent(state: contentState, staleDate: nil)
+                await activity.update(content)
+            } else {
+                await activity.update(using: contentState)
+            }
+            print("📝 Updated Live Activity with phrase: \(phrase.prefix(20))...")
+        }
+    }
+    
+    private func endLiveActivity() {
+        activeActivityEndTime = nil
+        currentKaiPhrase = ""
+        
+        // End ALL active activities of this type to be safe
+        for activity in Activity<LiveTimerAttributes>.activities {
+            let finalState = LiveTimerAttributes.ContentState(
+                currentPhrase: "",
+                estimatedEndTime: Date()
+            )
+            
+            Task {
+                if #available(iOS 16.2, *) {
+                    await activity.end(ActivityContent(state: finalState, staleDate: nil), dismissalPolicy: .immediate)
+                } else {
+                    await activity.end(using: finalState, dismissalPolicy: .immediate)
+                }
+            }
+        }
+        currentActivity = nil
     }
 
     func stop() {
@@ -422,6 +527,8 @@ final class MeditationManager {
         state = .idle
         remainingSeconds = 0
         elapsedSeconds = 0
+        sessionStartDate = nil
+        endLiveActivity()
         soundEngine.stopAll()
         GuruManager.shared.stop()
     }
@@ -473,6 +580,8 @@ final class MeditationManager {
         }
     }
 
+    private var sessionStartDate: Date?
+    
     private func tick() {
         guard state == .meditating else {
             timer?.invalidate()
@@ -498,9 +607,17 @@ final class MeditationManager {
         soundEngine.stopAll()
         soundEngine.playSound(endSound)
         GuruManager.shared.stop()
+        endLiveActivity()
         if hapticEnabled {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
+        
+        // Finalize HealthKit session record
+        if let startDate = sessionStartDate, sessionSeconds > 0 {
+            let endDate = Date()
+            HealthManager.shared.saveMindfulMinute(startDate: startDate, endDate: endDate)
+        }
+        sessionStartDate = nil
     }
 }
 
@@ -550,5 +667,54 @@ class NotificationManager: ObservableObject {
     }
     func cancelAllReminders() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
+    }
+}
+
+// MARK: - HealthKit Integration
+
+@MainActor
+class HealthManager {
+    static let shared = HealthManager()
+    
+    private let healthStore = HKHealthStore()
+    
+    private init() {}
+    
+    func requestAuthorization() async -> Bool {
+        guard HKHealthStore.isHealthDataAvailable() else { return false }
+        guard let mindfulType = HKObjectType.categoryType(forIdentifier: .mindfulSession) else { return false }
+        
+        do {
+            try await healthStore.requestAuthorization(toShare: [mindfulType], read: [mindfulType])
+            return true
+        } catch {
+            print("❌ HealthKit Authorization Failed: \(error.localizedDescription)")
+            return false
+        }
+    }
+    
+    func saveMindfulMinute(startDate: Date, endDate: Date) {
+        guard HKHealthStore.isHealthDataAvailable() else { return }
+        
+        Task {
+            let authorized = await requestAuthorization()
+            guard authorized else { return }
+            
+            guard let mindfulType = HKObjectType.categoryType(forIdentifier: .mindfulSession) else { return }
+            
+            let mindfulSample = HKCategorySample(
+                type: mindfulType,
+                value: HKCategoryValue.notApplicable.rawValue,
+                start: startDate,
+                end: endDate
+            )
+            
+            do {
+                try await healthStore.save(mindfulSample)
+                print("✅ Mindful minutes successfully saved to Apple Health (\(startDate) - \(endDate)).")
+            } catch {
+                print("❌ Failed to save mindful minutes: \(error.localizedDescription)")
+            }
+        }
     }
 }

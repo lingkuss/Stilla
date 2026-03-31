@@ -3,10 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		64F9FE2B2F7BE1F100BBB344 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */; };
+		64F9FE2D2F7BE1F100BBB344 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */; };
+		64F9FE3C2F7BE1F100BBB344 /* MeditationWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		64F9FE432F7BEC2300BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
+		64F9FE442F7BECF000BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
 		A10001 /* MeditationTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10001 /* MeditationTimerApp.swift */; };
 		A10002 /* MeditationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10002 /* MeditationManager.swift */; };
 		A10003 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10003 /* SoundEngine.swift */; };
@@ -29,8 +34,37 @@
 		A10020 /* KaiExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10022 /* KaiExperienceView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		64F9FE3A2F7BE1F100BBB344 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E10002 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 64F9FE272F7BE1F100BBB344;
+			remoteInfo = MeditationWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		64F9FE412F7BE1F100BBB344 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				64F9FE3C2F7BE1F100BBB344 /* MeditationWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		640598A62F76CAF500B0F381 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
+		64F9FE232F7BE17400BBB344 /* MeditationTimer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeditationTimer.entitlements; sourceTree = "<group>"; };
+		64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MeditationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTimerAttributes.swift; sourceTree = "<group>"; };
 		B10001 /* MeditationTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationTimerApp.swift; sourceTree = "<group>"; };
 		B10002 /* MeditationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationManager.swift; sourceTree = "<group>"; };
 		B10003 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
@@ -55,7 +89,30 @@
 		F1000C /* SavedMeditationsLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedMeditationsLibraryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		64F9FE3D2F7BE1F100BBB344 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 64F9FE272F7BE1F100BBB344 /* MeditationWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (64F9FE3D2F7BE1F100BBB344 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MeditationWidget; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		64F9FE252F7BE1F100BBB344 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64F9FE2D2F7BE1F100BBB344 /* SwiftUI.framework in Frameworks */,
+				64F9FE2B2F7BE1F100BBB344 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C10001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -66,11 +123,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		64F9FE292F7BE1F100BBB344 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */,
+				64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D10001 = {
 			isa = PBXGroup;
 			children = (
 				640598A62F76CAF500B0F381 /* Products.storekit */,
 				D10002 /* MeditationTimer */,
+				64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */,
+				64F9FE292F7BE1F100BBB344 /* Frameworks */,
 				D10005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +146,7 @@
 		D10002 /* MeditationTimer */ = {
 			isa = PBXGroup;
 			children = (
+				64F9FE232F7BE17400BBB344 /* MeditationTimer.entitlements */,
 				B10001 /* MeditationTimerApp.swift */,
 				B10002 /* MeditationManager.swift */,
 				B10003 /* SoundEngine.swift */,
@@ -121,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				B10012 /* MeditationTimer.app */,
+				64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,6 +198,7 @@
 		D10006 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */,
 				B10013 /* BreathingTechnique.swift */,
 				B10017 /* MeditationScript.swift */,
 			);
@@ -154,6 +225,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		64F9FE272F7BE1F100BBB344 /* MeditationWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 64F9FE3E2F7BE1F100BBB344 /* Build configuration list for PBXNativeTarget "MeditationWidgetExtension" */;
+			buildPhases = (
+				64F9FE242F7BE1F100BBB344 /* Sources */,
+				64F9FE252F7BE1F100BBB344 /* Frameworks */,
+				64F9FE262F7BE1F100BBB344 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */,
+			);
+			name = MeditationWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = MeditationWidgetExtension;
+			productReference = 64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		E10001 /* MeditationTimer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F10003 /* Build configuration list for PBXNativeTarget "MeditationTimer" */;
@@ -161,10 +254,12 @@
 				C10002 /* Sources */,
 				C10001 /* Frameworks */,
 				C10003 /* Resources */,
+				64F9FE412F7BE1F100BBB344 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				64F9FE3B2F7BE1F100BBB344 /* PBXTargetDependency */,
 			);
 			name = MeditationTimer;
 			productName = MeditationTimer;
@@ -178,9 +273,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					64F9FE272F7BE1F100BBB344 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 					E10001 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -200,11 +298,19 @@
 			projectRoot = "";
 			targets = (
 				E10001 /* MeditationTimer */,
+				64F9FE272F7BE1F100BBB344 /* MeditationWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		64F9FE262F7BE1F100BBB344 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C10003 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -216,6 +322,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		64F9FE242F7BE1F100BBB344 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64F9FE442F7BECF000BBB344 /* LiveTimerAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C10002 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -224,6 +338,7 @@
 				A10002 /* MeditationManager.swift in Sources */,
 				A10003 /* SoundEngine.swift in Sources */,
 				A10004 /* ContentView.swift in Sources */,
+				64F9FE432F7BEC2300BBB344 /* LiveTimerAttributes.swift in Sources */,
 				A10005 /* SettingsView.swift in Sources */,
 				A10006 /* BreathingCircleView.swift in Sources */,
 				A10007 /* StartMeditationIntent.swift in Sources */,
@@ -244,7 +359,79 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		64F9FE3B2F7BE1F100BBB344 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 64F9FE272F7BE1F100BBB344 /* MeditationWidgetExtension */;
+			targetProxy = 64F9FE3A2F7BE1F100BBB344 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		64F9FE3F2F7BE1F100BBB344 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZVH6AMJF8F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MeditationWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MeditationWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.meditation.timer.MeditationWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		64F9FE402F7BE1F100BBB344 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZVH6AMJF8F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MeditationWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MeditationWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.meditation.timer.MeditationWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		F10004 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -369,6 +556,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MeditationTimer/MeditationTimer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
@@ -400,6 +588,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MeditationTimer/MeditationTimer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
@@ -429,6 +618,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		64F9FE3E2F7BE1F100BBB344 /* Build configuration list for PBXNativeTarget "MeditationWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64F9FE3F2F7BE1F100BBB344 /* Debug */,
+				64F9FE402F7BE1F100BBB344 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F10001 /* Build configuration list for PBXProject "MeditationTimer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

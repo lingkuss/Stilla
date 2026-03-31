@@ -92,6 +92,8 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         let step = script.steps[currentStepIndex]
         let utterance = AVSpeechUtterance(string: step.text)
         
+        MeditationManager.shared.updateLiveActivity(phrase: step.text)
+        
         // Zen voice settings
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9 // Grounded and deep

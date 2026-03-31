@@ -147,12 +147,25 @@ struct ContentView: View {
                 )
 
                 // Timer display
-                Text(timerText)
-                    .font(.system(size: 64, weight: .ultraLight, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                    .padding(.top, 12) // Reduced from 24
-                    .contentTransition(.numericText())
+                VStack(spacing: 4) {
+                    Text(timerText)
+                        .font(.system(size: 64, weight: .ultraLight, design: .rounded))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                        .contentTransition(.numericText())
+                    
+                    if manager.state == .meditating, manager.isGuruEnabled, !manager.currentKaiPhrase.isEmpty {
+                        Text(manager.currentKaiPhrase)
+                            .font(.system(size: 16, weight: .light, design: .serif))
+                            .italic()
+                            .foregroundStyle(.white.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 40)
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
+                }
+                .padding(.top, 12)
+                .animation(.easeInOut, value: manager.currentKaiPhrase)
 
                 if manager.state == .idle {
                     guruControls

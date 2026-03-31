@@ -6,6 +6,7 @@ struct KaiExperienceView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var moodText: String = ""
+    @State private var selectedIntention: String? = nil
     @State private var selectedDuration: Int = 10
     @State private var isGenerating: Bool = false
     @State private var kaiPulse: Bool = false
@@ -156,7 +157,11 @@ struct KaiExperienceView: View {
                         HStack(spacing: 12) {
                             ForEach(presets, id: \.self) { preset in
                                 Button {
-                                    moodText = preset
+                                    if selectedIntention == preset {
+                                        selectedIntention = nil
+                                    } else {
+                                        selectedIntention = preset
+                                    }
                                     UISelectionFeedbackGenerator().selectionChanged()
                                 } label: {
                                     Text(preset)
@@ -165,10 +170,10 @@ struct KaiExperienceView: View {
                                         .padding(.vertical, 10)
                                         .background {
                                             Capsule()
-                                                .fill(moodText == preset ? Color.white.opacity(0.2) : Color.white.opacity(0.05))
-                                                .overlay(Capsule().strokeBorder(Color.white.opacity(moodText == preset ? 0.3 : 0.05), lineWidth: 1))
+                                                .fill(selectedIntention == preset ? Color.white.opacity(0.2) : Color.white.opacity(0.05))
+                                                .overlay(Capsule().strokeBorder(Color.white.opacity(selectedIntention == preset ? 0.3 : 0.05), lineWidth: 1))
                                         }
-                                        .foregroundStyle(moodText == preset ? .white : .white.opacity(0.6))
+                                        .foregroundStyle(selectedIntention == preset ? .white : .white.opacity(0.6))
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -185,27 +190,30 @@ struct KaiExperienceView: View {
                         .foregroundStyle(.white.opacity(0.4))
                         .padding(.horizontal, 24)
                     
-                    HStack(spacing: 12) {
-                        ForEach([5, 10, 30], id: \.self) { mins in
-                            Button {
-                                selectedDuration = mins
-                                UISelectionFeedbackGenerator().selectionChanged()
-                            } label: {
-                                Text("\(mins)m")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 14)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(selectedDuration == mins ? Color.white.opacity(0.15) : Color.white.opacity(0.05))
-                                            .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Color.white.opacity(selectedDuration == mins ? 0.2 : 0.05), lineWidth: 1))
-                                    }
-                                    .foregroundStyle(selectedDuration == mins ? .white : .white.opacity(0.4))
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            // Filter out 0 (Infinite) as Kai requires a structured script duration
+                            ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { mins in
+                                Button {
+                                    selectedDuration = mins
+                                    UISelectionFeedbackGenerator().selectionChanged()
+                                } label: {
+                                    Text("\(mins)m")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .frame(minWidth: 64)
+                                        .padding(.vertical, 14)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .fill(selectedDuration == mins ? Color.white.opacity(0.15) : Color.white.opacity(0.05))
+                                                .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Color.white.opacity(selectedDuration == mins ? 0.2 : 0.05), lineWidth: 1))
+                                        }
+                                        .foregroundStyle(selectedDuration == mins ? .white : .white.opacity(0.4))
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
+                        .padding(.horizontal, 24)
                     }
-                    .padding(.horizontal, 24)
                 }
                 
                 // Generate Button
@@ -221,8 +229,8 @@ struct KaiExperienceView: View {
                         .padding(.horizontal, 24)
                         .shadow(color: .white.opacity(0.1), radius: 20, x: 0, y: 10)
                 }
-                .disabled(moodText.isEmpty)
-                .opacity(moodText.isEmpty ? 0.3 : 1.0)
+                .disabled(moodText.isEmpty && selectedIntention == nil)
+                .opacity((moodText.isEmpty && selectedIntention == nil) ? 0.3 : 1.0)
                 .padding(.top, 20)
                 .padding(.bottom, 60)
             }
@@ -276,8 +284,16 @@ struct KaiExperienceView: View {
         
         Task {
             do {
+                var combinedMood = ""
+                if let intention = selectedIntention {
+                    combinedMood += "Intention: \(intention). "
+                }
+                if !moodText.isEmpty {
+                    combinedMood += "Mood/Details: \(moodText)"
+                }
+                
                 let script = try await KaiBrainService.shared.generateScript(
-                    mood: moodText.isEmpty ? "Calm" : moodText,
+                    mood: combinedMood.isEmpty ? "Calm" : combinedMood,
                     durationMinutes: selectedDuration
                 )
                 

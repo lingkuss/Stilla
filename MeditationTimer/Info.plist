@@ -20,12 +20,12 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone access is required to capture your voice for speech commands.</string>
 	<key>NSSiriUsageDescription</key>
 	<string>MeditationTimer uses Siri to let you start and stop meditation sessions hands-free.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Still uses speech recognition to understand your meditation goals.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Microphone access is required to capture your voice for speech commands.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -41,5 +41,11 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Still requires access to Apple Health to save your Mindful Minutes.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Still requires access to Apple Health to save your Mindful Minutes.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 </dict>
 </plist>
