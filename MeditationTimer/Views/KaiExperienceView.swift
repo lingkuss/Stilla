@@ -11,6 +11,7 @@ struct KaiExperienceView: View {
     @State private var isGenerating: Bool = false
     @State private var kaiPulse: Bool = false
     @State private var showingError: Bool = false
+    @State private var showingPaywall: Bool = false
     
     private let speechManager = SpeechManager.shared
     
@@ -48,6 +49,9 @@ struct KaiExperienceView: View {
             }
             .onAppear {
                 // Initial pulse state
+            }
+            .sheet(isPresented: $showingPaywall) {
+                KAIPaywallView()
             }
         }
     }
@@ -283,6 +287,16 @@ struct KaiExperienceView: View {
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         
         Task {
+            // Entitlement Check
+            let isSubscribed = StoreKitManager.shared.isKAISubscribed
+            let isFreeAvailable = KaiBrainService.shared.isFreeGenerationAvailable
+            
+            if !isSubscribed && !isFreeAvailable {
+                isGenerating = false
+                showingPaywall = true
+                return
+            }
+            
             do {
                 var combinedMood = ""
                 if let intention = selectedIntention {
@@ -296,6 +310,11 @@ struct KaiExperienceView: View {
                     mood: combinedMood.isEmpty ? "Calm" : combinedMood,
                     durationMinutes: selectedDuration
                 )
+                
+                // If we got here and weren't subscribed, consume the free credit
+                if !isSubscribed {
+                    KaiBrainService.shared.recordFreeGeneration()
+                }
                 
                 // Set the script in GuruManager and start
                 GuruManager.shared.play(script: script)

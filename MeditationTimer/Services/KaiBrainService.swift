@@ -7,6 +7,20 @@ class KaiBrainService {
     enum BrainError: Error {
         case generationFailed
         case invalidResponse
+        case trialExpired
+    }
+
+    private let freeGenMonthKey = "kai.last_free_gen_month"
+
+    var isFreeGenerationAvailable: Bool {
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        let lastMonth = UserDefaults.standard.integer(forKey: freeGenMonthKey)
+        return lastMonth != currentMonth
+    }
+
+    func recordFreeGeneration() {
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        UserDefaults.standard.set(currentMonth, forKey: freeGenMonthKey)
     }
     
     /// Generates a personalized meditation script based on mood and duration.

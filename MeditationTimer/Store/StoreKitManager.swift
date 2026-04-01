@@ -26,6 +26,9 @@ final class StoreKitManager {
     static let ambientNoiseBrownID = "ambient.noise.brown"
     static let ambientSolfeggioNatureID = "ambient.solfeggio.nature"
     static let ambientSolfeggioLoveID = "ambient.solfeggio.love"
+    
+    // KAI Subscription
+    static let soundKAIProID = "sub.kai.monthly"
 
     private(set) var purchasedProductIDs: Set<String> = []
     private(set) var products: [Product] = []
@@ -34,7 +37,7 @@ final class StoreKitManager {
         // Start listening for transactions
         Task.detached {
             for await result in Transaction.updates {
-                await self.handle(transaction: result)
+                await self.handle(verification: result)
             }
         }
         
@@ -60,6 +63,10 @@ final class StoreKitManager {
         return purchasedProductIDs.contains(productID)
     }
 
+    var isKAISubscribed: Bool {
+        purchasedProductIDs.contains(Self.soundKAIProID)
+    }
+
     func loadProducts() async {
         do {
             self.products = try await Product.products(for: [
@@ -77,7 +84,8 @@ final class StoreKitManager {
                 Self.ambientNoisePinkID,
                 Self.ambientNoiseBrownID,
                 Self.ambientSolfeggioNatureID,
-                Self.ambientSolfeggioLoveID
+                Self.ambientSolfeggioLoveID,
+                Self.soundKAIProID
             ])
         } catch {
             print("Failed to load products: \(error)")
@@ -85,30 +93,37 @@ final class StoreKitManager {
     }
 
     func purchase(_ productID: String) async {
-        guard let product = products.first(where: { $0.id == productID }) else { return }
+        print("🛒 Attempting to purchase: \(productID)")
+        guard let product = products.first(where: { $0.id == productID }) else {
+            print("❌ Product not found: \(productID). Loaded: \(products.map { $0.id })")
+            return
+        }
         
         do {
             let result = try await product.purchase()
             switch result {
             case .success(let verification):
-                await handle(transaction: verification)
-            case .userCancelled, .pending:
-                break
+                print("✅ Purchase success: \(productID)")
+                await handle(verification: verification)
+            case .userCancelled:
+                print("⚠️ Purchase cancelled by user")
+            case .pending:
+                print("⏳ Purchase pending")
             @unknown default:
                 break
             }
         } catch {
-            print("Purchase failed: \(error)")
+            print("❌ Purchase failed: \(error)")
         }
     }
 
     func updateCustomerProductStatus() async {
         for await result in Transaction.currentEntitlements {
-            await handle(transaction: result)
+            await handle(verification: result)
         }
     }
 
-    private func handle(transaction verification: VerificationResult<Transaction>) async {
+    private func handle(verification: VerificationResult<Transaction>) async {
         switch verification {
         case .verified(let transaction):
             purchasedProductIDs.insert(transaction.productID)
