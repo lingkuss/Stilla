@@ -206,10 +206,10 @@ struct SettingsView: View {
                 // Siri Tips
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        voiceCommandRow("\"Hey Siri, begin MeditationTimer\"", desc: "Begin with saved duration")
-                        voiceCommandRow("\"Hey Siri, meditate for X minutes\"", desc: "Begin with custom duration")
-                        voiceCommandRow("\"Hey Siri, begin limitless meditation with MeditationTimer\"", desc: "Begin a limitless stopwatch")
-                        voiceCommandRow("\"Hey Siri, end MeditationTimer\"", desc: "End session early")
+                        voiceCommandRow("\"Hey Siri, begin Stilla\"", desc: "Begin with saved duration")
+                        voiceCommandRow("\"Hey Siri, begin Stilla for X minutes\"", desc: "Begin with custom duration")
+                        voiceCommandRow("\"Hey Siri, begin limitless meditation with Stilla\"", desc: "Begin a limitless stopwatch")
+                        voiceCommandRow("\"Hey Siri, end Stilla\"", desc: "End session early")
                     }
                     .padding(.vertical, 4)
                 } header: {

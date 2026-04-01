@@ -13,7 +13,7 @@
 		64F9FE432F7BEC2300BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
 		64F9FE442F7BECF000BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
 		64F9FE462F7C7B7300BBB344 /* KAIPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE452F7C7B7300BBB344 /* KAIPaywallView.swift */; };
-		A10001 /* MeditationTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10001 /* MeditationTimerApp.swift */; };
+		A10001 /* StillaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10001 /* StillaApp.swift */; };
 		A10002 /* MeditationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10002 /* MeditationManager.swift */; };
 		A10003 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10003 /* SoundEngine.swift */; };
 		A10004 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10004 /* ContentView.swift */; };
@@ -61,13 +61,13 @@
 
 /* Begin PBXFileReference section */
 		640598A62F76CAF500B0F381 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
-		64F9FE232F7BE17400BBB344 /* MeditationTimer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeditationTimer.entitlements; sourceTree = "<group>"; };
+		64F9FE232F7BE17400BBB344 /* Stilla.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stilla.entitlements; sourceTree = "<group>"; };
 		64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MeditationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTimerAttributes.swift; sourceTree = "<group>"; };
 		64F9FE452F7C7B7300BBB344 /* KAIPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KAIPaywallView.swift; sourceTree = "<group>"; };
-		B10001 /* MeditationTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationTimerApp.swift; sourceTree = "<group>"; };
+		B10001 /* StillaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillaApp.swift; sourceTree = "<group>"; };
 		B10002 /* MeditationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationManager.swift; sourceTree = "<group>"; };
 		B10003 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
 		B10004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 		B10009 /* MeditationShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationShortcuts.swift; sourceTree = "<group>"; };
 		B10010 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B10011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B10012 /* MeditationTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeditationTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10012 /* Stilla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stilla.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10013 /* BreathingTechnique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingTechnique.swift; sourceTree = "<group>"; };
 		B10014 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		B10017 /* MeditationScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationScript.swift; sourceTree = "<group>"; };
@@ -138,18 +138,18 @@
 			isa = PBXGroup;
 			children = (
 				640598A62F76CAF500B0F381 /* Products.storekit */,
-				D10002 /* MeditationTimer */,
+				D10002 /* Stilla */,
 				64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */,
 				64F9FE292F7BE1F100BBB344 /* Frameworks */,
 				D10005 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D10002 /* MeditationTimer */ = {
+		D10002 /* Stilla */ = {
 			isa = PBXGroup;
 			children = (
-				64F9FE232F7BE17400BBB344 /* MeditationTimer.entitlements */,
-				B10001 /* MeditationTimerApp.swift */,
+				64F9FE232F7BE17400BBB344 /* Stilla.entitlements */,
+				B10001 /* StillaApp.swift */,
 				B10002 /* MeditationManager.swift */,
 				B10003 /* SoundEngine.swift */,
 				D10003 /* Views */,
@@ -162,7 +162,7 @@
 				F1000B /* Secrets.swift */,
 				D10008 /* Services */,
 			);
-			path = MeditationTimer;
+			path = Stilla;
 			sourceTree = "<group>";
 		};
 		D10003 /* Views */ = {
@@ -192,7 +192,7 @@
 		D10005 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B10012 /* MeditationTimer.app */,
+				B10012 /* Stilla.app */,
 				64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */,
 			);
 			name = Products;
@@ -250,9 +250,9 @@
 			productReference = 64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		E10001 /* MeditationTimer */ = {
+		E10001 /* Stilla */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F10003 /* Build configuration list for PBXNativeTarget "MeditationTimer" */;
+			buildConfigurationList = F10003 /* Build configuration list for PBXNativeTarget "Stilla" */;
 			buildPhases = (
 				C10002 /* Sources */,
 				C10001 /* Frameworks */,
@@ -264,9 +264,9 @@
 			dependencies = (
 				64F9FE3B2F7BE1F100BBB344 /* PBXTargetDependency */,
 			);
-			name = MeditationTimer;
-			productName = MeditationTimer;
-			productReference = B10012 /* MeditationTimer.app */;
+			name = Stilla;
+			productName = Stilla;
+			productReference = B10012 /* Stilla.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -287,7 +287,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F10001 /* Build configuration list for PBXProject "MeditationTimer" */;
+			buildConfigurationList = F10001 /* Build configuration list for PBXProject "Stilla" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -300,7 +300,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E10001 /* MeditationTimer */,
+				E10001 /* Stilla */,
 				64F9FE272F7BE1F100BBB344 /* MeditationWidgetExtension */,
 			);
 		};
@@ -337,7 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10001 /* MeditationTimerApp.swift in Sources */,
+				A10001 /* StillaApp.swift in Sources */,
 				A10002 /* MeditationManager.swift in Sources */,
 				A10003 /* SoundEngine.swift in Sources */,
 				A10004 /* ContentView.swift in Sources */,
@@ -392,7 +392,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.meditation.timer.MeditationWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.stilla.StillaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -424,7 +424,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.meditation.timer.MeditationWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.stilla.StillaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -560,13 +560,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MeditationTimer/MeditationTimer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Stilla/Stilla.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = MeditationTimer/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Still;
+				INFOPLIST_FILE = Stilla/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stilla;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -577,7 +577,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.meditation.timer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.stilla;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -592,13 +592,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MeditationTimer/MeditationTimer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Stilla/Stilla.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = MeditationTimer/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Still;
+				INFOPLIST_FILE = Stilla/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stilla;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -609,7 +609,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.meditation.timer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.stilla;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -631,7 +631,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F10001 /* Build configuration list for PBXProject "MeditationTimer" */ = {
+		F10001 /* Build configuration list for PBXProject "Stilla" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F10004 /* Debug */,
@@ -640,7 +640,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F10003 /* Build configuration list for PBXNativeTarget "MeditationTimer" */ = {
+		F10003 /* Build configuration list for PBXNativeTarget "Stilla" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F10006 /* Debug */,

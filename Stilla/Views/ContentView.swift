@@ -176,8 +176,8 @@ struct ContentView: View {
                 .animation(.easeInOut, value: manager.currentKaiPhrase)
 
                 if manager.state == .idle {
-                    guruControls
-                        .padding(.top, 6) // Reduced from 10
+                    libraryButton
+                        .padding(.top, 6)
                     
                     durationPicker
                         .padding(.top, 10) // Reduced from 16
@@ -424,51 +424,20 @@ struct ContentView: View {
         }
     }
 
-    private var guruControls: some View {
-        HStack(spacing: 16) {
-            // Kai Enable Toggle
-            Button {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                    manager.isGuruEnabled.toggle()
-                }
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "quote.bubble.fill")
-                        .font(.system(size: 14))
-                    Text("KAI")
-                        .font(.system(size: 12, weight: .bold))
-                }
-                .foregroundStyle(manager.isGuruEnabled ? .white : .white.opacity(0.4))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                .background(
-                    Capsule()
-                        .fill(manager.isGuruEnabled 
-                            ? Color(hue: 0.55, saturation: 0.6, brightness: 0.8).opacity(0.4)
-                            : Color.white.opacity(0.05))
-                )
-                .overlay(
-                    Capsule()
-                        .strokeBorder(Color.white.opacity(manager.isGuruEnabled ? 0.3 : 0.1), lineWidth: 1)
-                )
-            }
-            .buttonStyle(.plain)
-            
-            // Library Button
-            Button {
-                showSavedMeditations = true
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            } label: {
-                Image(systemName: "books.vertical.fill")
-                    .font(.system(size: 16))
-                    .foregroundStyle(.white.opacity(0.4))
-                    .frame(width: 44, height: 44)
-                    .background(Circle().fill(Color.white.opacity(0.05)))
-                    .overlay(Circle().strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
-            }
-            .buttonStyle(.plain)
+    private var libraryButton: some View {
+        // Library Button
+        Button {
+            showSavedMeditations = true
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        } label: {
+            Image(systemName: "books.vertical.fill")
+                .font(.system(size: 16))
+                .foregroundStyle(.white.opacity(0.4))
+                .frame(width: 44, height: 44)
+                .background(Circle().fill(Color.white.opacity(0.05)))
+                .overlay(Circle().strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
         }
+        .buttonStyle(.plain)
         .frame(height: 44)
     }
 
@@ -1184,12 +1153,22 @@ struct OnboardingView: View {
         ),
         OnboardingPage(
             title: "Techniques for Every Need",
-            description: "Tap the wind icon to discover different breathing patterns for energy, focus, or sleep.",
+            description: "Discover a variety of breathing patterns tailored for energy, deep focus, or restorative sleep.",
             systemImage: "wind"
         ),
         OnboardingPage(
+            title: "Kai: Your AI Guide",
+            description: "Meet Kai, your personalized meditation architect. Speak your mood, and Kai will craft a unique, guided journey just for you.",
+            systemImage: "sparkles"
+        ),
+        OnboardingPage(
+            title: "Immersive Soundscapes",
+            description: "Enhance your practice with premium ambient sounds, binaural beats, and Solfeggio frequencies.",
+            systemImage: "speaker.wave.3.fill"
+        ),
+        OnboardingPage(
             title: "Meditate with Siri",
-            description: "Just say \"Hey Siri, begin MeditationTimer\" to start your session instantly, totally hands-free.",
+            description: "Just say \"Hey Siri, begin Stilla\" to start your session instantly, totally hands-free.",
             systemImage: "mic.fill"
         )
     ]

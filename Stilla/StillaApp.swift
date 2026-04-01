@@ -3,7 +3,7 @@ import AppIntents
 import AVFoundation
 
 @main
-struct MeditationTimerApp: App {
+struct StillaApp: App {
     @State private var manager = MeditationManager.shared
 
     init() {

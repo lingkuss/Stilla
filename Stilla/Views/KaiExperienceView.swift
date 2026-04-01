@@ -1,10 +1,12 @@
 import SwiftUI
 import Speech
+import Foundation
 
 struct KaiExperienceView: View {
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
     
+    @State private var store = StoreKitManager.shared
     @State private var moodText: String = ""
     @State private var selectedIntention: String? = nil
     @State private var selectedDuration: Int = 10
@@ -12,6 +14,8 @@ struct KaiExperienceView: View {
     @State private var kaiPulse: Bool = false
     @State private var showingError: Bool = false
     @State private var showingPaywall: Bool = false
+    @State private var rotationAmount: Double = 0.0
+    @State private var pulseAmount: Double = 0.0
     
     private let speechManager = SpeechManager.shared
     
@@ -58,7 +62,40 @@ struct KaiExperienceView: View {
     
     private var mainInputView: some View {
         ScrollView {
-            VStack(spacing: 32) {
+            VStack(spacing: 24) {
+                // Status Badge
+                Group {
+                    if store.isKAISubscribed {
+                        HStack(spacing: 6) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 12, weight: .bold))
+                            Text("KAI PRO MEMBER")
+                                .font(.system(size: 10, weight: .bold))
+                                .kerning(1)
+                        }
+                        .foregroundStyle(.blue)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(Capsule().fill(.blue.opacity(0.1)))
+                    } else {
+                        HStack(spacing: 6) {
+                            Image(systemName: "bolt.fill")
+                                .font(.system(size: 10))
+                            Text(KaiBrainService.shared.isFreeGenerationAvailable ? "1 FREE MONTHLY CREDIT" : "0 CREDITS REMAINING")
+                                .font(.system(size: 10, weight: .bold))
+                                .kerning(1)
+                        }
+                        .foregroundStyle(.white.opacity(0.4))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background {
+                            Capsule()
+                                .strokeBorder(.white.opacity(0.1), lineWidth: 1)
+                        }
+                    }
+                }
+                .padding(.top, 12)
+
                 // Intro
                 VStack(spacing: 12) {
                     Text("How are you feeling?")
@@ -69,7 +106,6 @@ struct KaiExperienceView: View {
                         .foregroundStyle(.white.opacity(0.4))
                 }
                 .multilineTextAlignment(.center)
-                .padding(.top, 40)
                 
                 // Voice / Text Input Box
                 VStack(spacing: 24) {
@@ -257,13 +293,26 @@ struct KaiExperienceView: View {
                         .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
                         .frame(width: 100, height: 100)
                         .blur(radius: 40)
-                        .offset(x: isGenerating ? CGFloat.random(in: -30...30) : 0, y: isGenerating ? CGFloat.random(in: -30...30) : 0)
-                        .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true).delay(Double(i) * 0.5), value: isGenerating)
+                        .scaleEffect(0.8 + (pulseAmount * 0.4))
+                        .offset(x: CGFloat(sin(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0),
+                                y: CGFloat(cos(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0))
                 }
                 
                 Circle()
-                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .stroke(
+                        AngularGradient(colors: [.white.opacity(0.0), .white.opacity(0.3), .white.opacity(0.0)], center: .center),
+                        style: StrokeStyle(lineWidth: 1, lineCap: .round)
+                    )
                     .frame(width: 140, height: 140)
+                    .rotationEffect(.degrees(rotationAmount))
+            }
+            .onAppear {
+                withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
+                    rotationAmount = 360.0
+                }
+                withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                    pulseAmount = 1.0
+                }
             }
             
             VStack(spacing: 16) {

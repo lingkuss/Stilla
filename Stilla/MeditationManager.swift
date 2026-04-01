@@ -686,7 +686,7 @@ class NotificationManager: ObservableObject {
         cancelAllReminders()
         let content = UNMutableNotificationContent()
         content.title = "Time for your breath"
-        content.body = "Take a few minutes for yourself with MeditationTimer."
+        content.body = "Take a few minutes for yourself with Stilla."
         content.sound = .default
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute], from: date)
