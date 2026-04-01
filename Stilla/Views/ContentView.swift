@@ -286,6 +286,11 @@ struct ContentView: View {
             Text("Enter a duration in minutes (1–180).")
         }
         .animation(.easeInOut(duration: 0.6), value: manager.state)
+        .onChange(of: manager.isSiriTriggeredKai) { _, newValue in
+            if newValue {
+                showKaiExperience = true
+            }
+        }
     }
 
     // MARK: - Subviews
@@ -1057,12 +1062,12 @@ struct TechniqueLibraryView: View {
                 
                 Text(technique.description)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.white.opacity(0.75))
                 
                 Text(String(format: "In: %.0fs • Hold: %.0fs • Out: %.0fs • Hold: %.0fs",
                            technique.inhale, technique.holdIn, technique.exhale, technique.holdOut))
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.secondary.opacity(0.8))
+                    .foregroundStyle(.white.opacity(0.5))
             }
             .padding(.vertical, 4)
         }

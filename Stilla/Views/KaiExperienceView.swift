@@ -52,7 +52,22 @@ struct KaiExperienceView: View {
                 }
             }
             .onAppear {
-                // Initial pulse state
+                if manager.isSiriTriggeredKai {
+                    if let mood = manager.siriPendingMood {
+                        moodText = mood
+                    }
+                    if let duration = manager.siriPendingDuration {
+                        selectedDuration = duration
+                    }
+                    
+                    // Reset the flags so we don't re-trigger
+                    manager.isSiriTriggeredKai = false
+                    manager.siriPendingMood = nil
+                    manager.siriPendingDuration = nil
+                    
+                    // Trigger generation
+                    generateMeditation()
+                }
             }
             .sheet(isPresented: $showingPaywall) {
                 KAIPaywallView()
@@ -337,6 +352,8 @@ struct KaiExperienceView: View {
         
         Task {
             // Entitlement Check
+            await StoreKitManager.shared.updateCustomerProductStatus()
+            
             let isSubscribed = StoreKitManager.shared.isKAISubscribed
             let isFreeAvailable = KaiBrainService.shared.isFreeGenerationAvailable
             

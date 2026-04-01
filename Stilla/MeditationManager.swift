@@ -149,6 +149,11 @@ final class MeditationManager {
     /// Used for the "Save" feature at the end of a session.
     var currentScript: MeditationScript?
 
+    /// Siri Handoff State
+    var isSiriTriggeredKai: Bool = false
+    var siriPendingMood: String?
+    var siriPendingDuration: Int?
+
     var isCurrentScriptSaved: Bool {
         guard let current = currentScript else { return false }
         return savedMeditations.contains(where: { $0.id == current.id })
@@ -443,13 +448,14 @@ final class MeditationManager {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
         
-        let script = currentScript ?? MeditationScript.sample(for: minutes)
-        
-        // Start Live Activity before speech begins so updates find an active activity
-        startLiveActivity(initialPhrase: script.steps.first?.text ?? "Focusing inward...")
-        
-        if isGuruEnabled {
-            GuruManager.shared.play(script: script)
+        if let script = currentScript {
+            // Start Live Activity before speech begins so updates find an active activity
+            startLiveActivity(initialPhrase: script.steps.first?.text ?? "Focusing inward...")
+            if isGuruEnabled {
+                GuruManager.shared.play(script: script)
+            }
+        } else {
+            startLiveActivity(initialPhrase: "Focusing inward...")
         }
         
         timer?.invalidate()
@@ -563,6 +569,7 @@ final class MeditationManager {
         sessionStartDate = nil
         endLiveActivity()
         soundEngine.stopAll()
+        currentScript = nil
         GuruManager.shared.stop()
     }
 

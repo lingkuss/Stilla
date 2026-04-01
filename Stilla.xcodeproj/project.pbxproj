@@ -13,6 +13,7 @@
 		64F9FE432F7BEC2300BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
 		64F9FE442F7BECF000BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
 		64F9FE462F7C7B7300BBB344 /* KAIPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE452F7C7B7300BBB344 /* KAIPaywallView.swift */; };
+		64F9FE6C2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE6B2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift */; };
 		A10001 /* StillaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10001 /* StillaApp.swift */; };
 		A10002 /* MeditationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10002 /* MeditationManager.swift */; };
 		A10003 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10003 /* SoundEngine.swift */; };
@@ -67,6 +68,7 @@
 		64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTimerAttributes.swift; sourceTree = "<group>"; };
 		64F9FE452F7C7B7300BBB344 /* KAIPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KAIPaywallView.swift; sourceTree = "<group>"; };
+		64F9FE6B2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartKaiMeditationIntent.swift; sourceTree = "<group>"; };
 		B10001 /* StillaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillaApp.swift; sourceTree = "<group>"; };
 		B10002 /* MeditationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationManager.swift; sourceTree = "<group>"; };
 		B10003 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 		D10004 /* Intents */ = {
 			isa = PBXGroup;
 			children = (
+				64F9FE6B2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift */,
 				B10007 /* StartMeditationIntent.swift */,
 				B10008 /* StopMeditationIntent.swift */,
 				B10009 /* MeditationShortcuts.swift */,
@@ -347,6 +350,7 @@
 				A10007 /* StartMeditationIntent.swift in Sources */,
 				A10008 /* StopMeditationIntent.swift in Sources */,
 				A10009 /* MeditationShortcuts.swift in Sources */,
+				64F9FE6C2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift in Sources */,
 				64F9FE462F7C7B7300BBB344 /* KAIPaywallView.swift in Sources */,
 				A1000B /* Secrets.swift in Sources */,
 				A1000C /* SavedMeditationsLibraryView.swift in Sources */,

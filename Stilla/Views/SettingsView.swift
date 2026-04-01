@@ -176,10 +176,9 @@ struct SettingsView: View {
                                 manager.updateDailyReminder()
                             }
                     }
-                } header: {
-                    Label("Mindfulness", systemImage: "sparkles")
                 } footer: {
                     Text("Receive a gentle notification to help you stay consistent.")
+                        .foregroundStyle(.white.opacity(0.6))
                 }
 
                 // Kai's Voice
@@ -197,15 +196,15 @@ struct SettingsView: View {
                             }
                         }
                     }
-                } header: {
-                    Label("Voice Guide", systemImage: "person.wave.2.fill")
                 } footer: {
                     Text("Choose a high-quality natural voice for Kai.")
+                        .foregroundStyle(.white.opacity(0.6))
                 }
 
                 // Siri Tips
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
+                        voiceCommandRow("\"Hey Siri, ask Kai for a meditation in Stilla\"", desc: "Siri will ask for your mood and duration")
                         voiceCommandRow("\"Hey Siri, begin Stilla\"", desc: "Begin with saved duration")
                         voiceCommandRow("\"Hey Siri, begin Stilla for X minutes\"", desc: "Begin with custom duration")
                         voiceCommandRow("\"Hey Siri, begin limitless meditation with Stilla\"", desc: "Begin a limitless stopwatch")
@@ -214,6 +213,16 @@ struct SettingsView: View {
                     .padding(.vertical, 4)
                 } header: {
                     Label("Voice Commands", systemImage: "mic.fill")
+                }
+
+                // Support / Information
+                Section {
+                    Button {
+                        manager.hasSeenOnboarding = false
+                        dismiss()
+                    } label: {
+                        Label("Show Intro Guide", systemImage: "sparkles")
+                    }
                 }
             }
             .navigationTitle("Settings")
@@ -309,6 +318,7 @@ struct SoundSelectionView: View {
                     }
                 } footer: {
                     Text("These gentle tones mark the beginning and end of your meditation.")
+                        .foregroundStyle(.white.opacity(0.6))
                 }
             } else {
                 Section("Nature & Noise") {
@@ -327,6 +337,7 @@ struct SoundSelectionView: View {
                     Text("Binaural Beats")
                 } footer: {
                     Text("Binaural beats use two slightly different frequencies to guide your brainwaves into specific mental states.")
+                        .foregroundStyle(.white.opacity(0.6))
                 }
 
                 Section("Solfeggio Frequencies") {
@@ -395,7 +406,7 @@ struct SoundSelectionView: View {
                     if let desc = ambientDescriptions[ambient], ambient != .none {
                         Text(desc)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.white.opacity(0.7))
                     }
                 }
                 Spacer()

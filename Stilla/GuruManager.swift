@@ -23,7 +23,13 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         self.currentScript = script
         self.currentStepIndex = 0
         self.isPlaying = true
-        speakNextStep()
+        
+        // Wait 2 seconds before the first phrase to allow for centering
+        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
+            Task { @MainActor in
+                self?.speakNextStep()
+            }
+        }
     }
 
     func previewVoice(identifier: String) {
