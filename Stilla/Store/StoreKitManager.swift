@@ -6,27 +6,21 @@ import StoreKit
 final class StoreKitManager {
     static let shared = StoreKitManager()
 
+    enum PurchaseOutcome {
+        case success
+        case cancelled
+        case pending
+        case unavailable
+        case failed(String)
+    }
+
     // IAP Product IDs
     static let techniqueLibraryID = "technique.library"
     static let customTechniqueEditorID = "custom.editor"
-    static let advancedStatsID = "advanced.stats"
 
     // Sound Library IDs
     static let soundBundleID = "premium.sounds.bundle"
-    static let soundZenWoodblockID = "sound.zenwoodblock"
-    static let soundBambooChimeID = "sound.bamboochime"
-    static let soundTempleBellID = "sound.templebell"
-    static let ambientBinauralDeltaID = "ambient.binaural.delta"
-    static let ambientBinauralAlphaID = "ambient.binaural.alpha"
-    static let ambientBinauralBetaID = "ambient.binaural.beta"
-    
-    // New Ambient IDs
-    static let ambientNoiseWhiteID = "ambient.noise.white"
-    static let ambientNoisePinkID = "ambient.noise.pink"
-    static let ambientNoiseBrownID = "ambient.noise.brown"
-    static let ambientSolfeggioNatureID = "ambient.solfeggio.nature"
-    static let ambientSolfeggioLoveID = "ambient.solfeggio.love"
-    
+
     // KAI Subscription
     static let soundKAIProID = "sub.kai.monthly"
 
@@ -48,18 +42,6 @@ final class StoreKitManager {
     }
 
     func isPurchased(_ productID: String) -> Bool {
-        // If they own the bundle, they own all sounds automatically
-        if purchasedProductIDs.contains(Self.soundBundleID) {
-            let soundIDs: Set<String> = [
-                Self.soundZenWoodblockID, Self.soundBambooChimeID, Self.soundTempleBellID,
-                Self.ambientBinauralDeltaID, Self.ambientBinauralAlphaID, Self.ambientBinauralBetaID,
-                Self.ambientNoiseWhiteID, Self.ambientNoisePinkID, Self.ambientNoiseBrownID,
-                Self.ambientSolfeggioNatureID, Self.ambientSolfeggioLoveID
-            ]
-            if soundIDs.contains(productID) {
-                return true
-            }
-        }
         return purchasedProductIDs.contains(productID)
     }
 
@@ -72,19 +54,7 @@ final class StoreKitManager {
             self.products = try await Product.products(for: [
                 Self.techniqueLibraryID,
                 Self.customTechniqueEditorID,
-                Self.advancedStatsID,
                 Self.soundBundleID,
-                Self.soundZenWoodblockID,
-                Self.soundBambooChimeID,
-                Self.soundTempleBellID,
-                Self.ambientBinauralDeltaID,
-                Self.ambientBinauralAlphaID,
-                Self.ambientBinauralBetaID,
-                Self.ambientNoiseWhiteID,
-                Self.ambientNoisePinkID,
-                Self.ambientNoiseBrownID,
-                Self.ambientSolfeggioNatureID,
-                Self.ambientSolfeggioLoveID,
                 Self.soundKAIProID
             ])
         } catch {
@@ -92,11 +62,11 @@ final class StoreKitManager {
         }
     }
 
-    func purchase(_ productID: String) async {
+    func purchase(_ productID: String) async -> PurchaseOutcome {
         print("🛒 Attempting to purchase: \(productID)")
         guard let product = products.first(where: { $0.id == productID }) else {
             print("❌ Product not found: \(productID). Loaded: \(products.map { $0.id })")
-            return
+            return .unavailable
         }
         
         do {
@@ -105,15 +75,19 @@ final class StoreKitManager {
             case .success(let verification):
                 print("✅ Purchase success: \(productID)")
                 await handle(verification: verification)
+                return .success
             case .userCancelled:
                 print("⚠️ Purchase cancelled by user")
+                return .cancelled
             case .pending:
                 print("⏳ Purchase pending")
+                return .pending
             @unknown default:
-                break
+                return .failed("The App Store returned an unknown purchase state.")
             }
         } catch {
             print("❌ Purchase failed: \(error)")
+            return .failed(error.localizedDescription)
         }
     }
 

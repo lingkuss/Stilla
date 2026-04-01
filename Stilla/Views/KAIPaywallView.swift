@@ -3,6 +3,9 @@ import StoreKit
 
 struct KAIPaywallView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var store = StoreKitManager.shared
+    @State private var statusMessage = ""
+    @State private var showingStatus = false
     
     var body: some View {
         ZStack {
@@ -27,7 +30,7 @@ struct KAIPaywallView: View {
                     Text("Unlock Unlimited KAI")
                         .font(.system(size: 28, weight: .bold, design: .serif))
                     
-                    Text("Experience the full power of your personal AI guide. One-time monthly subscription, endless clarity.")
+                    Text("Experience the full power of your personal AI guide with unlimited personalized meditation generation.")
                         .font(.system(size: 16))
                         .foregroundStyle(.white.opacity(0.6))
                         .multilineTextAlignment(.center)
@@ -38,7 +41,7 @@ struct KAIPaywallView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     BenefitRow(icon: "infinite", text: "Unlimited AI Meditations")
                     BenefitRow(icon: "brain.headset", text: "Deep Personalized Guidance")
-                    BenefitRow(icon: "icloud.and.arrow.down", text: "Save Journeys to Library")
+                    BenefitRow(icon: "waveform.path.ecg", text: "Create Personalized Sessions On Demand")
                 }
                 .padding(.top, 20)
                 
@@ -47,15 +50,16 @@ struct KAIPaywallView: View {
                 // Purchase Button
                 Button {
                     Task {
-                        await StoreKitManager.shared.purchase(StoreKitManager.soundKAIProID)
-                        // Only dismiss if the purchase was successful
-                        if StoreKitManager.shared.isKAISubscribed {
+                        let outcome = await StoreKitManager.shared.purchase(StoreKitManager.soundKAIProID)
+                        if case .success = outcome {
                             dismiss()
+                        } else {
+                            present(outcome)
                         }
                     }
                 } label: {
                     VStack(spacing: 4) {
-                        Text("Subscribe for $4.99/mo")
+                        Text("Subscribe for \(kaiPriceText)")
                             .font(.system(size: 18, weight: .semibold))
                     }
                     .foregroundStyle(.black)
@@ -67,8 +71,20 @@ struct KAIPaywallView: View {
                 
                 Button("Restore Purchases") {
                     Task {
-                        // In a real app, you'd call AppStore.sync()
-                        dismiss()
+                        do {
+                            try await AppStore.sync()
+                        } catch {
+                            statusMessage = "Restore couldn't be completed right now. Please try again in a moment."
+                            showingStatus = true
+                            return
+                        }
+                        await store.updateCustomerProductStatus()
+                        if store.isKAISubscribed {
+                            dismiss()
+                        } else {
+                            statusMessage = "No active Kai subscription was found to restore."
+                            showingStatus = true
+                        }
                     }
                 }
                 .font(.system(size: 13))
@@ -77,6 +93,31 @@ struct KAIPaywallView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .alert("Purchase Status", isPresented: $showingStatus) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(statusMessage)
+        }
+    }
+
+    private var kaiPriceText: String {
+        store.products.first(where: { $0.id == StoreKitManager.soundKAIProID }).map { "\($0.displayPrice)/mo" } ?? "$4.99/mo"
+    }
+
+    private func present(_ outcome: StoreKitManager.PurchaseOutcome) {
+        switch outcome {
+        case .success:
+            return
+        case .cancelled:
+            statusMessage = "Purchase cancelled."
+        case .pending:
+            statusMessage = "Your subscription purchase is pending approval."
+        case .unavailable:
+            statusMessage = "Kai Pro isn't available right now. Check your App Store product configuration."
+        case .failed(let message):
+            statusMessage = message
+        }
+        showingStatus = true
     }
 }
 

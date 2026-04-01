@@ -18,6 +18,10 @@
 	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>KAIBackendURL</key>
+	<string>https://stilla-api.vercel.app/kai/generate</string>
+	<key>KAIBackendToken</key>
+	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
@@ -25,7 +29,7 @@
 	<key>NSSiriUsageDescription</key>
 	<string>Stilla uses Siri to let you start and stop meditation sessions hands-free.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Still uses speech recognition to understand your meditation goals.</string>
+	<string>Stilla uses speech recognition to understand your meditation goals.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

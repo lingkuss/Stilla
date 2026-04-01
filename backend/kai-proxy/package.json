@@ -1,0 +1,17 @@
+{
+  "name": "stilla-kai-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "openai": "^4.103.0"
+  }
+}

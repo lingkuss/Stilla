@@ -555,7 +555,6 @@ struct ContentView: View {
 struct StatisticsView: View {
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
-    @State private var storeManager = StoreKitManager.shared
 
     private let milestones: [(icon: String, title: String, desc: String, check: (MeditationManager) -> Bool)] = [
         ("sparkles", "First Light", "First session", { $0.totalSecondsMeditated > 0 }),
@@ -571,10 +570,6 @@ struct StatisticsView: View {
         ("sun.max.fill", "Enlightened", "90-day streak", { $0.bestStreakDays >= 90 }),
         ("mountain.2.fill", "Zen Master", "100 hours total", { $0.totalSecondsMeditated >= 360000 }),
     ]
-
-    private var hasAdvancedStats: Bool {
-        storeManager.isPurchased(StoreKitManager.advancedStatsID)
-    }
 
     @State private var selectedMilestone: Int? = nil
 
@@ -635,92 +630,45 @@ struct StatisticsView: View {
                         }
                     }
 
-                    // MARK: Advanced Stats (IAP)
-                    if hasAdvancedStats {
-                        // Total Time Hero
-                        VStack(spacing: 8) {
-                            Text("Total Journey")
-                                .font(.subheadline.weight(.medium))
-                                .foregroundStyle(.white.opacity(0.6))
-                                .textCase(.uppercase)
-                                .tracking(2)
+                    VStack(spacing: 8) {
+                        Text("Total Journey")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(.white.opacity(0.6))
+                            .textCase(.uppercase)
+                            .tracking(2)
 
-                            Text(formatStatTime(manager.totalSecondsMeditated))
-                                .font(.system(size: 48, weight: .ultraLight, design: .rounded))
-                                .foregroundStyle(.white)
-                        }
-
-                        // Streak & Average
-                        HStack(spacing: 0) {
-                            statCard(
-                                icon: "flame.fill",
-                                label: "Streak",
-                                value: "\(manager.currentStreak) day\(manager.currentStreak == 1 ? "" : "s")",
-                                color: Color(hue: 0.08, saturation: 0.8, brightness: 0.95)
-                            )
-                            Rectangle()
-                                .fill(Color.white.opacity(0.1))
-                                .frame(width: 1, height: 40)
-                            statCard(
-                                icon: "clock.fill",
-                                label: "Daily Avg",
-                                value: formatStatTime(manager.averageSessionSeconds),
-                                color: Color(hue: 0.55, saturation: 0.6, brightness: 0.9)
-                            )
-                        }
-                        .padding(.horizontal, 24)
-
-                        // Weekly Bar Chart
-                        weeklyChartSection
-                            .padding(.horizontal, 24)
-
-                        // Personal Records
-                        recordsSection
-                            .padding(.horizontal, 24)
-
-                        // Heatmap
-                        heatmapSection
-                            .padding(.horizontal, 24)
-                    } else {
-                        // Unlock Prompt
-                        VStack(spacing: 16) {
-                            Image(systemName: "chart.bar.xaxis")
-                                .font(.largeTitle)
-                                .foregroundStyle(Color(hue: 0.55, saturation: 0.5, brightness: 0.8))
-
-                            Text("Unlock Advanced Stats")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-
-                            Text("Track your total time, streaks, weekly charts, records, and heatmap.")
-                                .font(.caption)
-                                .foregroundStyle(.white.opacity(0.5))
-                                .multilineTextAlignment(.center)
-
-                            Button {
-                                Task {
-                                    await storeManager.purchase(StoreKitManager.advancedStatsID)
-                                }
-                            } label: {
-                                Text("Unlock for $0.99")
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 28)
-                                    .padding(.vertical, 12)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color(hue: 0.55, saturation: 0.6, brightness: 0.7))
-                                    )
-                            }
-                        }
-                        .padding(.vertical, 24)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.white.opacity(0.04))
-                        )
-                        .padding(.horizontal, 24)
+                        Text(formatStatTime(manager.totalSecondsMeditated))
+                            .font(.system(size: 48, weight: .ultraLight, design: .rounded))
+                            .foregroundStyle(.white)
                     }
+
+                    HStack(spacing: 0) {
+                        statCard(
+                            icon: "flame.fill",
+                            label: "Streak",
+                            value: "\(manager.currentStreak) day\(manager.currentStreak == 1 ? "" : "s")",
+                            color: Color(hue: 0.08, saturation: 0.8, brightness: 0.95)
+                        )
+                        Rectangle()
+                            .fill(Color.white.opacity(0.1))
+                            .frame(width: 1, height: 40)
+                        statCard(
+                            icon: "clock.fill",
+                            label: "Daily Avg",
+                            value: formatStatTime(manager.averageSessionSeconds),
+                            color: Color(hue: 0.55, saturation: 0.6, brightness: 0.9)
+                        )
+                    }
+                    .padding(.horizontal, 24)
+
+                    weeklyChartSection
+                        .padding(.horizontal, 24)
+
+                    recordsSection
+                        .padding(.horizontal, 24)
+
+                    heatmapSection
+                        .padding(.horizontal, 24)
                 }
                 .padding(.bottom, 40)
             }
@@ -1173,7 +1121,7 @@ struct OnboardingView: View {
         ),
         OnboardingPage(
             title: "Meditate with Siri",
-            description: "Just say \"Hey Siri, begin Stilla\" to start your session instantly, totally hands-free.",
+            description: "Say \"Hey Siri, begin Stilla\" to start instantly, or \"Hey Siri, ask Kai for a meditation in Stilla\" for a personalized guided session.",
             systemImage: "mic.fill"
         )
     ]

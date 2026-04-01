@@ -1,6 +1,7 @@
 import SwiftUI
 import Speech
 import Foundation
+import UIKit
 
 struct KaiExperienceView: View {
     @Environment(MeditationManager.self) private var manager
@@ -14,8 +15,11 @@ struct KaiExperienceView: View {
     @State private var kaiPulse: Bool = false
     @State private var showingError: Bool = false
     @State private var showingPaywall: Bool = false
+    @State private var showingSettingsPrompt: Bool = false
     @State private var rotationAmount: Double = 0.0
     @State private var pulseAmount: Double = 0.0
+    @State private var errorTitle = "Kai is resting"
+    @State private var errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
     
     private let speechManager = SpeechManager.shared
     
@@ -167,15 +171,22 @@ struct KaiExperienceView: View {
                                 speechManager.stopRecording()
                                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                             } else {
-                                do {
-                                    speechManager.requestPermissions()
-                                    try speechManager.startRecording()
-                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                                    withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                                        kaiPulse = true
+                                Task {
+                                    do {
+                                        try await speechManager.requestPermissions()
+                                        try speechManager.startRecording()
+                                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                                            kaiPulse = true
+                                        }
+                                    } catch let speechError as SpeechManager.SpeechError {
+                                        errorMessage = speechError.localizedDescription
+                                        showingSettingsPrompt = true
+                                    } catch {
+                                        errorTitle = "Voice Input Unavailable"
+                                        errorMessage = "Voice input isn't available right now. Please type your mood instead."
+                                        showingError = true
                                     }
-                                } catch {
-                                    showingError = true
                                 }
                             }
                         } label: {
@@ -290,10 +301,18 @@ struct KaiExperienceView: View {
                 .padding(.bottom, 60)
             }
         }
-        .alert("Kai is resting", isPresented: $showingError) {
+        .alert(errorTitle, isPresented: $showingError) {
             Button("I understand") { }
         } message: {
-            Text("I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment.")
+            Text(errorMessage)
+        }
+        .alert("Open Settings?", isPresented: $showingSettingsPrompt) {
+            Button("Open Settings") {
+                openAppSettings()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
         }
     }
     
@@ -395,9 +414,31 @@ struct KaiExperienceView: View {
                 
                 dismiss()
             } catch {
+                if case KaiBrainService.BrainError.serviceUnavailable = error {
+                    errorTitle = "Kai Not Configured"
+                    errorMessage = "Kai is not configured for production yet. Add your backend URL before requesting personalized sessions."
+                } else if let urlError = error as? URLError {
+                    errorTitle = "Connection Problem"
+                    switch urlError.code {
+                    case .notConnectedToInternet, .networkConnectionLost:
+                        errorMessage = "You're offline. Reconnect to the internet and try generating your Kai session again."
+                    case .timedOut:
+                        errorMessage = "Kai took too long to respond. Please try again in a moment."
+                    default:
+                        errorMessage = "Kai couldn't be reached right now. Please try again shortly."
+                    }
+                } else {
+                    errorTitle = "Kai is resting"
+                    errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
+                }
                 showingError = true
                 isGenerating = false
             }
         }
+    }
+
+    private func openAppSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 }

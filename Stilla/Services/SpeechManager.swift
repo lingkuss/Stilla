@@ -7,6 +7,23 @@ import Observation
 @Observable
 class SpeechManager {
     static let shared = SpeechManager()
+
+    enum SpeechError: LocalizedError {
+        case speechPermissionDenied
+        case microphonePermissionDenied
+        case recognizerUnavailable
+
+        var errorDescription: String? {
+            switch self {
+            case .speechPermissionDenied:
+                return "Speech recognition access is turned off for Stilla. Enable it in Settings to use voice input for Kai."
+            case .microphonePermissionDenied:
+                return "Microphone access is turned off for Stilla. Enable it in Settings to speak with Kai."
+            case .recognizerUnavailable:
+                return "Speech recognition is currently unavailable on this device."
+            }
+        }
+    }
     
     var transcription: String = ""
     var isRecording: Bool = false
@@ -17,15 +34,46 @@ class SpeechManager {
     private var recognitionTask: SFSpeechRecognitionTask?
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     
-    func requestPermissions() {
-        SFSpeechRecognizer.requestAuthorization { status in
-            Task { @MainActor in
-                self.speechAuthorized = (status == .authorized)
+    func requestPermissions() async throws {
+        let speechStatus = await withCheckedContinuation { continuation in
+            SFSpeechRecognizer.requestAuthorization { status in
+                continuation.resume(returning: status)
+            }
+        }
+
+        speechAuthorized = (speechStatus == .authorized)
+        guard speechAuthorized else {
+            throw SpeechError.speechPermissionDenied
+        }
+
+        let micGranted = await requestMicrophonePermission()
+        guard micGranted else {
+            throw SpeechError.microphonePermissionDenied
+        }
+    }
+
+    private func requestMicrophonePermission() async -> Bool {
+        await withCheckedContinuation { continuation in
+            if #available(iOS 17.0, *) {
+                AVAudioApplication.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            } else {
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
             }
         }
     }
     
     func startRecording() throws {
+        guard speechAuthorized else {
+            throw SpeechError.speechPermissionDenied
+        }
+        guard speechRecognizer != nil else {
+            throw SpeechError.recognizerUnavailable
+        }
+
         // Cancel previous task
         recognitionTask?.cancel()
         recognitionTask = nil

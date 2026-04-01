@@ -168,6 +168,47 @@ final class MeditationManager {
         savedMeditations.removeAll(where: { $0.id == id })
     }
 
+    func toggleFavoriteSavedMeditation(_ id: UUID) {
+        guard let index = savedMeditations.firstIndex(where: { $0.id == id }) else { return }
+        savedMeditations[index].isFavorite.toggle()
+    }
+
+    func addTag(_ tag: String, toSavedMeditation id: UUID) {
+        let normalized = normalizedTag(tag)
+        guard !normalized.isEmpty,
+              let index = savedMeditations.firstIndex(where: { $0.id == id }) else { return }
+
+        let existingTags = savedMeditations[index].tags.map { $0.lowercased() }
+        guard !existingTags.contains(normalized.lowercased()) else { return }
+        savedMeditations[index].tags.append(normalized)
+        savedMeditations[index].tags.sort()
+    }
+
+    func renameSavedMeditation(_ id: UUID, to newTitle: String) {
+        let normalized = normalizedTitle(newTitle)
+        guard !normalized.isEmpty,
+              let index = savedMeditations.firstIndex(where: { $0.id == id }) else { return }
+        savedMeditations[index].title = normalized
+    }
+
+    func removeTag(_ tag: String, fromSavedMeditation id: UUID) {
+        guard let index = savedMeditations.firstIndex(where: { $0.id == id }) else { return }
+        savedMeditations[index].tags.removeAll { $0.caseInsensitiveCompare(tag) == .orderedSame }
+    }
+
+    private func normalizedTitle(_ rawTitle: String) -> String {
+        let trimmed = rawTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return "" }
+        return trimmed.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+    }
+
+    private func normalizedTag(_ rawTag: String) -> String {
+        let trimmed = rawTag.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return "" }
+        let collapsed = trimmed.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+        return String(collapsed.prefix(18))
+    }
+
     // MARK: - Computed Properties
 
     var totalSecondsMeditated: Int {

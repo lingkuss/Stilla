@@ -12,12 +12,40 @@ struct ScriptStep: Identifiable, Codable {
 
 struct MeditationScript: Identifiable, Codable {
     var id = UUID()
-    let title: String
-    let durationMinutes: Int
-    let steps: [ScriptStep]
+    var title: String
+    var durationMinutes: Int
+    var steps: [ScriptStep]
+    var isFavorite: Bool
+    var tags: [String]
     
     enum CodingKeys: String, CodingKey {
-        case title, durationMinutes, steps
+        case id, title, durationMinutes, steps, isFavorite, tags
+    }
+
+    init(
+        id: UUID = UUID(),
+        title: String,
+        durationMinutes: Int,
+        steps: [ScriptStep],
+        isFavorite: Bool = false,
+        tags: [String] = []
+    ) {
+        self.id = id
+        self.title = title
+        self.durationMinutes = durationMinutes
+        self.steps = steps
+        self.isFavorite = isFavorite
+        self.tags = tags
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        title = try container.decode(String.self, forKey: .title)
+        durationMinutes = try container.decode(Int.self, forKey: .durationMinutes)
+        steps = try container.decode([ScriptStep].self, forKey: .steps)
+        isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
+        tags = try container.decodeIfPresent([String].self, forKey: .tags) ?? []
     }
 }
 

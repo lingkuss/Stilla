@@ -215,6 +215,22 @@ struct SettingsView: View {
                     Label("Voice Commands", systemImage: "mic.fill")
                 }
 
+                Section {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Label("Kai Cloud Processing", systemImage: "lock.shield.fill")
+                            .foregroundStyle(.white.opacity(0.85))
+
+                        Text("When you use Kai, your prompt and selected duration are sent to Stilla's cloud service to generate a personalized meditation.")
+                            .foregroundStyle(.white.opacity(0.7))
+
+                        Text("Avoid sharing medical details or highly sensitive personal information in Kai prompts.")
+                            .foregroundStyle(.white.opacity(0.55))
+                    }
+                    .padding(.vertical, 4)
+                } header: {
+                    Label("Privacy & Data", systemImage: "hand.raised.fill")
+                }
+
                 // Support / Information
                 Section {
                     Button {
@@ -277,24 +293,16 @@ struct SoundSelectionView: View {
     @State private var storeManager = StoreKitManager.shared
     @State private var previewTimer: Timer?
     @State private var showingPurchaseSheet = false
-    @State private var selectedLockedSoundID: String? = nil
     @State private var selectedLockedSoundName: String = ""
-    
-    private let premiumTones: [SoundEngine.Sound: String] = [
-        .zenWoodblock: StoreKitManager.soundZenWoodblockID,
-        .bambooChime: StoreKitManager.soundBambooChimeID,
-        .templeBell: StoreKitManager.soundTempleBellID
+    @State private var purchaseStatusMessage = ""
+    @State private var showingPurchaseStatus = false
+
+    private let premiumTones: Set<SoundEngine.Sound> = [
+        .zenWoodblock, .bambooChime, .templeBell
     ]
-    
-    private let premiumAmbiences: [SoundEngine.AmbientSound: String] = [
-        .delta: StoreKitManager.ambientBinauralDeltaID,
-        .alpha: StoreKitManager.ambientBinauralAlphaID,
-        .beta: StoreKitManager.ambientBinauralBetaID,
-        .whiteNoise: StoreKitManager.ambientNoiseWhiteID,
-        .pinkNoise: StoreKitManager.ambientNoisePinkID,
-        .brownNoise: StoreKitManager.ambientNoiseBrownID,
-        .solfeggioLove: StoreKitManager.ambientSolfeggioLoveID,
-        .solfeggioNature: StoreKitManager.ambientSolfeggioNatureID
+
+    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
+        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
     ]
     
     private let ambientDescriptions: [SoundEngine.AmbientSound: String] = [
@@ -354,6 +362,11 @@ struct SoundSelectionView: View {
         .sheet(isPresented: $showingPurchaseSheet) {
             premiumPurchaseModal
         }
+        .alert("Purchase Status", isPresented: $showingPurchaseStatus) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(purchaseStatusMessage)
+        }
     }
     
     private func titleForMode() -> String {
@@ -368,12 +381,11 @@ struct SoundSelectionView: View {
     
     private func toneRow(_ sound: SoundEngine.Sound) -> some View {
         let isSelected = (mode == .start && manager.startSound == sound) || (mode == .end && manager.endSound == sound)
-        let productID = premiumTones[sound]
-        let isPremium = productID != nil
-        let isLocked = isPremium && !storeManager.isPurchased(productID!)
+        let isPremium = premiumTones.contains(sound)
+        let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
         
         return Button {
-            handleToneTap(sound, isLocked: isLocked, productID: productID)
+            handleToneTap(sound, isLocked: isLocked)
         } label: {
             HStack {
                 Text(sound.rawValue)
@@ -392,12 +404,11 @@ struct SoundSelectionView: View {
     
     private func ambientRow(_ ambient: SoundEngine.AmbientSound) -> some View {
         let isSelected = manager.ambientSound == ambient
-        let productID = premiumAmbiences[ambient]
-        let isPremium = productID != nil
-        let isLocked = isPremium && !storeManager.isPurchased(productID!)
+        let isPremium = premiumAmbiences.contains(ambient)
+        let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
         
         return Button {
-            handleAmbientTap(ambient, isLocked: isLocked, productID: productID)
+            handleAmbientTap(ambient, isLocked: isLocked)
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -423,13 +434,12 @@ struct SoundSelectionView: View {
     
     // MARK: - Event Handlers
     
-    private func handleToneTap(_ sound: SoundEngine.Sound, isLocked: Bool, productID: String?) {
+    private func handleToneTap(_ sound: SoundEngine.Sound, isLocked: Bool) {
         // Always preview
         startPreviewTimer()
         manager.soundEngine.playSound(sound)
         
         if isLocked {
-            selectedLockedSoundID = productID
             selectedLockedSoundName = sound.rawValue
             showingPurchaseSheet = true
         } else {
@@ -442,13 +452,12 @@ struct SoundSelectionView: View {
         }
     }
     
-    private func handleAmbientTap(_ ambient: SoundEngine.AmbientSound, isLocked: Bool, productID: String?) {
+    private func handleAmbientTap(_ ambient: SoundEngine.AmbientSound, isLocked: Bool) {
         // Always preview
         startPreviewTimer()
         manager.soundEngine.startAmbientSound(ambient)
         
         if isLocked {
-            selectedLockedSoundID = productID
             selectedLockedSoundName = ambient.rawValue
             showingPurchaseSheet = true
         } else {
@@ -464,8 +473,9 @@ struct SoundSelectionView: View {
         // Only auto-stop if we are NOT in an active meditation session.
         // If meditating, let the sound continue as part of the session.
         if manager.state != .meditating {
+            let soundEngine = manager.soundEngine
             previewTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
-                manager.soundEngine.stopAll()
+                soundEngine.stopAll()
             }
         }
     }
@@ -490,12 +500,10 @@ struct SoundSelectionView: View {
                     .foregroundStyle(.blue)
                 
                 VStack(spacing: 8) {
-                    Text("Unlock ")
-                        .font(.title2) +
-                    Text(selectedLockedSoundName)
+                    Text("Unlock Premium Sound Library")
                         .font(.title2.bold())
                     
-                    Text("Premium procedural audio. Pure, rich, and generated instantly.")
+                    Text("\(selectedLockedSoundName) is part of the full premium sound library, which unlocks every premium tone and ambience.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -503,30 +511,13 @@ struct SoundSelectionView: View {
                 }
                 
                 VStack(spacing: 16) {
-                    if let id = selectedLockedSoundID {
-                        Button {
-                            Task {
-                                await storeManager.purchase(id)
-                                if storeManager.isPurchased(id) {
-                                    showingPurchaseSheet = false
-                                }
-                            }
-                        } label: {
-                            Text("Unlock Single Sound - $0.99")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.white.opacity(0.1))
-                                .clipShape(Capsule())
-                        }
-                        .foregroundStyle(.white)
-                    }
-                    
                     Button {
                         Task {
-                            await storeManager.purchase(StoreKitManager.soundBundleID)
-                            if storeManager.isPurchased(StoreKitManager.soundBundleID) {
+                            let outcome = await storeManager.purchase(StoreKitManager.soundBundleID)
+                            if case .success = outcome {
                                 showingPurchaseSheet = false
+                            } else {
+                                presentPurchaseStatus(outcome)
                             }
                         }
                     } label: {
@@ -558,5 +549,21 @@ struct SoundSelectionView: View {
             .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.10).ignoresSafeArea())
         }
         .presentationDetents([.fraction(0.6)])
+    }
+
+    private func presentPurchaseStatus(_ outcome: StoreKitManager.PurchaseOutcome) {
+        switch outcome {
+        case .success:
+            return
+        case .cancelled:
+            purchaseStatusMessage = "Purchase cancelled."
+        case .pending:
+            purchaseStatusMessage = "Your premium library purchase is pending approval."
+        case .unavailable:
+            purchaseStatusMessage = "The premium library isn't available right now. Check your App Store product configuration."
+        case .failed(let message):
+            purchaseStatusMessage = message
+        }
+        showingPurchaseStatus = true
     }
 }

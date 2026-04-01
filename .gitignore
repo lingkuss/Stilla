@@ -71,6 +71,7 @@ DerivedData/
 *.swp
 *~
 executable
+node_modules/
 *.com
 *.class
 *.dll
