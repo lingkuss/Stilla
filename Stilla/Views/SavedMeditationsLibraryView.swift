@@ -6,6 +6,7 @@ struct SavedMeditationsLibraryView: View {
 
     @State private var searchText = ""
     @State private var selectedFilter: LibraryFilter = .all
+    @State private var selectedPersonalityID: String = "all"
 
     private enum LibraryFilter: String, CaseIterable, Identifiable {
         case all = "All"
@@ -22,7 +23,7 @@ struct SavedMeditationsLibraryView: View {
                 if lhs.isFavorite != rhs.isFavorite {
                     return lhs.isFavorite && !rhs.isFavorite
                 }
-                return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
+                return lhs.createdAt > rhs.createdAt
             }
     }
 
@@ -30,6 +31,11 @@ struct SavedMeditationsLibraryView: View {
         let defaults = ["Sleep", "Focus", "Calm", "Stress", "Morning", "Evening"]
         let existing = manager.savedMeditations.flatMap(\.tags)
         return Array(Set(defaults + existing)).sorted()
+    }
+
+    private var availablePersonalities: [KaiPersonality] {
+        let ids = Set(manager.savedMeditations.compactMap(\.kaiPersonalityID))
+        return KaiPersonality.all.filter { ids.contains($0.id) }
     }
 
     var body: some View {
@@ -119,6 +125,18 @@ struct SavedMeditationsLibraryView: View {
                 }
             }
             .pickerStyle(.segmented)
+
+            if !availablePersonalities.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        personalityFilterChip(title: "All Personas", personalityID: "all")
+
+                        ForEach(availablePersonalities) { personality in
+                            personalityFilterChip(title: personality.name, personalityID: personality.id)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -163,10 +181,16 @@ struct SavedMeditationsLibraryView: View {
     private func matchesFilter(_ script: MeditationScript) -> Bool {
         switch selectedFilter {
         case .all:
-            return true
+            break
         case .favorites:
-            return script.isFavorite
+            guard script.isFavorite else { return false }
         }
+
+        if selectedPersonalityID != "all" {
+            return script.kaiPersonalityID == selectedPersonalityID
+        }
+
+        return true
     }
 
     private func matchesSearch(_ script: MeditationScript) -> Bool {
@@ -174,6 +198,11 @@ struct SavedMeditationsLibraryView: View {
         guard !query.isEmpty else { return true }
 
         if script.title.localizedCaseInsensitiveContains(query) {
+            return true
+        }
+
+        if let personalityName = script.resolvedKaiPersonalityName,
+           personalityName.localizedCaseInsensitiveContains(query) {
             return true
         }
 
@@ -190,6 +219,23 @@ struct SavedMeditationsLibraryView: View {
 
         dismiss()
     }
+
+    private func personalityFilterChip(title: String, personalityID: String) -> some View {
+        Button {
+            selectedPersonalityID = personalityID
+        } label: {
+            Text(title)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(selectedPersonalityID == personalityID ? .black : .white.opacity(0.7))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    Capsule()
+                        .fill(selectedPersonalityID == personalityID ? Color.white : Color.white.opacity(0.06))
+                )
+        }
+        .buttonStyle(.plain)
+    }
 }
 
 struct SavedMeditationRow: View {
@@ -205,6 +251,13 @@ struct SavedMeditationRow: View {
     @State private var isExpanded = false
     @State private var draftTitle: String
     @State private var newTagText = ""
+
+    private static let createdDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
 
     init(
         script: MeditationScript,
@@ -246,9 +299,17 @@ struct SavedMeditationRow: View {
                             .fill(Color.white.opacity(0.05))
                             .frame(width: 48, height: 48)
 
-                        Image(systemName: script.isFavorite ? "heart.fill" : "quote.bubble.fill")
-                            .font(.system(size: 18))
-                            .foregroundStyle(script.isFavorite ? .pink : Color(hue: 0.55, saturation: 0.4, brightness: 0.9))
+                        if let personality = script.generatedPersonality {
+                            Image(personality.imageName)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 48, height: 48)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: script.isFavorite ? "heart.fill" : "quote.bubble.fill")
+                                .font(.system(size: 18))
+                                .foregroundStyle(script.isFavorite ? .pink : Color(hue: 0.55, saturation: 0.4, brightness: 0.9))
+                        }
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
@@ -267,6 +328,14 @@ struct SavedMeditationRow: View {
                         Text("\(script.durationMinutes)m Journey")
                             .font(.system(size: 12))
                             .foregroundStyle(.white.opacity(0.4))
+
+                        Text("Created \(Self.createdDateFormatter.string(from: script.createdAt))")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.35))
+
+                        if let personalityName = script.resolvedKaiPersonalityName {
+                            personalityBadge(personalityName)
+                        }
 
                         if !script.tags.isEmpty {
                             tagWrap(script.tags, removable: false)
@@ -310,6 +379,26 @@ struct SavedMeditationRow: View {
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Created")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.6))
+
+                            Text(Self.createdDateFormatter.string(from: script.createdAt))
+                                .font(.system(size: 13))
+                                .foregroundStyle(.white.opacity(0.72))
+                        }
+
+                        if let personalityName = script.resolvedKaiPersonalityName {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Generated With")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.white.opacity(0.6))
+
+                                personalityBadge(personalityName)
+                            }
+                        }
+
                         Text("Title")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.6))
@@ -473,6 +562,19 @@ struct SavedMeditationRow: View {
         }
         onRename(trimmed)
         draftTitle = trimmed
+    }
+
+    private func personalityBadge(_ name: String) -> some View {
+        Text(name)
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(Color(hue: 0.55, saturation: 0.35, brightness: 0.95))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Capsule().fill(Color(hue: 0.55, saturation: 0.4, brightness: 0.18).opacity(0.55)))
+            .overlay(
+                Capsule()
+                    .strokeBorder(Color(hue: 0.55, saturation: 0.3, brightness: 0.85).opacity(0.35), lineWidth: 1)
+            )
     }
 }
 

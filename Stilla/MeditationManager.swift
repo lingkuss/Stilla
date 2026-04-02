@@ -110,6 +110,10 @@ final class MeditationManager {
         didSet { UserDefaults.standard.set(kaiVoiceIdentifier, forKey: "kaiVoiceIdentifier") }
     }
 
+    var selectedKaiPersonalityID: String {
+        didSet { UserDefaults.standard.set(selectedKaiPersonalityID, forKey: "selectedKaiPersonalityID") }
+    }
+
     var meditationHistory: [String: Int] {
         didSet { UserDefaults.standard.set(meditationHistory, forKey: "meditationHistory") }
     }
@@ -157,6 +161,10 @@ final class MeditationManager {
     var isCurrentScriptSaved: Bool {
         guard let current = currentScript else { return false }
         return savedMeditations.contains(where: { $0.id == current.id })
+    }
+
+    var selectedKaiPersonality: KaiPersonality {
+        KaiPersonality.personality(for: selectedKaiPersonalityID)
     }
 
     func saveCurrentScript() {
@@ -415,6 +423,7 @@ final class MeditationManager {
         self.isGuruEnabled = UserDefaults.standard.bool(forKey: "isGuruEnabled")
         
         self.kaiVoiceIdentifier = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") ?? ""
+        self.selectedKaiPersonalityID = UserDefaults.standard.string(forKey: "selectedKaiPersonalityID") ?? KaiPersonality.default.id
         
         self.meditationHistory = (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
         

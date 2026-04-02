@@ -1097,6 +1097,7 @@ struct CustomTechniqueEditor: View {
 struct OnboardingView: View {
     @Environment(MeditationManager.self) private var manager
     @State private var currentPage = 0
+    @State private var selectedOnboardingPersonalityID: String? = nil
     
     let pages = [
         OnboardingPage(
@@ -1113,6 +1114,12 @@ struct OnboardingView: View {
             title: "Kai: Your AI Guide",
             description: "Meet Kai, your personalized meditation architect. Speak your mood, and Kai will craft a unique, guided journey just for you.",
             systemImage: "sparkles"
+        ),
+        OnboardingPage(
+            title: "Choose Your Kai",
+            description: "Pick the voice you want guiding your practice.",
+            systemImage: "person.crop.rectangle.stack.fill",
+            style: .personalitySelection
         ),
         OnboardingPage(
             title: "Immersive Soundscapes",
@@ -1134,27 +1141,20 @@ struct OnboardingView: View {
             VStack(spacing: 40) {
                 TabView(selection: $currentPage) {
                     ForEach(0..<pages.count, id: \.self) { index in
-                        VStack(spacing: 24) {
-                            Image(systemName: pages[index].systemImage)
-                                .font(.system(size: 80, weight: .thin))
-                                .foregroundStyle(Color(hue: 0.55, saturation: 0.6, brightness: 0.8))
-                                .padding(.bottom, 20)
-                            
-                            Text(pages[index].title)
-                                .font(.system(size: 28, weight: .light, design: .rounded))
-                                .foregroundStyle(.white)
-                            
-                            Text(pages[index].description)
-                                .font(.body)
-                                .foregroundStyle(.white.opacity(0.6))
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal, 40)
-                                .lineSpacing(4)
-                        }
+                        pageView(for: pages[index])
                         .tag(index)
                     }
                 }
-                .tabViewStyle(.page(indexDisplayMode: .always))
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(maxHeight: 640)
+
+                HStack(spacing: 8) {
+                    ForEach(0..<pages.count, id: \.self) { index in
+                        Capsule()
+                            .fill(index == currentPage ? .white : .white.opacity(0.22))
+                            .frame(width: index == currentPage ? 20 : 8, height: 8)
+                    }
+                }
                 
                 Button {
                     if currentPage < pages.count - 1 {
@@ -1169,19 +1169,123 @@ struct OnboardingView: View {
                 } label: {
                     Text(currentPage == pages.count - 1 ? "Get Started" : "Next")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(isNextEnabled ? .white : .white.opacity(0.45))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
                         .background(
                             Capsule()
-                                .fill(Color(hue: 0.55, saturation: 0.6, brightness: 0.7))
+                                .fill(
+                                    isNextEnabled
+                                        ? Color(hue: 0.55, saturation: 0.6, brightness: 0.7)
+                                        : Color.white.opacity(0.10)
+                                )
                         )
                         .padding(.horizontal, 40)
                 }
+                .disabled(!isNextEnabled)
             }
             .padding(.vertical, 60)
         }
         .preferredColorScheme(.dark)
+    }
+
+    private var isNextEnabled: Bool {
+        pages[currentPage].style != .personalitySelection || selectedOnboardingPersonalityID != nil
+    }
+
+    @ViewBuilder
+    private func pageView(for page: OnboardingPage) -> some View {
+        switch page.style {
+        case .standard:
+            VStack(spacing: 24) {
+                Image(systemName: page.systemImage)
+                    .font(.system(size: 80, weight: .thin))
+                    .foregroundStyle(Color(hue: 0.55, saturation: 0.6, brightness: 0.8))
+                    .padding(.bottom, 20)
+                
+                Text(page.title)
+                    .font(.system(size: 28, weight: .light, design: .rounded))
+                    .foregroundStyle(.white)
+                
+                Text(page.description)
+                    .font(.body)
+                    .foregroundStyle(.white.opacity(0.6))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+                    .lineSpacing(4)
+            }
+
+        case .personalitySelection:
+            VStack(spacing: 24) {
+                Image(systemName: page.systemImage)
+                    .font(.system(size: 70, weight: .thin))
+                    .foregroundStyle(Color(hue: 0.55, saturation: 0.6, brightness: 0.8))
+                
+                Text(page.title)
+                    .font(.system(size: 28, weight: .light, design: .rounded))
+                    .foregroundStyle(.white)
+                
+                Text(page.description)
+                    .font(.body)
+                    .foregroundStyle(.white.opacity(0.6))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+                    .lineSpacing(4)
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 14) {
+                        ForEach(KaiPersonality.all) { personality in
+                            Button {
+                                manager.selectedKaiPersonalityID = personality.id
+                                selectedOnboardingPersonalityID = personality.id
+                                UISelectionFeedbackGenerator().selectionChanged()
+                            } label: {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Image(personality.imageName)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 210, height: 150)
+                                        .clipped()
+                                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 24)
+                                                .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+                                        }
+
+                                    HStack(spacing: 8) {
+                                        Text(personality.name)
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundStyle(.white)
+
+                                        if selectedOnboardingPersonalityID == personality.id {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundStyle(.white.opacity(0.9))
+                                        }
+                                    }
+
+                                    Text(personality.shortDescription)
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.white.opacity(0.65))
+                                        .multilineTextAlignment(.leading)
+                                }
+                                .frame(width: 210, alignment: .leading)
+                                .padding(16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 28)
+                                        .fill(selectedOnboardingPersonalityID == personality.id ? Color.white.opacity(0.10) : Color.white.opacity(0.04))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 28)
+                                                .strokeBorder(selectedOnboardingPersonalityID == personality.id ? .white.opacity(0.22) : .white.opacity(0.06), lineWidth: 1)
+                                        )
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                }
+            }
+        }
     }
 }
 
@@ -1189,4 +1293,17 @@ struct OnboardingPage {
     let title: String
     let description: String
     let systemImage: String
+    let style: Style
+
+    init(title: String, description: String, systemImage: String, style: Style = .standard) {
+        self.title = title
+        self.description = description
+        self.systemImage = systemImage
+        self.style = style
+    }
+
+    enum Style {
+        case standard
+        case personalitySelection
+    }
 }

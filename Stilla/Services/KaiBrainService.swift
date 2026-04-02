@@ -25,7 +25,7 @@ class KaiBrainService {
     }
     
     /// Generates a personalized meditation script based on mood and duration.
-    func generateScript(mood: String, durationMinutes: Int) async throws -> MeditationScript {
+    func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality) async throws -> MeditationScript {
         guard let url = Secrets.kaiBackendURL else {
             throw BrainError.serviceUnavailable
         }
@@ -39,7 +39,9 @@ class KaiBrainService {
 
         let body = KaiGenerationRequest(
             mood: mood,
-            durationMinutes: durationMinutes
+            durationMinutes: durationMinutes,
+            personalityName: personality.name,
+            personalityPrompt: personality.promptInjection
         )
         request.httpBody = try JSONEncoder().encode(body)
         
@@ -100,9 +102,15 @@ class KaiBrainService {
                 )
             }
             return MeditationScript(
+                id: script.id,
                 title: script.title,
                 durationMinutes: script.durationMinutes,
-                steps: stretchedSteps
+                steps: stretchedSteps,
+                isFavorite: script.isFavorite,
+                tags: script.tags,
+                kaiPersonalityID: script.kaiPersonalityID,
+                kaiPersonalityName: script.kaiPersonalityName,
+                createdAt: script.createdAt
             )
         }
         
@@ -112,4 +120,6 @@ class KaiBrainService {
 private struct KaiGenerationRequest: Codable {
     let mood: String
     let durationMinutes: Int
+    let personalityName: String
+    let personalityPrompt: String
 }

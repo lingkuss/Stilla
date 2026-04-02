@@ -35,6 +35,8 @@ app.post("/kai/generate", async (req, res) => {
 
         const mood = typeof req.body?.mood === "string" ? req.body.mood.trim() : "";
         const durationMinutes = Number(req.body?.durationMinutes);
+        const personalityName = typeof req.body?.personalityName === "string" ? req.body.personalityName.trim() : "Zen Minimalist";
+        const personalityPrompt = typeof req.body?.personalityPrompt === "string" ? req.body.personalityPrompt.trim() : "";
 
         if (!mood || !Number.isInteger(durationMinutes) || durationMinutes < 1 || durationMinutes > 180) {
             return res.status(400).json({
@@ -42,7 +44,7 @@ app.post("/kai/generate", async (req, res) => {
             });
         }
 
-        const systemPrompt = buildSystemPrompt(mood, durationMinutes);
+        const systemPrompt = buildSystemPrompt(mood, durationMinutes, personalityName, personalityPrompt);
         const completion = await openai.chat.completions.create({
             model,
             response_format: { type: "json_object" },
@@ -85,9 +87,21 @@ app.listen(port, () => {
     console.log(`Stilla Kai proxy listening on :${port}`);
 });
 
-function buildSystemPrompt(mood, durationMinutes) {
+function buildSystemPrompt(mood, durationMinutes, personalityName, personalityPrompt) {
     return `
-You are Kai, a Zen meditation guide. Create a personalized meditation script in JSON format.
+You are Kai.
+You must fully assume the selected persona below.
+Persona compliance is mandatory.
+Do not blend this persona with a generic meditation voice.
+Do not soften, average out, or partially apply the persona.
+The user should be able to clearly feel which persona they chose from the wording alone.
+
+Selected persona: ${personalityName}
+
+Persona instructions:
+${personalityPrompt}
+
+Now create a personalized meditation script in JSON format.
 The JSON must follow this structure exactly:
 {
   "title": "A short, poetic title",
@@ -101,7 +115,22 @@ Guidelines:
 - Total duration: ${durationMinutes} minutes (${durationMinutes * 60} seconds).
 - The "pauseDuration" field is in SECONDS. Provide generous pauses between steps.
 - Ensure the sum of pauseDurations plus reading time roughly matches the total duration.
-- Be poetic, compassionate, and grounded.
+- Stay safe, non-diagnostic, and non-medical.
+- Do not claim to treat mental illness, trauma, or medical conditions.
+- Do not encourage emotional dependency.
+- If the user expresses distress, respond gently and keep the meditation grounded and supportive.
+- Keep the meditation useful and coherent, but let the persona strongly shape:
+  - sentence length
+  - emotional tone
+  - metaphor density
+  - pacing
+  - level of warmth vs restraint
+  - how distraction is described
+- If the selected persona is minimal, be truly minimal.
+- If the selected persona is practical, be plainly practical.
+- If the selected persona is poetic, be richly poetic.
+- If the selected persona is analytical, sound observant and reflective.
+- If the selected persona is formal and esoteric, stay formal and esoteric throughout.
 - Respond ONLY with raw JSON. No markdown, no filler.
 `.trim();
 }

@@ -16,6 +16,7 @@ struct KaiExperienceView: View {
     @State private var showingError: Bool = false
     @State private var showingPaywall: Bool = false
     @State private var showingSettingsPrompt: Bool = false
+    @State private var isPersonalityPickerExpanded = false
     @State private var rotationAmount: Double = 0.0
     @State private var pulseAmount: Double = 0.0
     @State private var errorTitle = "Kai is resting"
@@ -27,6 +28,14 @@ struct KaiExperienceView: View {
         "Deep Stress", "Sleep Prep", "Creative Flow", 
         "Morning Spark", "Anxiety Calm", "Grateful Heart"
     ]
+
+    private var availablePersonalities: [KaiPersonality] {
+        KaiPersonality.all
+    }
+
+    private var activePersonality: KaiPersonality {
+        manager.selectedKaiPersonality
+    }
     
     var body: some View {
         NavigationStack {
@@ -41,13 +50,8 @@ struct KaiExperienceView: View {
                     mainInputView
                 }
             }
-            .navigationTitle("Kai Experience")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") { dismiss() }
-                        .foregroundStyle(.white.opacity(0.6))
-                }
+            .overlay(alignment: .top) {
+                kaiTopBar
             }
             .preferredColorScheme(.dark)
             .onChange(of: speechManager.transcription) { _, newValue in
@@ -72,6 +76,8 @@ struct KaiExperienceView: View {
                     // Trigger generation
                     generateMeditation()
                 }
+
+                isPersonalityPickerExpanded = false
             }
             .sheet(isPresented: $showingPaywall) {
                 KAIPaywallView()
@@ -82,39 +88,6 @@ struct KaiExperienceView: View {
     private var mainInputView: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Status Badge
-                Group {
-                    if store.isKAISubscribed {
-                        HStack(spacing: 6) {
-                            Image(systemName: "sparkles")
-                                .font(.system(size: 12, weight: .bold))
-                            Text("KAI PRO MEMBER")
-                                .font(.system(size: 10, weight: .bold))
-                                .kerning(1)
-                        }
-                        .foregroundStyle(.blue)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Capsule().fill(.blue.opacity(0.1)))
-                    } else {
-                        HStack(spacing: 6) {
-                            Image(systemName: "bolt.fill")
-                                .font(.system(size: 10))
-                            Text(KaiBrainService.shared.isFreeGenerationAvailable ? "1 FREE MONTHLY CREDIT" : "0 CREDITS REMAINING")
-                                .font(.system(size: 10, weight: .bold))
-                                .kerning(1)
-                        }
-                        .foregroundStyle(.white.opacity(0.4))
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background {
-                            Capsule()
-                                .strokeBorder(.white.opacity(0.1), lineWidth: 1)
-                        }
-                    }
-                }
-                .padding(.top, 12)
-
                 // Intro
                 VStack(spacing: 12) {
                     Text("How are you feeling?")
@@ -125,6 +98,9 @@ struct KaiExperienceView: View {
                         .foregroundStyle(.white.opacity(0.4))
                 }
                 .multilineTextAlignment(.center)
+                .padding(.top, 0)
+
+                personalitySection
                 
                 // Voice / Text Input Box
                 VStack(spacing: 24) {
@@ -300,6 +276,7 @@ struct KaiExperienceView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 60)
             }
+            .padding(.top, 68)
         }
         .alert(errorTitle, isPresented: $showingError) {
             Button("I understand") { }
@@ -391,10 +368,13 @@ struct KaiExperienceView: View {
                     combinedMood += "Mood/Details: \(moodText)"
                 }
                 
-                let script = try await KaiBrainService.shared.generateScript(
+                var script = try await KaiBrainService.shared.generateScript(
                     mood: combinedMood.isEmpty ? "Calm" : combinedMood,
-                    durationMinutes: selectedDuration
+                    durationMinutes: selectedDuration,
+                    personality: activePersonality
                 )
+                script.kaiPersonalityID = activePersonality.id
+                script.kaiPersonalityName = activePersonality.name
                 
                 // If we got here and weren't subscribed, consume the free credit
                 if !isSubscribed {
@@ -441,4 +421,245 @@ struct KaiExperienceView: View {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url)
     }
+
+    private var personalitySection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    isPersonalityPickerExpanded.toggle()
+                }
+            } label: {
+                HStack(alignment: .center, spacing: 16) {
+                    Image(activePersonality.imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 58, height: 58)
+                        .clipped()
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 18)
+                                .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+                        }
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("CHOOSE YOUR KAI")
+                            .font(.system(size: 10, weight: .bold))
+                            .kerning(1)
+                            .foregroundStyle(.white.opacity(0.4))
+
+                        Text(activePersonality.name)
+                            .font(.system(size: 22, weight: .light, design: .serif))
+                            .foregroundStyle(.white)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.45))
+                        .rotationEffect(.degrees(isPersonalityPickerExpanded ? 180 : 0))
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 18)
+                .background(
+                    RoundedRectangle(cornerRadius: 24)
+                        .fill(Color.white.opacity(0.04))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
+                        )
+                )
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 24)
+
+            if isPersonalityPickerExpanded {
+                ScrollViewReader { proxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(availablePersonalities) { personality in
+                                Button {
+                                    select(personality)
+                                } label: {
+                                    KaiPersonalityCard(
+                                        personality: personality,
+                                        isSelected: activePersonality.id == personality.id,
+                                        isLocked: false
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                                .id(personality.id)
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                    }
+                    .onAppear {
+                        scrollToActivePersonality(using: proxy, animated: false)
+                    }
+                    .onChange(of: activePersonality.id) { _, _ in
+                        scrollToActivePersonality(using: proxy)
+                    }
+                }
+            }
+        }
+    }
+
+    private func select(_ personality: KaiPersonality) {
+        manager.selectedKaiPersonalityID = personality.id
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
+
+    private func scrollToActivePersonality(using proxy: ScrollViewProxy, animated: Bool = true) {
+        let action = {
+            proxy.scrollTo(activePersonality.id, anchor: .center)
+        }
+
+        if animated {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                action()
+            }
+        } else {
+            action()
+        }
+    }
+
+    private var statusBadge: some View {
+        Group {
+            if store.isKAISubscribed {
+                HStack(spacing: 6) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("KAI PRO MEMBER")
+                        .font(.system(size: 10, weight: .bold))
+                        .kerning(1)
+                }
+                .foregroundStyle(.blue)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(.blue.opacity(0.1)))
+            } else {
+                HStack(spacing: 6) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 10))
+                    Text(KaiBrainService.shared.isFreeGenerationAvailable ? "1 FREE MONTHLY CREDIT" : "0 CREDITS REMAINING")
+                        .font(.system(size: 10, weight: .bold))
+                        .kerning(1)
+                }
+                .foregroundStyle(.white.opacity(0.5))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background {
+                    Capsule()
+                        .strokeBorder(.white.opacity(0.1), lineWidth: 1)
+                }
+            }
+        }
+    }
+
+    private var kaiTopBar: some View {
+        HStack {
+            statusBadge
+
+            Spacer()
+
+            Button("Close") { dismiss() }
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(.white.opacity(0.7))
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .background(
+            LinearGradient(
+                colors: [
+                    Color(hue: 0.72, saturation: 0.4, brightness: 0.05),
+                    Color(hue: 0.72, saturation: 0.4, brightness: 0.05).opacity(0)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+    }
+}
+
+private struct KaiPersonalityCard: View {
+    let personality: KaiPersonality
+    let isSelected: Bool
+    let isLocked: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            ZStack(alignment: .topTrailing) {
+                Image(personality.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 250, height: 186)
+                    .clipped()
+                    .background(Color.white.opacity(0.05))
+                    .clipShape(RoundedRectangle(cornerRadius: 28))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 28)
+                            .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+                    }
+
+                if isLocked {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(10)
+                        .background(Circle().fill(.black.opacity(0.28)))
+                        .padding(12)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Text(personality.name)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(.white)
+
+                    if isSelected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.white.opacity(0.9))
+                    }
+                }
+
+                Text(personality.shortDescription)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.62))
+
+                HStack(spacing: 8) {
+                    ForEach(personality.traits, id: \.self) { trait in
+                        Text(trait)
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.72))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Capsule().fill(.white.opacity(0.06)))
+                    }
+                }
+
+                Text("“\(personality.sampleLine)”")
+                    .font(.system(size: 12, weight: .light, design: .serif))
+                    .italic()
+                    .foregroundStyle(.white.opacity(0.74))
+                    .lineSpacing(3)
+
+                Text(personality.longDescription)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .lineSpacing(3)
+            }
+        }
+        .frame(width: 250, alignment: .leading)
+        .padding(18)
+        .background(
+            RoundedRectangle(cornerRadius: 30)
+                .fill(isSelected ? Color.white.opacity(0.09) : Color.white.opacity(0.04))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .strokeBorder(isSelected ? .white.opacity(0.22) : .white.opacity(0.06), lineWidth: 1)
+                )
+        )
+    }
+
 }
