@@ -29,9 +29,9 @@ final class StoreKitManager {
 
     init() {
         // Start listening for transactions
-        Task.detached {
+        Task {
             for await result in Transaction.updates {
-                await self.handle(verification: result)
+                await self.handleTransactionUpdate(result)
             }
         }
         
@@ -47,6 +47,10 @@ final class StoreKitManager {
 
     var isKAISubscribed: Bool {
         purchasedProductIDs.contains(Self.soundKAIProID)
+    }
+
+    func displayPrice(for productID: String, fallback: String) -> String {
+        products.first(where: { $0.id == productID })?.displayPrice ?? fallback
     }
 
     func loadProducts() async {
@@ -74,7 +78,7 @@ final class StoreKitManager {
             switch result {
             case .success(let verification):
                 print("✅ Purchase success: \(productID)")
-                await handle(verification: verification)
+                await handleTransactionUpdate(verification)
                 return .success
             case .userCancelled:
                 print("⚠️ Purchase cancelled by user")
@@ -92,16 +96,29 @@ final class StoreKitManager {
     }
 
     func updateCustomerProductStatus() async {
+        var refreshedIDs: Set<String> = []
+
         for await result in Transaction.currentEntitlements {
-            await handle(verification: result)
+            switch result {
+            case .verified(let transaction):
+                guard transaction.revocationDate == nil else { continue }
+                if let expirationDate = transaction.expirationDate, expirationDate <= Date() {
+                    continue
+                }
+                refreshedIDs.insert(transaction.productID)
+            case .unverified(_, let error):
+                print("Transaction unverified: \(error)")
+            }
         }
+
+        purchasedProductIDs = refreshedIDs
     }
 
-    private func handle(verification: VerificationResult<Transaction>) async {
+    private func handleTransactionUpdate(_ verification: VerificationResult<Transaction>) async {
         switch verification {
         case .verified(let transaction):
-            purchasedProductIDs.insert(transaction.productID)
             await transaction.finish()
+            await updateCustomerProductStatus()
         case .unverified(_, let error):
             print("Transaction unverified: \(error)")
         }

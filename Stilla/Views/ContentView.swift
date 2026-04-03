@@ -195,8 +195,8 @@ struct ContentView: View {
                             UINotificationFeedbackGenerator().notificationOccurred(.success)
                         } label: {
                             HStack(spacing: 8) {
-                                Image(systemName: "heart.fill")
-                                Text("Save to Favorites")
+                                Image(systemName: "books.vertical.fill")
+                                Text("Save to Library")
                             }
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.white.opacity(0.8))
@@ -899,69 +899,76 @@ struct TechniqueLibraryView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    techniqueRow(BreathingTechnique.defaultTechnique)
-                } header: {
-                    Text("Standard")
-                }
+            ZStack {
+                Color(hue: 0.72, saturation: 0.4, brightness: 0.10)
+                    .ignoresSafeArea()
 
-                Section {
-                    ForEach(BreathingTechnique.presets) { technique in
-                        techniqueRow(technique)
+                List {
+                    Section {
+                        techniqueRow(BreathingTechnique.defaultTechnique)
+                    } header: {
+                        Text("Standard")
                     }
-                } header: {
-                    HStack {
-                        Text("Library")
-                        Spacer()
-                        if !storeManager.isPurchased(StoreKitManager.techniqueLibraryID) {
-                            Button("Unlock All ($1.99)") {
+
+                    Section {
+                        ForEach(BreathingTechnique.presets) { technique in
+                            techniqueRow(technique)
+                        }
+                    } header: {
+                        HStack {
+                            Text("Library")
+                            Spacer()
+                            if !storeManager.isPurchased(StoreKitManager.techniqueLibraryID) {
+                                Button("Unlock All (\(storeManager.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99")))") {
+                                    Task {
+                                        await storeManager.purchase(StoreKitManager.techniqueLibraryID)
+                                    }
+                                }
+                                .font(.caption.bold())
+                                .foregroundStyle(.blue)
+                            }
+                        }
+                    }
+
+                    Section {
+                        ForEach(manager.userCustomTechniques) { technique in
+                            techniqueRow(technique)
+                                .swipeActions {
+                                    Button(role: .destructive) {
+                                        manager.removeCustomTechnique(technique.id)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                        }
+
+                        if storeManager.isPurchased(StoreKitManager.customTechniqueEditorID) {
+                            Button {
+                                showingCustomEditor = true
+                            } label: {
+                                Label("Create Custom Technique", systemImage: "plus")
+                            }
+                        } else {
+                            Button {
                                 Task {
-                                    await storeManager.purchase(StoreKitManager.techniqueLibraryID)
+                                    await storeManager.purchase(StoreKitManager.customTechniqueEditorID)
+                                }
+                            } label: {
+                                HStack {
+                                    Label("Create Custom Technique", systemImage: "lock.fill")
+                                    Spacer()
+                                    Text("Unlock (\(storeManager.displayPrice(for: StoreKitManager.customTechniqueEditorID, fallback: "$0.99")))")
+                                        .font(.caption.bold())
+                                        .foregroundStyle(.blue)
                                 }
                             }
-                            .font(.caption.bold())
-                            .foregroundStyle(.blue)
                         }
+                    } header: {
+                        Text("Custom")
                     }
                 }
-
-                Section {
-                    ForEach(manager.userCustomTechniques) { technique in
-                        techniqueRow(technique)
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    manager.removeCustomTechnique(technique.id)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
-                    }
-
-                    if storeManager.isPurchased(StoreKitManager.customTechniqueEditorID) {
-                        Button {
-                            showingCustomEditor = true
-                        } label: {
-                            Label("Create Custom Technique", systemImage: "plus")
-                        }
-                    } else {
-                        Button {
-                            Task {
-                                await storeManager.purchase(StoreKitManager.customTechniqueEditorID)
-                            }
-                        } label: {
-                            HStack {
-                                Label("Create Custom Technique", systemImage: "lock.fill")
-                                Spacer()
-                                Text("Unlock ($0.99)")
-                                    .font(.caption.bold())
-                                    .foregroundStyle(.blue)
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Custom")
-                }
+                .scrollContentBackground(.hidden)
+                .listStyle(.insetGrouped)
             }
             .navigationTitle("Techniques")
             .navigationBarTitleDisplayMode(.inline)
@@ -972,6 +979,7 @@ struct TechniqueLibraryView: View {
                     }
                 }
             }
+            .preferredColorScheme(.dark)
             .sheet(isPresented: $showingCustomEditor) {
                 CustomTechniqueEditor()
                     .environment(manager)
@@ -992,12 +1000,12 @@ struct TechniqueLibraryView: View {
                 HStack {
                     Text(technique.name)
                         .font(.headline)
-                        .foregroundStyle(isSelected ? .blue : .primary)
+                        .foregroundStyle(isSelected ? .blue : .white)
                     
                     if isLocked {
                         Image(systemName: "lock.fill")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.white.opacity(0.45))
                     }
                     
                     Spacer()
@@ -1020,6 +1028,7 @@ struct TechniqueLibraryView: View {
             .padding(.vertical, 4)
         }
         .disabled(isLocked)
+        .listRowBackground(Color.white.opacity(0.04))
     }
 }
 

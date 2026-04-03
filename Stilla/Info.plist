@@ -19,7 +19,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>KAIBackendURL</key>
-	<string>http://192.168.1.9:8787/kai/generate</string>
+	<string>https://stilla-api.vercel.app/kai/generate</string>
 	<key>KAIBackendToken</key>
 	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
 	<key>LSRequiresIPhoneOS</key>

@@ -133,7 +133,7 @@ struct SettingsView: View {
                                     await StoreKitManager.shared.purchase(StoreKitManager.techniqueLibraryID)
                                 }
                             } label: {
-                                Text("Unlock for $1.99")
+                                Text("Unlock for \(StoreKitManager.shared.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99"))")
                                     .font(.subheadline.weight(.semibold))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 20)

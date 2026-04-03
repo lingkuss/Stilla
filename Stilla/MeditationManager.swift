@@ -519,21 +519,37 @@ final class MeditationManager {
     // MARK: - Live Activities
     
     private var activeActivityEndTime: Date?
+    private var activeKaiPersonaImageName: String?
+    private var activeKaiPersonaName: String?
 
     private func startLiveActivity(initialPhrase: String = "Focusing inward...") {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         
         let title = currentScript?.title ?? "Meditation Journey"
-        let attributes = LiveTimerAttributes(title: title)
+        let personality = currentScript?.generatedPersonality
+            ?? {
+                guard currentScript != nil, isGuruEnabled else { return nil }
+                return selectedKaiPersonality
+            }()
+        let attributes = LiveTimerAttributes(
+            title: title,
+            personaImageName: personality?.imageName,
+            personaName: personality?.name
+        )
         
         let endSeconds = isOpenEnded ? 0 : totalSeconds
         let endDate = Date().addingTimeInterval(TimeInterval(endSeconds))
         self.activeActivityEndTime = endDate
         self.currentKaiPhrase = initialPhrase
+        self.activeKaiPersonaImageName = personality?.imageName
+        self.activeKaiPersonaName = personality?.name
+        let liveActivityPhrase = shortenedLiveActivityPhrase(from: initialPhrase)
         
         let contentState = LiveTimerAttributes.ContentState(
-            currentPhrase: "", // Empty as we are hiding it from the widget
-            estimatedEndTime: endDate
+            currentPhrase: liveActivityPhrase,
+            estimatedEndTime: endDate,
+            personaImageName: personality?.imageName,
+            personaName: personality?.name
         )
         
         do {
@@ -558,10 +574,13 @@ final class MeditationManager {
         // Stabilize end time: use the one we calculated at the start
         let endDate = activeActivityEndTime ?? Date()
         self.currentKaiPhrase = phrase
+        let liveActivityPhrase = shortenedLiveActivityPhrase(from: phrase)
         
         let contentState = LiveTimerAttributes.ContentState(
-            currentPhrase: "", // Empty as we are hiding it from the widget
-            estimatedEndTime: endDate
+            currentPhrase: liveActivityPhrase,
+            estimatedEndTime: endDate,
+            personaImageName: activeKaiPersonaImageName,
+            personaName: activeKaiPersonaName
         )
         
         // Re-attachment Logic: If currentActivity is nil or lost, find it in the global list
@@ -588,12 +607,16 @@ final class MeditationManager {
     private func endLiveActivity() {
         activeActivityEndTime = nil
         currentKaiPhrase = ""
+        activeKaiPersonaImageName = nil
+        activeKaiPersonaName = nil
         
         // End ALL active activities of this type to be safe
         for activity in Activity<LiveTimerAttributes>.activities {
             let finalState = LiveTimerAttributes.ContentState(
                 currentPhrase: "",
-                estimatedEndTime: Date()
+                estimatedEndTime: Date(),
+                personaImageName: nil,
+                personaName: nil
             )
             
             Task {
@@ -605,6 +628,18 @@ final class MeditationManager {
             }
         }
         currentActivity = nil
+    }
+
+    private func shortenedLiveActivityPhrase(from phrase: String) -> String {
+        let trimmed = phrase
+            .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmed.isEmpty else { return "" }
+        if trimmed.count <= 72 { return trimmed }
+
+        let prefix = trimmed.prefix(69).trimmingCharacters(in: .whitespacesAndNewlines)
+        return prefix + "..."
     }
 
     func stop() {

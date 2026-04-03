@@ -370,10 +370,10 @@ struct KaiPersonality: Identifiable, Codable, Hashable {
     )
 
     static let all: [KaiPersonality] = [
+        .cosmicSage,
         .zenMinimalist,
         .warmGuardian,
         .modernRealist,
-        .cosmicSage,
         .reflectiveAnalyst,
         .philosopher,
         .ra
