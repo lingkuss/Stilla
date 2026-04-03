@@ -240,6 +240,11 @@ struct SettingsView: View {
                         Label("Show Intro Guide", systemImage: "sparkles")
                     }
                 }
+
+                Section {
+                    Link("Privacy Policy", destination: URL(string: "https://stilla-three.vercel.app/privacy")!)
+                    Link("Terms of Use", destination: URL(string: "https://stilla-three.vercel.app/terms")!)
+                }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

@@ -7,6 +7,8 @@ struct SavedMeditationsLibraryView: View {
     @State private var searchText = ""
     @State private var selectedFilter: LibraryFilter = .all
     @State private var selectedPersonalityID: String = "all"
+    @State private var showPaywall = false
+    @State private var store = StoreKitManager.shared
 
     private enum LibraryFilter: String, CaseIterable, Identifiable {
         case all = "All"
@@ -85,6 +87,9 @@ struct SavedMeditationsLibraryView: View {
                 }
             }
             .preferredColorScheme(.dark)
+            .sheet(isPresented: $showPaywall) {
+                KAIPaywallView()
+            }
         }
     }
 
@@ -210,6 +215,11 @@ struct SavedMeditationsLibraryView: View {
     }
 
     private func playScript(_ script: MeditationScript) {
+        if !store.isKAISubscribed {
+            showPaywall = true
+            return
+        }
+
         manager.durationMinutes = script.durationMinutes
         manager.isGuruEnabled = true
         manager.currentScript = script

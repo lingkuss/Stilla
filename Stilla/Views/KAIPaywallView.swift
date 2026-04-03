@@ -39,9 +39,10 @@ struct KAIPaywallView: View {
                 
                 // Benefit List
                 VStack(alignment: .leading, spacing: 16) {
-                    BenefitRow(icon: "infinite", text: "Unlimited AI Meditations")
-                    BenefitRow(icon: "brain.headset", text: "Deep Personalized Guidance")
-                    BenefitRow(icon: "waveform.path.ecg", text: "Create Personalized Sessions On Demand")
+                    BenefitRow(icon: "infinity", text: "Unlimited AI Meditations")
+                    BenefitRow(icon: "brain.head.profile", text: "Deep Personalized Guidance")
+                    BenefitRow(icon: "person.2.fill", text: "All Personas Always Available")
+                    BenefitRow(icon: "books.vertical.fill", text: "Replay Your Saved Kai Library")
                 }
                 .padding(.top, 20)
                 
@@ -88,6 +89,13 @@ struct KAIPaywallView: View {
                     }
                 }
                 .font(.system(size: 13))
+                .foregroundStyle(.white.opacity(0.4))
+
+                HStack(spacing: 16) {
+                    Link("Privacy Policy", destination: URL(string: "https://stilla-three.vercel.app/privacy")!)
+                    Link("Terms of Use", destination: URL(string: "https://stilla-three.vercel.app/terms")!)
+                }
+                .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(.white.opacity(0.4))
                 .padding(.bottom, 40)
             }

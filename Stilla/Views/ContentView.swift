@@ -14,6 +14,13 @@ struct ContentView: View {
     @State private var kaiPulse = false
     @State private var currentPhase = ""
     @State private var showSavedMeditations = false
+    @State private var reflectionSheetContext: ReflectionSheetContext?
+
+    private struct ReflectionSheetContext: Identifiable {
+        let id = UUID()
+        let sessionID: UUID
+        let defaultReminderTime: Date
+    }
 
     var body: some View {
         ZStack {
@@ -79,26 +86,26 @@ struct ContentView: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: "sparkles")
                                         .font(.system(size: 10, weight: .bold))
-                                    Text("PERSONALIZED")
+                                    Text("PERSONALIZED ∞ Tap to start a Kai session")
                                         .font(.system(size: 9, weight: .bold))
                                         .kerning(1)
                                 }
                                 .foregroundStyle(.white.opacity(0.8))
-                                
+
                                 Spacer()
-                                
+
                                 Image(systemName: "arrow.up.right")
                                     .font(.system(size: 10, weight: .bold))
                                     .foregroundStyle(.white.opacity(0.4))
                             }
                             
                             VStack(alignment: .leading, spacing: 1) {
-                                Text("Kai Journey")
+                                Text(latestKaiHeader)
                                     .font(.system(size: 16, weight: .light, design: .serif))
                                     .italic()
                                     .foregroundStyle(.white)
                                 
-                                Text("Describe your mood. Kai will curate your path.")
+                                Text(latestKaiBody)
                                     .font(.system(size: 11))
                                     .foregroundStyle(.white.opacity(0.5))
                             }
@@ -269,6 +276,13 @@ struct ContentView: View {
             SavedMeditationsLibraryView()
                 .environment(manager)
         }
+        .sheet(item: $reflectionSheetContext, onDismiss: { reflectionSheetContext = nil }) { context in
+            ReflectionPromptView(
+                sessionID: context.sessionID,
+                defaultReminderTime: context.defaultReminderTime
+            )
+            .environment(manager)
+        }
         .alert("Custom Duration", isPresented: $showAddDuration) {
             TextField("Minutes", text: $customDurationText)
                 .keyboardType(.numberPad)
@@ -286,11 +300,31 @@ struct ContentView: View {
             Text("Enter a duration in minutes (1–180).")
         }
         .animation(.easeInOut(duration: 0.6), value: manager.state)
+        .onChange(of: manager.state) { _, newValue in
+            guard newValue == .complete else { return }
+            guard let sessionID = manager.lastCompletedSessionID else { return }
+            reflectionSheetContext = ReflectionSheetContext(
+                sessionID: sessionID,
+                defaultReminderTime: manager.defaultNextSessionReminderTime()
+            )
+        }
         .onChange(of: manager.isSiriTriggeredKai) { _, newValue in
             if newValue {
                 showKaiExperience = true
             }
         }
+    }
+
+    private var latestKaiHeader: String {
+        let fallback = "Kai Journey"
+        let header = manager.latestSessionMemory?.proactiveHeader?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
+        return header.isEmpty ? fallback : header
+    }
+
+    private var latestKaiBody: String {
+        let fallback = "Describe your mood. Kai will curate your path."
+        let body = manager.latestSessionMemory?.proactiveBody?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
+        return body.isEmpty ? fallback : body
     }
 
     // MARK: - Subviews

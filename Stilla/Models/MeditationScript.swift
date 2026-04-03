@@ -19,10 +19,24 @@ struct MeditationScript: Identifiable, Codable {
     var tags: [String]
     var kaiPersonalityID: String?
     var kaiPersonalityName: String?
+    var guidanceHeader: String?
+    var guidanceBody: String?
+    var suggestionOptions: [String]
     var createdAt: Date
     
     enum CodingKeys: String, CodingKey {
-        case id, title, durationMinutes, steps, isFavorite, tags, kaiPersonalityID, kaiPersonalityName, createdAt
+        case id
+        case title
+        case durationMinutes
+        case steps
+        case isFavorite
+        case tags
+        case kaiPersonalityID
+        case kaiPersonalityName
+        case guidanceHeader
+        case guidanceBody
+        case suggestionOptions = "suggestions"
+        case createdAt
     }
 
     init(
@@ -34,6 +48,9 @@ struct MeditationScript: Identifiable, Codable {
         tags: [String] = [],
         kaiPersonalityID: String? = nil,
         kaiPersonalityName: String? = nil,
+        guidanceHeader: String? = nil,
+        guidanceBody: String? = nil,
+        suggestionOptions: [String] = [],
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -44,6 +61,9 @@ struct MeditationScript: Identifiable, Codable {
         self.tags = tags
         self.kaiPersonalityID = kaiPersonalityID
         self.kaiPersonalityName = kaiPersonalityName
+        self.guidanceHeader = guidanceHeader
+        self.guidanceBody = guidanceBody
+        self.suggestionOptions = suggestionOptions
         self.createdAt = createdAt
     }
 
@@ -57,6 +77,9 @@ struct MeditationScript: Identifiable, Codable {
         tags = try container.decodeIfPresent([String].self, forKey: .tags) ?? []
         kaiPersonalityID = try container.decodeIfPresent(String.self, forKey: .kaiPersonalityID)
         kaiPersonalityName = try container.decodeIfPresent(String.self, forKey: .kaiPersonalityName)
+        guidanceHeader = try container.decodeIfPresent(String.self, forKey: .guidanceHeader)
+        guidanceBody = try container.decodeIfPresent(String.self, forKey: .guidanceBody)
+        suggestionOptions = try container.decodeIfPresent([String].self, forKey: .suggestionOptions) ?? []
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
     }
 }

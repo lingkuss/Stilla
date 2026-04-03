@@ -14,6 +14,8 @@
 		64F9FE442F7BECF000BBB344 /* LiveTimerAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */; };
 		64F9FE462F7C7B7300BBB344 /* KAIPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE452F7C7B7300BBB344 /* KAIPaywallView.swift */; };
 		64F9FE6C2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE6B2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift */; };
+		64F9FE6E2F7FC73C00BBB344 /* SessionMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE6D2F7FC73C00BBB344 /* SessionMemory.swift */; };
+		64F9FE702F7FC80700BBB344 /* ReflectionPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F9FE6F2F7FC80700BBB344 /* ReflectionPromptView.swift */; };
 		A10001 /* StillaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10001 /* StillaApp.swift */; };
 		A10002 /* MeditationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10002 /* MeditationManager.swift */; };
 		A10003 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10003 /* SoundEngine.swift */; };
@@ -69,6 +71,8 @@
 		64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTimerAttributes.swift; sourceTree = "<group>"; };
 		64F9FE452F7C7B7300BBB344 /* KAIPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KAIPaywallView.swift; sourceTree = "<group>"; };
 		64F9FE6B2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartKaiMeditationIntent.swift; sourceTree = "<group>"; };
+		64F9FE6D2F7FC73C00BBB344 /* SessionMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionMemory.swift; sourceTree = "<group>"; };
+		64F9FE6F2F7FC80700BBB344 /* ReflectionPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionPromptView.swift; sourceTree = "<group>"; };
 		B10001 /* StillaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillaApp.swift; sourceTree = "<group>"; };
 		B10002 /* MeditationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationManager.swift; sourceTree = "<group>"; };
 		B10003 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 				B10019 /* VoiceSelectionView.swift */,
 				B10022 /* KaiExperienceView.swift */,
 				F1000C /* SavedMeditationsLibraryView.swift */,
+				64F9FE6F2F7FC80700BBB344 /* ReflectionPromptView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -207,6 +212,7 @@
 				64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */,
 				B10013 /* BreathingTechnique.swift */,
 				B10017 /* MeditationScript.swift */,
+				64F9FE6D2F7FC73C00BBB344 /* SessionMemory.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -348,10 +354,12 @@
 				A10005 /* SettingsView.swift in Sources */,
 				A10006 /* BreathingCircleView.swift in Sources */,
 				A10007 /* StartMeditationIntent.swift in Sources */,
+				64F9FE6E2F7FC73C00BBB344 /* SessionMemory.swift in Sources */,
 				A10008 /* StopMeditationIntent.swift in Sources */,
 				A10009 /* MeditationShortcuts.swift in Sources */,
 				64F9FE6C2F7D4BD500BBB344 /* StartKaiMeditationIntent.swift in Sources */,
 				64F9FE462F7C7B7300BBB344 /* KAIPaywallView.swift in Sources */,
+				64F9FE702F7FC80700BBB344 /* ReflectionPromptView.swift in Sources */,
 				A1000B /* Secrets.swift in Sources */,
 				A1000C /* SavedMeditationsLibraryView.swift in Sources */,
 				A10011 /* BreathingTechnique.swift in Sources */,

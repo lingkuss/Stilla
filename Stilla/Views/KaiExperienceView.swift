@@ -21,12 +21,16 @@ struct KaiExperienceView: View {
     @State private var pulseAmount: Double = 0.0
     @State private var errorTitle = "Kai is resting"
     @State private var errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
+    @State private var pickedSuggestion: String? = nil
+    @State private var suggestionWasPicked = false
     
     private let speechManager = SpeechManager.shared
     
     private let presets = [
-        "Deep Stress", "Sleep Prep", "Creative Flow", 
-        "Morning Spark", "Anxiety Calm", "Grateful Heart"
+        "Creative Flow", "Deep Stress", "Sleep Prep",
+        "Morning Spark", "Anxiety Calm", "Grateful Heart",
+        "Focus Reset", "Body Ease", "Confidence Boost",
+        "Gentle Clarity", "Evening Unwind", "Self-Compassion"
     ]
 
     private var availablePersonalities: [KaiPersonality] {
@@ -88,24 +92,12 @@ struct KaiExperienceView: View {
     private var mainInputView: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Intro
-                VStack(spacing: 12) {
-                    Text("How are you feeling?")
-                        .font(.system(size: 24, weight: .light, design: .serif))
-                        .italic()
-                    Text("Speak or type your mood. Kai will curate your path.")
-                        .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.4))
-                }
-                .multilineTextAlignment(.center)
-                .padding(.top, 0)
-
                 personalitySection
                 
                 // Voice / Text Input Box
                 VStack(spacing: 24) {
                     ZStack(alignment: .topTrailing) {
-                        TextField("e.g. Anxious about tomorrow's presentation...", text: $moodText, axis: .vertical)
+                        TextField("Speak or type your mood. Kai will curate your path.", text: $moodText, axis: .vertical)
                             .lineLimit(4...8)
                             .padding(24)
                             .background {
@@ -116,76 +108,85 @@ struct KaiExperienceView: View {
                                             .strokeBorder(Color.white.opacity(0.05), lineWidth: 1)
                                     )
                             }
-                        
+
                         if !moodText.isEmpty {
-                            Button { moodText = "" } label: {
+                            Button {
+                                moodText = ""
+                                pickedSuggestion = nil
+                                suggestionWasPicked = false
+                            } label: {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundStyle(.white.opacity(0.2))
                                     .padding(16)
                             }
                         }
-                    }
-                    
-                    // Voice Button & Aura
-                    ZStack {
-                        // Breathing Aura (Visible when recording)
-                        if speechManager.isRecording {
-                            Circle()
-                                .fill(Color.blue.opacity(0.15))
-                                .frame(width: 120, height: 120)
-                                .scaleEffect(kaiPulse ? 1.4 : 0.8)
-                                .opacity(kaiPulse ? 0.0 : 0.4)
-                            
-                            Circle()
-                                .fill(Color.blue.opacity(0.1))
-                                .frame(width: 100, height: 100)
-                                .scaleEffect(kaiPulse ? 1.2 : 0.9)
-                        }
-                        
-                        Button {
-                            if speechManager.isRecording {
-                                speechManager.stopRecording()
-                                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            } else {
-                                Task {
-                                    do {
-                                        try await speechManager.requestPermissions()
-                                        try speechManager.startRecording()
+
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                Button {
+                                    if speechManager.isRecording {
+                                        speechManager.stopRecording()
                                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                                        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                                            kaiPulse = true
+                                    } else {
+                                        if suggestionWasPicked {
+                                            moodText = ""
+                                            pickedSuggestion = nil
+                                            suggestionWasPicked = false
                                         }
-                                    } catch let speechError as SpeechManager.SpeechError {
-                                        errorMessage = speechError.localizedDescription
-                                        showingSettingsPrompt = true
-                                    } catch {
-                                        errorTitle = "Voice Input Unavailable"
-                                        errorMessage = "Voice input isn't available right now. Please type your mood instead."
-                                        showingError = true
+                                        Task {
+                                            do {
+                                                try await speechManager.requestPermissions()
+                                                try speechManager.startRecording()
+                                                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                                withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                                                    kaiPulse = true
+                                                }
+                                            } catch let speechError as SpeechManager.SpeechError {
+                                                errorMessage = speechError.localizedDescription
+                                                showingSettingsPrompt = true
+                                            } catch {
+                                                errorTitle = "Voice Input Unavailable"
+                                                errorMessage = "Voice input isn't available right now. Please type your mood instead."
+                                                showingError = true
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    ZStack {
+                                        Circle()
+                                            .fill(speechManager.isRecording ? Color.red.opacity(0.2) : Color.white.opacity(0.1))
+                                            .frame(width: 44, height: 44)
+                                            .overlay(Circle().strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
+
+                                        Image(systemName: speechManager.isRecording ? "stop.fill" : "mic.fill")
+                                            .font(.system(size: 18, weight: .light))
+                                            .foregroundStyle(.white)
                                     }
                                 }
-                            }
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .fill(speechManager.isRecording ? Color.red.opacity(0.2) : Color.white.opacity(0.1))
-                                    .frame(width: 72, height: 72)
-                                    .overlay(Circle().strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
-                                
-                                Image(systemName: speechManager.isRecording ? "stop.fill" : "mic.fill")
-                                    .font(.system(size: 24, weight: .light))
-                                    .foregroundStyle(.white)
+                                .buttonStyle(.plain)
+                                .padding(16)
                             }
                         }
-                        .buttonStyle(.plain)
                     }
-                    .padding(.top, 10)
                     
-                    Text(speechManager.isRecording ? "Listening to your heart..." : "Tap to Speak")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.4))
+                    suggestionOptionsView
+
+                    if speechManager.isRecording {
+                        Text("Listening to your heart...")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.4))
+                    }
                 }
                 .padding(.horizontal, 24)
+                .onChange(of: moodText) { _, newValue in
+                    guard suggestionWasPicked else { return }
+                    if let currentSuggestion = pickedSuggestion, newValue != currentSuggestion {
+                        suggestionWasPicked = false
+                        pickedSuggestion = nil
+                    }
+                }
                 
                 // Presets
                 VStack(alignment: .leading, spacing: 16) {
@@ -367,6 +368,17 @@ struct KaiExperienceView: View {
                 if !moodText.isEmpty {
                     combinedMood += "Mood/Details: \(moodText)"
                 }
+
+                manager.pendingKaiMoodSummary = moodText.isEmpty ? nil : moodText
+                manager.pendingKaiIntention = selectedIntention
+
+                if let memoryContext = memoryContextString() {
+                    if combinedMood.isEmpty {
+                        combinedMood = "Memory context: \(memoryContext)"
+                    } else {
+                        combinedMood += " Recent memory: \(memoryContext)"
+                    }
+                }
                 
                 var script = try await KaiBrainService.shared.generateScript(
                     mood: combinedMood.isEmpty ? "Calm" : combinedMood,
@@ -523,6 +535,75 @@ struct KaiExperienceView: View {
         }
     }
 
+    private var suggestionOptionsView: some View {
+        let suggestions = manager.latestSessionMemory?.suggestionOptions ?? []
+        return Group {
+            if !suggestions.isEmpty {
+                VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("KAI SUGGESTIONS")
+                            .font(.system(size: 10, weight: .bold))
+                            .kerning(1)
+                            .foregroundStyle(.white.opacity(0.4))
+                        Text("Tap one to auto-fill your mood")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                    .padding(.horizontal, 4)
+
+                    ForEach(suggestions, id: \.self) { suggestion in
+                        Button {
+                            moodText = suggestion
+                            pickedSuggestion = suggestion
+                            suggestionWasPicked = true
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.white.opacity(0.5))
+                                Text(suggestion)
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(.white.opacity(0.85))
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 14)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(Color.white.opacity(0.06))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 14)
+                                            .strokeBorder(Color.white.opacity(0.12), lineWidth: 1)
+                                    )
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 24)
+            }
+        }
+    }
+
+    private func memoryContextString() -> String? {
+        let memories = Array(manager.recentSessionMemories.prefix(3))
+        guard !memories.isEmpty else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+
+        let entries: [String] = memories.map { memory in
+            var parts: [String] = []
+            parts.append(formatter.string(from: memory.startedAt))
+            parts.append("\(max(1, memory.durationMinutesRounded))m")
+            if let intention = memory.intention { parts.append("Intention: \(intention)") }
+            if let mood = memory.moodSummary { parts.append("Mood: \(mood)") }
+            if let reflection = memory.reflection { parts.append("Reflection: \(reflection)") }
+            return parts.joined(separator: " | ")
+        }
+        return entries.joined(separator: " || ")
+    }
+
     private var statusBadge: some View {
         Group {
             if store.isKAISubscribed {
@@ -541,7 +622,10 @@ struct KaiExperienceView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "bolt.fill")
                         .font(.system(size: 10))
-                    Text(KaiBrainService.shared.isFreeGenerationAvailable ? "1 FREE MONTHLY CREDIT" : "0 CREDITS REMAINING")
+                    Text({
+                        let n = KaiBrainService.shared.freeCreditsRemaining
+                        return n > 0 ? "\(n) FREE CREDIT\(n == 1 ? "" : "S")" : "0 CREDITS REMAINING"
+                    }())
                         .font(.system(size: 10, weight: .bold))
                         .kerning(1)
                 }

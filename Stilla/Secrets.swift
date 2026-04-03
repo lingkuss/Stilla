@@ -18,6 +18,7 @@ enum Secrets {
         return URL(string: cleaned)
     }
 
+
     /// Optional shared secret forwarded to your proxy. This is not a substitute for server-side auth,
     /// but it provides a simple first gate while you stand up proper protection and rate limiting.
     static var kaiBackendToken: String? {

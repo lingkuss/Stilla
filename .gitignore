@@ -66,6 +66,11 @@ DerivedData/
 ## GNUstep
 .GNUstep/
 
+## Secrets
+.env
+.env.*
+!.env.example
+
 ## Other
 .DS_Store
 *.swp

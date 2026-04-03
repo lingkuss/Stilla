@@ -11,17 +11,49 @@ class KaiBrainService {
         case serviceUnavailable
     }
 
-    private let freeGenMonthKey = "kai.last_free_gen_month"
+    private let maxFreeCredits = 3
+    private let freeGenMonthKey = "kai.free_gen_month"
+    private let freeGenCountKey = "kai.free_gen_count"
+
+    private var iCloudStore: NSUbiquitousKeyValueStore { .default }
+
+    /// Remaining free credits this month (0…3).
+    var freeCreditsRemaining: Int {
+        let currentMonth = currentMonthTag
+        let storedMonth = iCloudStore.string(forKey: freeGenMonthKey) ?? ""
+        if storedMonth != currentMonth {
+            return maxFreeCredits          // new month → full credits
+        }
+        let used = Int(iCloudStore.longLong(forKey: freeGenCountKey))
+        return max(0, maxFreeCredits - used)
+    }
 
     var isFreeGenerationAvailable: Bool {
-        let currentMonth = Calendar.current.component(.month, from: Date())
-        let lastMonth = UserDefaults.standard.integer(forKey: freeGenMonthKey)
-        return lastMonth != currentMonth
+        freeCreditsRemaining > 0
     }
 
     func recordFreeGeneration() {
-        let currentMonth = Calendar.current.component(.month, from: Date())
-        UserDefaults.standard.set(currentMonth, forKey: freeGenMonthKey)
+        let currentMonth = currentMonthTag
+        let storedMonth = iCloudStore.string(forKey: freeGenMonthKey) ?? ""
+
+        if storedMonth != currentMonth {
+            // First use this month — reset counter
+            iCloudStore.set(currentMonth, forKey: freeGenMonthKey)
+            iCloudStore.set(Int64(1), forKey: freeGenCountKey)
+        } else {
+            let used = iCloudStore.longLong(forKey: freeGenCountKey)
+            iCloudStore.set(used + 1, forKey: freeGenCountKey)
+        }
+        iCloudStore.synchronize()
+    }
+
+    /// "2026-04" style tag so we never confuse January across years.
+    private var currentMonthTag: String {
+        let now = Date()
+        let cal = Calendar.current
+        let y = cal.component(.year, from: now)
+        let m = cal.component(.month, from: now)
+        return "\(y)-\(m)"
     }
     
     /// Generates a personalized meditation script based on mood and duration.
@@ -110,6 +142,9 @@ class KaiBrainService {
                 tags: script.tags,
                 kaiPersonalityID: script.kaiPersonalityID,
                 kaiPersonalityName: script.kaiPersonalityName,
+                guidanceHeader: script.guidanceHeader,
+                guidanceBody: script.guidanceBody,
+                suggestionOptions: script.suggestionOptions,
                 createdAt: script.createdAt
             )
         }

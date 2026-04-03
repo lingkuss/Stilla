@@ -50,6 +50,23 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         timer = nil
     }
 
+    func speak(text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        stop()
+        let utterance = AVSpeechUtterance(string: trimmed)
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.pitchMultiplier = 0.9
+        utterance.volume = 1.0
+        let voiceId = MeditationManager.shared.kaiVoiceIdentifier
+        if let voice = AVSpeechSynthesisVoice(identifier: voiceId) {
+            utterance.voice = voice
+        } else if let bestVoice = findBestAvailableVoice() {
+            utterance.voice = bestVoice
+        }
+        synthesizer.speak(utterance)
+    }
+
     func findBestAvailableVoice() -> AVSpeechSynthesisVoice? {
         let allVoices = AVSpeechSynthesisVoice.speechVoices()
         let enVoices = allVoices.filter { $0.language.contains("en") } // en-US, en-GB, etc.

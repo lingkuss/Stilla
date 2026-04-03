@@ -1,5 +1,6 @@
 import express from "express";
 import OpenAI from "openai";
+import rateLimit from "express-rate-limit";
 
 const port = Number(process.env.PORT || 8787);
 const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
@@ -23,7 +24,15 @@ app.get("/health", (_req, res) => {
     });
 });
 
-app.post("/kai/generate", async (req, res) => {
+const generateLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many requests. Please try again later." },
+});
+
+app.post("/kai/generate", generateLimiter, async (req, res) => {
     try {
         if (proxyToken) {
             const authHeader = req.headers.authorization || "";
@@ -35,8 +44,12 @@ app.post("/kai/generate", async (req, res) => {
 
         const mood = typeof req.body?.mood === "string" ? req.body.mood.trim() : "";
         const durationMinutes = Number(req.body?.durationMinutes);
-        const personalityName = typeof req.body?.personalityName === "string" ? req.body.personalityName.trim() : "Zen Minimalist";
-        const personalityPrompt = typeof req.body?.personalityPrompt === "string" ? req.body.personalityPrompt.trim() : "";
+        const personalityName = typeof req.body?.personalityName === "string"
+            ? req.body.personalityName.trim()
+            : "Zen Minimalist";
+        const personalityPrompt = typeof req.body?.personalityPrompt === "string"
+            ? req.body.personalityPrompt.trim()
+            : "";
 
         if (!mood || !Number.isInteger(durationMinutes) || durationMinutes < 1 || durationMinutes > 180) {
             return res.status(400).json({
@@ -56,7 +69,7 @@ app.post("/kai/generate", async (req, res) => {
                 },
                 {
                     role: "user",
-                    content: `Generate a ${durationMinutes} minute meditation for someone feeling ${mood}.`
+                    content: `Generate a ${durationMinutes} minute meditation for someone feeling ${mood}. Also provide a proactive next-step header, 1–2 sentence guidance, and three distinct session suggestions for their next session.`
                 }
             ]
         });
@@ -101,10 +114,17 @@ Selected persona: ${personalityName}
 Persona instructions:
 ${personalityPrompt}
 
-Now create a personalized meditation script in JSON format.
+Now create a personalized meditation script and proactive guidance in JSON format.
 The JSON must follow this structure exactly:
 {
   "title": "A short, poetic title",
+  "guidanceHeader": "A proactive, persona-styled header (max 60 chars)",
+  "guidanceBody": "A short, proactive, persona-styled paragraph (1–2 sentences)",
+  "suggestions": [
+    "Suggestion 1 (short, specific, 8–16 words)",
+    "Suggestion 2 (short, specific, 8–16 words)",
+    "Suggestion 3 (short, specific, 8–16 words)"
+  ],
   "durationMinutes": ${durationMinutes},
   "steps": [
     { "text": "The words to speak", "pauseDuration": 5.0 }
@@ -112,6 +132,8 @@ The JSON must follow this structure exactly:
 }
 Guidelines:
 - The user is feeling: ${mood}.
+- The proactive guidance should feel like a personal next step based on the user's recent memory and current mood.
+- Suggestions should feel varied, useful, and aligned to the persona while respecting the user's context.
 - Total duration: ${durationMinutes} minutes (${durationMinutes * 60} seconds).
 - The "pauseDuration" field is in SECONDS. Provide generous pauses between steps.
 - Ensure the sum of pauseDurations plus reading time roughly matches the total duration.
@@ -138,6 +160,18 @@ Guidelines:
 function normalizeScript(raw, requestedDuration) {
     const title = typeof raw?.title === "string" && raw.title.trim() ? raw.title.trim() : "Kai Journey";
     const durationMinutes = Number.isInteger(raw?.durationMinutes) ? raw.durationMinutes : requestedDuration;
+    const guidanceHeader = typeof raw?.guidanceHeader === "string" && raw.guidanceHeader.trim()
+        ? raw.guidanceHeader.trim()
+        : null;
+    const guidanceBody = typeof raw?.guidanceBody === "string" && raw.guidanceBody.trim()
+        ? raw.guidanceBody.trim()
+        : null;
+    const suggestions = Array.isArray(raw?.suggestions)
+        ? raw.suggestions
+            .map((s) => (typeof s === "string" ? s.trim() : ""))
+            .filter((s) => s.length > 0)
+            .slice(0, 3)
+        : [];
     const rawSteps = Array.isArray(raw?.steps) ? raw.steps : [];
 
     const steps = rawSteps
@@ -157,6 +191,9 @@ function normalizeScript(raw, requestedDuration) {
 
     return {
         title,
+        guidanceHeader,
+        guidanceBody,
+        suggestions,
         durationMinutes,
         steps
     };

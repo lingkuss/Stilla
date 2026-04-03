@@ -118,6 +118,16 @@ final class MeditationManager {
         didSet { UserDefaults.standard.set(meditationHistory, forKey: "meditationHistory") }
     }
 
+    var recentSessionMemories: [SessionMemory] {
+        didSet {
+            if let data = try? JSONEncoder().encode(recentSessionMemories) {
+                UserDefaults.standard.set(data, forKey: "recentSessionMemories")
+            }
+        }
+    }
+
+    var lastCompletedSessionID: UUID?
+
     var selectedTechnique: BreathingTechnique {
         didSet {
             if let data = try? JSONEncoder().encode(selectedTechnique) {
@@ -157,6 +167,9 @@ final class MeditationManager {
     var isSiriTriggeredKai: Bool = false
     var siriPendingMood: String?
     var siriPendingDuration: Int?
+
+    var pendingKaiMoodSummary: String?
+    var pendingKaiIntention: String?
 
     var isCurrentScriptSaved: Bool {
         guard let current = currentScript else { return false }
@@ -426,6 +439,13 @@ final class MeditationManager {
         self.selectedKaiPersonalityID = UserDefaults.standard.string(forKey: "selectedKaiPersonalityID") ?? KaiPersonality.default.id
         
         self.meditationHistory = (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
+
+        if let data = UserDefaults.standard.data(forKey: "recentSessionMemories"),
+           let decoded = try? JSONDecoder().decode([SessionMemory].self, from: data) {
+            self.recentSessionMemories = decoded
+        } else {
+            self.recentSessionMemories = []
+        }
         
         // Load techniques
         if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
@@ -490,6 +510,11 @@ final class MeditationManager {
         }
         state = .meditating
         sessionStartDate = Date()
+        lastSessionStartDate = sessionStartDate
+        activeSessionMoodSummary = normalizedMemoryText(pendingKaiMoodSummary)
+        activeSessionIntention = normalizedMemoryText(pendingKaiIntention)
+        pendingKaiMoodSummary = nil
+        pendingKaiIntention = nil
         soundEngine.playSound(startSound)
         if ambientSound != .none {
             soundEngine.startAmbientSound(ambientSound)
@@ -706,6 +731,9 @@ final class MeditationManager {
     }
 
     private var sessionStartDate: Date?
+    private var lastSessionStartDate: Date?
+    private var activeSessionMoodSummary: String?
+    private var activeSessionIntention: String?
     
     private func tick() {
         guard state == .meditating else {
@@ -724,6 +752,23 @@ final class MeditationManager {
 
     private func finish() {
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
+        if let startDate = sessionStartDate,
+           sessionSeconds > 0,
+           (currentScript != nil || activeSessionMoodSummary != nil || activeSessionIntention != nil) {
+            let memory = SessionMemory(
+                startedAt: startDate,
+                durationSeconds: sessionSeconds,
+                moodSummary: activeSessionMoodSummary,
+                intention: activeSessionIntention,
+                proactiveHeader: currentScript?.guidanceHeader,
+                proactiveBody: currentScript?.guidanceBody,
+                suggestionOptions: currentScript?.suggestionOptions ?? []
+            )
+            recentSessionMemories = Array(([memory] + recentSessionMemories).prefix(3))
+            lastCompletedSessionID = memory.id
+        } else {
+            lastCompletedSessionID = nil
+        }
         logMeditationSession(seconds: sessionSeconds)
         timer?.invalidate()
         timer = nil
@@ -742,7 +787,44 @@ final class MeditationManager {
             let endDate = Date()
             HealthManager.shared.saveMindfulMinute(startDate: startDate, endDate: endDate)
         }
+        activeSessionMoodSummary = nil
+        activeSessionIntention = nil
         sessionStartDate = nil
+    }
+}
+
+extension MeditationManager {
+    var latestSessionMemory: SessionMemory? {
+        recentSessionMemories.first
+    }
+
+    var lastSessionStartTime: Date? {
+        lastSessionStartDate
+    }
+
+    func attachReflection(_ reflection: String, to sessionID: UUID) {
+        let trimmed = normalizedMemoryText(reflection)
+        guard let trimmed, !trimmed.isEmpty else { return }
+        guard let index = recentSessionMemories.firstIndex(where: { $0.id == sessionID }) else { return }
+        var memories = recentSessionMemories
+        var updated = memories[index]
+        updated.reflection = trimmed
+        updated.reflectionDate = Date()
+        memories[index] = updated
+        recentSessionMemories = memories
+    }
+
+    func defaultNextSessionReminderTime() -> Date {
+        guard let lastSessionStartDate else { return Date() }
+        let components = Calendar.current.dateComponents([.hour, .minute], from: lastSessionStartDate)
+        return Calendar.current.date(from: components) ?? lastSessionStartDate
+    }
+
+    private func normalizedMemoryText(_ raw: String?) -> String? {
+        guard let raw else { return nil }
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        return trimmed.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
     }
 }
 
@@ -790,6 +872,37 @@ class NotificationManager: ObservableObject {
             }
         }
     }
+
+    func scheduleNextSessionReminder(
+        at date: Date,
+        suggestionText: String? = nil,
+        personaName: String? = nil
+    ) {
+        cancelNextSessionReminder()
+        let content = UNMutableNotificationContent()
+        let trimmedPersona = personaName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        content.title = trimmedPersona.isEmpty ? "See you soon" : "Kai • \(trimmedPersona)"
+        let trimmedSuggestion = suggestionText?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        content.body = trimmedSuggestion.isEmpty
+            ? "Ready for another moment of calm?"
+            : "Ready to \(trimmedSuggestion)?"
+        content.sound = .default
+        content.userInfo = ["open_kai": true]
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: "next_session_reminder", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling next session reminder: \(error)")
+            }
+        }
+    }
+
+    func cancelNextSessionReminder() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["next_session_reminder"])
+    }
+
     func cancelAllReminders() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
     }
