@@ -37,6 +37,9 @@ struct StillaApp: App {
         WindowGroup {
             ContentView()
                 .environment(manager)
+                .onOpenURL { url in
+                    handleIncomingShare(url)
+                }
         }
     }
 
@@ -48,6 +51,36 @@ struct StillaApp: App {
         } catch {
             print("Failed to configure audio session: \(error)")
         }
+    }
+
+    private func handleIncomingShare(_ url: URL) {
+        guard let payload = decodeSharePayload(from: url) else { return }
+        guard MeditationManager.shared.state != .meditating else { return }
+
+        let script = payload.script
+        Task { @MainActor in
+            MeditationManager.shared.currentScript = script
+            MeditationManager.shared.isGuruEnabled = true
+            MeditationManager.shared.durationMinutes = script.durationMinutes
+            MeditationManager.shared.start(durationMinutes: script.durationMinutes)
+        }
+    }
+
+    private func decodeSharePayload(from url: URL) -> ShareSessionPayload? {
+        if url.scheme == "stilla",
+           let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let dataItem = components.queryItems?.first(where: { $0.name == "data" })?.value {
+            return ShareSessionCodec.decode(dataItem)
+        }
+
+        if (url.host == "stilla.app" || url.host == "stilla-three.vercel.app"),
+           url.path == "/share",
+           let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let dataItem = components.queryItems?.first(where: { $0.name == "data" })?.value {
+            return ShareSessionCodec.decode(dataItem)
+        }
+
+        return nil
     }
 }
 

@@ -1,30 +1,55 @@
 import Foundation
 
-@MainActor
-class KaiBrainService {
+/// Internal protocol to allow seamless switching between iCloud KVS and UserDefaults.
+protocol KeyValueStoring {
+    func set(_ value: Any?, forKey defaultName: String)
+    func string(forKey defaultName: String) -> String?
+    func longLong(forKey defaultName: String) -> Int64
+    func synchronize() -> Bool
+}
+
+class UserDefaultsStore: KeyValueStoring {
+    func set(_ value: Any?, forKey defaultName: String) { UserDefaults.standard.set(value, forKey: defaultName) }
+    func string(forKey defaultName: String) -> String? { UserDefaults.standard.string(forKey: defaultName) }
+    func longLong(forKey defaultName: String) -> Int64 { Int64(UserDefaults.standard.integer(forKey: defaultName)) }
+    func synchronize() -> Bool { UserDefaults.standard.synchronize() }
+}
+
+class ICloudStore: KeyValueStoring {
+    func set(_ value: Any?, forKey defaultName: String) { NSUbiquitousKeyValueStore.default.set(value, forKey: defaultName) }
+    func string(forKey defaultName: String) -> String? { NSUbiquitousKeyValueStore.default.string(forKey: defaultName) }
+    func longLong(forKey defaultName: String) -> Int64 { NSUbiquitousKeyValueStore.default.longLong(forKey: defaultName) }
+    func synchronize() -> Bool { NSUbiquitousKeyValueStore.default.synchronize() }
+}
+
+final class KaiBrainService {
     static let shared = KaiBrainService()
     
-    enum BrainError: Error {
-        case generationFailed
-        case invalidResponse
-        case trialExpired
-        case serviceUnavailable
-    }
-
     private let maxFreeCredits = 3
     private let freeGenMonthKey = "kai.free_gen_month"
     private let freeGenCountKey = "kai.free_gen_count"
 
-    private var iCloudStore: NSUbiquitousKeyValueStore { .default }
+    private var proxyURL: URL {
+        Secrets.kaiBackendURL ?? URL(string: "https://stilla-three.vercel.app/kai/generate")!
+    }
+
+    /// Strategy: Probe for iCloud first. If unavailable (e.g. personal dev team),
+    /// fall back to local UserDefaults.
+    private var store: KeyValueStoring {
+        if NSUbiquitousKeyValueStore.default.synchronize() {
+            return ICloudStore()
+        }
+        return UserDefaultsStore()
+    }
 
     /// Remaining free credits this month (0…3).
     var freeCreditsRemaining: Int {
         let currentMonth = currentMonthTag
-        let storedMonth = iCloudStore.string(forKey: freeGenMonthKey) ?? ""
+        let storedMonth = store.string(forKey: freeGenMonthKey) ?? ""
         if storedMonth != currentMonth {
-            return maxFreeCredits          // new month → full credits
+            return maxFreeCredits
         }
-        let used = Int(iCloudStore.longLong(forKey: freeGenCountKey))
+        let used = Int(store.longLong(forKey: freeGenCountKey))
         return max(0, maxFreeCredits - used)
     }
 
@@ -34,20 +59,24 @@ class KaiBrainService {
 
     func recordFreeGeneration() {
         let currentMonth = currentMonthTag
-        let storedMonth = iCloudStore.string(forKey: freeGenMonthKey) ?? ""
+        let storedMonth = store.string(forKey: freeGenMonthKey) ?? ""
 
         if storedMonth != currentMonth {
-            // First use this month — reset counter
-            iCloudStore.set(currentMonth, forKey: freeGenMonthKey)
-            iCloudStore.set(Int64(1), forKey: freeGenCountKey)
+            store.set(currentMonth, forKey: freeGenMonthKey)
+            store.set(Int64(1), forKey: freeGenCountKey)
         } else {
-            let used = iCloudStore.longLong(forKey: freeGenCountKey)
-            iCloudStore.set(used + 1, forKey: freeGenCountKey)
+            let used = store.longLong(forKey: freeGenCountKey)
+            store.set(used + 1, forKey: freeGenCountKey)
         }
-        iCloudStore.synchronize()
+        
+        // Mirror to both for a smooth future transition
+        UserDefaults.standard.set(currentMonth, forKey: freeGenMonthKey)
+        let totalUsed = store.longLong(forKey: freeGenCountKey)
+        UserDefaults.standard.set(totalUsed, forKey: freeGenCountKey)
+        
+        _ = store.synchronize()
     }
 
-    /// "2026-04" style tag so we never confuse January across years.
     private var currentMonthTag: String {
         let now = Date()
         let cal = Calendar.current
@@ -56,39 +85,44 @@ class KaiBrainService {
         return "\(y)-\(m)"
     }
     
-    /// Generates a personalized meditation script based on mood and duration.
+    enum BrainError: Error {
+        case generationFailed
+        case invalidResponse
+        case rateLimited
+        case serviceUnavailable
+    }
+
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality) async throws -> MeditationScript {
-        guard let url = Secrets.kaiBackendURL else {
-            throw BrainError.serviceUnavailable
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        if let token = Secrets.kaiBackendToken {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-
-        let body = KaiGenerationRequest(
+        let request = KaiGenerationRequest(
             mood: mood,
             durationMinutes: durationMinutes,
             personalityName: personality.name,
             personalityPrompt: personality.promptInjection
         )
-        request.httpBody = try JSONEncoder().encode(body)
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        var urlRequest = URLRequest(url: proxyURL)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if let token = Secrets.kaiBackendToken {
+            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        urlRequest.httpBody = try JSONEncoder().encode(request)
+        
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ KAI ERROR: No HTTP Response")
             throw BrainError.generationFailed
         }
         
-        print("🌐 KAI Status: \(httpResponse.statusCode)")
+        if httpResponse.statusCode == 429 {
+            throw BrainError.rateLimited
+        }
         
         if httpResponse.statusCode != 200 {
-            if let errorString = String(data: data, encoding: .utf8) {
-                print("❌ KAI backend error: \(errorString)")
+            if let errorLog = String(data: data, encoding: .utf8) {
+                print("❌ KAI Proxy Error [\(httpResponse.statusCode)]: \(errorLog)")
             }
             throw BrainError.generationFailed
         }
@@ -96,60 +130,32 @@ class KaiBrainService {
         do {
             let rawScript = try JSONDecoder().decode(MeditationScript.self, from: data)
             return stretchScriptToFit(rawScript)
-        } catch let decodingError as DecodingError {
-            print("❌ KAI Decoding Error: \(decodingError)")
-            throw BrainError.invalidResponse
         } catch {
-            print("❌ KAI Unknown Error: \(error)")
-            throw BrainError.generationFailed
+            print("❌ KAI Decoding Error: \(error)")
+            throw BrainError.invalidResponse
         }
-    }
     }
     
-    /// Guarantees that the generated script actually covers the requested duration.
-    /// LLMs are notoriously bad at summing pauses. This function detects any shortfall in
-    /// total elapsed time and pads the `pauseDuration` of every step evenly.
     private func stretchScriptToFit(_ script: MeditationScript) -> MeditationScript {
         let targetSeconds = Double(script.durationMinutes * 60)
-        
-        // Count words to estimate reading time
-        var totalWords = 0
-        var totalPauses: Double = 0
-        for step in script.steps {
-            totalWords += step.text.split(separator: " ").count
-            totalPauses += step.pauseDuration
+        let totalElapsed = script.steps.reduce(0.0) { sum, step in
+            sum + (Double(step.text.count) * 0.12) + step.pauseDuration
         }
         
-        // Assume roughly 150 words per minute -> 2.5 words per sec limit -> 0.4s per word
-        let estimatedReadingSeconds = Double(totalWords) * 0.4
-        let currentTotalSeconds = estimatedReadingSeconds + totalPauses
+        if totalElapsed >= targetSeconds { return script }
         
-        let shortfall = targetSeconds - currentTotalSeconds
-        if shortfall > 0, !script.steps.isEmpty {
-            let extraPausePerStep = shortfall / Double(script.steps.count)
-            let stretchedSteps = script.steps.map { step -> ScriptStep in
-                ScriptStep(
-                    text: step.text,
-                    pauseDuration: step.pauseDuration + extraPausePerStep
-                )
-            }
-            return MeditationScript(
-                id: script.id,
-                title: script.title,
-                durationMinutes: script.durationMinutes,
-                steps: stretchedSteps,
-                isFavorite: script.isFavorite,
-                tags: script.tags,
-                kaiPersonalityID: script.kaiPersonalityID,
-                kaiPersonalityName: script.kaiPersonalityName,
-                guidanceHeader: script.guidanceHeader,
-                guidanceBody: script.guidanceBody,
-                suggestionOptions: script.suggestionOptions,
-                createdAt: script.createdAt
-            )
+        let diff = targetSeconds - totalElapsed
+        let extraPerStep = diff / Double(script.steps.count)
+        
+        var newSteps = script.steps
+        for i in 0..<newSteps.count {
+            newSteps[i].pauseDuration += extraPerStep
         }
         
+        var script = script
+        script.steps = newSteps
         return script
+    }
 }
 
 private struct KaiGenerationRequest: Codable {

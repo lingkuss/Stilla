@@ -3,7 +3,7 @@ import Foundation
 struct ScriptStep: Identifiable, Codable {
     var id = UUID()
     let text: String
-    let pauseDuration: TimeInterval
+    var pauseDuration: TimeInterval
     
     enum CodingKeys: String, CodingKey {
         case text, pauseDuration

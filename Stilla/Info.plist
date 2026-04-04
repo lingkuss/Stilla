@@ -22,6 +22,15 @@
 	<string>https://stilla-api.vercel.app/kai/generate</string>
 	<key>KAIBackendToken</key>
 	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>stilla</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Kai Meditation — Stilla</title>
+    <meta name="description" content="Someone shared a personalized Kai meditation with you. Open it in Stilla or download the app to experience it.">
+
+    <!-- Static OG tags (crawlers don't run JS, so these are generic) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="A Kai Meditation — Stilla">
+    <meta property="og:description" content="Someone shared a personalized AI meditation with you. Tap to experience it in Stilla.">
+    <meta property="og:image" content="https://stilla.app/kai_avatar.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="A Kai Meditation — Stilla">
+    <meta property="twitter:description" content="Someone shared a personalized AI meditation with you.">
+    <meta property="twitter:image" content="https://stilla.app/kai_avatar.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .share-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .share-card {
+            width: min(420px, 100%);
+            background: linear-gradient(135deg,
+                hsl(245, 30%, 12%),
+                hsl(265, 35%, 8%),
+                hsl(280, 25%, 6%)
+            );
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .share-card-hero {
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            display: block;
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        }
+
+        .share-card-hero.hidden {
+            display: none;
+        }
+
+        .share-card-body {
+            padding: 24px 28px 28px;
+        }
+
+        .share-persona-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 8px;
+        }
+
+        .share-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 16px;
+            line-height: 1.15;
+        }
+
+        .share-snippet {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.65;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .share-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .share-meta-brand {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .share-meta-duration {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+        }
+
+        .share-actions {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: min(420px, 100%);
+        }
+
+        .share-actions .primary-button {
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .share-actions .secondary-button {
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .share-fallback {
+            text-align: center;
+            max-width: 420px;
+        }
+
+        .share-fallback h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .share-fallback p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="share-page">
+        <!-- Fallback when no data -->
+        <div id="fallback" class="share-fallback" style="display: none;">
+            <span class="eyebrow">Stilla</span>
+            <h1>This link has expired</h1>
+            <p>The shared meditation is no longer available, but you can create your own with Kai.</p>
+            <div class="share-actions">
+                <a class="primary-button" href="index.html">Explore Stilla</a>
+            </div>
+        </div>
+
+        <!-- Dynamic card -->
+        <div id="share-content" style="display: none;">
+            <div class="share-card">
+                <img id="persona-image" class="share-card-hero hidden" alt="Kai Persona" loading="eager">
+                <div class="share-card-body">
+                    <div id="persona-name" class="share-persona-label"></div>
+                    <h1 id="session-title" class="share-title"></h1>
+                    <p id="session-snippet" class="share-snippet"></p>
+                    <div class="share-meta">
+                        <span class="share-meta-brand">✦ Stilla · Kai</span>
+                        <span id="session-duration" class="share-meta-duration"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="share-actions">
+                <a id="app-store-link" class="primary-button" href="#">Download Stilla</a>
+                <a class="secondary-button" href="index.html">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Persona image map (matches the website's image files)
+        const personaImages = {
+            'zen_minimalist': 'kai_zen_minimalist.png',
+            'warm_guardian': 'kai_warm_guardian.png',
+            'modern_realist': 'kai_modern_realist.png',
+            'cosmic_sage': 'kai_cosmic_sage.png',
+            'reflective_analyst': 'kai_reflective_analyst.png',
+            'philosopher': 'kai_philosopher.png',
+            'ra': 'kai_ra.png'
+        };
+
+        function base64URLDecode(str) {
+            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            while (base64.length % 4) base64 += '=';
+            return atob(base64);
+        }
+
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            const encoded = params.get('data');
+
+            if (!encoded) {
+                document.getElementById('fallback').style.display = 'block';
+                return;
+            }
+
+            try {
+                const json = base64URLDecode(encoded);
+                const payload = JSON.parse(json);
+                const script = payload.script || payload;
+
+                // Populate the card
+                const title = script.title || 'Kai Meditation';
+                const personaName = script.kaiPersonalityName || 'Kai';
+                const personaID = script.kaiPersonalityID || '';
+                const duration = script.durationMinutes || 10;
+
+                // Find the best snippet
+                let snippet = '';
+                if (script.steps && script.steps.length > 0) {
+                    const candidates = script.steps
+                        .map(s => (s.text || '').trim())
+                        .filter(t => t.length > 30);
+                    snippet = candidates[0] || script.steps[0].text || '';
+                }
+                if (snippet.length > 180) {
+                    snippet = snippet.substring(0, 177) + '…';
+                }
+
+                document.getElementById('session-title').textContent = title;
+                document.getElementById('persona-name').textContent = personaName.toUpperCase();
+                document.getElementById('session-snippet').textContent = '\u201C' + snippet + '\u201D';
+                document.getElementById('session-duration').textContent = duration + ' min';
+
+                // Update page title for browser tab
+                document.title = title + ' — Stilla';
+
+                // Set persona image
+                const imgFile = personaImages[personaID];
+                if (imgFile) {
+                    const imgEl = document.getElementById('persona-image');
+                    imgEl.src = imgFile;
+                    imgEl.classList.remove('hidden');
+                }
+
+                document.getElementById('share-content').style.display = 'block';
+            } catch (e) {
+                console.error('Failed to decode share data:', e);
+                document.getElementById('fallback').style.display = 'block';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
