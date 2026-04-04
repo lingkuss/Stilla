@@ -7,6 +7,11 @@ import Observation
 import HealthKit
 import ActivityKit
 
+enum HomeViewMode: String, Codable {
+    case hero
+    case timer
+}
+
 /// Central state manager for the meditation timer.
 @MainActor
 @Observable

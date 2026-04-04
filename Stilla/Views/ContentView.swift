@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var currentPhase = ""
     @State private var showSavedMeditations = false
     @State private var reflectionSheetContext: ReflectionSheetContext?
+    @AppStorage("homeViewMode") private var homeViewMode = HomeViewMode.hero
 
     private struct ReflectionSheetContext: Identifiable {
         let id = UUID()
@@ -31,12 +32,27 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 // Header
                 HStack(spacing: 0) {
-                    // Left: Stats
-                    Button(action: { showStats = true }) {
-                        Image(systemName: "chart.bar.fill")
-                            .font(.system(size: 18))
-                            .foregroundStyle(.white.opacity(0.6))
-                            .frame(width: 44, height: 44)
+                    // Left: Mode Toggle & Stats
+                    HStack(spacing: 4) {
+                        Button(action: {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                homeViewMode = (homeViewMode == .hero) ? .timer : .hero
+                            }
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        }) {
+                            Image(systemName: homeViewMode == .hero ? "timer" : "sparkles")
+                                .font(.system(size: 18))
+                                .foregroundStyle(.white.opacity(0.8))
+                                .frame(width: 44, height: 44)
+                                .background(Circle().fill(Color.white.opacity(0.1)))
+                        }
+                        
+                        Button(action: { showStats = true }) {
+                            Image(systemName: "chart.bar.fill")
+                                .font(.system(size: 18))
+                                .foregroundStyle(.white.opacity(0.6))
+                                .frame(width: 44, height: 44)
+                        }
                     }
 
                     Spacer()
@@ -72,122 +88,21 @@ struct ContentView: View {
                     }
                 }
                 .padding(.horizontal, 12)
-                .padding(.top, 4) // Reduced from 8
+                .padding(.top, 4)
                 .layoutPriority(1)
 
                 if manager.state == .idle {
-                    // Kai Experience Promo Card (Premium Overhaul)
-                    Button(action: { 
-                        showKaiExperience = true 
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    }) {
-                        VStack(alignment: .leading, spacing: 6) { // Reduced spacing
-                            HStack {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "sparkles")
-                                        .font(.system(size: 10, weight: .bold))
-                                    Text("PERSONALIZED ∞ Tap to start a Kai session")
-                                        .font(.system(size: 9, weight: .bold))
-                                        .kerning(1)
-                                }
-                                .foregroundStyle(.white.opacity(0.8))
-
-                                Spacer()
-
-                                Image(systemName: "arrow.up.right")
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundStyle(.white.opacity(0.4))
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(latestKaiHeader)
-                                    .font(.system(size: 16, weight: .light, design: .serif))
-                                    .italic()
-                                    .foregroundStyle(.white)
-                                
-                                Text(latestKaiBody)
-                                    .font(.system(size: 11))
-                                    .foregroundStyle(.white.opacity(0.5))
-                            }
-                        }
-                        .padding(.horizontal, 18)
-                        .padding(.vertical, 14) // Reduced from 20
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(.ultraThinMaterial)
-                                
-                                LinearGradient(
-                                    colors: [.indigo.opacity(0.2), .purple.opacity(0.05), .clear],
-                                    startPoint: kaiShimmer ? .topLeading : .bottomTrailing,
-                                    endPoint: kaiShimmer ? .bottomTrailing : .topLeading
-                                )
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-                                .animation(.easeInOut(duration: 4).repeatForever(autoreverses: true), value: kaiShimmer)
-                            }
-                        }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
-                        )
-                        .scaleEffect(kaiPulse ? 1.01 : 1.0)
-                        .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: kaiPulse)
+                    if homeViewMode == .hero {
+                        heroView
+                            .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .leading).combined(with: .opacity)))
+                    } else {
+                        timerView
+                            .transition(.asymmetric(insertion: .move(edge: .leading).combined(with: .opacity), removal: .move(edge: .trailing).combined(with: .opacity)))
                     }
-                    .buttonStyle(.plain)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12) // Reduced from 24
-                    .onAppear {
-                        kaiShimmer = true
-                        kaiPulse = true
-                    }
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                }
-
-                Spacer()
-
-                // Status label
-                statusLabel
-                    .padding(.top, 30) // Push down slightly
-                    .padding(.bottom, 12) // Reduced from 20
-
-                // Breathing circle
-                BreathingCircleView(
-                    isActive: manager.state == .meditating,
-                    progress: manager.progress,
-                    technique: manager.selectedTechnique,
-                    onPhaseChange: { phase, duration in
-                        currentPhase = phase
-                        manager.playBreathingCue(phase: phase, duration: duration)
-                    }
-                )
-
-                // Timer display
-                VStack(spacing: 4) {
-                    Text(timerText)
-                        .font(.system(size: 64, weight: .ultraLight, design: .rounded))
-                        .foregroundStyle(.white)
-                        .monospacedDigit()
-                        .contentTransition(.numericText())
-                    
-                    if manager.state == .meditating, manager.isGuruEnabled, !manager.currentKaiPhrase.isEmpty {
-                        Text(manager.currentKaiPhrase)
-                            .font(.system(size: 16, weight: .light, design: .serif))
-                            .italic()
-                            .foregroundStyle(.white.opacity(0.7))
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 40)
-                            .transition(.opacity.combined(with: .move(edge: .bottom)))
-                    }
-                }
-                .padding(.top, 12)
-                .animation(.easeInOut, value: manager.currentKaiPhrase)
-
-                if manager.state == .idle {
-                    libraryButton
-                        .padding(.top, 6)
-                    
-                    durationPicker
-                        .padding(.top, 10) // Reduced from 16
+                } else {
+                    // Always show timer view when active
+                    timerView
+                        .transition(.opacity)
                 }
 
                 Spacer()
@@ -214,23 +129,25 @@ struct ContentView: View {
                         .transition(.scale.combined(with: .opacity))
                     }
 
-                    actionButton
-                    
-                    if manager.state == .idle {
-                        Button {
-                            showTechniques = true
-                        } label: {
-                            HStack(spacing: 6) {
-                                Text(techniqueTimings)
-                                    .font(.system(size: 11, design: .monospaced))
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 8, weight: .bold))
+                    if homeViewMode == .timer || manager.state != .idle {
+                        actionButton
+                        
+                        if manager.state == .idle {
+                            Button {
+                                showTechniques = true
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Text(techniqueTimings)
+                                        .font(.system(size: 11, design: .monospaced))
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 8, weight: .bold))
+                                }
+                                .foregroundStyle(.white.opacity(0.35))
                             }
-                            .foregroundStyle(.white.opacity(0.35))
                         }
                     }
                 }
-                .padding(.bottom, 16) // Combined bottom padding
+                .padding(.bottom, 16)
                 .layoutPriority(1)
             }
         }
@@ -337,6 +254,209 @@ struct ContentView: View {
         let fallback = "Describe your mood. Kai will curate your path."
         let body = manager.latestSessionMemory?.proactiveBody?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
         return body.isEmpty ? fallback : body
+    }
+
+    // MARK: - Redesign Home Views
+
+    private var heroView: some View {
+        VStack(spacing: 30) {
+            Spacer()
+            
+            // 1. Large Persona Portrait (Middle)
+            ZStack {
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 240, height: 240)
+                    .overlay(
+                        Circle()
+                            .stroke(LinearGradient(colors: [.white.opacity(0.2), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
+                    )
+                
+                Image(manager.selectedKaiPersonality.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 220, height: 220)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+            }
+            .scaleEffect(kaiPulse ? 1.02 : 1.0)
+            .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: kaiPulse)
+            
+            // 3. Message Citation (Under the image)
+            VStack(spacing: 16) {
+                Text("“\(latestKaiBody)”")
+                    .font(.system(size: 16, weight: .light))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .italic()
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 60)
+                    .lineSpacing(4)
+                
+                HStack(spacing: 8) {
+                    Rectangle()
+                        .fill(.white.opacity(0.3))
+                        .frame(width: 20, height: 1)
+                    Text("KAI")
+                        .font(.system(size: 10, weight: .bold))
+                        .kerning(3)
+                        .foregroundStyle(.white.opacity(0.5))
+                    Rectangle()
+                        .fill(.white.opacity(0.3))
+                        .frame(width: 20, height: 1)
+                }
+            }
+            
+            Spacer()
+            
+            // 4. Primary Action Button
+            Button(action: { 
+                showKaiExperience = true 
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            }) {
+                HStack(spacing: 12) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 16, weight: .semibold))
+                    Text("Start Kai Journey")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 32)
+                .padding(.vertical, 18)
+                .background {
+                    Capsule()
+                        .fill(LinearGradient(colors: [.indigo, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .shadow(color: .indigo.opacity(0.3), radius: 15, x: 0, y: 8)
+                }
+            }
+            .buttonStyle(.plain)
+            
+            Spacer()
+        }
+        .onAppear {
+            kaiPulse = true
+        }
+    }
+
+    private var timerView: some View {
+        VStack(spacing: 0) {
+            // Kai Experience Promo Card (RESTORED FULL PREMIUM VERSION)
+            if manager.state == .idle {
+                Button(action: { 
+                    showKaiExperience = true 
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }) {
+                    VStack(alignment: .leading, spacing: 6) { 
+                        HStack {
+                            HStack(spacing: 8) {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 10, weight: .bold))
+                                Text("PERSONALIZED ∞ Tap to start a Kai session")
+                                    .font(.system(size: 9, weight: .bold))
+                                    .kerning(1)
+                            }
+                            .foregroundStyle(.white.opacity(0.8))
+                            
+                            Spacer()
+                            
+                            Image(systemName: "arrow.up.right")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.white.opacity(0.4))
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(latestKaiHeader)
+                                .font(.system(size: 16, weight: .light, design: .serif))
+                                .italic()
+                                .foregroundStyle(.white)
+                            
+                            Text(latestKaiBody)
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white.opacity(0.5))
+                        }
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 14)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.ultraThinMaterial)
+                            
+                            LinearGradient(
+                                colors: [.indigo.opacity(0.2), .purple.opacity(0.05), .clear],
+                                startPoint: kaiShimmer ? .topLeading : .bottomTrailing,
+                                endPoint: kaiShimmer ? .bottomTrailing : .topLeading
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .animation(.easeInOut(duration: 4).repeatForever(autoreverses: true), value: kaiShimmer)
+                        }
+                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+                    .scaleEffect(kaiPulse ? 1.01 : 1.0)
+                    .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: kaiPulse)
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .onAppear {
+                    kaiShimmer = true
+                    kaiPulse = true
+                }
+            }
+            
+            Spacer()
+            
+            // Status label
+            statusLabel
+                .padding(.top, 30)
+                .padding(.bottom, 12)
+
+            // Breathing circle
+            BreathingCircleView(
+                isActive: manager.state == .meditating,
+                progress: manager.progress,
+                technique: manager.selectedTechnique,
+                onPhaseChange: { phase, duration in
+                    currentPhase = phase
+                    manager.playBreathingCue(phase: phase, duration: duration)
+                }
+            )
+
+            // Timer display
+            VStack(spacing: 4) {
+                Text(timerText)
+                    .font(.system(size: 64, weight: .ultraLight, design: .rounded))
+                    .foregroundStyle(.white)
+                    .monospacedDigit()
+                    .contentTransition(.numericText())
+                
+                if manager.state == .meditating, manager.isGuruEnabled, !manager.currentKaiPhrase.isEmpty {
+                    Text(manager.currentKaiPhrase)
+                        .font(.system(size: 16, weight: .light, design: .serif))
+                        .italic()
+                        .foregroundStyle(.white.opacity(0.7))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                }
+            }
+            .padding(.top, 12)
+            .animation(.easeInOut, value: manager.currentKaiPhrase)
+
+            if manager.state == .idle {
+                libraryButton
+                    .padding(.top, 6)
+                
+                durationPicker
+                    .padding(.top, 10)
+            }
+
+            Spacer()
+        }
     }
 
     // MARK: - Subviews
