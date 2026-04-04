@@ -39,4 +39,25 @@ struct SessionMemory: Identifiable, Codable, Hashable {
     var durationMinutesRounded: Int {
         Int((Double(durationSeconds) / 60.0).rounded())
     }
+    
+    // MARK: - Safe Decoding for Legacy Records
+    
+    enum CodingKeys: String, CodingKey {
+        case id, startedAt, durationSeconds, moodSummary, intention
+        case proactiveHeader, proactiveBody, suggestionOptions, reflection, reflectionDate
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        startedAt = try container.decode(Date.self, forKey: .startedAt)
+        durationSeconds = try container.decode(Int.self, forKey: .durationSeconds)
+        moodSummary = try container.decodeIfPresent(String.self, forKey: .moodSummary)
+        intention = try container.decodeIfPresent(String.self, forKey: .intention)
+        proactiveHeader = try container.decodeIfPresent(String.self, forKey: .proactiveHeader)
+        proactiveBody = try container.decodeIfPresent(String.self, forKey: .proactiveBody)
+        suggestionOptions = (try? container.decode([String].self, forKey: .suggestionOptions)) ?? []
+        reflection = try container.decodeIfPresent(String.self, forKey: .reflection)
+        reflectionDate = try container.decodeIfPresent(Date.self, forKey: .reflectionDate)
+    }
 }

@@ -159,12 +159,19 @@ final class MeditationManager {
         }
     }
 
+    /// For deep linking: tells views to dismiss themselves to show the meditation.
+    var shouldDismissSheets: Bool = false
+    
     /// The script currently being played (or just finished). 
-    /// Used for the "Save" feature at the end of a session.
     var currentScript: MeditationScript?
 
     /// Siri Handoff State
     var isSiriTriggeredKai: Bool = false
+    
+    /// Tracks if the current session was loaded via a share link.
+    /// Shared sessions skip memory logging and the reflection prompt.
+    private(set) var isSharedSession: Bool = false
+    
     var siriPendingMood: String?
     var siriPendingDuration: Int?
 
@@ -495,8 +502,9 @@ final class MeditationManager {
         start(durationMinutes: durationMinutes)
     }
 
-    func start(durationMinutes minutes: Int) {
+    func start(durationMinutes minutes: Int, isShared: Bool = false) {
         guard state != .meditating else { return }
+        self.isSharedSession = isShared
         self.durationMinutes = minutes
         if minutes == 0 {
             totalSeconds = 0
@@ -539,6 +547,30 @@ final class MeditationManager {
                 self?.tick()
             }
         }
+    }
+
+    /// Explicitly starts a session from a shared script, ensuring exact settings match.
+    func startSharedSession(script: MeditationScript) {
+        // Reset state if needed
+        if state == .meditating {
+            stop()
+        }
+        
+        // Match the shared session exactly
+        self.currentScript = script
+        self.isGuruEnabled = true
+        self.durationMinutes = script.durationMinutes
+        self.isSharedSession = true // Mark as shared
+        
+        // Sync the persona for the UI (image/name)
+        if let sharedID = script.kaiPersonalityID {
+            self.selectedKaiPersonalityID = sharedID
+        }
+        
+        print("🚀 KAI: Replicating shared session: '\(script.title)' with \(script.durationMinutes)m length.")
+        
+        // Start using the matched duration and explicit shared flag
+        start(durationMinutes: script.durationMinutes, isShared: true)
     }
     
     // MARK: - Live Activities
@@ -677,9 +709,10 @@ final class MeditationManager {
         remainingSeconds = 0
         elapsedSeconds = 0
         sessionStartDate = nil
+        isSharedSession = false // Ensure we return to personal mode
+        currentScript = nil // Clear the shared script content
         endLiveActivity()
         soundEngine.stopAll()
-        currentScript = nil
         GuruManager.shared.stop()
     }
 
@@ -754,6 +787,7 @@ final class MeditationManager {
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
         if let startDate = sessionStartDate,
            sessionSeconds > 0,
+           !isSharedSession, // Skip memory logging for shared sessions
            (currentScript != nil || activeSessionMoodSummary != nil || activeSessionIntention != nil) {
             let memory = SessionMemory(
                 startedAt: startDate,

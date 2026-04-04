@@ -1,6 +1,11 @@
 import express from "express";
 import OpenAI from "openai";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
+import Redis from "ioredis";
+import crypto from "crypto";
+
+const kv = process.env.REDIS_URL ? new Redis(process.env.REDIS_URL) : null;
 
 const port = Number(process.env.PORT || 8787);
 const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
@@ -13,6 +18,12 @@ if (!openAIKey) {
 
 const openai = new OpenAI({ apiKey: openAIKey });
 const app = express();
+
+app.use(cors({
+    origin: ["https://stilla.app", "https://stilla-three.vercel.app", "http://localhost:3000"],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json({ limit: "32kb" }));
 
@@ -93,6 +104,74 @@ app.post("/kai/generate", generateLimiter, async (req, res) => {
         return res.status(500).json({
             error: "Unable to generate a Kai meditation right now."
         });
+    }
+});
+
+// --- NEW SHARING ENDPOINTS ---
+
+const shareLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many share attempts. Please try again later." },
+});
+
+// Store session JSON and return a short ID
+app.post("/kai/share", shareLimiter, async (req, res) => {
+    try {
+        if (!kv) {
+            return res.status(503).json({ error: "Storage not configured" });
+        }
+
+        if (proxyToken) {
+            const authHeader = req.headers.authorization || "";
+            const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+            if (bearerToken !== proxyToken) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+        }
+
+        const sessionData = req.body;
+        if (!sessionData || Object.keys(sessionData).length === 0) {
+            return res.status(400).json({ error: "Invalid session data" });
+        }
+
+        // Generate a random 7-character ID
+        const id = crypto.randomBytes(4).toString("hex").slice(0, 7);
+        
+        // Store in KV with 30 day expiry
+        const ONE_MONTH = 60 * 60 * 24 * 30;
+        await kv.set(`share:${id}`, JSON.stringify(sessionData), "EX", ONE_MONTH);
+
+        return res.json({ id });
+    } catch (error) {
+        console.error("Kai share store failure:", error);
+        return res.status(500).json({ error: "Failed to store shared session" });
+    }
+});
+
+// Retrieve session JSON by ID
+app.get("/kai/share", async (req, res) => {
+    try {
+        if (!kv) {
+            return res.status(503).json({ error: "Storage not configured" });
+        }
+
+        const id = req.query.id;
+        if (typeof id !== "string" || !id) {
+            return res.status(400).json({ error: "Missing share ID" });
+        }
+
+        const rawData = await kv.get(`share:${id}`);
+        if (!rawData) {
+            return res.status(404).json({ error: "Session not found or expired" });
+        }
+
+        return res.json(JSON.parse(rawData));
+    } catch (error) {
+        console.error("Kai share retrieve failure:", error);
+        return res.status(500).json({ error: "Failed to retrieve shared session" });
     }
 });
 

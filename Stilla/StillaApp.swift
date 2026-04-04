@@ -54,33 +54,51 @@ struct StillaApp: App {
     }
 
     private func handleIncomingShare(_ url: URL) {
-        guard let payload = decodeSharePayload(from: url) else { return }
-        guard MeditationManager.shared.state != .meditating else { return }
-
-        let script = payload.script
-        Task { @MainActor in
-            MeditationManager.shared.currentScript = script
-            MeditationManager.shared.isGuruEnabled = true
-            MeditationManager.shared.durationMinutes = script.durationMinutes
-            MeditationManager.shared.start(durationMinutes: script.durationMinutes)
+        print("🔗 KAI: Received Deep Link: \(url.absoluteString)")
+        guard manager.state != .meditating else { 
+            print("⚠️ KAI: Ignoring link because already meditating.")
+            return 
+        }
+        
+        guard let id = extractShareID(from: url) else { 
+            print("❌ KAI: No 'id' found in URL.")
+            return 
+        }
+        
+        Task {
+            print("📥 KAI: Fetching payload for ID: \(id)")
+            if let payload = await fetchSessionPayload(id: id) {
+                let script = payload.script.toFullScript()
+                print("✅ KAI: Payload received. Title: \(script.title)")
+                
+                await MainActor.run {
+                    // Force dismiss everything to show the session
+                    manager.shouldDismissSheets = true
+                    
+                    print("🚀 KAI: Atomic start for shared script: \(script.title)")
+                    manager.startSharedSession(script: script)
+                }
+            } else {
+                print("❌ KAI: Failed to fetch payload from backend.")
+            }
         }
     }
 
-    private func decodeSharePayload(from url: URL) -> ShareSessionPayload? {
-        if url.scheme == "stilla",
-           let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-           let dataItem = components.queryItems?.first(where: { $0.name == "data" })?.value {
-            return ShareSessionCodec.decode(dataItem)
+    private func fetchSessionPayload(id: String) async -> ShareSessionPayload? {
+        let url = URL(string: "https://stilla-api.vercel.app/kai/share?id=\(id)")!
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoder = JSONDecoder()
+            return try decoder.decode(ShareSessionPayload.self, from: data)
+        } catch {
+            print("Failed to fetch shared session: \(error)")
+            return nil
         }
+    }
 
-        if (url.host == "stilla.app" || url.host == "stilla-three.vercel.app"),
-           url.path == "/share",
-           let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-           let dataItem = components.queryItems?.first(where: { $0.name == "data" })?.value {
-            return ShareSessionCodec.decode(dataItem)
-        }
-
-        return nil
+    private func extractShareID(from url: URL) -> String? {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        return components?.queryItems?.first(where: { $0.name == "id" })?.value
     }
 }
 

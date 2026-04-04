@@ -197,39 +197,36 @@
             'ra': 'kai_ra.png'
         };
 
-        function base64URLDecode(str) {
-            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-            while (base64.length % 4) base64 += '=';
-            return atob(base64);
-        }
-
-        function init() {
+        async function init() {
             const params = new URLSearchParams(window.location.search);
-            const encoded = params.get('data');
+            const id = params.get('id');
 
-            if (!encoded) {
+            if (!id) {
                 document.getElementById('fallback').style.display = 'block';
                 return;
             }
 
             try {
-                const json = base64URLDecode(encoded);
-                const payload = JSON.parse(json);
-                const script = payload.script || payload;
+                // Fetch from backend
+                const response = await fetch(`https://stilla-api.vercel.app/kai/share?id=${id}`);
+                if (!response.ok) throw new Error('Session not found');
+                const payload = await response.json();
+                const scriptData = payload.s || payload.script || payload;
 
                 // Populate the card
-                const title = script.title || 'Kai Meditation';
-                const personaName = script.kaiPersonalityName || 'Kai';
-                const personaID = script.kaiPersonalityID || '';
-                const duration = script.durationMinutes || 10;
+                const title = scriptData.t || scriptData.title || 'Kai Meditation';
+                const personaName = scriptData.kn || scriptData.kaiPersonalityName || 'Kai';
+                const personaID = scriptData.kid || scriptData.kaiPersonalityID || '';
+                const duration = scriptData.d || scriptData.durationMinutes || 10;
+                const steps = scriptData.s || scriptData.steps || [];
 
                 // Find the best snippet
                 let snippet = '';
-                if (script.steps && script.steps.length > 0) {
-                    const candidates = script.steps
-                        .map(s => (s.text || '').trim())
+                if (steps && steps.length > 0) {
+                    const candidates = steps
+                        .map(s => (s.t || s.text || '').trim())
                         .filter(t => t.length > 30);
-                    snippet = candidates[0] || script.steps[0].text || '';
+                    snippet = candidates[0] || (steps[0].t || steps[0].text) || '';
                 }
                 if (snippet.length > 180) {
                     snippet = snippet.substring(0, 177) + '…';
@@ -245,10 +242,17 @@
 
                 // Set persona image
                 const imgFile = personaImages[personaID];
-                if (imgFile) {
-                    const imgEl = document.getElementById('persona-image');
+                const imgEl = document.getElementById('persona-image');
+                if (imgFile && imgEl) {
                     imgEl.src = imgFile;
                     imgEl.classList.remove('hidden');
+                }
+
+                // Update the "Open in Stilla" button to use the custom URL scheme
+                const appLink = document.getElementById('app-store-link');
+                if (appLink && id) {
+                    appLink.href = 'stilla://share?id=' + id;
+                    appLink.textContent = 'Open in Stilla';
                 }
 
                 document.getElementById('share-content').style.display = 'block';

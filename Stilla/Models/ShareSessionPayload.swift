@@ -2,42 +2,52 @@ import Foundation
 
 struct ShareSessionPayload: Codable {
     let version: Int
-    let script: MeditationScript
+    let script: SharedMeditationScript
 
     init(version: Int = 1, script: MeditationScript) {
         self.version = version
-        self.script = script
+        self.script = SharedMeditationScript(from: script)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case version = "v"
+        case script = "s"
     }
 }
 
-enum ShareSessionCodec {
-    static func encode(_ payload: ShareSessionPayload) -> String? {
-        let encoder = JSONEncoder()
-        guard let data = try? encoder.encode(payload) else { return nil }
-        return base64URLEncode(data)
+// Aggressively shortened models for sharing only
+struct SharedScriptStep: Codable {
+    let t: String // text
+    let p: Double // pauseDuration
+    
+    init(from step: ScriptStep) {
+        self.t = step.text
+        self.p = step.pauseDuration
     }
+}
 
-    static func decode(_ encoded: String) -> ShareSessionPayload? {
-        guard let data = base64URLDecode(encoded) else { return nil }
-        let decoder = JSONDecoder()
-        return try? decoder.decode(ShareSessionPayload.self, from: data)
+struct SharedMeditationScript: Codable {
+    let t: String // title
+    let d: Int    // duration
+    let s: [SharedScriptStep] // steps
+    let kid: String? // kaiPersonalityID
+    let kn: String?  // kaiPersonalityName
+    
+    init(from script: MeditationScript) {
+        self.t = script.title
+        self.d = script.durationMinutes
+        self.s = script.steps.map { SharedScriptStep(from: $0) }
+        self.kid = script.kaiPersonalityID
+        self.kn = script.kaiPersonalityName
     }
-
-    private static func base64URLEncode(_ data: Data) -> String {
-        return data.base64EncodedString()
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
-    }
-
-    private static func base64URLDecode(_ value: String) -> Data? {
-        var base64 = value
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-        let padding = 4 - (base64.count % 4)
-        if padding < 4 {
-            base64 += String(repeating: "=", count: padding)
-        }
-        return Data(base64Encoded: base64)
+    
+    func toFullScript() -> MeditationScript {
+        return MeditationScript(
+            title: t,
+            durationMinutes: d,
+            steps: s.map { ScriptStep(text: $0.t, pauseDuration: $0.p) },
+            kaiPersonalityID: kid,
+            kaiPersonalityName: kn
+        )
     }
 }

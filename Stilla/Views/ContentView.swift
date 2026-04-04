@@ -308,6 +308,18 @@ struct ContentView: View {
                 defaultReminderTime: manager.defaultNextSessionReminderTime()
             )
         }
+        .onChange(of: manager.shouldDismissSheets) { _, newValue in
+            if newValue {
+                showSettings = false
+                showSoundLibrary = false
+                showStats = false
+                showTechniques = false
+                showKaiExperience = false
+                showSavedMeditations = false
+                reflectionSheetContext = nil
+                manager.shouldDismissSheets = false
+            }
+        }
         .onChange(of: manager.isSiriTriggeredKai) { _, newValue in
             if newValue {
                 showKaiExperience = true

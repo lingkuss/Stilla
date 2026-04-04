@@ -1,4 +1,5 @@
 import SwiftUI
+import LinkPresentation
 
 struct ReflectionPromptView: View {
     @Environment(MeditationManager.self) private var manager
@@ -15,8 +16,11 @@ struct ReflectionPromptView: View {
     @State private var showingShareCard = false
     @State private var shareItems: [Any] = []
     @State private var showingShareSheet = false
+    @State private var isSavingShare = false
+    @State private var shareUploadError = false
     @State private var cachedShareImage: UIImage?
     @State private var cachedShareURL: URL?
+    @State private var isGeneratingShareContent = false
 
     private let speechManager = SpeechManager.shared
 
@@ -57,6 +61,14 @@ struct ReflectionPromptView: View {
             }
             .sheet(isPresented: $showingShareSheet) {
                 ShareSheet(activityItems: shareItems)
+            }
+            .alert("Couldn't Share Session", isPresented: $shareUploadError) {
+                Button("OK") { }
+            } message: {
+                Text("There was a problem saving your session to the server. Please check your internet connection or Vercel KV setup.")
+            }
+            .onAppear {
+                prefetchShareContent()
             }
         }
     }
@@ -251,8 +263,13 @@ struct ReflectionPromptView: View {
                     shareSession()
                 } label: {
                     HStack(spacing: 8) {
-                        Image(systemName: "square.and.arrow.up")
-                        Text("Share")
+                        if isGeneratingShareContent || isSavingShare {
+                            ProgressView()
+                                .tint(.black)
+                        } else {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        Text(isGeneratingShareContent || isSavingShare ? "Preparing..." : "Share")
                     }
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.black)
@@ -260,6 +277,7 @@ struct ReflectionPromptView: View {
                     .padding(.vertical, 16)
                     .background(Capsule().fill(.white))
                 }
+                .disabled(isGeneratingShareContent || isSavingShare)
 
                 Button("Not now") {
                     dismiss()
@@ -317,27 +335,44 @@ struct ReflectionPromptView: View {
         MeditationScript(title: "Kai Journey", durationMinutes: 10, steps: [])
     }
 
+    private var lastSessionScript: MeditationScript? {
+        manager.currentScript
+    }
+
     private func transitionToShare() {
-        guard let script = manager.currentScript else {
+        guard manager.currentScript != nil else {
             dismiss()
             return
         }
 
-        // Pre-render the share image so it's ready when the user taps Share
-        let personaImg = loadPersonaUIImage()
-        let cardView = ShareSessionCardView(script: script, personaUIImage: personaImg)
-        let renderer = ImageRenderer(content: cardView)
-        renderer.scale = 3.0
-        cachedShareImage = renderer.uiImage
-
-        // Pre-compute the share URL
-        let payload = ShareSessionPayload(script: script)
-        if let encoded = ShareSessionCodec.encode(payload) {
-            cachedShareURL = URL(string: "https://stilla-three.vercel.app/share?data=\(encoded)")
-        }
-
         withAnimation(.easeInOut(duration: 0.3)) {
             showingShareCard = true
+        }
+        
+        prefetchShareContent()
+    }
+
+    private func prefetchShareContent() {
+        guard let script = manager.currentScript, 
+              !isGeneratingShareContent,
+              cachedShareImage == nil else { return }
+
+        isGeneratingShareContent = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
+            let personaImg = loadPersonaUIImage()
+            let cardView = ShareSessionCardView(script: script, personaUIImage: personaImg)
+            let renderer = ImageRenderer(content: cardView)
+            renderer.scale = UIScreen.main.scale
+            renderer.proposedSize = ProposedViewSize(width: 420, height: 560)
+            
+            if let image = renderer.uiImage {
+                cachedShareImage = image
+            }
+            
+            isGeneratingShareContent = false
         }
     }
 
@@ -370,22 +405,111 @@ struct ReflectionPromptView: View {
         return calendar.date(from: components) ?? tomorrow
     }
 
-    /// Load the persona image as a UIImage so ImageRenderer can use it
     private func loadPersonaUIImage() -> UIImage? {
         guard let imageName = activePersonaImageName else { return nil }
         return UIImage(named: imageName)
     }
 
     private func shareSession() {
-        var items: [Any] = []
+        if let url = cachedShareURL {
+            presentShareSheet(url: url)
+            return
+        }
+        
+        guard let script = lastSessionScript else { return }
+        let payload = ShareSessionPayload(script: script)
+        
+        isSavingShare = true
+        shareUploadError = false
+        
+        print("KAI: Starting session upload...")
+        
+        Task {
+            do {
+                let id = try await uploadSessionForSharing(payload)
+                print("KAI: Upload successful, ID: \(id)")
+                await MainActor.run {
+                    let shortURL = URL(string: "https://stilla-three.vercel.app/share?id=\(id)")!
+                    self.cachedShareURL = shortURL
+                    self.isSavingShare = false
+                    presentShareSheet(url: shortURL)
+                }
+            } catch {
+                print("KAI: Upload failed: \(error)")
+                await MainActor.run {
+                    self.isSavingShare = false
+                    self.shareUploadError = true
+                }
+            }
+        }
+    }
+
+    private func uploadSessionForSharing(_ payload: ShareSessionPayload) async throws -> String {
+        let url = URL(string: "https://stilla-api.vercel.app/kai/share")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let token = "9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let encoder = JSONEncoder()
+        request.httpBody = try encoder.encode(payload)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw NSError(domain: "ShareError", code: 1, userInfo: nil)
+        }
+        
+        struct ShareResponse: Codable { let id: String }
+        let shareRes = try JSONDecoder().decode(ShareResponse.self, from: data)
+        return shareRes.id
+    }
+
+    private func presentShareSheet(url: URL) {
+        let provider = ShareActivityProvider(url: url, image: cachedShareImage)
+        
+        var items: [Any] = [provider]
         if let image = cachedShareImage {
             items.append(image)
         }
-        if let url = cachedShareURL {
-            items.append(url)
-        }
-
+        
         shareItems = items
         showingShareSheet = true
+    }
+}
+
+class ShareActivityProvider: NSObject, UIActivityItemSource {
+    let url: URL
+    let image: UIImage?
+    let title: String
+
+    init(url: URL, image: UIImage?, title: String = "A Kai Meditation — Stilla") {
+        self.url = url
+        self.image = image
+        self.title = title
+        super.init()
+    }
+
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return url
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        return url
+    }
+
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        let metadata = LPLinkMetadata()
+        metadata.title = title
+        metadata.originalURL = url
+        metadata.url = url
+        
+        if let image = image {
+            metadata.iconProvider = NSItemProvider(object: image)
+            metadata.imageProvider = NSItemProvider(object: image)
+        }
+        
+        return metadata
     }
 }
