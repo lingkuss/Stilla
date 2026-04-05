@@ -109,26 +109,6 @@ struct ContentView: View {
 
                 // Action button & Siri hint
                 VStack(spacing: 16) {
-                    if manager.state == .complete, manager.currentScript != nil, !manager.isCurrentScriptSaved {
-                        Button {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                                manager.saveCurrentScript()
-                            }
-                            UINotificationFeedbackGenerator().notificationOccurred(.success)
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "books.vertical.fill")
-                                Text("Save to Library")
-                            }
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.8))
-                            .padding(.horizontal, 24)
-                            .padding(.vertical, 12)
-                            .background(Capsule().strokeBorder(Color.white.opacity(0.2), lineWidth: 1))
-                        }
-                        .transition(.scale.combined(with: .opacity))
-                    }
-
                     if homeViewMode == .timer || manager.state != .idle {
                         actionButton
                         
@@ -193,7 +173,10 @@ struct ContentView: View {
             SavedMeditationsLibraryView()
                 .environment(manager)
         }
-        .sheet(item: $reflectionSheetContext, onDismiss: { reflectionSheetContext = nil }) { context in
+        .sheet(item: $reflectionSheetContext, onDismiss: { 
+            reflectionSheetContext = nil 
+            manager.reset()
+        }) { context in
             ReflectionPromptView(
                 sessionID: context.sessionID,
                 defaultReminderTime: context.defaultReminderTime

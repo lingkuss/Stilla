@@ -92,12 +92,26 @@ final class KaiBrainService {
         case serviceUnavailable
     }
 
-    func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality) async throws -> MeditationScript {
+    func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
+        let wordBudget = Int(Double(durationMinutes * 150) * (1.0 - stillnessRatio))
+        
+        let densityInstruction = """
+        
+        🎯 KAI RHYTHM TARGET:
+        The user has requested a Stillness Ratio of \(Int(stillnessRatio * 100))%.
+        Your goal is to provide approximately \(wordBudget) words total for this \(durationMinutes) minute journey.
+
+        EXECUTION RULES:
+        1. SILENCE IS PRIMARY: To respect the word budget, you MUST use significantly longer 'pauseDuration' values (often 60–180s in high stillness).
+        2. JSON SYNC: Ensure the total of all 'text' words is ~\(wordBudget) and the total sum of pauses + reading time is exactly \(durationMinutes * 60) seconds.
+        3. ADAPTATION: If you provide very few words, use very few steps with massive pauses.
+        """
+        
         let request = KaiGenerationRequest(
             mood: mood,
             durationMinutes: durationMinutes,
             personalityName: personality.name,
-            personalityPrompt: personality.promptInjection
+            personalityPrompt: personality.promptInjection + densityInstruction
         )
         
         var urlRequest = URLRequest(url: proxyURL)

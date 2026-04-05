@@ -23,6 +23,8 @@ struct KaiExperienceView: View {
     @State private var errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
     @State private var pickedSuggestion: String? = nil
     @State private var suggestionWasPicked = false
+    @State private var stillnessRatio: Double = 0.5
+    @State private var showingStillnessInfo = false
     
     private let speechManager = SpeechManager.shared
     
@@ -81,6 +83,7 @@ struct KaiExperienceView: View {
                     generateMeditation()
                 }
 
+                stillnessRatio = manager.preferredStillnessRatio
                 isPersonalityPickerExpanded = false
             }
             .sheet(isPresented: $showingPaywall) {
@@ -255,9 +258,50 @@ struct KaiExperienceView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        .padding(.horizontal, 24)
                     }
                 }
+                
+                // Stillness Ratio
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack(spacing: 8) {
+                        Text("STILLNESS RATIO")
+                            .font(.system(size: 10, weight: .bold))
+                            .kerning(1)
+                            .foregroundStyle(.white.opacity(0.4))
+                        
+                        Button {
+                            showingStillnessInfo = true
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 10))
+                                .foregroundStyle(.white.opacity(0.3))
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    
+                    VStack(spacing: 8) {
+                        Slider(value: $stillnessRatio, in: 0.01...0.99, step: 0.01)
+                            .tint(.white.opacity(0.3))
+                        
+                        HStack {
+                            Text("Continuous Guidance")
+                            Spacer()
+                            Text("Deep Stillness")
+                        }
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.3))
+                        .kerning(1)
+                    }
+                    .padding(.horizontal, 28)
+                    .padding(.vertical, 12)
+                    .background {
+                        RoundedRectangle(cornerRadius: 24)
+                            .fill(Color.white.opacity(0.04))
+                            .padding(.horizontal, 16)
+                    }
+                }
+                .padding(.top, 8)
                 
                 // Generate Button
                 Button {
@@ -291,6 +335,11 @@ struct KaiExperienceView: View {
             Button("Cancel", role: .cancel) { }
         } message: {
             Text(errorMessage)
+        }
+        .alert("About Stillness", isPresented: $showingStillnessInfo) {
+            Button("Got it", role: .cancel) { }
+        } message: {
+            Text("This slider controls how much silence Kai provides. At lower levels, Kai gives constant guidance. At higher levels, Kai steps back to give you long, quiet stretches of stillness.")
         }
     }
     
@@ -383,8 +432,12 @@ struct KaiExperienceView: View {
                 var script = try await KaiBrainService.shared.generateScript(
                     mood: combinedMood.isEmpty ? "Calm" : combinedMood,
                     durationMinutes: selectedDuration,
-                    personality: activePersonality
+                    personality: activePersonality,
+                    stillnessRatio: stillnessRatio
                 )
+                
+                // Persist choice
+                manager.preferredStillnessRatio = stillnessRatio
                 script.kaiPersonalityID = activePersonality.id
                 script.kaiPersonalityName = activePersonality.name
                 

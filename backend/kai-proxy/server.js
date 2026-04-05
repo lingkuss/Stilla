@@ -8,7 +8,7 @@ import crypto from "crypto";
 const kv = process.env.REDIS_URL ? new Redis(process.env.REDIS_URL) : null;
 
 const port = Number(process.env.PORT || 8787);
-const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+const model = process.env.OPENAI_MODEL || "gpt-5.4-mini";
 const proxyToken = process.env.KAI_PROXY_TOKEN || "";
 const openAIKey = process.env.OPENAI_API_KEY;
 

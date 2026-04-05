@@ -111,6 +111,10 @@ final class MeditationManager {
         didSet { UserDefaults.standard.set(isGuruEnabled, forKey: "isGuruEnabled") }
     }
 
+    var preferredStillnessRatio: Double {
+        didSet { UserDefaults.standard.set(preferredStillnessRatio, forKey: "preferredStillnessRatio") }
+    }
+
     var kaiVoiceIdentifier: String {
         didSet { UserDefaults.standard.set(kaiVoiceIdentifier, forKey: "kaiVoiceIdentifier") }
     }
@@ -445,9 +449,9 @@ final class MeditationManager {
         }
         
         self.hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
-        self.isGuruEnabled = UserDefaults.standard.bool(forKey: "isGuruEnabled")
-        
-        self.kaiVoiceIdentifier = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") ?? ""
+        self.isGuruEnabled = UserDefaults.standard.object(forKey: "isGuruEnabled") as? Bool ?? true
+        self.preferredStillnessRatio = UserDefaults.standard.double(forKey: "preferredStillnessRatio") == 0 ? 0.5 : UserDefaults.standard.double(forKey: "preferredStillnessRatio")
+        self.kaiVoiceIdentifier = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") ?? "com.apple.voice.compact.en-US.Samantha"
         self.selectedKaiPersonalityID = UserDefaults.standard.string(forKey: "selectedKaiPersonalityID") ?? KaiPersonality.default.id
         
         self.meditationHistory = (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
