@@ -258,6 +258,7 @@ struct KaiExperienceView: View {
                                 .buttonStyle(.plain)
                             }
                         }
+                        .padding(.horizontal, 24)
                     }
                 }
                 
