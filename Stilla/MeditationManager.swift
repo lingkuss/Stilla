@@ -596,6 +596,7 @@ final class MeditationManager {
     // MARK: - Live Activities
     
     private var activeActivityEndTime: Date?
+    private var activeActivityStartTime: Date?
     private(set) var activeKaiPersonaImageName: String?
     private(set) var activeKaiPersonaName: String?
 
@@ -614,8 +615,10 @@ final class MeditationManager {
             personaName: personality?.name
         )
         
+        let startDate = sessionStartDate ?? Date()
         let endSeconds = isOpenEnded ? 0 : totalSeconds
-        let endDate = Date().addingTimeInterval(TimeInterval(endSeconds))
+        let endDate = startDate.addingTimeInterval(TimeInterval(endSeconds))
+        self.activeActivityStartTime = startDate
         self.activeActivityEndTime = endDate
         self.currentKaiPhrase = initialPhrase
         self.activeKaiPersonaImageName = personality?.imageName
@@ -625,6 +628,8 @@ final class MeditationManager {
         let contentState = LiveTimerAttributes.ContentState(
             currentPhrase: liveActivityPhrase,
             estimatedEndTime: endDate,
+            sessionStartTime: startDate,
+            isOpenEnded: isOpenEnded,
             personaImageName: personality?.imageName,
             personaName: personality?.name
         )
@@ -648,14 +653,17 @@ final class MeditationManager {
     }
     
     func updateLiveActivity(phrase: String) {
-        // Stabilize end time: use the one we calculated at the start
+        // Stabilize timer references: use values captured when the session started.
         let endDate = activeActivityEndTime ?? Date()
+        let startDate = activeActivityStartTime ?? Date()
         self.currentKaiPhrase = phrase
         let liveActivityPhrase = shortenedLiveActivityPhrase(from: phrase)
         
         let contentState = LiveTimerAttributes.ContentState(
             currentPhrase: liveActivityPhrase,
             estimatedEndTime: endDate,
+            sessionStartTime: startDate,
+            isOpenEnded: isOpenEnded,
             personaImageName: activeKaiPersonaImageName,
             personaName: activeKaiPersonaName
         )
@@ -683,6 +691,7 @@ final class MeditationManager {
     
     private func endLiveActivity() {
         activeActivityEndTime = nil
+        activeActivityStartTime = nil
         currentKaiPhrase = ""
         activeKaiPersonaImageName = nil
         activeKaiPersonaName = nil
@@ -692,6 +701,8 @@ final class MeditationManager {
             let finalState = LiveTimerAttributes.ContentState(
                 currentPhrase: "",
                 estimatedEndTime: Date(),
+                sessionStartTime: Date(),
+                isOpenEnded: false,
                 personaImageName: nil,
                 personaName: nil
             )

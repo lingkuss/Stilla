@@ -26,7 +26,7 @@ struct MeditationWidgetLiveActivity: Widget {
 
                 Spacer()
 
-                Text(timerInterval: Date()...context.state.estimatedEndTime, countsDown: true)
+                liveActivityTimer(state: context.state)
                     .monospacedDigit()
                     .foregroundColor(.cyan)
             }
@@ -41,7 +41,7 @@ struct MeditationWidgetLiveActivity: Widget {
                         .padding(.top, 4)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(timerInterval: Date()...context.state.estimatedEndTime, countsDown: true)
+                    liveActivityTimer(state: context.state)
                         .multilineTextAlignment(.trailing)
                         .monospacedDigit()
                         .foregroundColor(.cyan)
@@ -67,7 +67,7 @@ struct MeditationWidgetLiveActivity: Widget {
             } compactLeading: {
                 liveActivityLeadingVisual(attributes: context.attributes, state: context.state, size: 16)
             } compactTrailing: {
-                Text(timerInterval: Date()...context.state.estimatedEndTime, countsDown: true)
+                liveActivityTimer(state: context.state)
                     .monospacedDigit()
                     .foregroundColor(.cyan)
             } minimal: {
@@ -75,6 +75,15 @@ struct MeditationWidgetLiveActivity: Widget {
             }
             .keylineTint(Color.cyan.opacity(0.5))
         }
+    }
+}
+
+@ViewBuilder
+private func liveActivityTimer(state: LiveTimerAttributes.ContentState) -> some View {
+    if state.isOpenEnded {
+        Text(state.sessionStartTime, style: .timer)
+    } else {
+        Text(state.estimatedEndTime, style: .timer)
     }
 }
 

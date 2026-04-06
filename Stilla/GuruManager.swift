@@ -157,13 +157,14 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
             guard utterance.speechString == currentStep.text else { return }
 
             self.currentWordRange = nil
-            self.currentStepIndex += 1
 
-            // Wait for the step's specified pause duration before proceeding
+            // Wait for the step's specified pause duration, then advance.
             self.timer?.invalidate()
             self.timer = Timer.scheduledTimer(withTimeInterval: currentStep.pauseDuration, repeats: false) { [weak self] _ in
                 Task { @MainActor in
-                    self?.speakNextStep()
+                    guard let self = self else { return }
+                    self.currentStepIndex += 1
+                    self.speakNextStep()
                 }
             }
         }
