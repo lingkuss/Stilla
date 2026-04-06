@@ -143,32 +143,47 @@ final class KaiBrainService {
         
         do {
             let rawScript = try JSONDecoder().decode(MeditationScript.self, from: data)
-            return stretchScriptToFit(rawScript)
+            return normalizeScriptDuration(rawScript)
         } catch {
             print("❌ KAI Decoding Error: \(error)")
             throw BrainError.invalidResponse
         }
     }
     
-    private func stretchScriptToFit(_ script: MeditationScript) -> MeditationScript {
-        let targetSeconds = Double(script.durationMinutes * 60)
-        let totalElapsed = script.steps.reduce(0.0) { sum, step in
-            sum + (Double(step.text.count) * 0.12) + step.pauseDuration
-        }
+    private func normalizeScriptDuration(_ script: MeditationScript) -> MeditationScript {
+        let startDelay = 2.0 // GuruManager delay
+        let targetSeconds = Double(script.durationMinutes * 60) - startDelay
+        let secondsPerChar = 0.07 // Calibrated for typical iOS voice rate
+        let minPause: TimeInterval = 1.5 // Minimum gap for clarity
         
-        if totalElapsed >= targetSeconds { return script }
+        // 1. Calculate pure speaking time
+        let speakingTime = script.steps.reduce(0.0) { $0 + (Double($1.text.count) * secondsPerChar) }
         
-        let diff = targetSeconds - totalElapsed
-        let extraPerStep = diff / Double(script.steps.count)
+        // 2. Remaining time available for pauses
+        let totalPauseTime = max(Double(script.steps.count) * minPause, targetSeconds - speakingTime)
+        
+        // 3. Current sum of pauses provided by LLM
+        let originalPauseSum = script.steps.reduce(0.0) { $0 + $1.pauseDuration }
         
         var newSteps = script.steps
-        for i in 0..<newSteps.count {
-            newSteps[i].pauseDuration += extraPerStep
+        
+        if originalPauseSum > 0 {
+            // Proportional scaling (Shrink or Stretch)
+            let scale = totalPauseTime / originalPauseSum
+            for i in 0..<newSteps.count {
+                newSteps[i].pauseDuration = max(minPause, newSteps[i].pauseDuration * scale)
+            }
+        } else {
+            // Distribute pause time evenly if LLM forgot pauses
+            let evenPause = totalPauseTime / Double(newSteps.count)
+            for i in 0..<newSteps.count {
+                newSteps[i].pauseDuration = max(minPause, evenPause)
+            }
         }
         
-        var script = script
-        script.steps = newSteps
-        return script
+        var normalized = script
+        normalized.steps = newSteps
+        return normalized
     }
 }
 
