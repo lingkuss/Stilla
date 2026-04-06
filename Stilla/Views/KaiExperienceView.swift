@@ -347,7 +347,7 @@ struct KaiExperienceView: View {
     private var generatingView: some View {
         VStack(spacing: 48) {
             Spacer()
-            
+
             // Spirit Animation
             ZStack {
                 ForEach(0..<3) { i in
@@ -359,7 +359,7 @@ struct KaiExperienceView: View {
                         .offset(x: CGFloat(sin(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0),
                                 y: CGFloat(cos(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0))
                 }
-                
+
                 Circle()
                     .stroke(
                         AngularGradient(colors: [.white.opacity(0.0), .white.opacity(0.3), .white.opacity(0.0)], center: .center),
@@ -367,6 +367,17 @@ struct KaiExperienceView: View {
                     )
                     .frame(width: 140, height: 140)
                     .rotationEffect(.degrees(rotationAmount))
+
+                Image(activePersonality.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 96, height: 96)
+                    .clipped()
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .strokeBorder(.white.opacity(0.2), lineWidth: 0.5)
+                    )
             }
             .onAppear {
                 withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
@@ -376,17 +387,17 @@ struct KaiExperienceView: View {
                     pulseAmount = 1.0
                 }
             }
-            
+
             VStack(spacing: 16) {
-                Text("Kai is crafting your path")
+                Text(loadingHeadline)
                     .font(.system(size: 20, weight: .light, design: .serif))
                     .italic()
-                Text("Aligning your heart with your breath.")
+                Text(loadingSubheadline)
                     .font(.system(size: 14))
                     .foregroundStyle(.white.opacity(0.4))
             }
             .multilineTextAlignment(.center)
-            
+
             Spacer()
             Spacer()
         }
@@ -656,6 +667,48 @@ struct KaiExperienceView: View {
             return parts.joined(separator: " | ")
         }
         return entries.joined(separator: " || ")
+    }
+
+    private var loadingHeadline: String {
+        switch activePersonality.id {
+        case "zen_minimalist":
+            return "Stillness, forming"
+        case "warm_guardian":
+            return "A gentle space, prepared"
+        case "modern_realist":
+            return "Getting your path ready"
+        case "cosmic_sage":
+            return "Weaving your quiet orbit"
+        case "reflective_analyst":
+            return "Aligning your inner patterns"
+        case "philosopher":
+            return "Clarifying the path ahead"
+        case "ra":
+            return "I am Ra. The path is aligning"
+        default:
+            return "Kai is crafting your path"
+        }
+    }
+
+    private var loadingSubheadline: String {
+        switch activePersonality.id {
+        case "zen_minimalist":
+            return "Breath by breath, we begin."
+        case "warm_guardian":
+            return "You are safe here. We'll move softly."
+        case "modern_realist":
+            return "No pressure. Just a few honest breaths."
+        case "cosmic_sage":
+            return "Let the tide gather. We enter gently."
+        case "reflective_analyst":
+            return "Observing what matters, without force."
+        case "philosopher":
+            return "Attention steadies. Judgment softens."
+        case "ra":
+            return "The alignment is in motion."
+        default:
+            return "Aligning your heart with your breath."
+        }
     }
 
     private var statusBadge: some View {

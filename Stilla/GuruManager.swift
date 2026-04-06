@@ -46,6 +46,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
 
     func stop() {
         isPlaying = false
+        currentWordRange = nil
         synthesizer.stopSpeaking(at: .immediate)
         timer?.invalidate()
         timer = nil
@@ -112,7 +113,8 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
             isPlaying = false
             return 
         }
-        
+
+        currentWordRange = nil
         let step = script.steps[currentStepIndex]
         let utterance = AVSpeechUtterance(string: step.text)
         
@@ -138,17 +140,25 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
     
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
         Task { @MainActor [weak self] in
-            self?.currentWordRange = characterRange
+            guard let self = self, self.isPlaying, let script = self.currentScript else { return }
+            guard self.currentStepIndex < script.steps.count else { return }
+            let currentText = script.steps[self.currentStepIndex].text
+            guard utterance.speechString == currentText else { return }
+            self.currentWordRange = characterRange
         }
     }
     
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         Task { @MainActor [weak self] in
             guard let self = self, self.isPlaying, let script = self.currentScript else { return }
-            
+            guard self.currentStepIndex < script.steps.count else { return }
+
             let currentStep = script.steps[self.currentStepIndex]
+            guard utterance.speechString == currentStep.text else { return }
+
+            self.currentWordRange = nil
             self.currentStepIndex += 1
-            
+
             // Wait for the step's specified pause duration before proceeding
             self.timer?.invalidate()
             self.timer = Timer.scheduledTimer(withTimeInterval: currentStep.pauseDuration, repeats: false) { [weak self] _ in
