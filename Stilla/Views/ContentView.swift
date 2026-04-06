@@ -403,6 +403,7 @@ struct ContentView: View {
                 isActive: manager.state == .meditating,
                 progress: manager.progress,
                 technique: manager.selectedTechnique,
+                imageName: manager.activeKaiPersonaImageName,
                 onPhaseChange: { phase, duration in
                     currentPhase = phase
                     manager.playBreathingCue(phase: phase, duration: duration)
@@ -417,13 +418,9 @@ struct ContentView: View {
                     .monospacedDigit()
                     .contentTransition(.numericText())
                 
-                if manager.state == .meditating, manager.isGuruEnabled, !manager.currentKaiPhrase.isEmpty {
-                    Text(manager.currentKaiPhrase)
-                        .font(.system(size: 16, weight: .light, design: .serif))
-                        .italic()
-                        .foregroundStyle(.white.opacity(0.7))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
+                if manager.state == .meditating, manager.isGuruEnabled, manager.currentScript != nil {
+                    KaiScriptView()
+                        .frame(height: 200)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                 }
             }

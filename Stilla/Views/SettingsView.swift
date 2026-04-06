@@ -441,7 +441,7 @@ struct SoundSelectionView: View {
     
     private func handleToneTap(_ sound: SoundEngine.Sound, isLocked: Bool) {
         // Always preview
-        startPreviewTimer()
+        startPreviewTimer(isLocked: isLocked)
         manager.soundEngine.playSound(sound)
         
         if isLocked {
@@ -459,7 +459,7 @@ struct SoundSelectionView: View {
     
     private func handleAmbientTap(_ ambient: SoundEngine.AmbientSound, isLocked: Bool) {
         // Always preview
-        startPreviewTimer()
+        startPreviewTimer(isLocked: isLocked)
         manager.soundEngine.startAmbientSound(ambient)
         
         if isLocked {
@@ -473,22 +473,38 @@ struct SoundSelectionView: View {
     
     // MARK: - Playback
     
-    private func startPreviewTimer() {
+    private func startPreviewTimer(isLocked: Bool) {
         previewTimer?.invalidate()
-        // Only auto-stop if we are NOT in an active meditation session.
-        // If meditating, let the sound continue as part of the session.
-        if manager.state != .meditating {
+        
+        // Always stop locked sounds after 5 seconds.
+        // For unlocked sounds, only auto-stop if NOT in an active session.
+        if isLocked || manager.state != .meditating {
+            let currentAmbient = manager.ambientSound
             let soundEngine = manager.soundEngine
+            let isMeditating = manager.state == .meditating
+            
             previewTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
-                soundEngine.stopAll()
+                if isLocked {
+                    if isMeditating {
+                        // Revert back to the valid session sound
+                        soundEngine.startAmbientSound(currentAmbient)
+                    } else {
+                        soundEngine.stopAll()
+                    }
+                } else if !isMeditating {
+                    // Stop unlocked preview only if we aren't meditating
+                    soundEngine.stopAll()
+                }
             }
         }
     }
     
     private func stopPreview() {
         previewTimer?.invalidate()
-        // Only stop everything if we aren't in a real meditation session.
-        if manager.state != .meditating {
+        // Recovery logic: if we are mid-session, ensure the valid ambient is playing
+        if manager.state == .meditating {
+            manager.soundEngine.startAmbientSound(manager.ambientSound)
+        } else {
             manager.soundEngine.stopAll()
         }
     }

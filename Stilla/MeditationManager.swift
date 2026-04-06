@@ -585,8 +585,8 @@ final class MeditationManager {
     // MARK: - Live Activities
     
     private var activeActivityEndTime: Date?
-    private var activeKaiPersonaImageName: String?
-    private var activeKaiPersonaName: String?
+    private(set) var activeKaiPersonaImageName: String?
+    private(set) var activeKaiPersonaName: String?
 
     private func startLiveActivity(initialPhrase: String = "Focusing inward...") {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }

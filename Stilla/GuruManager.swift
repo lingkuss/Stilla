@@ -9,7 +9,8 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
     
     private let synthesizer = AVSpeechSynthesizer()
     private var currentScript: MeditationScript?
-    private var currentStepIndex = 0
+    public var currentStepIndex = 0
+    public var currentWordRange: NSRange?
     private var isPlaying = false
     private var timer: Timer?
     
@@ -134,6 +135,12 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
     }
     
     // MARK: - AVSpeechSynthesizerDelegate
+    
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
+        Task { @MainActor [weak self] in
+            self?.currentWordRange = characterRange
+        }
+    }
     
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         Task { @MainActor [weak self] in
