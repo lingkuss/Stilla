@@ -127,6 +127,10 @@ final class MeditationManager {
         didSet { UserDefaults.standard.set(meditationHistory, forKey: "meditationHistory") }
     }
 
+    var bestSessionSecondsStored: Int {
+        didSet { UserDefaults.standard.set(bestSessionSecondsStored, forKey: "bestSessionSeconds") }
+    }
+
     var recentSessionMemories: [SessionMemory] {
         didSet {
             if let data = try? JSONEncoder().encode(recentSessionMemories) {
@@ -304,7 +308,7 @@ final class MeditationManager {
     }
 
     var bestSessionSeconds: Int {
-        meditationHistory.values.max() ?? 0
+        bestSessionSecondsStored
     }
 
     var bestStreakDays: Int {
@@ -455,13 +459,16 @@ final class MeditationManager {
         self.selectedKaiPersonalityID = UserDefaults.standard.string(forKey: "selectedKaiPersonalityID") ?? KaiPersonality.default.id
         
         self.meditationHistory = (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
+        self.bestSessionSecondsStored = UserDefaults.standard.integer(forKey: "bestSessionSeconds")
 
+        let decodedMemories: [SessionMemory]
         if let data = UserDefaults.standard.data(forKey: "recentSessionMemories"),
            let decoded = try? JSONDecoder().decode([SessionMemory].self, from: data) {
-            self.recentSessionMemories = decoded
+            decodedMemories = decoded
         } else {
-            self.recentSessionMemories = []
+            decodedMemories = []
         }
+        self.recentSessionMemories = decodedMemories
         
         // Load techniques
         if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
@@ -495,6 +502,10 @@ final class MeditationManager {
         // Pass volume directly to engine setup
         soundEngine.ambientVolume = self.ambientVolume
         soundEngine.toneVolume = self.toneVolume
+
+        if bestSessionSecondsStored == 0 {
+            bestSessionSecondsStored = decodedMemories.map(\.durationSeconds).max() ?? 0
+        }
     }
 
     // MARK: - Public API
@@ -811,6 +822,9 @@ final class MeditationManager {
             lastCompletedSessionID = memory.id
         } else {
             lastCompletedSessionID = nil
+        }
+        if sessionSeconds > 0 {
+            bestSessionSecondsStored = max(bestSessionSecondsStored, sessionSeconds)
         }
         logMeditationSession(seconds: sessionSeconds)
         timer?.invalidate()

@@ -685,6 +685,8 @@ struct KaiExperienceView: View {
             return "Clarifying the path ahead"
         case "ra":
             return "I am Ra. The path is aligning"
+        case "shadow_guide":
+            return "Descending into the depths"
         default:
             return "Kai is crafting your path"
         }
@@ -705,7 +707,9 @@ struct KaiExperienceView: View {
         case "philosopher":
             return "Attention steadies. Judgment softens."
         case "ra":
-            return "The alignment is in motion."
+            return "I leave you in the love and in the light."
+        case "shadow_guide":
+            return "Greeting the silence of the unconscious."
         default:
             return "Aligning your heart with your breath."
         }
