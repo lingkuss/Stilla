@@ -242,8 +242,8 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Link("Privacy Policy", destination: URL(string: "https://stilla-three.vercel.app/privacy")!)
-                    Link("Terms of Use", destination: URL(string: "https://stilla-three.vercel.app/terms")!)
+                    Link("Privacy Policy", destination: URL(string: "https://vindla-three.vercel.app/privacy")!)
+                    Link("Terms of Use", destination: URL(string: "https://vindla-three.vercel.app/terms")!)
                 }
             }
             .navigationTitle("Settings")

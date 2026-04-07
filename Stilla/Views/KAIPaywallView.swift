@@ -92,8 +92,8 @@ struct KAIPaywallView: View {
                 .foregroundStyle(.white.opacity(0.4))
 
                 HStack(spacing: 16) {
-                    Link("Privacy Policy", destination: URL(string: "https://stilla-three.vercel.app/privacy")!)
-                    Link("Terms of Use", destination: URL(string: "https://stilla-three.vercel.app/terms")!)
+                    Link("Privacy Policy", destination: URL(string: "https://vindla-three.vercel.app/privacy")!)
+                    Link("Terms of Use", destination: URL(string: "https://vindla-three.vercel.app/terms")!)
                 }
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(.white.opacity(0.4))
