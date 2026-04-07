@@ -2,7 +2,7 @@ import AppIntents
 import Foundation
 
 /// Siri intent: Stop the current meditation session.
-/// Triggered by: "Hey Siri, stop Stilla"
+/// Triggered by: "Hey Siri, stop Vindla"
 struct StopMeditationIntent: AppIntent {
     static var title: LocalizedStringResource = "End Meditation"
     static var description: IntentDescription = "End the current meditation session"

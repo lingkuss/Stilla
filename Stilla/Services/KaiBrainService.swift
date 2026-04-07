@@ -136,7 +136,7 @@ final class KaiBrainService {
         
         if httpResponse.statusCode != 200 {
             if let errorLog = String(data: data, encoding: .utf8) {
-                print("❌ KAI Proxy Error [\(httpResponse.statusCode)]: \(errorLog)")
+                print("❌ MIMIR Proxy Error [\(httpResponse.statusCode)]: \(errorLog)")
             }
             throw BrainError.generationFailed
         }
@@ -145,7 +145,7 @@ final class KaiBrainService {
             let rawScript = try JSONDecoder().decode(MeditationScript.self, from: data)
             return normalizeScriptDuration(rawScript)
         } catch {
-            print("❌ KAI Decoding Error: \(error)")
+            print("❌ MIMIR Decoding Error: \(error)")
             throw BrainError.invalidResponse
         }
     }

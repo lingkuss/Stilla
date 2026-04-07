@@ -587,7 +587,7 @@ final class MeditationManager {
             self.selectedKaiPersonalityID = sharedID
         }
         
-        print("🚀 KAI: Replicating shared session: '\(script.title)' with \(script.durationMinutes)m length.")
+        print("🚀 MIMIR: Replicating shared session: '\(script.title)' with \(script.durationMinutes)m length.")
         
         // Start using the matched duration and explicit shared flag
         start(durationMinutes: script.durationMinutes, isShared: true)
@@ -928,7 +928,7 @@ class NotificationManager: ObservableObject {
         cancelAllReminders()
         let content = UNMutableNotificationContent()
         content.title = "Time for your breath"
-        content.body = "Take a few minutes for yourself with Stilla."
+        content.body = "Take a few minutes for yourself with Vindla."
         content.sound = .default
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute], from: date)
@@ -949,7 +949,7 @@ class NotificationManager: ObservableObject {
         cancelNextSessionReminder()
         let content = UNMutableNotificationContent()
         let trimmedPersona = personaName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        content.title = trimmedPersona.isEmpty ? "See you soon" : "Kai • \(trimmedPersona)"
+        content.title = trimmedPersona.isEmpty ? "See you soon" : "Mimir • \(trimmedPersona)"
         let trimmedSuggestion = suggestionText?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         content.body = trimmedSuggestion.isEmpty
             ? "Ready for another moment of calm?"

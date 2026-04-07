@@ -19,7 +19,7 @@ struct KaiExperienceView: View {
     @State private var isPersonalityPickerExpanded = false
     @State private var rotationAmount: Double = 0.0
     @State private var pulseAmount: Double = 0.0
-    @State private var errorTitle = "Kai is resting"
+    @State private var errorTitle = "Mimir is resting"
     @State private var errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
     @State private var pickedSuggestion: String? = nil
     @State private var suggestionWasPicked = false
@@ -100,7 +100,7 @@ struct KaiExperienceView: View {
                 // Voice / Text Input Box
                 VStack(spacing: 24) {
                     ZStack(alignment: .topTrailing) {
-                        TextField("Speak or type your mood. Kai will curate your path.", text: $moodText, axis: .vertical)
+                        TextField("Speak or type your mood. Mimir will curate your path.", text: $moodText, axis: .vertical)
                             .lineLimit(4...8)
                             .padding(24)
                             .background {
@@ -340,7 +340,7 @@ struct KaiExperienceView: View {
         .alert("About Stillness", isPresented: $showingStillnessInfo) {
             Button("Got it", role: .cancel) { }
         } message: {
-            Text("This slider controls how much silence Kai provides. At lower levels, Kai gives constant guidance. At higher levels, Kai steps back to give you long, quiet stretches of stillness.")
+            Text("This slider controls how much silence Mimir provides. At lower levels, Mimir gives constant guidance. At higher levels, Mimir steps back to give you long, quiet stretches of stillness.")
         }
     }
     
@@ -472,20 +472,20 @@ struct KaiExperienceView: View {
                 dismiss()
             } catch {
                 if case KaiBrainService.BrainError.serviceUnavailable = error {
-                    errorTitle = "Kai Not Configured"
-                    errorMessage = "Kai is not configured for production yet. Add your backend URL before requesting personalized sessions."
+                    errorTitle = "Mimir Not Configured"
+                    errorMessage = "Mimir is not configured for production yet. Add your backend URL before requesting personalized sessions."
                 } else if let urlError = error as? URLError {
                     errorTitle = "Connection Problem"
                     switch urlError.code {
                     case .notConnectedToInternet, .networkConnectionLost:
-                        errorMessage = "You're offline. Reconnect to the internet and try generating your Kai session again."
+                        errorMessage = "You're offline. Reconnect to the internet and try generating your Mimir session again."
                     case .timedOut:
-                        errorMessage = "Kai took too long to respond. Please try again in a moment."
+                        errorMessage = "Mimir took too long to respond. Please try again in a moment."
                     default:
-                        errorMessage = "Kai couldn't be reached right now. Please try again shortly."
+                        errorMessage = "Mimir couldn't be reached right now. Please try again shortly."
                     }
                 } else {
-                    errorTitle = "Kai is resting"
+                    errorTitle = "Mimir is resting"
                     errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
                 }
                 showingError = true
@@ -519,7 +519,7 @@ struct KaiExperienceView: View {
                         }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("CHOOSE YOUR KAI")
+                        Text("CHOOSE YOUR MIMIR")
                             .font(.system(size: 10, weight: .bold))
                             .kerning(1)
                             .foregroundStyle(.white.opacity(0.4))
@@ -606,7 +606,7 @@ struct KaiExperienceView: View {
             if !suggestions.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("KAI SUGGESTIONS")
+                        Text("MIMIR SUGGESTIONS")
                             .font(.system(size: 10, weight: .bold))
                             .kerning(1)
                             .foregroundStyle(.white.opacity(0.4))
@@ -688,7 +688,7 @@ struct KaiExperienceView: View {
         case "shadow_guide":
             return "Descending into the depths"
         default:
-            return "Kai is crafting your path"
+            return "Mimir is crafting your path"
         }
     }
 
@@ -721,7 +721,7 @@ struct KaiExperienceView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "sparkles")
                         .font(.system(size: 12, weight: .bold))
-                    Text("KAI PRO MEMBER")
+                    Text("MIMIR PRO MEMBER")
                         .font(.system(size: 10, weight: .bold))
                         .kerning(1)
                 }

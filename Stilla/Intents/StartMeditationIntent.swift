@@ -4,7 +4,7 @@ import Foundation
 /// Siri intent: Start a meditation session.
 struct StartMeditationIntent: AppIntent {
     static var title: LocalizedStringResource = "Begin Meditation"
-    static var description: IntentDescription = "Begin a meditation session with Stilla"
+    static var description: IntentDescription = "Begin a meditation session with Vindla"
 
     static var openAppWhenRun: Bool = true
 
@@ -63,7 +63,7 @@ enum DurationOption: String, AppEnum {
 /// Siri intent: Start a limitless stopwatch meditation session.
 struct StartOpenEndedMeditationIntent: AppIntent {
     static var title: LocalizedStringResource = "Begin Limitless Meditation"
-    static var description: IntentDescription = "Begin a limitless stopwatch meditation session with Stilla"
+    static var description: IntentDescription = "Begin a limitless stopwatch meditation session with Vindla"
 
     static var openAppWhenRun: Bool = true
 

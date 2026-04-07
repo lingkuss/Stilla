@@ -5,7 +5,7 @@ struct ShareSessionCardView: View {
     let personaUIImage: UIImage?
 
     private var personaName: String {
-        script.resolvedKaiPersonalityName ?? "Kai"
+        script.resolvedKaiPersonalityName ?? "Mimir"
     }
 
     private var snippet: String {
@@ -82,7 +82,7 @@ struct ShareSessionCardView: View {
                         HStack(spacing: 6) {
                             Text("✦")
                                 .font(.system(size: 10))
-                            Text("Stilla")
+                            Text("Vindla")
                                 .font(.system(size: 13, weight: .semibold))
                         }
                         .foregroundStyle(.white.opacity(0.5))

@@ -27,7 +27,7 @@ struct KAIPaywallView: View {
                 }
                 
                 VStack(spacing: 16) {
-                    Text("Unlock Unlimited KAI")
+                    Text("Unlock Unlimited MIMIR")
                         .font(.system(size: 28, weight: .bold, design: .serif))
                     
                     Text("Experience the full power of your personal AI guide with unlimited personalized meditation generation.")
@@ -42,7 +42,7 @@ struct KAIPaywallView: View {
                     BenefitRow(icon: "infinity", text: "Unlimited AI Meditations")
                     BenefitRow(icon: "brain.head.profile", text: "Deep Personalized Guidance")
                     BenefitRow(icon: "person.2.fill", text: "All Personas Always Available")
-                    BenefitRow(icon: "books.vertical.fill", text: "Replay Your Saved Kai Library")
+                    BenefitRow(icon: "books.vertical.fill", text: "Replay Your Saved Mimir Library")
                 }
                 .padding(.top, 20)
                 
@@ -83,7 +83,7 @@ struct KAIPaywallView: View {
                         if store.isKAISubscribed {
                             dismiss()
                         } else {
-                            statusMessage = "No active Kai subscription was found to restore."
+                            statusMessage = "No active Mimir subscription was found to restore."
                             showingStatus = true
                         }
                     }
@@ -121,7 +121,7 @@ struct KAIPaywallView: View {
         case .pending:
             statusMessage = "Your subscription purchase is pending approval."
         case .unavailable:
-            statusMessage = "Kai Pro isn't available right now. Check your App Store product configuration."
+            statusMessage = "Mimir Pro isn't available right now. Check your App Store product configuration."
         case .failed(let message):
             statusMessage = message
         }

@@ -15,7 +15,7 @@ struct VoiceSelectionView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("No high-quality voices found.")
                                 .font(.headline)
-                            Text("Kai works best with Enhanced or Premium voices. You can download them in your iPhone Settings.")
+                            Text("Mimir works best with Enhanced or Premium voices. You can download them in your iPhone Settings.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                             
@@ -80,11 +80,11 @@ struct VoiceSelectionView: View {
                     Text("AVAILABLE VOICES")
                 } footer: {
                     if !voices.isEmpty {
-                        Text("Higher quality voices provide a more natural, human-like guidance from Kai.")
+                        Text("Higher quality voices provide a more natural, human-like guidance from Mimir.")
                     }
                 }
             }
-            .navigationTitle("Kai's Voice Studio")
+            .navigationTitle("Mimir's Voice Studio")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

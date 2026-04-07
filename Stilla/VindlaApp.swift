@@ -20,7 +20,7 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 }
 
 @main
-struct StillaApp: App {
+struct VindlaApp: App {
     @State private var manager = MeditationManager.shared
     @UIApplicationDelegateAdaptor private var notificationDelegate: AppNotificationDelegate
 
@@ -54,38 +54,43 @@ struct StillaApp: App {
     }
 
     private func handleIncomingShare(_ url: URL) {
-        print("🔗 KAI: Received Deep Link: \(url.absoluteString)")
+        print("🔗 MIMIR: Received Deep Link: \(url.absoluteString)")
         guard manager.state != .meditating else { 
-            print("⚠️ KAI: Ignoring link because already meditating.")
+            print("⚠️ MIMIR: Ignoring link because already meditating.")
             return 
         }
         
         guard let id = extractShareID(from: url) else { 
-            print("❌ KAI: No 'id' found in URL.")
+            print("❌ MIMIR: No 'id' found in URL.")
             return 
         }
         
         Task {
-            print("📥 KAI: Fetching payload for ID: \(id)")
+            print("📥 MIMIR: Fetching payload for ID: \(id)")
             if let payload = await fetchSessionPayload(id: id) {
                 let script = payload.script.toFullScript()
-                print("✅ KAI: Payload received. Title: \(script.title)")
+                print("✅ MIMIR: Payload received. Title: \(script.title)")
                 
                 await MainActor.run {
                     // Force dismiss everything to show the session
                     manager.shouldDismissSheets = true
                     
-                    print("🚀 KAI: Atomic start for shared script: \(script.title)")
+                    print("🚀 MIMIR: Atomic start for shared script: \(script.title)")
                     manager.startSharedSession(script: script)
                 }
             } else {
-                print("❌ KAI: Failed to fetch payload from backend.")
+                print("❌ MIMIR: Failed to fetch payload from backend.")
             }
         }
     }
 
     private func fetchSessionPayload(id: String) async -> ShareSessionPayload? {
-        let url = URL(string: "https://stilla-api.vercel.app/kai/share?id=\(id)")!
+        guard let shareURL = Secrets.kaiShareBackendURL else {
+            print("Failed to fetch shared session: missing KAIShareBackendURL/KAIBackendURL")
+            return nil
+        }
+
+        let url = shareURL.appending(queryItems: [URLQueryItem(name: "id", value: id)])
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let decoder = JSONDecoder()

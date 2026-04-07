@@ -16,9 +16,9 @@ class SpeechManager {
         var errorDescription: String? {
             switch self {
             case .speechPermissionDenied:
-                return "Speech recognition access is turned off for Stilla. Enable it in Settings to use voice input for Kai."
+                return "Speech recognition access is turned off for Vindla. Enable it in Settings to use voice input for Mimir."
             case .microphonePermissionDenied:
-                return "Microphone access is turned off for Stilla. Enable it in Settings to speak with Kai."
+                return "Microphone access is turned off for Vindla. Enable it in Settings to speak with Mimir."
             case .recognizerUnavailable:
                 return "Speech recognition is currently unavailable on this device."
             }

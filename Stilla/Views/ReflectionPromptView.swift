@@ -100,7 +100,7 @@ struct ReflectionPromptView: View {
                 }
             }
 
-            Text("A short reflection helps Kai remember what matters to you.")
+            Text("A short reflection helps Mimir remember what matters to you.")
                 .font(.system(size: 12))
                 .foregroundStyle(.white.opacity(0.5))
         }
@@ -272,7 +272,7 @@ struct ReflectionPromptView: View {
                 Text("Share your journey")
                     .font(.system(size: 20, weight: .light, design: .serif))
                     .italic()
-                Text("Let others discover their own path with Kai.")
+                Text("Let others discover their own path with Mimir.")
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.5))
             }
@@ -341,7 +341,7 @@ struct ReflectionPromptView: View {
     private var reminderSuggestionText: String {
         let memory = manager.recentSessionMemories.first(where: { $0.id == sessionID })
         let suggestion = memory?.suggestionOptions.first?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return suggestion.isEmpty ? "return for a Kai session" : suggestion
+        return suggestion.isEmpty ? "return for a Mimir session" : suggestion
     }
 
     private var activePersonaName: String {
@@ -353,7 +353,7 @@ struct ReflectionPromptView: View {
     }
 
     private var fallbackScript: MeditationScript {
-        MeditationScript(title: "Kai Journey", durationMinutes: 10, steps: [])
+        MeditationScript(title: "Mimir Journey", durationMinutes: 10, steps: [])
     }
 
     private var lastSessionScript: MeditationScript? {
@@ -443,20 +443,25 @@ struct ReflectionPromptView: View {
         isSavingShare = true
         shareUploadError = false
         
-        print("KAI: Starting session upload...")
+        print("MIMIR: Starting session upload...")
         
         Task {
             do {
                 let id = try await uploadSessionForSharing(payload)
-                print("KAI: Upload successful, ID: \(id)")
+                print("MIMIR: Upload successful, ID: \(id)")
                 await MainActor.run {
-                    let shortURL = URL(string: "https://stilla-three.vercel.app/share?id=\(id)")!
+                    guard let shortURL = makeShareURL(id: id) else {
+                        self.isSavingShare = false
+                        self.shareUploadError = true
+                        return
+                    }
+
                     self.cachedShareURL = shortURL
                     self.isSavingShare = false
                     presentShareSheet(url: shortURL)
                 }
             } catch {
-                print("KAI: Upload failed: \(error)")
+                print("MIMIR: Upload failed: \(error)")
                 await MainActor.run {
                     self.isSavingShare = false
                     self.shareUploadError = true
@@ -466,25 +471,36 @@ struct ReflectionPromptView: View {
     }
 
     private func uploadSessionForSharing(_ payload: ShareSessionPayload) async throws -> String {
-        let url = URL(string: "https://stilla-api.vercel.app/kai/share")!
+        guard let url = Secrets.kaiShareBackendURL else {
+            throw NSError(domain: "ShareError", code: 2, userInfo: [NSLocalizedDescriptionKey: "Missing KAIShareBackendURL/KAIBackendURL in Info.plist"])
+        }
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let token = "9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
+
+        if let token = Secrets.kaiBackendToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(payload)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw NSError(domain: "ShareError", code: 1, userInfo: nil)
         }
-        
+
         struct ShareResponse: Codable { let id: String }
         let shareRes = try JSONDecoder().decode(ShareResponse.self, from: data)
         return shareRes.id
+    }
+
+    private func makeShareURL(id: String) -> URL? {
+        guard let baseURL = Secrets.kaiShareWebBaseURL else { return nil }
+        return baseURL
+            .appendingPathComponent("share")
+            .appending(queryItems: [URLQueryItem(name: "id", value: id)])
     }
 
     private func presentShareSheet(url: URL) {
@@ -505,7 +521,7 @@ class ShareActivityProvider: NSObject, UIActivityItemSource {
     let image: UIImage?
     let title: String
 
-    init(url: URL, image: UIImage?, title: String = "A Kai Meditation — Stilla") {
+    init(url: URL, image: UIImage?, title: String = "A Mimir Meditation — Vindla") {
         self.url = url
         self.image = image
         self.title = title

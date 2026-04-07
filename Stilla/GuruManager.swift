@@ -35,7 +35,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
 
     func previewVoice(identifier: String) {
         stop()
-        let utterance = AVSpeechUtterance(string: "Hello, I am Kai. This is my voice. I look forward to our practice together.")
+        let utterance = AVSpeechUtterance(string: "Hello, I am Mimir. This is my voice. I look forward to our practice together.")
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9
         if let voice = AVSpeechSynthesisVoice(identifier: identifier) {

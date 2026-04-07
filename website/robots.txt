@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://stilla.app/sitemap.xml
+Sitemap: https://vindla.app/sitemap.xml

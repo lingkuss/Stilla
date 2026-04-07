@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Kai Meditation — Stilla</title>
-    <meta name="description" content="Someone shared a personalized Kai meditation with you. Open it in Stilla or download the app to experience it.">
+    <title>A Mimir Meditation — Vindla</title>
+    <meta name="description"
+        content="Someone shared a personalized Mimir meditation with you. Open it in Vindla or download the app to experience it.">
 
     <!-- Static OG tags (crawlers don't run JS, so these are generic) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="A Kai Meditation — Stilla">
-    <meta property="og:description" content="Someone shared a personalized AI meditation with you. Tap to experience it in Stilla.">
-    <meta property="og:image" content="https://stilla.app/kai_avatar.png">
+    <meta property="og:title" content="A Mimir Meditation — Vindla">
+    <meta property="og:description"
+        content="Someone shared a personalized AI meditation with you. Tap to experience it in Vindla.">
+    <meta property="og:image" content="https://vindla.app/kai_avatar.png">
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="A Kai Meditation — Stilla">
+    <meta property="twitter:title" content="A Mimir Meditation — Vindla">
     <meta property="twitter:description" content="Someone shared a personalized AI meditation with you.">
-    <meta property="twitter:image" content="https://stilla.app/kai_avatar.png">
+    <meta property="twitter:image" content="https://vindla.app/kai_avatar.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
         .share-page {
@@ -33,10 +38,9 @@
         .share-card {
             width: min(420px, 100%);
             background: linear-gradient(135deg,
-                hsl(245, 30%, 12%),
-                hsl(265, 35%, 8%),
-                hsl(280, 25%, 6%)
-            );
+                    hsl(245, 30%, 12%),
+                    hsl(265, 35%, 8%),
+                    hsl(280, 25%, 6%));
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 28px;
             overflow: hidden;
@@ -151,35 +155,36 @@
         }
     </style>
 </head>
+
 <body>
     <div class="share-page">
         <!-- Fallback when no data -->
         <div id="fallback" class="share-fallback" style="display: none;">
-            <span class="eyebrow">Stilla</span>
+            <span class="eyebrow">Vindla</span>
             <h1>This link has expired</h1>
-            <p>The shared meditation is no longer available, but you can create your own with Kai.</p>
+            <p>The shared meditation is no longer available, but you can create your own with Mimir.</p>
             <div class="share-actions">
-                <a class="primary-button" href="index.html">Explore Stilla</a>
+                <a class="primary-button" href="index.html">Explore Vindla</a>
             </div>
         </div>
 
         <!-- Dynamic card -->
         <div id="share-content" style="display: none;">
             <div class="share-card">
-                <img id="persona-image" class="share-card-hero hidden" alt="Kai Persona" loading="eager">
+                <img id="persona-image" class="share-card-hero hidden" alt="Mimir Persona" loading="eager">
                 <div class="share-card-body">
                     <div id="persona-name" class="share-persona-label"></div>
                     <h1 id="session-title" class="share-title"></h1>
                     <p id="session-snippet" class="share-snippet"></p>
                     <div class="share-meta">
-                        <span class="share-meta-brand">✦ Stilla · Kai</span>
+                        <span class="share-meta-brand">✦ Vindla · Mimir</span>
                         <span id="session-duration" class="share-meta-duration"></span>
                     </div>
                 </div>
             </div>
 
             <div class="share-actions">
-                <a id="app-store-link" class="primary-button" href="#">Download Stilla</a>
+                <a id="app-store-link" class="primary-button" href="#">Download Vindla</a>
                 <a class="secondary-button" href="index.html">Learn More</a>
             </div>
         </div>
@@ -192,9 +197,10 @@
             'warm_guardian': 'kai_warm_guardian.png',
             'modern_realist': 'kai_urban_sage.png',
             'cosmic_sage': 'kai_cosmic_sage.png',
-            'reflective_analyst': 'kai_insight_observer.png',
+            'reflective_analyst': 'kai_reflective_analyst.png',
             'philosopher': 'kai_philosopher.png',
-            'ra': 'kai_ra.png'
+            'ra': 'kai_ra.png',
+            'shadow_guide': 'kai_shadow_guide.png'
         };
 
         async function init() {
@@ -208,14 +214,14 @@
 
             try {
                 // Fetch from backend
-                const response = await fetch(`https://stilla-api.vercel.app/kai/share?id=${id}`);
+                const response = await fetch(`https://vindla-api.vercel.app/kai/share?id=${id}`);
                 if (!response.ok) throw new Error('Session not found');
                 const payload = await response.json();
                 const scriptData = payload.s || payload.script || payload;
 
                 // Populate the card
-                const title = scriptData.t || scriptData.title || 'Kai Meditation';
-                const personaName = scriptData.kn || scriptData.kaiPersonalityName || 'Kai';
+                const title = scriptData.t || scriptData.title || 'Mimir Meditation';
+                const personaName = scriptData.kn || scriptData.kaiPersonalityName || 'Mimir';
                 const personaID = scriptData.kid || scriptData.kaiPersonalityID || '';
                 const duration = scriptData.d || scriptData.durationMinutes || 10;
                 const steps = scriptData.s || scriptData.steps || [];
@@ -238,7 +244,7 @@
                 document.getElementById('session-duration').textContent = duration + ' min';
 
                 // Update page title for browser tab
-                document.title = title + ' — Stilla';
+                document.title = title + ' — Vindla';
 
                 // Set persona image
                 const imgFile = personaImages[personaID];
@@ -248,11 +254,11 @@
                     imgEl.classList.remove('hidden');
                 }
 
-                // Update the "Open in Stilla" button to use the custom URL scheme
+                // Update the "Open in Vindla" button to use the custom URL scheme
                 const appLink = document.getElementById('app-store-link');
                 if (appLink && id) {
-                    appLink.href = 'stilla://share?id=' + id;
-                    appLink.textContent = 'Open in Stilla';
+                    appLink.href = 'vindla://share?id=' + id;
+                    appLink.textContent = 'Open in Vindla';
                 }
 
                 document.getElementById('share-content').style.display = 'block';
@@ -265,4 +271,5 @@
         init();
     </script>
 </body>
+
 </html>

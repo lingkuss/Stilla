@@ -155,7 +155,7 @@ struct SavedMeditationsLibraryView: View {
                 Text("Your Library is Empty")
                     .font(.system(size: 18, weight: .medium))
 
-                Text("Complete a session with Kai and save it to build your personal collection.")
+                Text("Complete a session with Mimir and save it to build your personal collection.")
                     .font(.system(size: 14))
                     .foregroundStyle(.white.opacity(0.4))
                     .multilineTextAlignment(.center)

@@ -40,11 +40,11 @@ struct MeditationShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: StartKaiMeditationIntent(),
             phrases: [
-                "Ask Kai for a meditation in \(.applicationName)",
-                "Ask Kai for a \(\.$duration) meditation in \(.applicationName)",
-                "Generate a meditation with Kai in \(.applicationName)"
+                "Ask Mimir for a meditation in \(.applicationName)",
+                "Ask Mimir for a \(\.$duration) meditation in \(.applicationName)",
+                "Generate a meditation with Mimir in \(.applicationName)"
             ],
-            shortTitle: "Ask Kai",
+            shortTitle: "Ask Mimir",
             systemImageName: "sparkles"
         )
     }

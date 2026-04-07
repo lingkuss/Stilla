@@ -20,7 +20,7 @@ const openai = new OpenAI({ apiKey: openAIKey });
 const app = express();
 
 app.use(cors({
-    origin: ["https://stilla.app", "https://stilla-three.vercel.app", "http://localhost:3000"],
+    origin: ["https://vindla.app", "https://vindla-three.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -139,7 +139,7 @@ app.post("/kai/share", shareLimiter, async (req, res) => {
 
         // Generate a random 7-character ID
         const id = crypto.randomBytes(4).toString("hex").slice(0, 7);
-        
+
         // Store in KV with 30 day expiry
         const ONE_MONTH = 60 * 60 * 24 * 30;
         await kv.set(`share:${id}`, JSON.stringify(sessionData), "EX", ONE_MONTH);

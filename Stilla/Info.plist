@@ -3,42 +3,52 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Stilla</string>
+	<string>Vindla</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleName</key>
-	<string>Stilla</string>
+	<string>Vindla</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>1</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>KAIBackendURL</key>
-	<string>https://stilla-api.vercel.app/kai/generate</string>
-	<key>KAIBackendToken</key>
-	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>stilla</string>
+				<string>vindla</string>
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>KAIBackendToken</key>
+	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
+	<key>KAIBackendURL</key>
+	<string>https://vindla-api.vercel.app/kai/generate</string>
+	<key>KAIShareBackendURL</key>
+	<string>https://vindla-api.vercel.app/kai/share</string>
+	<key>KAIShareWebBaseURL</key>
+	<string>https://vindla-three.vercel.app</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Vindla requires access to Apple Health to save your Mindful Minutes.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Vindla requires access to Apple Health to save your Mindful Minutes.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone access is required to capture your voice for speech commands.</string>
 	<key>NSSiriUsageDescription</key>
-	<string>Stilla uses Siri to let you start and stop meditation sessions hands-free.</string>
+	<string>Vindla uses Siri to let you start and stop meditation sessions hands-free.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Stilla uses speech recognition to understand your meditation goals.</string>
+	<string>Vindla uses speech recognition to understand your meditation goals.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -54,11 +64,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSHealthShareUsageDescription</key>
-	<string>Stilla requires access to Apple Health to save your Mindful Minutes.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>Stilla requires access to Apple Health to save your Mindful Minutes.</string>
-	<key>NSSupportsLiveActivities</key>
-	<true/>
 </dict>
 </plist>

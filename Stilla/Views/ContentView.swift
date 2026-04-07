@@ -228,13 +228,13 @@ struct ContentView: View {
     }
 
     private var latestKaiHeader: String {
-        let fallback = "Kai Journey"
+        let fallback = "Mimir Journey"
         let header = manager.latestSessionMemory?.proactiveHeader?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
         return header.isEmpty ? fallback : header
     }
 
     private var latestKaiBody: String {
-        let fallback = "Describe your mood. Kai will curate your path."
+        let fallback = "Describe your mood. Mimir will curate your path."
         let body = manager.latestSessionMemory?.proactiveBody?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
         return body.isEmpty ? fallback : body
     }
@@ -281,7 +281,7 @@ struct ContentView: View {
                     Rectangle()
                         .fill(.white.opacity(0.3))
                         .frame(width: 20, height: 1)
-                    Text("KAI")
+                    Text("MIMIR")
                         .font(.system(size: 10, weight: .bold))
                         .kerning(3)
                         .foregroundStyle(.white.opacity(0.5))
@@ -301,7 +301,7 @@ struct ContentView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "sparkles")
                         .font(.system(size: 16, weight: .semibold))
-                    Text("Start Kai Journey")
+                    Text("Start Mimir Journey")
                         .font(.system(size: 16, weight: .semibold))
                 }
                 .foregroundStyle(.white)
@@ -335,7 +335,7 @@ struct ContentView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "sparkles")
                                     .font(.system(size: 10, weight: .bold))
-                                Text("PERSONALIZED ∞ Tap to start a Kai session")
+                                Text("PERSONALIZED ∞ Tap to start a Mimir session")
                                     .font(.system(size: 9, weight: .bold))
                                     .kerning(1)
                             }
@@ -1266,12 +1266,12 @@ struct OnboardingView: View {
             systemImage: "wind"
         ),
         OnboardingPage(
-            title: "Kai: Your AI Guide",
-            description: "Meet Kai, your personalized meditation architect. Speak your mood, and Kai will craft a unique, guided journey just for you.",
+            title: "Mimir: Your AI Guide",
+            description: "Meet Mimir, your personalized meditation architect. Speak your mood, and Mimir will craft a unique, guided journey just for you.",
             systemImage: "sparkles"
         ),
         OnboardingPage(
-            title: "Choose Your Kai",
+            title: "Choose Your Mimir",
             description: "Pick the voice you want guiding your practice.",
             systemImage: "person.crop.rectangle.stack.fill",
             style: .personalitySelection
@@ -1283,7 +1283,7 @@ struct OnboardingView: View {
         ),
         OnboardingPage(
             title: "Meditate with Siri",
-            description: "Say \"Hey Siri, begin Stilla\" to start instantly, or \"Hey Siri, ask Kai for a meditation in Stilla\" for a personalized guided session.",
+            description: "Say \"Hey Siri, begin Vindla\" to start instantly, or \"Hey Siri, ask Mimir for a meditation in Vindla\" for a personalized guided session.",
             systemImage: "mic.fill"
         )
     ]

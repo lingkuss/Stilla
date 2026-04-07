@@ -187,7 +187,7 @@ struct SettingsView: View {
                         VoiceSelectionView()
                     } label: {
                         HStack {
-                            Label("Kai's Voice", systemImage: "quote.bubble.fill")
+                            Label("Mimir's Voice", systemImage: "quote.bubble.fill")
                             Spacer()
                             if let voice = AVSpeechSynthesisVoice(identifier: manager.kaiVoiceIdentifier) {
                                 Text(voice.name)
@@ -197,18 +197,18 @@ struct SettingsView: View {
                         }
                     }
                 } footer: {
-                    Text("Choose a high-quality natural voice for Kai.")
+                    Text("Choose a high-quality natural voice for Mimir.")
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
                 // Siri Tips
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        voiceCommandRow("\"Hey Siri, ask Kai for a meditation in Stilla\"", desc: "Siri will ask for your mood and duration")
-                        voiceCommandRow("\"Hey Siri, begin Stilla\"", desc: "Begin with saved duration")
-                        voiceCommandRow("\"Hey Siri, begin Stilla for X minutes\"", desc: "Begin with custom duration")
-                        voiceCommandRow("\"Hey Siri, begin limitless meditation with Stilla\"", desc: "Begin a limitless stopwatch")
-                        voiceCommandRow("\"Hey Siri, end Stilla\"", desc: "End session early")
+                        voiceCommandRow("\"Hey Siri, ask Mimir for a meditation in Vindla\"", desc: "Siri will ask for your mood and duration")
+                        voiceCommandRow("\"Hey Siri, begin Vindla\"", desc: "Begin with saved duration")
+                        voiceCommandRow("\"Hey Siri, begin Vindla for X minutes\"", desc: "Begin with custom duration")
+                        voiceCommandRow("\"Hey Siri, begin limitless meditation with Vindla\"", desc: "Begin a limitless stopwatch")
+                        voiceCommandRow("\"Hey Siri, end Vindla\"", desc: "End session early")
                     }
                     .padding(.vertical, 4)
                 } header: {
@@ -217,13 +217,13 @@ struct SettingsView: View {
 
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("Kai Cloud Processing", systemImage: "lock.shield.fill")
+                        Label("Mimir Cloud Processing", systemImage: "lock.shield.fill")
                             .foregroundStyle(.white.opacity(0.85))
 
-                        Text("When you use Kai, your prompt and selected duration are sent to Stilla's cloud service to generate a personalized meditation.")
+                        Text("When you use Mimir, your prompt and selected duration are sent to Vindla's cloud service to generate a personalized meditation.")
                             .foregroundStyle(.white.opacity(0.7))
 
-                        Text("Avoid sharing medical details or highly sensitive personal information in Kai prompts.")
+                        Text("Avoid sharing medical details or highly sensitive personal information in Mimir prompts.")
                             .foregroundStyle(.white.opacity(0.55))
                     }
                     .padding(.vertical, 4)

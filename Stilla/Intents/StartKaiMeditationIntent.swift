@@ -5,8 +5,8 @@ import SwiftUI
 /// Siri intent: Ask Kai for a personalized meditation.
 /// This intent is conversational and will prompt for mood and duration if missing.
 struct StartKaiMeditationIntent: AppIntent {
-    static var title: LocalizedStringResource = "Ask Kai for Meditation"
-    static var description: IntentDescription = "Ask Kai to craft a personalized meditation for you."
+    static var title: LocalizedStringResource = "Ask Mimir for Meditation"
+    static var description: IntentDescription = "Ask Mimir to craft a personalized meditation for you."
 
     static var openAppWhenRun: Bool = true
 
@@ -25,6 +25,6 @@ struct StartKaiMeditationIntent: AppIntent {
         manager.siriPendingDuration = duration.minutes
         manager.isSiriTriggeredKai = true
         
-        return .result(dialog: "Opening Stilla... Kai is aligning your path now.")
+        return .result(dialog: "Opening Vindla... Mimir is aligning your path now.")
     }
 }
