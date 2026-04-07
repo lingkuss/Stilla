@@ -22,7 +22,7 @@ final class StoreKitManager {
     static let soundBundleID = "premium.sounds.bundle"
 
     // KAI Subscription
-    static let soundKAIProID = "sub.kai.monthly"
+    static let vindlaProID = "sub.vindla.monthly"
 
     private(set) var purchasedProductIDs: Set<String> = []
     private(set) var products: [Product] = []
@@ -45,8 +45,8 @@ final class StoreKitManager {
         return purchasedProductIDs.contains(productID)
     }
 
-    var isKAISubscribed: Bool {
-        purchasedProductIDs.contains(Self.soundKAIProID)
+    var isVindlaProSubscribed: Bool {
+        purchasedProductIDs.contains(Self.vindlaProID)
     }
 
     func displayPrice(for productID: String, fallback: String) -> String {
@@ -59,7 +59,7 @@ final class StoreKitManager {
                 Self.techniqueLibraryID,
                 Self.customTechniqueEditorID,
                 Self.soundBundleID,
-                Self.soundKAIProID
+                Self.vindlaProID
             ])
         } catch {
             print("Failed to load products: \(error)")

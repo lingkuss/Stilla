@@ -122,7 +122,7 @@
       "localizations" : [
 
       ],
-      "name" : "kai",
+      "name" : "Vindla",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -139,13 +139,13 @@
           "localizations" : [
             {
               "description" : "Unlimited personalized meditation journeys.",
-              "displayName" : "KAI pro subscription",
+              "displayName" : "Vindla pro subscription",
               "locale" : "en_US"
             }
           ],
-          "productID" : "sub.kai.monthly",
+          "productID" : "sub.vindla.monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "KAI pro",
+          "referenceName" : "Vindla pro",
           "subscriptionGroupID" : "C31A2700",
           "type" : "RecurringSubscription",
           "winbackOffers" : [

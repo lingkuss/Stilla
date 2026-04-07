@@ -412,7 +412,7 @@ struct KaiExperienceView: View {
             // Entitlement Check
             await StoreKitManager.shared.updateCustomerProductStatus()
             
-            let isSubscribed = StoreKitManager.shared.isKAISubscribed
+            let isSubscribed = StoreKitManager.shared.isVindlaProSubscribed
             let isFreeAvailable = KaiBrainService.shared.isFreeGenerationAvailable
             
             if !isSubscribed && !isFreeAvailable {
@@ -717,7 +717,7 @@ struct KaiExperienceView: View {
 
     private var statusBadge: some View {
         Group {
-            if store.isKAISubscribed {
+            if store.isVindlaProSubscribed {
                 HStack(spacing: 6) {
                     Image(systemName: "sparkles")
                         .font(.system(size: 12, weight: .bold))

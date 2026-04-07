@@ -215,7 +215,7 @@ struct SavedMeditationsLibraryView: View {
     }
 
     private func playScript(_ script: MeditationScript) {
-        if !store.isKAISubscribed {
+        if !store.isVindlaProSubscribed {
             showPaywall = true
             return
         }

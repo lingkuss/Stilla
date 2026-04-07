@@ -51,7 +51,7 @@ struct KAIPaywallView: View {
                 // Purchase Button
                 Button {
                     Task {
-                        let outcome = await StoreKitManager.shared.purchase(StoreKitManager.soundKAIProID)
+                        let outcome = await StoreKitManager.shared.purchase(StoreKitManager.vindlaProID)
                         if case .success = outcome {
                             dismiss()
                         } else {
@@ -80,7 +80,7 @@ struct KAIPaywallView: View {
                             return
                         }
                         await store.updateCustomerProductStatus()
-                        if store.isKAISubscribed {
+                        if store.isVindlaProSubscribed {
                             dismiss()
                         } else {
                             statusMessage = "No active Mimir subscription was found to restore."
@@ -109,7 +109,7 @@ struct KAIPaywallView: View {
     }
 
     private var kaiPriceText: String {
-        store.products.first(where: { $0.id == StoreKitManager.soundKAIProID }).map { "\($0.displayPrice)/mo" } ?? "$4.99/mo"
+        store.products.first(where: { $0.id == StoreKitManager.vindlaProID }).map { "\($0.displayPrice)/mo" } ?? "$4.99/mo"
     }
 
     private func present(_ outcome: StoreKitManager.PurchaseOutcome) {
