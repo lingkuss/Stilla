@@ -3,48 +3,48 @@ import Foundation
 
 /// Siri intent: Start a meditation session.
 struct StartMeditationIntent: AppIntent {
-    static var title: LocalizedStringResource = "Begin Meditation"
-    static var description: IntentDescription = "Begin a meditation session with Vindla"
+    static var title: LocalizedStringResource = "intent.start_meditation.title"
+    static var description: IntentDescription = IntentDescription("intent.start_meditation.description")
 
     static var openAppWhenRun: Bool = true
 
-    @Parameter(title: "Duration")
+    @Parameter(title: "intent.common.duration")
     var duration: DurationOption?
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let manager = MeditationManager.shared
 
-        if let duration = duration {
+        if let duration {
             manager.start(durationMinutes: duration.minutes)
-            return .result(dialog: "Beginning \(duration.minutes) minute meditation. Find your calm.")
-        } else {
-            manager.start()
-            return .result(dialog: "Beginning \(manager.durationMinutes) minute meditation. Find your calm.")
+            return .result(dialog: IntentDialog("intent.start_meditation.dialog.started_with_duration"))
         }
+
+        manager.start()
+        return .result(dialog: IntentDialog("intent.start_meditation.dialog.started_default"))
     }
 }
 
 /// Duration options for Siri parameter
 enum DurationOption: String, AppEnum {
-    case one = "1 minute"
-    case three = "3 minutes"
-    case five = "5 minutes"
-    case ten = "10 minutes"
-    case fifteen = "15 minutes"
-    case twenty = "20 minutes"
-    case thirty = "30 minutes"
+    case one = "one"
+    case three = "three"
+    case five = "five"
+    case ten = "ten"
+    case fifteen = "fifteen"
+    case twenty = "twenty"
+    case thirty = "thirty"
 
-    static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Duration")
+    static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "intent.common.duration")
 
     static var caseDisplayRepresentations: [DurationOption: DisplayRepresentation] = [
-        .one: "1 minute",
-        .three: "3 minutes",
-        .five: "5 minutes",
-        .ten: "10 minutes",
-        .fifteen: "15 minutes",
-        .twenty: "20 minutes",
-        .thirty: "30 minutes",
+        .one: "intent.duration.one",
+        .three: "intent.duration.three",
+        .five: "intent.duration.five",
+        .ten: "intent.duration.ten",
+        .fifteen: "intent.duration.fifteen",
+        .twenty: "intent.duration.twenty",
+        .thirty: "intent.duration.thirty",
     ]
 
     var minutes: Int {
@@ -62,8 +62,8 @@ enum DurationOption: String, AppEnum {
 
 /// Siri intent: Start a limitless stopwatch meditation session.
 struct StartOpenEndedMeditationIntent: AppIntent {
-    static var title: LocalizedStringResource = "Begin Limitless Meditation"
-    static var description: IntentDescription = "Begin a limitless stopwatch meditation session with Vindla"
+    static var title: LocalizedStringResource = "intent.start_open_ended.title"
+    static var description: IntentDescription = IntentDescription("intent.start_open_ended.description")
 
     static var openAppWhenRun: Bool = true
 
@@ -71,6 +71,6 @@ struct StartOpenEndedMeditationIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let manager = MeditationManager.shared
         manager.start(durationMinutes: 0)
-        return .result(dialog: "Beginning limitless meditation. End whenever you're ready.")
+        return .result(dialog: IntentDialog("intent.start_open_ended.dialog.started"))
     }
 }

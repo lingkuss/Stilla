@@ -19,8 +19,8 @@ struct KaiExperienceView: View {
     @State private var isPersonalityPickerExpanded = false
     @State private var rotationAmount: Double = 0.0
     @State private var pulseAmount: Double = 0.0
-    @State private var errorTitle = "Mimir is resting"
-    @State private var errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
+    @State private var errorTitle = String(localized: "kai.error.resting.title")
+    @State private var errorMessage = String(localized: "kai.error.resting.message")
     @State private var pickedSuggestion: String? = nil
     @State private var suggestionWasPicked = false
     @State private var stillnessRatio: Double = 0.5
@@ -28,11 +28,11 @@ struct KaiExperienceView: View {
     
     private let speechManager = SpeechManager.shared
     
-    private let presets = [
-        "Creative Flow", "Deep Stress", "Sleep Prep",
-        "Morning Spark", "Anxiety Calm", "Grateful Heart",
-        "Focus Reset", "Body Ease", "Confidence Boost",
-        "Gentle Clarity", "Evening Unwind", "Self-Compassion"
+    private let intentionKeys = [
+        "intention.creative_flow", "intention.deep_stress", "intention.sleep_prep",
+        "intention.morning_spark", "intention.anxiety_calm", "intention.grateful_heart",
+        "intention.focus_reset", "intention.body_ease", "intention.confidence_boost",
+        "intention.gentle_clarity", "intention.evening_unwind", "intention.self_compassion"
     ]
 
     private var availablePersonalities: [KaiPersonality] {
@@ -100,7 +100,7 @@ struct KaiExperienceView: View {
                 // Voice / Text Input Box
                 VStack(spacing: 24) {
                     ZStack(alignment: .topTrailing) {
-                        TextField("Speak or type your mood. Mimir will curate your path.", text: $moodText, axis: .vertical)
+                        TextField(String(localized: "kai.mood_input_placeholder"), text: $moodText, axis: .vertical)
                             .lineLimit(4...8)
                             .padding(24)
                             .background {
@@ -150,8 +150,8 @@ struct KaiExperienceView: View {
                                                 errorMessage = speechError.localizedDescription
                                                 showingSettingsPrompt = true
                                             } catch {
-                                                errorTitle = "Voice Input Unavailable"
-                                                errorMessage = "Voice input isn't available right now. Please type your mood instead."
+                                                errorTitle = String(localized: "alerts.voice_input_unavailable")
+                                                errorMessage = String(localized: "kai.voice_input_unavailable_type_mood")
                                                 showingError = true
                                             }
                                         }
@@ -177,7 +177,7 @@ struct KaiExperienceView: View {
                     suggestionOptionsView
 
                     if speechManager.isRecording {
-                        Text("Listening to your heart...")
+                        Text(String(localized: "kai.listening"))
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(.white.opacity(0.4))
                     }
@@ -193,7 +193,7 @@ struct KaiExperienceView: View {
                 
                 // Presets
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("INTENTIONS")
+                    Text(String(localized: "kai.intentions"))
                         .font(.system(size: 10, weight: .bold))
                         .kerning(1)
                         .foregroundStyle(.white.opacity(0.4))
@@ -201,25 +201,25 @@ struct KaiExperienceView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
-                            ForEach(presets, id: \.self) { preset in
+                            ForEach(intentionKeys, id: \.self) { intentionKey in
                                 Button {
-                                    if selectedIntention == preset {
+                                    if selectedIntention == intentionKey {
                                         selectedIntention = nil
                                     } else {
-                                        selectedIntention = preset
+                                        selectedIntention = intentionKey
                                     }
                                     UISelectionFeedbackGenerator().selectionChanged()
                                 } label: {
-                                    Text(preset)
+                                    Text(localizedIntention(intentionKey))
                                         .font(.system(size: 13, weight: .medium))
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 10)
                                         .background {
                                             Capsule()
-                                                .fill(selectedIntention == preset ? Color.white.opacity(0.2) : Color.white.opacity(0.05))
-                                                .overlay(Capsule().strokeBorder(Color.white.opacity(selectedIntention == preset ? 0.3 : 0.05), lineWidth: 1))
+                                                .fill(selectedIntention == intentionKey ? Color.white.opacity(0.2) : Color.white.opacity(0.05))
+                                                .overlay(Capsule().strokeBorder(Color.white.opacity(selectedIntention == intentionKey ? 0.3 : 0.05), lineWidth: 1))
                                         }
-                                        .foregroundStyle(selectedIntention == preset ? .white : .white.opacity(0.6))
+                                        .foregroundStyle(selectedIntention == intentionKey ? .white : .white.opacity(0.6))
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -230,7 +230,7 @@ struct KaiExperienceView: View {
                 
                 // Duration
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("DURATION")
+                    Text(String(localized: "kai.duration"))
                         .font(.system(size: 10, weight: .bold))
                         .kerning(1)
                         .foregroundStyle(.white.opacity(0.4))
@@ -244,7 +244,7 @@ struct KaiExperienceView: View {
                                     selectedDuration = mins
                                     UISelectionFeedbackGenerator().selectionChanged()
                                 } label: {
-                                    Text("\(mins)m")
+                                    Text(String(format: String(localized: "kai.duration_minutes_format"), mins))
                                         .font(.system(size: 14, weight: .medium))
                                         .frame(minWidth: 64)
                                         .padding(.vertical, 14)
@@ -265,7 +265,7 @@ struct KaiExperienceView: View {
                 // Stillness Ratio
                 VStack(alignment: .leading, spacing: 16) {
                     HStack(spacing: 8) {
-                        Text("STILLNESS RATIO")
+                        Text(String(localized: "kai.stillness_ratio"))
                             .font(.system(size: 10, weight: .bold))
                             .kerning(1)
                             .foregroundStyle(.white.opacity(0.4))
@@ -286,9 +286,9 @@ struct KaiExperienceView: View {
                             .tint(.white.opacity(0.3))
                         
                         HStack {
-                            Text("Continuous Guidance")
+                            Text(String(localized: "kai.continuous_guidance"))
                             Spacer()
-                            Text("Deep Stillness")
+                            Text(String(localized: "kai.deep_stillness"))
                         }
                         .font(.system(size: 9, weight: .bold))
                         .foregroundStyle(.white.opacity(0.3))
@@ -308,7 +308,7 @@ struct KaiExperienceView: View {
                 Button {
                     generateMeditation()
                 } label: {
-                    Text("Create Meditation")
+                    Text(String(localized: "kai.create_meditation"))
                         .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
@@ -325,22 +325,22 @@ struct KaiExperienceView: View {
             .padding(.top, 68)
         }
         .alert(errorTitle, isPresented: $showingError) {
-            Button("I understand") { }
+            Button(String(localized: "kai.i_understand")) { }
         } message: {
             Text(errorMessage)
         }
-        .alert("Open Settings?", isPresented: $showingSettingsPrompt) {
-            Button("Open Settings") {
+        .alert(String(localized: "alerts.open_settings"), isPresented: $showingSettingsPrompt) {
+            Button(String(localized: "kai.open_settings")) {
                 openAppSettings()
             }
-            Button("Cancel", role: .cancel) { }
+            Button(String(localized: "ui.cancel"), role: .cancel) { }
         } message: {
             Text(errorMessage)
         }
-        .alert("About Stillness", isPresented: $showingStillnessInfo) {
-            Button("Got it", role: .cancel) { }
+        .alert(String(localized: "alerts.about_stillness"), isPresented: $showingStillnessInfo) {
+            Button(String(localized: "ui.got_it"), role: .cancel) { }
         } message: {
-            Text("This slider controls how much silence Mimir provides. At lower levels, Mimir gives constant guidance. At higher levels, Mimir steps back to give you long, quiet stretches of stillness.")
+            Text(String(localized: "kai.stillness_help"))
         }
     }
     
@@ -423,15 +423,16 @@ struct KaiExperienceView: View {
             
             do {
                 var combinedMood = ""
-                if let intention = selectedIntention {
-                    combinedMood += "Intention: \(intention). "
+                if let intentionKey = selectedIntention {
+                    let intentionText = localizedIntention(intentionKey)
+                    combinedMood += "Intention: \(intentionText). "
                 }
                 if !moodText.isEmpty {
                     combinedMood += "Mood/Details: \(moodText)"
                 }
 
                 manager.pendingKaiMoodSummary = moodText.isEmpty ? nil : moodText
-                manager.pendingKaiIntention = selectedIntention
+                manager.pendingKaiIntention = selectedIntention.map(localizedIntention)
 
                 if let memoryContext = memoryContextString() {
                     if combinedMood.isEmpty {
@@ -451,7 +452,7 @@ struct KaiExperienceView: View {
                 // Persist choice
                 manager.preferredStillnessRatio = stillnessRatio
                 script.kaiPersonalityID = activePersonality.id
-                script.kaiPersonalityName = activePersonality.name
+                script.kaiPersonalityName = activePersonality.localizedName
                 
                 // If we got here and weren't subscribed, consume the free credit
                 if !isSubscribed {
@@ -485,7 +486,7 @@ struct KaiExperienceView: View {
                         errorMessage = "Mimir couldn't be reached right now. Please try again shortly."
                     }
                 } else {
-                    errorTitle = "Mimir is resting"
+                    errorTitle = String(localized: "kai.error.resting.title")
                     errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
                 }
                 showingError = true
@@ -519,12 +520,12 @@ struct KaiExperienceView: View {
                         }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("CHOOSE YOUR MIMIR")
+                        Text(String(localized: "kai.choose_your_mimir"))
                             .font(.system(size: 10, weight: .bold))
                             .kerning(1)
                             .foregroundStyle(.white.opacity(0.4))
 
-                        Text(activePersonality.name)
+                        Text(activePersonality.localizedName)
                             .font(.system(size: 22, weight: .light, design: .serif))
                             .foregroundStyle(.white)
                     }
@@ -606,11 +607,11 @@ struct KaiExperienceView: View {
             if !suggestions.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("MIMIR SUGGESTIONS")
+                        Text(String(localized: "kai.mimir_suggestions"))
                             .font(.system(size: 10, weight: .bold))
                             .kerning(1)
                             .foregroundStyle(.white.opacity(0.4))
-                        Text("Tap one to auto-fill your mood")
+                        Text(String(localized: "kai.tap_to_autofill_mood"))
                             .font(.system(size: 12))
                             .foregroundStyle(.white.opacity(0.5))
                     }
@@ -669,49 +670,53 @@ struct KaiExperienceView: View {
         return entries.joined(separator: " || ")
     }
 
+    private func localizedIntention(_ key: String) -> String {
+        Bundle.main.localizedString(forKey: key, value: key, table: nil)
+    }
+
     private var loadingHeadline: String {
         switch activePersonality.id {
         case "zen_minimalist":
-            return "Stillness, forming"
+            return String(localized: "kai.loading.headline.zen_minimalist")
         case "warm_guardian":
-            return "A gentle space, prepared"
+            return String(localized: "kai.loading.headline.warm_guardian")
         case "modern_realist":
-            return "Getting your path ready"
+            return String(localized: "kai.loading.headline.modern_realist")
         case "cosmic_sage":
-            return "Weaving your quiet orbit"
+            return String(localized: "kai.loading.headline.cosmic_sage")
         case "reflective_analyst":
-            return "Aligning your inner patterns"
+            return String(localized: "kai.loading.headline.reflective_analyst")
         case "philosopher":
-            return "Clarifying the path ahead"
+            return String(localized: "kai.loading.headline.philosopher")
         case "ra":
-            return "I am Ra. The path is aligning"
+            return String(localized: "kai.loading.headline.ra")
         case "shadow_guide":
-            return "Descending into the depths"
+            return String(localized: "kai.loading.headline.shadow_guide")
         default:
-            return "Mimir is crafting your path"
+            return String(localized: "kai.loading.headline.default")
         }
     }
 
     private var loadingSubheadline: String {
         switch activePersonality.id {
         case "zen_minimalist":
-            return "Breath by breath, we begin."
+            return String(localized: "kai.loading.subheadline.zen_minimalist")
         case "warm_guardian":
-            return "You are safe here. We'll move softly."
+            return String(localized: "kai.loading.subheadline.warm_guardian")
         case "modern_realist":
-            return "No pressure. Just a few honest breaths."
+            return String(localized: "kai.loading.subheadline.modern_realist")
         case "cosmic_sage":
-            return "Let the tide gather. We enter gently."
+            return String(localized: "kai.loading.subheadline.cosmic_sage")
         case "reflective_analyst":
-            return "Observing what matters, without force."
+            return String(localized: "kai.loading.subheadline.reflective_analyst")
         case "philosopher":
-            return "Attention steadies. Judgment softens."
+            return String(localized: "kai.loading.subheadline.philosopher")
         case "ra":
-            return "I leave you in the love and in the light."
+            return String(localized: "kai.loading.subheadline.ra")
         case "shadow_guide":
-            return "Greeting the silence of the unconscious."
+            return String(localized: "kai.loading.subheadline.shadow_guide")
         default:
-            return "Aligning your heart with your breath."
+            return String(localized: "kai.loading.subheadline.default")
         }
     }
 
@@ -721,7 +726,7 @@ struct KaiExperienceView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "sparkles")
                         .font(.system(size: 12, weight: .bold))
-                    Text("MIMIR PRO MEMBER")
+                    Text(String(localized: "kai.pro_member"))
                         .font(.system(size: 10, weight: .bold))
                         .kerning(1)
                 }
@@ -735,7 +740,9 @@ struct KaiExperienceView: View {
                         .font(.system(size: 10))
                     Text({
                         let n = KaiBrainService.shared.freeCreditsRemaining
-                        return n > 0 ? "\(n) FREE CREDIT\(n == 1 ? "" : "S")" : "0 CREDITS REMAINING"
+                        return n > 0
+                            ? String(format: String(localized: "kai.free_credits_remaining_format"), n)
+                            : String(localized: "kai.zero_credits_remaining")
                     }())
                         .font(.system(size: 10, weight: .bold))
                         .kerning(1)
@@ -757,7 +764,7 @@ struct KaiExperienceView: View {
 
             Spacer()
 
-            Button("Close") { dismiss() }
+            Button(String(localized: "ui.close")) { dismiss() }
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(.white.opacity(0.7))
         }
@@ -808,7 +815,7 @@ private struct KaiPersonalityCard: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
-                    Text(personality.name)
+                    Text(personality.localizedName)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(.white)
 
@@ -818,12 +825,12 @@ private struct KaiPersonalityCard: View {
                     }
                 }
 
-                Text(personality.shortDescription)
+                Text(personality.localizedShortDescription)
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.62))
 
                 HStack(spacing: 8) {
-                    ForEach(personality.traits, id: \.self) { trait in
+                    ForEach(personality.localizedTraits, id: \.self) { trait in
                         Text(trait)
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(.white.opacity(0.72))
@@ -833,13 +840,13 @@ private struct KaiPersonalityCard: View {
                     }
                 }
 
-                Text("“\(personality.sampleLine)”")
+                Text("“\(personality.localizedSampleLine)”")
                     .font(.system(size: 12, weight: .light, design: .serif))
                     .italic()
                     .foregroundStyle(.white.opacity(0.74))
                     .lineSpacing(3)
 
-                Text(personality.longDescription)
+                Text(personality.localizedLongDescription)
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.5))
                     .lineSpacing(3)

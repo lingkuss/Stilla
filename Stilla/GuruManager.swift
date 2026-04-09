@@ -69,39 +69,50 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         synthesizer.speak(utterance)
     }
 
+    private var preferredVoiceLanguages: [String] {
+        AppLocalization.preferredLanguageCodes
+    }
+
+    private func isPreferredLanguage(_ voice: AVSpeechSynthesisVoice) -> Bool {
+        let code = Locale(identifier: voice.language).language.languageCode?.identifier.lowercased() ?? ""
+        return preferredVoiceLanguages.contains(code)
+    }
+
     func findBestAvailableVoice() -> AVSpeechSynthesisVoice? {
         let allVoices = AVSpeechSynthesisVoice.speechVoices()
-        let enVoices = allVoices.filter { $0.language.contains("en") } // en-US, en-GB, etc.
-        
-        // Priority 1: Premium Female
-        if let premiumFemale = enVoices.first(where: { $0.quality == .premium && $0.gender == .female }) {
+        let candidateVoices = allVoices.filter { isPreferredLanguage($0) }
+        let preferredPool = candidateVoices.isEmpty ? allVoices : candidateVoices
+
+        if let premiumFemale = preferredPool.first(where: { $0.quality == .premium && $0.gender == .female }) {
             return premiumFemale
         }
-        
-        // Priority 2: Enhanced Female (e.g. Samantha Enhanced)
-        if let enhancedFemale = enVoices.first(where: { $0.quality == .enhanced && $0.gender == .female }) {
+
+        if let enhancedFemale = preferredPool.first(where: { $0.quality == .enhanced && $0.gender == .female }) {
             return enhancedFemale
         }
-        
-        // Priority 3: Any Premium
-        if let premium = enVoices.first(where: { $0.quality == .premium }) {
+
+        if let premium = preferredPool.first(where: { $0.quality == .premium }) {
             return premium
         }
-        
-        // Priority 4: Any Enhanced
-        if let enhanced = enVoices.first(where: { $0.quality == .enhanced }) {
+
+        if let enhanced = preferredPool.first(where: { $0.quality == .enhanced }) {
             return enhanced
         }
-        
-        return enVoices.first // Fallback
+
+        return preferredPool.first
     }
 
     var availableHighQualityVoices: [AVSpeechSynthesisVoice] {
-        return AVSpeechSynthesisVoice.speechVoices()
-            .filter { $0.language.contains("en") && $0.quality != .default }
+        AVSpeechSynthesisVoice.speechVoices()
+            .filter { $0.quality != .default }
             .sorted { v1, v2 in
+                let v1Preferred = isPreferredLanguage(v1)
+                let v2Preferred = isPreferredLanguage(v2)
+                if v1Preferred != v2Preferred {
+                    return v1Preferred && !v2Preferred
+                }
                 if v1.quality != v2.quality {
-                    return v1.quality.rawValue > v2.quality.rawValue // Premium first
+                    return v1.quality.rawValue > v2.quality.rawValue
                 }
                 return v1.name < v2.name
             }

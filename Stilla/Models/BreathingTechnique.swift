@@ -114,3 +114,18 @@ struct BreathingTechnique: Identifiable, Codable, Hashable {
         )
     ]
 }
+
+extension BreathingTechnique {
+    private func localizedValue(_ key: String, fallback: String) -> String {
+        let value = Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        return value == key ? fallback : value
+    }
+
+    var localizedName: String {
+        localizedValue("technique.\(id).name", fallback: name)
+    }
+
+    var localizedDescription: String {
+        localizedValue("technique.\(id).description", fallback: description)
+    }
+}

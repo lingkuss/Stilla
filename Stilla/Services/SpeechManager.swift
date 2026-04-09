@@ -32,7 +32,11 @@ class SpeechManager {
     private var audioEngine: AVAudioEngine?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
-    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    private var speechRecognizer: SFSpeechRecognizer?
+
+    private var preferredSpeechLocale: Locale {
+        Locale(identifier: AppLocalization.currentLocaleIdentifier)
+    }
     
     func requestPermissions() async throws {
         let speechStatus = await withCheckedContinuation { continuation in
@@ -70,7 +74,8 @@ class SpeechManager {
         guard speechAuthorized else {
             throw SpeechError.speechPermissionDenied
         }
-        guard speechRecognizer != nil else {
+        speechRecognizer = SFSpeechRecognizer(locale: preferredSpeechLocale)
+        guard let speechRecognizer, speechRecognizer.isAvailable else {
             throw SpeechError.recognizerUnavailable
         }
 
@@ -92,7 +97,7 @@ class SpeechManager {
         transcription = ""
         isRecording = true
         
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { result, error in
+        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             if let result = result {
                 self.transcription = result.bestTranscription.formattedString
             }

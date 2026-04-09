@@ -455,7 +455,7 @@ final class MeditationManager {
         self.hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
         self.isGuruEnabled = UserDefaults.standard.object(forKey: "isGuruEnabled") as? Bool ?? true
         self.preferredStillnessRatio = UserDefaults.standard.double(forKey: "preferredStillnessRatio") == 0 ? 0.5 : UserDefaults.standard.double(forKey: "preferredStillnessRatio")
-        self.kaiVoiceIdentifier = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") ?? "com.apple.voice.compact.en-US.Samantha"
+        self.kaiVoiceIdentifier = UserDefaults.standard.string(forKey: "kaiVoiceIdentifier") ?? ""
         self.selectedKaiPersonalityID = UserDefaults.standard.string(forKey: "selectedKaiPersonalityID") ?? KaiPersonality.default.id
         
         self.meditationHistory = (UserDefaults.standard.dictionary(forKey: "meditationHistory") as? [String: Int]) ?? [:]
@@ -494,8 +494,8 @@ final class MeditationManager {
             self.savedMeditations = []
         }
         
-        // One-time auto-select voice if empty
-        if self.kaiVoiceIdentifier.isEmpty {
+        // Auto-select a best available voice if empty or no longer installed.
+        if self.kaiVoiceIdentifier.isEmpty || AVSpeechSynthesisVoice(identifier: self.kaiVoiceIdentifier) == nil {
             self.kaiVoiceIdentifier = GuruManager.shared.findBestAvailableVoice()?.identifier ?? ""
         }
         

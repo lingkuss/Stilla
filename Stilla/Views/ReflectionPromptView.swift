@@ -39,18 +39,18 @@ struct ReflectionPromptView: View {
                 }
             }
             .padding(.top, 24)
-            .navigationTitle(showingShareCard ? "Share" : "Reflection")
+            .navigationTitle(showingShareCard ? String(localized: "reflection.share_nav_title") : String(localized: "reflection.nav_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "ui.done")) { dismiss() }
                         .font(.system(size: 14, weight: .medium))
                 }
             }
             .preferredColorScheme(.dark)
             .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.07).ignoresSafeArea())
-            .alert("Voice Input Unavailable", isPresented: $showingError) {
-                Button("I understand") { }
+            .alert(String(localized: "alerts.voice_input_unavailable"), isPresented: $showingError) {
+                Button(String(localized: "reflection.i_understand")) { }
             } message: {
                 Text(errorMessage)
             }
@@ -62,10 +62,10 @@ struct ReflectionPromptView: View {
             .sheet(isPresented: $showingShareSheet) {
                 ShareSheet(activityItems: shareItems)
             }
-            .alert("Couldn't Share Session", isPresented: $shareUploadError) {
-                Button("OK") { }
+            .alert(String(localized: "alerts.could_not_share_session"), isPresented: $shareUploadError) {
+                Button(String(localized: "ui.ok")) { }
             } message: {
-                Text("There was a problem saving your session to the server. Please check your internet connection or Vercel KV setup.")
+                Text(String(localized: "reflection.share_upload_error"))
             }
             .onAppear {
                 prefetchShareContent()
@@ -94,13 +94,13 @@ struct ReflectionPromptView: View {
                     Text(activePersonaName)
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.6))
-                    Text("How are you now?")
+                    Text(String(localized: "reflection.how_are_you_now"))
                         .font(.system(size: 22, weight: .light, design: .serif))
                         .italic()
                 }
             }
 
-            Text("A short reflection helps Mimir remember what matters to you.")
+            Text(String(localized: "reflection.short_reflection_hint"))
                 .font(.system(size: 12))
                 .foregroundStyle(.white.opacity(0.5))
         }
@@ -110,7 +110,7 @@ struct ReflectionPromptView: View {
 
     private var reflectionInputSection: some View {
         ZStack(alignment: .bottomTrailing) {
-            TextField("One line is enough...", text: $reflectionText, axis: .vertical)
+            TextField(String(localized: "reflection.placeholder"), text: $reflectionText, axis: .vertical)
                 .lineLimit(3...6)
                 .padding(16)
                 .background(
@@ -139,7 +139,7 @@ struct ReflectionPromptView: View {
                             errorMessage = speechError.localizedDescription
                             showingError = true
                         } catch {
-                            errorMessage = "Voice input isn't available right now. Please type instead."
+                            errorMessage = String(localized: "reflection.voice_input_fallback_error")
                             showingError = true
                         }
                     }
@@ -175,7 +175,7 @@ struct ReflectionPromptView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $wantsReminder) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Should I remind you tomorrow to")
+                        Text(String(localized: "reflection.reminder_prompt"))
                             .font(.system(size: 14, weight: .medium))
                         Text(reminderSuggestionText)
                             .font(.system(size: 13))
@@ -186,7 +186,7 @@ struct ReflectionPromptView: View {
 
                 if wantsReminder {
                     HStack(spacing: 8) {
-                        Text("Time")
+                        Text(String(localized: "reflection.time_label"))
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.5))
                         DatePicker("", selection: $reminderTime, displayedComponents: .hourAndMinute)
@@ -219,7 +219,7 @@ struct ReflectionPromptView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "books.vertical.fill")
-                        Text("Save Exercise to Library")
+                        Text(String(localized: "reflection.save_exercise"))
                     }
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.white.opacity(0.8))
@@ -235,7 +235,7 @@ struct ReflectionPromptView: View {
                 handleSave()
                 transitionToShare()
             } label: {
-                Text("Save Reflection")
+                Text(String(localized: "reflection.save"))
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
@@ -243,7 +243,7 @@ struct ReflectionPromptView: View {
                     .background(Capsule().fill(.white))
             }
 
-            Button("Skip") {
+            Button(String(localized: "ui.skip")) {
                 transitionToShare()
             }
             .font(.system(size: 14, weight: .medium))
@@ -269,10 +269,10 @@ struct ReflectionPromptView: View {
             .frame(height: 420)
 
             VStack(spacing: 16) {
-                Text("Share your journey")
+                Text(String(localized: "reflection.share_title"))
                     .font(.system(size: 20, weight: .light, design: .serif))
                     .italic()
-                Text("Let others discover their own path with Mimir.")
+                Text(String(localized: "reflection.share_subtitle"))
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.5))
             }
@@ -290,7 +290,7 @@ struct ReflectionPromptView: View {
                         } else {
                             Image(systemName: "square.and.arrow.up")
                         }
-                        Text(isGeneratingShareContent || isSavingShare ? "Preparing..." : "Share")
+                        Text(isGeneratingShareContent || isSavingShare ? String(localized: "reflection.preparing") : String(localized: "reflection.share_action"))
                     }
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.black)
@@ -300,7 +300,7 @@ struct ReflectionPromptView: View {
                 }
                 .disabled(isGeneratingShareContent || isSavingShare)
 
-                Button("Not now") {
+                Button(String(localized: "reflection.not_now")) {
                     dismiss()
                 }
                 .font(.system(size: 14, weight: .medium))
@@ -341,7 +341,7 @@ struct ReflectionPromptView: View {
     private var reminderSuggestionText: String {
         let memory = manager.recentSessionMemories.first(where: { $0.id == sessionID })
         let suggestion = memory?.suggestionOptions.first?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return suggestion.isEmpty ? "return for a Mimir session" : suggestion
+        return suggestion.isEmpty ? String(localized: "reflection.reminder_default_suggestion") : suggestion
     }
 
     private var activePersonaName: String {
@@ -353,7 +353,7 @@ struct ReflectionPromptView: View {
     }
 
     private var fallbackScript: MeditationScript {
-        MeditationScript(title: "Mimir Journey", durationMinutes: 10, steps: [])
+        MeditationScript(title: String(localized: "reflection.fallback_title"), durationMinutes: 10, steps: [])
     }
 
     private var lastSessionScript: MeditationScript? {
@@ -472,7 +472,7 @@ struct ReflectionPromptView: View {
 
     private func uploadSessionForSharing(_ payload: ShareSessionPayload) async throws -> String {
         guard let url = Secrets.kaiShareBackendURL else {
-            throw NSError(domain: "ShareError", code: 2, userInfo: [NSLocalizedDescriptionKey: "Missing KAIShareBackendURL/KAIBackendURL in Info.plist"])
+            throw NSError(domain: "ShareError", code: 2, userInfo: [NSLocalizedDescriptionKey: String(localized: "reflection.missing_backend_error")])
         }
 
         var request = URLRequest(url: url)
@@ -521,7 +521,7 @@ class ShareActivityProvider: NSObject, UIActivityItemSource {
     let image: UIImage?
     let title: String
 
-    init(url: URL, image: UIImage?, title: String = "A Mimir Meditation — Vindla") {
+    init(url: URL, image: UIImage?, title: String = String(localized: "reflection.share_default_title")) {
         self.url = url
         self.image = image
         self.title = title

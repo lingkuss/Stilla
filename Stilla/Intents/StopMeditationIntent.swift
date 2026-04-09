@@ -4,8 +4,8 @@ import Foundation
 /// Siri intent: Stop the current meditation session.
 /// Triggered by: "Hey Siri, stop Vindla"
 struct StopMeditationIntent: AppIntent {
-    static var title: LocalizedStringResource = "End Meditation"
-    static var description: IntentDescription = "End the current meditation session"
+    static var title: LocalizedStringResource = "intent.stop_meditation.title"
+    static var description: IntentDescription = IntentDescription("intent.stop_meditation.description")
 
     static var openAppWhenRun: Bool = true
 
@@ -13,6 +13,6 @@ struct StopMeditationIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let manager = MeditationManager.shared
         manager.stop()
-        return .result(dialog: "Meditation ended. Namaste. 🙏")
+        return .result(dialog: IntentDialog("intent.stop_meditation.dialog.stopped"))
     }
 }

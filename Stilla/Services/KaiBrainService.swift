@@ -93,6 +93,13 @@ final class KaiBrainService {
     }
 
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
+        let localeIdentifier = AppLocalization.currentLocaleIdentifier
+        let languageInstruction = """
+
+        LANGUAGE REQUIREMENT:
+        - Write all meditation content in locale: \(localeIdentifier).
+        - Match the user's language naturally and consistently.
+        """
         let wordBudget = Int(Double(durationMinutes * 150) * (1.0 - stillnessRatio))
         
         let densityInstruction = """
@@ -111,7 +118,8 @@ final class KaiBrainService {
             mood: mood,
             durationMinutes: durationMinutes,
             personalityName: personality.name,
-            personalityPrompt: personality.promptInjection + densityInstruction
+            personalityPrompt: personality.promptInjection + languageInstruction + densityInstruction,
+            locale: localeIdentifier
         )
         
         var urlRequest = URLRequest(url: proxyURL)
@@ -192,4 +200,5 @@ private struct KaiGenerationRequest: Codable {
     let durationMinutes: Int
     let personalityName: String
     let personalityPrompt: String
+    let locale: String
 }

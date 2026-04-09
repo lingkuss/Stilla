@@ -22,9 +22,12 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 @main
 struct VindlaApp: App {
     @State private var manager = MeditationManager.shared
+    @AppStorage("app.language.override") private var appLanguageOverride = AppLocalization.LanguageOption.system.rawValue
+    @Environment(\.scenePhase) private var scenePhase
     @UIApplicationDelegateAdaptor private var notificationDelegate: AppNotificationDelegate
 
     init() {
+        AppLocalization.applyLanguageOverrideOnLaunch()
         configureAudioSession()
         
         // Force iOS to refresh Siri shortcuts to catch any new additions
@@ -37,6 +40,16 @@ struct VindlaApp: App {
         WindowGroup {
             ContentView()
                 .environment(manager)
+                .environment(\.locale, AppLocalization.locale(forRawValue: appLanguageOverride))
+                .task {
+                    await StoreKitManager.shared.updateCustomerProductStatus()
+                }
+                .onChange(of: scenePhase) { _, newPhase in
+                    guard newPhase == .active else { return }
+                    Task {
+                        await StoreKitManager.shared.updateCustomerProductStatus()
+                    }
+                }
                 .onOpenURL { url in
                     handleIncomingShare(url)
                 }

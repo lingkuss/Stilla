@@ -44,7 +44,7 @@ struct KaiScriptView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.up.to.line.compact")
                             .font(.system(size: 10, weight: .bold))
-                        Text("Center on Mimir")
+                        Text(String(localized: "script.center_on_mimir"))
                     }
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.black.opacity(0.8))

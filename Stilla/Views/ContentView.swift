@@ -46,6 +46,11 @@ struct ContentView: View {
                                 .frame(width: 44, height: 44)
                                 .background(Circle().fill(Color.white.opacity(0.1)))
                         }
+                        .accessibilityLabel(
+                            homeViewMode == .hero
+                                ? String(localized: "content.mode.simple_timer")
+                                : String(localized: "content.mode.mimir")
+                        )
                         
                         Button(action: { showStats = true }) {
                             Image(systemName: "chart.bar.fill")
@@ -63,7 +68,7 @@ struct ContentView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "wind")
                                     .font(.system(size: 12))
-                                Text(manager.selectedTechnique.name)
+                                Text(manager.selectedTechnique.localizedName)
                                     .font(.system(size: 12, weight: .medium))
                             }
                             .foregroundStyle(.white.opacity(0.8))
@@ -141,7 +146,7 @@ struct ContentView: View {
                     .environment(manager)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
-                            Button("Done") { showSoundLibrary = false }
+                            Button(String(localized: "ui.done")) { showSoundLibrary = false }
                                 .fontWeight(.medium)
                         }
                     }
@@ -183,21 +188,21 @@ struct ContentView: View {
             )
             .environment(manager)
         }
-        .alert("Custom Duration", isPresented: $showAddDuration) {
-            TextField("Minutes", text: $customDurationText)
+        .alert(String(localized: "alerts.custom_duration"), isPresented: $showAddDuration) {
+            TextField(String(localized: "content.custom_duration_minutes_placeholder"), text: $customDurationText)
                 .keyboardType(.numberPad)
-            Button("Add") {
+            Button(String(localized: "ui.add")) {
                 if let mins = Int(customDurationText), mins >= 1, mins <= 180 {
                     manager.addCustomDuration(mins)
                     manager.durationMinutes = mins
                 }
                 customDurationText = ""
             }
-            Button("Cancel", role: .cancel) {
+            Button(String(localized: "ui.cancel"), role: .cancel) {
                 customDurationText = ""
             }
         } message: {
-            Text("Enter a duration in minutes (1–180).")
+            Text(String(localized: "content.custom_duration_help"))
         }
         .animation(.easeInOut(duration: 0.6), value: manager.state)
         .onChange(of: manager.state) { _, newValue in
@@ -281,7 +286,7 @@ struct ContentView: View {
                     Rectangle()
                         .fill(.white.opacity(0.3))
                         .frame(width: 20, height: 1)
-                    Text("MIMIR")
+                    Text(String(localized: "content.mimir_label"))
                         .font(.system(size: 10, weight: .bold))
                         .kerning(3)
                         .foregroundStyle(.white.opacity(0.5))
@@ -301,7 +306,7 @@ struct ContentView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "sparkles")
                         .font(.system(size: 16, weight: .semibold))
-                    Text("Start Mimir Journey")
+                    Text(String(localized: "content.start_mimir_journey"))
                         .font(.system(size: 16, weight: .semibold))
                 }
                 .foregroundStyle(.white)
@@ -335,7 +340,7 @@ struct ContentView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "sparkles")
                                     .font(.system(size: 10, weight: .bold))
-                                Text("PERSONALIZED ∞ Tap to start a Mimir session")
+                                Text(String(localized: "content.personalized_hint"))
                                     .font(.system(size: 9, weight: .bold))
                                     .kerning(1)
                             }
@@ -481,9 +486,27 @@ struct ContentView: View {
 
     private var statusText: String {
         switch manager.state {
-        case .idle: return "READY"
-        case .meditating: return currentPhase.isEmpty ? "BREATHE" : currentPhase.uppercased()
-        case .complete: return "NAMASTE"
+        case .idle:
+            return String(localized: "content.status.ready")
+        case .meditating:
+            return localizedPhaseStatus(currentPhase)
+        case .complete:
+            return String(localized: "content.status.complete")
+        }
+    }
+
+    private func localizedPhaseStatus(_ phase: String) -> String {
+        guard !phase.isEmpty else { return String(localized: "content.status.breathe") }
+
+        switch phase.lowercased() {
+        case "inhale":
+            return String(localized: "content.phase.inhale")
+        case "exhale":
+            return String(localized: "content.phase.exhale")
+        case "hold":
+            return String(localized: "content.phase.hold")
+        default:
+            return phase.uppercased()
         }
     }
 
@@ -503,10 +526,14 @@ struct ContentView: View {
     private var techniqueTimings: String {
         let t = manager.selectedTechnique
         var parts: [String] = []
-        parts.append("In \(Int(t.inhale))s")
-        if t.holdIn > 0 { parts.append("Hold \(Int(t.holdIn))s") }
-        parts.append("Out \(Int(t.exhale))s")
-        if t.holdOut > 0 { parts.append("Hold \(Int(t.holdOut))s") }
+        parts.append(String(format: String(localized: "content.timing.in_format"), Int(t.inhale)))
+        if t.holdIn > 0 {
+            parts.append(String(format: String(localized: "content.timing.hold_format"), Int(t.holdIn)))
+        }
+        parts.append(String(format: String(localized: "content.timing.out_format"), Int(t.exhale)))
+        if t.holdOut > 0 {
+            parts.append(String(format: String(localized: "content.timing.hold_format"), Int(t.holdOut)))
+        }
         return parts.joined(separator: " · ")
     }
 
@@ -544,7 +571,7 @@ struct ContentView: View {
                                     manager.removeCustomDuration(mins)
                                     UISelectionFeedbackGenerator().selectionChanged()
                                 } label: {
-                                    Label("Remove", systemImage: "trash")
+                                    Label(String(localized: "ui.remove"), systemImage: "trash")
                                 }
                             }
                         }
@@ -638,9 +665,9 @@ struct ContentView: View {
 
     private var actionText: String {
         switch manager.state {
-        case .idle: return "BEGIN"
-        case .meditating: return "STOP"
-        case .complete: return "DONE"
+        case .idle: return String(localized: "content.action.begin")
+        case .meditating: return String(localized: "content.action.stop")
+        case .complete: return String(localized: "content.action.done")
         }
     }
 
@@ -725,7 +752,7 @@ struct StatisticsView: View {
                 VStack(spacing: 28) {
                     // MARK: Milestone Badges (FREE)
                     VStack(alignment: .leading, spacing: 14) {
-                        Text("Milestones")
+                        Text(String(localized: "content.milestones"))
                             .font(.headline)
                             .foregroundStyle(.white.opacity(0.8))
 
@@ -767,17 +794,17 @@ struct StatisticsView: View {
                             set: { if !$0 { selectedMilestone = nil } }
                         )
                     ) {
-                        Button("OK", role: .cancel) { }
+                        Button(String(localized: "ui.ok"), role: .cancel) { }
                     } message: {
                         if let idx = selectedMilestone {
                             let m = milestones[idx]
                             let earned = m.check(manager)
-                            Text("\(m.desc)\n\(earned ? "✅ Earned!" : "🔒 Keep going!")")
+                            Text("\(m.desc)\n\(earned ? String(localized: "content.milestone_earned") : String(localized: "content.milestone_keep_going"))")
                         }
                     }
 
                     VStack(spacing: 8) {
-                        Text("Total Journey")
+                        Text(String(localized: "content.total_journey"))
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(.white.opacity(0.6))
                             .textCase(.uppercase)
@@ -791,8 +818,8 @@ struct StatisticsView: View {
                     HStack(spacing: 0) {
                         statCard(
                             icon: "flame.fill",
-                            label: "Streak",
-                            value: "\(manager.currentStreak) day\(manager.currentStreak == 1 ? "" : "s")",
+                            label: String(localized: "stats.streak"),
+                            value: String(format: String(localized: "stats.days_format"), manager.currentStreak),
                             color: Color(hue: 0.08, saturation: 0.8, brightness: 0.95)
                         )
                         Rectangle()
@@ -800,7 +827,7 @@ struct StatisticsView: View {
                             .frame(width: 1, height: 40)
                         statCard(
                             icon: "clock.fill",
-                            label: "Daily Avg",
+                            label: String(localized: "stats.daily_avg"),
                             value: formatStatTime(manager.averageSessionSeconds),
                             color: Color(hue: 0.55, saturation: 0.6, brightness: 0.9)
                         )
@@ -818,11 +845,11 @@ struct StatisticsView: View {
                 }
                 .padding(.bottom, 40)
             }
-            .navigationTitle("Journey")
+            .navigationTitle(String(localized: "nav.journey"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "ui.done")) { dismiss() }
                         .fontWeight(.medium)
                 }
             }
@@ -843,7 +870,7 @@ struct StatisticsView: View {
         let midVal = maxVal / 2
 
         return VStack(alignment: .leading, spacing: 14) {
-            Text("This Week")
+            Text(String(localized: "content.this_week"))
                 .font(.headline)
                 .foregroundStyle(.white.opacity(0.8))
 
@@ -854,7 +881,7 @@ struct StatisticsView: View {
                     Spacer()
                     Text(formatChartTime(midVal))
                     Spacer()
-                    Text("0m")
+                    Text(String(localized: "content.zero_minutes"))
                     // Spacer for day labels below bars
                     Text("")
                         .padding(.top, 6)
@@ -906,7 +933,7 @@ struct StatisticsView: View {
         HStack(spacing: 0) {
             statCard(
                 icon: "trophy.fill",
-                label: "Best Session",
+                label: String(localized: "stats.best_session"),
                 value: formatStatTime(manager.bestSessionSeconds),
                 color: Color(hue: 0.13, saturation: 0.8, brightness: 0.95)
             )
@@ -915,8 +942,8 @@ struct StatisticsView: View {
                 .frame(width: 1, height: 40)
             statCard(
                 icon: "crown.fill",
-                label: "Best Streak",
-                value: "\(manager.bestStreakDays) day\(manager.bestStreakDays == 1 ? "" : "s")",
+                label: String(localized: "stats.best_streak"),
+                value: String(format: String(localized: "stats.days_format"), manager.bestStreakDays),
                 color: Color(hue: 0.13, saturation: 0.7, brightness: 0.9)
             )
         }
@@ -926,7 +953,7 @@ struct StatisticsView: View {
 
     private var heatmapSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Consistency Map")
+            Text(String(localized: "content.consistency_map"))
                 .font(.headline)
                 .foregroundStyle(.white.opacity(0.8))
 
@@ -1053,7 +1080,7 @@ struct TechniqueLibraryView: View {
                     Section {
                         techniqueRow(BreathingTechnique.defaultTechnique)
                     } header: {
-                        Text("Standard")
+                        Text(String(localized: "content.standard"))
                     }
 
                     Section {
@@ -1062,10 +1089,10 @@ struct TechniqueLibraryView: View {
                         }
                     } header: {
                         HStack {
-                            Text("Library")
+                            Text(String(localized: "content.library"))
                             Spacer()
                             if !storeManager.isPurchased(StoreKitManager.techniqueLibraryID) {
-                                Button("Unlock All (\(storeManager.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99")))") {
+                                Button(String(format: String(localized: "content.unlock_all_format"), storeManager.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99"))) {
                                     Task {
                                         await storeManager.purchase(StoreKitManager.techniqueLibraryID)
                                     }
@@ -1083,7 +1110,7 @@ struct TechniqueLibraryView: View {
                                     Button(role: .destructive) {
                                         manager.removeCustomTechnique(technique.id)
                                     } label: {
-                                        Label("Delete", systemImage: "trash")
+                                        Label(String(localized: "ui.delete"), systemImage: "trash")
                                     }
                                 }
                         }
@@ -1092,7 +1119,7 @@ struct TechniqueLibraryView: View {
                             Button {
                                 showingCustomEditor = true
                             } label: {
-                                Label("Create Custom Technique", systemImage: "plus")
+                                Label(String(localized: "content.create_custom_technique"), systemImage: "plus")
                             }
                         } else {
                             Button {
@@ -1101,26 +1128,26 @@ struct TechniqueLibraryView: View {
                                 }
                             } label: {
                                 HStack {
-                                    Label("Create Custom Technique", systemImage: "lock.fill")
+                                    Label(String(localized: "content.create_custom_technique"), systemImage: "lock.fill")
                                     Spacer()
-                                    Text("Unlock (\(storeManager.displayPrice(for: StoreKitManager.customTechniqueEditorID, fallback: "$0.99")))")
+                                    Text(String(format: String(localized: "content.unlock_custom_format"), storeManager.displayPrice(for: StoreKitManager.customTechniqueEditorID, fallback: "$0.99")))
                                         .font(.caption.bold())
                                         .foregroundStyle(.blue)
                                 }
                             }
                         }
                     } header: {
-                        Text("Custom")
+                        Text(String(localized: "content.custom"))
                     }
                 }
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
             }
-            .navigationTitle("Techniques")
+            .navigationTitle(String(localized: "nav.techniques"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button(String(localized: "ui.done")) {
                         dismiss()
                     }
                 }
@@ -1144,7 +1171,7 @@ struct TechniqueLibraryView: View {
         } label: {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(technique.name)
+                    Text(technique.localizedName)
                         .font(.headline)
                         .foregroundStyle(isSelected ? .blue : .white)
                     
@@ -1162,11 +1189,11 @@ struct TechniqueLibraryView: View {
                     }
                 }
                 
-                Text(technique.description)
+                Text(technique.localizedDescription)
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.75))
                 
-                Text(String(format: "In: %.0fs • Hold: %.0fs • Out: %.0fs • Hold: %.0fs",
+                Text(String(format: String(localized: "content.technique_timing_full_format"),
                            technique.inhale, technique.holdIn, technique.exhale, technique.holdOut))
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.5))
@@ -1194,7 +1221,7 @@ struct CustomTechniqueEditor: View {
         NavigationStack {
             Form {
                 Section("Name") {
-                    TextField("E.g. My Flow", text: $name)
+                    TextField(String(localized: "content.custom_name_placeholder"), text: $name)
                 }
 
                 Section("Timings") {
@@ -1205,7 +1232,7 @@ struct CustomTechniqueEditor: View {
                 }
 
                 Section {
-                    Button("Add Technique") {
+                    Button(String(localized: "content.add_technique")) {
                         let new = BreathingTechnique(
                             id: UUID().uuidString,
                             name: name.isEmpty ? "Custom" : name,
@@ -1222,10 +1249,10 @@ struct CustomTechniqueEditor: View {
                     .disabled(inhale == 0 || exhale == 0)
                 }
             }
-            .navigationTitle("New Technique")
+            .navigationTitle(String(localized: "nav.new_technique"))
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button(String(localized: "ui.cancel")) {
                         dismiss()
                     }
                 }
@@ -1238,7 +1265,7 @@ struct CustomTechniqueEditor: View {
             HStack {
                 Text(title)
                 Spacer()
-                Text("\(Int(value.wrappedValue))s")
+                Text(String(format: String(localized: "content.seconds_format"), Int(value.wrappedValue)))
                     .monospacedDigit()
                     .foregroundStyle(.blue)
             }
@@ -1256,34 +1283,34 @@ struct OnboardingView: View {
     
     let pages = [
         OnboardingPage(
-            title: "Simplicity is Zen",
-            description: "Follow the expanding circle to inhale and contracting to exhale. No distractions, just your breath.",
+            titleKey: "onboarding.page1.title",
+            descriptionKey: "onboarding.page1.description",
             systemImage: "circle.dotted"
         ),
         OnboardingPage(
-            title: "Techniques for Every Need",
-            description: "Discover a variety of breathing patterns tailored for energy, deep focus, or restorative sleep.",
+            titleKey: "onboarding.page2.title",
+            descriptionKey: "onboarding.page2.description",
             systemImage: "wind"
         ),
         OnboardingPage(
-            title: "Mimir: Your AI Guide",
-            description: "Meet Mimir, your personalized meditation architect. Speak your mood, and Mimir will craft a unique, guided journey just for you.",
+            titleKey: "onboarding.page3.title",
+            descriptionKey: "onboarding.page3.description",
             systemImage: "sparkles"
         ),
         OnboardingPage(
-            title: "Choose Your Mimir",
-            description: "Pick the voice you want guiding your practice.",
+            titleKey: "onboarding.page4.title",
+            descriptionKey: "onboarding.page4.description",
             systemImage: "person.crop.rectangle.stack.fill",
             style: .personalitySelection
         ),
         OnboardingPage(
-            title: "Immersive Soundscapes",
-            description: "Enhance your practice with premium ambient sounds, binaural beats, and Solfeggio frequencies.",
+            titleKey: "onboarding.page5.title",
+            descriptionKey: "onboarding.page5.description",
             systemImage: "speaker.wave.3.fill"
         ),
         OnboardingPage(
-            title: "Meditate with Siri",
-            description: "Say \"Hey Siri, begin Vindla\" to start instantly, or \"Hey Siri, ask Mimir for a meditation in Vindla\" for a personalized guided session.",
+            titleKey: "onboarding.page6.title",
+            descriptionKey: "onboarding.page6.description",
             systemImage: "mic.fill"
         )
     ]
@@ -1322,7 +1349,7 @@ struct OnboardingView: View {
                         }
                     }
                 } label: {
-                    Text(currentPage == pages.count - 1 ? "Get Started" : "Next")
+                    Text(currentPage == pages.count - 1 ? String(localized: "onboarding.get_started") : String(localized: "onboarding.next"))
                         .font(.headline)
                         .foregroundStyle(isNextEnabled ? .white : .white.opacity(0.45))
                         .frame(maxWidth: .infinity)
@@ -1358,11 +1385,11 @@ struct OnboardingView: View {
                     .foregroundStyle(Color(hue: 0.55, saturation: 0.6, brightness: 0.8))
                     .padding(.bottom, 20)
                 
-                Text(page.title)
+                Text(page.localizedTitle)
                     .font(.system(size: 28, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
                 
-                Text(page.description)
+                Text(page.localizedDescription)
                     .font(.body)
                     .foregroundStyle(.white.opacity(0.6))
                     .multilineTextAlignment(.center)
@@ -1376,11 +1403,11 @@ struct OnboardingView: View {
                     .font(.system(size: 70, weight: .thin))
                     .foregroundStyle(Color(hue: 0.55, saturation: 0.6, brightness: 0.8))
                 
-                Text(page.title)
+                Text(page.localizedTitle)
                     .font(.system(size: 28, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
                 
-                Text(page.description)
+                Text(page.localizedDescription)
                     .font(.body)
                     .foregroundStyle(.white.opacity(0.6))
                     .multilineTextAlignment(.center)
@@ -1408,7 +1435,7 @@ struct OnboardingView: View {
                                         }
 
                                     HStack(spacing: 8) {
-                                        Text(personality.name)
+                                        Text(personality.localizedName)
                                             .font(.system(size: 16, weight: .medium))
                                             .foregroundStyle(.white)
 
@@ -1418,7 +1445,7 @@ struct OnboardingView: View {
                                         }
                                     }
 
-                                    Text(personality.shortDescription)
+                                    Text(personality.localizedShortDescription)
                                         .font(.system(size: 12))
                                         .foregroundStyle(.white.opacity(0.65))
                                         .multilineTextAlignment(.leading)
@@ -1445,14 +1472,22 @@ struct OnboardingView: View {
 }
 
 struct OnboardingPage {
-    let title: String
-    let description: String
+    let titleKey: String
+    let descriptionKey: String
     let systemImage: String
     let style: Style
 
-    init(title: String, description: String, systemImage: String, style: Style = .standard) {
-        self.title = title
-        self.description = description
+    var localizedTitle: String {
+        Bundle.main.localizedString(forKey: titleKey, value: titleKey, table: nil)
+    }
+
+    var localizedDescription: String {
+        Bundle.main.localizedString(forKey: descriptionKey, value: descriptionKey, table: nil)
+    }
+
+    init(titleKey: String, descriptionKey: String, systemImage: String, style: Style = .standard) {
+        self.titleKey = titleKey
+        self.descriptionKey = descriptionKey
         self.systemImage = systemImage
         self.style = style
     }

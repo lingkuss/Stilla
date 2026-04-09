@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6414BCA72F82E4D8009BF848 /* KaiScriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6414BCA62F82E4D8009BF848 /* KaiScriptView.swift */; };
+		6414BCF72F883CF6009BF848 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6414BCF62F883CF6009BF848 /* AppLocalization.swift */; };
+		6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BCFA2F883D4C009BF848 /* Localizable.strings */; };
+		6414BCFF2F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BCFD2F883D4C009BF848 /* Localizable.strings */; };
 		64F9FE2B2F7BE1F100BBB344 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */; };
 		64F9FE2D2F7BE1F100BBB344 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */; };
 		64F9FE3C2F7BE1F100BBB344 /* MeditationWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -69,6 +72,9 @@
 /* Begin PBXFileReference section */
 		640598A62F76CAF500B0F381 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		6414BCA62F82E4D8009BF848 /* KaiScriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaiScriptView.swift; sourceTree = "<group>"; };
+		6414BCF62F883CF6009BF848 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
+		6414BCFB2F883D4C009BF848 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		6414BCFE2F883D4C009BF848 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = Localizable.strings; sourceTree = "<group>"; };
 		64F9FE232F7BE17400BBB344 /* Vindla.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vindla.entitlements; sourceTree = "<group>"; };
 		64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MeditationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -139,6 +145,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6414BCF82F883D3A009BF848 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				6414BCFA2F883D4C009BF848 /* Localizable.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		6414BCF92F883D3A009BF848 /* sv.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				6414BCFD2F883D4C009BF848 /* Localizable.strings */,
+			);
+			path = sv.lproj;
+			sourceTree = "<group>";
+		};
 		64F9FE292F7BE1F100BBB344 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,14 +174,14 @@
 			isa = PBXGroup;
 			children = (
 				640598A62F76CAF500B0F381 /* Products.storekit */,
-				D10002 /* Vindla */,
+				D10002 /* Stilla */,
 				64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */,
 				64F9FE292F7BE1F100BBB344 /* Frameworks */,
 				D10005 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D10002 /* Vindla */ = {
+		D10002 /* Stilla */ = {
 			isa = PBXGroup;
 			children = (
 				64F9FE232F7BE17400BBB344 /* Vindla.entitlements */,
@@ -175,6 +197,8 @@
 				B10018 /* GuruManager.swift */,
 				F1000B /* Secrets.swift */,
 				D10008 /* Services */,
+				6414BCF82F883D3A009BF848 /* en.lproj */,
+				6414BCF92F883D3A009BF848 /* sv.lproj */,
 			);
 			path = Stilla;
 			sourceTree = "<group>";
@@ -242,6 +266,7 @@
 			children = (
 				B10020 /* SpeechManager.swift */,
 				B10021 /* KaiBrainService.swift */,
+				6414BCF62F883CF6009BF848 /* AppLocalization.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -315,6 +340,7 @@
 			knownRegions = (
 				en,
 				Base,
+				sv,
 			);
 			mainGroup = D10001;
 			productRefGroup = D10005 /* Products */;
@@ -340,6 +366,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10010 /* Assets.xcassets in Resources */,
+				6414BCFF2F883D4C009BF848 /* Localizable.strings in Resources */,
+				6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +391,7 @@
 				A10002 /* MeditationManager.swift in Sources */,
 				A10003 /* SoundEngine.swift in Sources */,
 				A10004 /* ContentView.swift in Sources */,
+				6414BCF72F883CF6009BF848 /* AppLocalization.swift in Sources */,
 				64F9FE432F7BEC2300BBB344 /* LiveTimerAttributes.swift in Sources */,
 				A10005 /* SettingsView.swift in Sources */,
 				64F9FE722F8082E300BBB344 /* ShareSessionPayload.swift in Sources */,
@@ -398,6 +427,25 @@
 			targetProxy = 64F9FE3A2F7BE1F100BBB344 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6414BCFA2F883D4C009BF848 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6414BCFB2F883D4C009BF848 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		6414BCFD2F883D4C009BF848 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6414BCFE2F883D4C009BF848 /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		64F9FE3F2F7BE1F100BBB344 /* Debug */ = {
@@ -589,6 +637,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stilla/Vindla.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
@@ -607,6 +656,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.vindla;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -621,6 +671,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stilla/Vindla.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
@@ -639,6 +690,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.vindla;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

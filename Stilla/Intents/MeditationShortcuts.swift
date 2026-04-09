@@ -11,8 +11,12 @@ struct MeditationShortcuts: AppShortcutsProvider {
                 "Begin meditation with \(.applicationName)",
                 "Meditate with \(.applicationName)",
                 "Meditate for \(\.$duration) with \(.applicationName)",
+                "Starta \(.applicationName)",
+                "Starta meditation med \(.applicationName)",
+                "Meditera med \(.applicationName)",
+                "Meditera i \(\.$duration) med \(.applicationName)",
             ],
-            shortTitle: "Begin Meditation",
+            shortTitle: "intent.shortcut.start.short_title",
             systemImageName: "sparkles"
         )
 
@@ -20,9 +24,11 @@ struct MeditationShortcuts: AppShortcutsProvider {
             intent: StartOpenEndedMeditationIntent(),
             phrases: [
                 "Begin limitless meditation with \(.applicationName)",
-                "Begin limitless with \(.applicationName)"
+                "Begin limitless with \(.applicationName)",
+                "Starta obegransad meditation med \(.applicationName)",
+                "Starta obegransad med \(.applicationName)",
             ],
-            shortTitle: "Begin Limitless Meditation",
+            shortTitle: "intent.shortcut.start_open_ended.short_title",
             systemImageName: "stopwatch"
         )
 
@@ -31,20 +37,26 @@ struct MeditationShortcuts: AppShortcutsProvider {
             phrases: [
                 "End \(.applicationName)",
                 "End meditating with \(.applicationName)",
-                "End meditation with \(.applicationName)"
+                "End meditation with \(.applicationName)",
+                "Stoppa \(.applicationName)",
+                "Stoppa meditation med \(.applicationName)",
+                "Avsluta meditation med \(.applicationName)",
             ],
-            shortTitle: "End Meditation",
+            shortTitle: "intent.shortcut.stop.short_title",
             systemImageName: "stop.circle"
         )
-        
+
         AppShortcut(
             intent: StartKaiMeditationIntent(),
             phrases: [
                 "Ask Mimir for a meditation in \(.applicationName)",
                 "Ask Mimir for a \(\.$duration) meditation in \(.applicationName)",
-                "Generate a meditation with Mimir in \(.applicationName)"
+                "Generate a meditation with Mimir in \(.applicationName)",
+                "Be Mimir om en meditation i \(.applicationName)",
+                "Be Mimir om en \(\.$duration) meditation i \(.applicationName)",
+                "Skapa en meditation med Mimir i \(.applicationName)",
             ],
-            shortTitle: "Ask Mimir",
+            shortTitle: "intent.shortcut.start_kai.short_title",
             systemImageName: "sparkles"
         )
     }

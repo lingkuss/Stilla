@@ -11,10 +11,19 @@ struct SavedMeditationsLibraryView: View {
     @State private var store = StoreKitManager.shared
 
     private enum LibraryFilter: String, CaseIterable, Identifiable {
-        case all = "All"
-        case favorites = "Favorites"
+        case all
+        case favorites
 
         var id: String { rawValue }
+
+        var localizedTitle: String {
+            switch self {
+            case .all:
+                return String(localized: "ui.all")
+            case .favorites:
+                return String(localized: "ui.favorites")
+            }
+        }
     }
 
     private var visibleMeditations: [MeditationScript] {
@@ -78,11 +87,11 @@ struct SavedMeditationsLibraryView: View {
                     }
                 }
             }
-            .navigationTitle("Your Library")
+            .navigationTitle(String(localized: "nav.your_library"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") { dismiss() }
+                    Button(String(localized: "ui.close")) { dismiss() }
                         .foregroundStyle(.white.opacity(0.6))
                 }
             }
@@ -99,7 +108,7 @@ struct SavedMeditationsLibraryView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.white.opacity(0.35))
 
-                TextField("Search title or tag", text: $searchText)
+                TextField(String(localized: "library.search_placeholder"), text: $searchText)
                     .textInputAutocapitalization(.words)
                     .autocorrectionDisabled()
 
@@ -124,9 +133,9 @@ struct SavedMeditationsLibraryView: View {
                     )
             )
 
-            Picker("Filter", selection: $selectedFilter) {
+            Picker(String(localized: "ui.filter"), selection: $selectedFilter) {
                 ForEach(LibraryFilter.allCases) { filter in
-                    Text(filter.rawValue).tag(filter)
+                    Text(filter.localizedTitle).tag(filter)
                 }
             }
             .pickerStyle(.segmented)
@@ -134,7 +143,7 @@ struct SavedMeditationsLibraryView: View {
             if !availablePersonalities.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        personalityFilterChip(title: "All Personas", personalityID: "all")
+                        personalityFilterChip(title: String(localized: "library.all_personas"), personalityID: "all")
 
                         ForEach(availablePersonalities) { personality in
                             personalityFilterChip(title: personality.name, personalityID: personality.id)
@@ -152,10 +161,10 @@ struct SavedMeditationsLibraryView: View {
                 .foregroundStyle(.white.opacity(0.1))
 
             VStack(spacing: 8) {
-                Text("Your Library is Empty")
+                Text(String(localized: "library.empty_title"))
                     .font(.system(size: 18, weight: .medium))
 
-                Text("Complete a session with Mimir and save it to build your personal collection.")
+                Text(String(localized: "library.empty_message"))
                     .font(.system(size: 14))
                     .foregroundStyle(.white.opacity(0.4))
                     .multilineTextAlignment(.center)
@@ -170,11 +179,11 @@ struct SavedMeditationsLibraryView: View {
                 .font(.system(size: 36))
                 .foregroundStyle(.white.opacity(0.15))
 
-            Text("No Matches")
+            Text(String(localized: "library.no_matches_title"))
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(.white)
 
-            Text("Try a different search or switch back to all meditations.")
+            Text(String(localized: "library.no_matches_message"))
                 .font(.system(size: 13))
                 .foregroundStyle(.white.opacity(0.4))
                 .multilineTextAlignment(.center)
@@ -335,11 +344,11 @@ struct SavedMeditationRow: View {
                             }
                         }
 
-                        Text("\(script.durationMinutes)m Journey")
+                        Text(String(format: String(localized: "library.duration_journey_format"), script.durationMinutes))
                             .font(.system(size: 12))
                             .foregroundStyle(.white.opacity(0.4))
 
-                        Text("Created \(Self.createdDateFormatter.string(from: script.createdAt))")
+                        Text(String(format: String(localized: "library.created_format"), Self.createdDateFormatter.string(from: script.createdAt)))
                             .font(.system(size: 12))
                             .foregroundStyle(.white.opacity(0.35))
 
@@ -377,20 +386,20 @@ struct SavedMeditationRow: View {
 
                     HStack(spacing: 10) {
                         libraryActionButton(
-                            title: script.isFavorite ? "Unfavorite" : "Favorite",
+                            title: script.isFavorite ? String(localized: "ui.unfavorite") : String(localized: "ui.favorite"),
                             systemImage: script.isFavorite ? "heart.slash" : "heart"
                         ) {
                             onToggleFavorite()
                         }
 
-                        libraryActionButton(title: "Rename", systemImage: "pencil") {
+                        libraryActionButton(title: String(localized: "ui.rename"), systemImage: "pencil") {
                             rename()
                         }
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Created")
+                            Text(String(localized: "library.created_label"))
                                 .font(.system(size: 12, weight: .semibold))
                                 .foregroundStyle(.white.opacity(0.6))
 
@@ -401,7 +410,7 @@ struct SavedMeditationRow: View {
 
                         if let personalityName = script.resolvedKaiPersonalityName {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Generated With")
+                                Text(String(localized: "library.generated_with_label"))
                                     .font(.system(size: 12, weight: .semibold))
                                     .foregroundStyle(.white.opacity(0.6))
 
@@ -409,17 +418,17 @@ struct SavedMeditationRow: View {
                             }
                         }
 
-                        Text("Title")
+                        Text(String(localized: "library.title_label"))
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.6))
 
                         HStack(spacing: 10) {
-                            TextField("Meditation title", text: $draftTitle)
+                            TextField(String(localized: "library.meditation_title_placeholder"), text: $draftTitle)
                                 .textInputAutocapitalization(.words)
                                 .autocorrectionDisabled()
                                 .onSubmit(rename)
 
-                            Button("Save") {
+                            Button(String(localized: "ui.save")) {
                                 rename()
                             }
                             .buttonStyle(.borderedProminent)
@@ -428,7 +437,7 @@ struct SavedMeditationRow: View {
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Tags")
+                        Text(String(localized: "library.tags_label"))
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.6))
 
@@ -437,11 +446,11 @@ struct SavedMeditationRow: View {
                         }
 
                         HStack(spacing: 10) {
-                            TextField("Add a tag", text: $newTagText)
+                            TextField(String(localized: "library.add_tag_placeholder"), text: $newTagText)
                                 .textInputAutocapitalization(.words)
                                 .autocorrectionDisabled()
 
-                            Button("Add") {
+                            Button(String(localized: "ui.add")) {
                                 addTag()
                             }
                             .buttonStyle(.borderedProminent)
@@ -496,15 +505,15 @@ struct SavedMeditationRow: View {
         }
         .contextMenu {
             Button(action: onToggleFavorite) {
-                Label(script.isFavorite ? "Unfavorite" : "Favorite", systemImage: script.isFavorite ? "heart.slash" : "heart")
+                Label(script.isFavorite ? String(localized: "ui.unfavorite") : String(localized: "ui.favorite"), systemImage: script.isFavorite ? "heart.slash" : "heart")
             }
 
             Button(action: rename) {
-                Label("Rename", systemImage: "pencil")
+                Label(String(localized: "ui.rename"), systemImage: "pencil")
             }
 
             Button(role: .destructive, action: onDelete) {
-                Label("Delete", systemImage: "trash")
+                Label(String(localized: "ui.delete"), systemImage: "trash")
             }
         }
         .padding(.vertical, 6)

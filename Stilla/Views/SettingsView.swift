@@ -4,6 +4,8 @@ import AVFoundation
 struct SettingsView: View {
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("app.language.override") private var appLanguageOverride = AppLocalization.LanguageOption.system.rawValue
+    @State private var showLanguageRestartAlert = false
 
     var body: some View {
         @Bindable var manager = manager
@@ -16,7 +18,7 @@ struct SettingsView: View {
                         SoundSelectionView(mode: .start)
                     } label: {
                         HStack {
-                            Text("Start Sound")
+                            Text(String(localized: "settings.start_sound"))
                             Spacer()
                             Text(manager.startSound.rawValue)
                                 .foregroundStyle(.secondary)
@@ -27,14 +29,14 @@ struct SettingsView: View {
                         SoundSelectionView(mode: .end)
                     } label: {
                         HStack {
-                            Text("End Sound")
+                            Text(String(localized: "settings.end_sound"))
                             Spacer()
                             Text(manager.endSound.rawValue)
                                 .foregroundStyle(.secondary)
                         }
                     }
                 } header: {
-                    Label("Chimes", systemImage: "bell.fill")
+                    Label(String(localized: "settings.chimes"), systemImage: "bell.fill")
                 }
 
                 // Ambient
@@ -43,22 +45,22 @@ struct SettingsView: View {
                         SoundSelectionView(mode: .ambience)
                     } label: {
                         HStack {
-                            Text("Ambience")
+                            Text(String(localized: "settings.ambience"))
                             Spacer()
                             Text(manager.ambientSound.rawValue)
                                 .foregroundStyle(.secondary)
                         }
                     }
                 } header: {
-                    Label("During Meditation", systemImage: "waveform")
+                    Label(String(localized: "settings.during_meditation"), systemImage: "waveform")
                 } footer: {
-                    Text("Plays gentle rain or binaural beats during your session")
+                    Text(String(localized: "settings.ambience_help"))
                 }
 
                 // Volume Mix
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Chimes & Cues")
+                        Text(String(localized: "settings.chimes_and_cues"))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         HStack(spacing: 12) {
@@ -78,7 +80,7 @@ struct SettingsView: View {
                     .padding(.vertical, 4)
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Ambience")
+                        Text(String(localized: "settings.ambience"))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         HStack(spacing: 12) {
@@ -97,15 +99,15 @@ struct SettingsView: View {
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Label("Volume Mix", systemImage: "slider.horizontal.3")
+                    Label(String(localized: "settings.volume_mix"), systemImage: "slider.horizontal.3")
                 } footer: {
-                    Text("Balance the levels of your meditation tones against your continuous ambient sounds.")
+                    Text(String(localized: "settings.volume_mix_help"))
                 }
 
                 // Haptics
                 Section {
                     Toggle(isOn: $manager.hapticEnabled) {
-                        Label("Haptic Feedback", systemImage: "iphone.radiowaves.left.and.right")
+                        Label(String(localized: "settings.haptic_feedback"), systemImage: "iphone.radiowaves.left.and.right")
                     }
 
                     Picker(selection: $manager.breathingCueMode) {
@@ -119,21 +121,21 @@ struct SettingsView: View {
                             }
                         }
                     } label: {
-                        Label("Breathing Cues", systemImage: "metronome.fill")
+                        Label(String(localized: "settings.breathing_cues"), systemImage: "metronome.fill")
                     }
                 } header: {
-                    Label("Feedback", systemImage: "hand.tap.fill")
+                    Label(String(localized: "settings.feedback"), systemImage: "hand.tap.fill")
                 } footer: {
                     if !StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID) {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Sound cues require the Technique Library unlock")
+                            Text(String(localized: "settings.sound_cues_unlock_required"))
                             
                             Button {
                                 Task {
                                     await StoreKitManager.shared.purchase(StoreKitManager.techniqueLibraryID)
                                 }
                             } label: {
-                                Text("Unlock for \(StoreKitManager.shared.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99"))")
+                                Text(String(format: String(localized: "settings.unlock_for_format"), StoreKitManager.shared.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99")))
                                     .font(.subheadline.weight(.semibold))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 20)
@@ -146,14 +148,14 @@ struct SettingsView: View {
                             .buttonStyle(.plain)
                         }
                     } else {
-                        Text("Subtle breath sounds at each inhale and exhale transition")
+                        Text(String(localized: "settings.breathing_cues_help"))
                     }
                 }
 
                 // Daily Reminder
                 Section {
                     Toggle(isOn: $manager.dailyReminderEnabled) {
-                        Label("Daily Reminder", systemImage: "clock.badge.checkmark.fill")
+                        Label(String(localized: "settings.daily_reminder"), systemImage: "clock.badge.checkmark.fill")
                     }
                     .onChange(of: manager.dailyReminderEnabled) { _, newValue in
                         if newValue {
@@ -177,7 +179,7 @@ struct SettingsView: View {
                             }
                     }
                 } footer: {
-                    Text("Receive a gentle notification to help you stay consistent.")
+                    Text(String(localized: "settings.daily_reminder_help"))
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
@@ -187,7 +189,7 @@ struct SettingsView: View {
                         VoiceSelectionView()
                     } label: {
                         HStack {
-                            Label("Mimir's Voice", systemImage: "quote.bubble.fill")
+                            Label(String(localized: "settings.mimir_voice"), systemImage: "quote.bubble.fill")
                             Spacer()
                             if let voice = AVSpeechSynthesisVoice(identifier: manager.kaiVoiceIdentifier) {
                                 Text(voice.name)
@@ -197,38 +199,68 @@ struct SettingsView: View {
                         }
                     }
                 } footer: {
-                    Text("Choose a high-quality natural voice for Mimir.")
+                    Text(String(localized: "settings.voice_help"))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+
+                Section {
+                    Picker(String(localized: "settings.app_language"), selection: $appLanguageOverride) {
+                        Text(String(localized: "settings.language.system")).tag(AppLocalization.LanguageOption.system.rawValue)
+                        Text(String(localized: "settings.language.english")).tag(AppLocalization.LanguageOption.english.rawValue)
+                        Text(String(localized: "settings.language.swedish")).tag(AppLocalization.LanguageOption.swedish.rawValue)
+                    }
+                    .onChange(of: appLanguageOverride) { _, newValue in
+                        AppLocalization.applyLanguageOverride(rawValue: newValue)
+                        showLanguageRestartAlert = true
+                    }
+                } footer: {
+                    Text(String(localized: "settings.app_language_footer"))
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
                 // Siri Tips
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        voiceCommandRow("\"Hey Siri, ask Mimir for a meditation in Vindla\"", desc: "Siri will ask for your mood and duration")
-                        voiceCommandRow("\"Hey Siri, begin Vindla\"", desc: "Begin with saved duration")
-                        voiceCommandRow("\"Hey Siri, begin Vindla for X minutes\"", desc: "Begin with custom duration")
-                        voiceCommandRow("\"Hey Siri, begin limitless meditation with Vindla\"", desc: "Begin a limitless stopwatch")
-                        voiceCommandRow("\"Hey Siri, end Vindla\"", desc: "End session early")
+                        voiceCommandRow(
+                            String(localized: "settings.voice_command.ask_mimir.command"),
+                            desc: String(localized: "settings.voice_command.ask_mimir.description")
+                        )
+                        voiceCommandRow(
+                            String(localized: "settings.voice_command.begin.command"),
+                            desc: String(localized: "settings.voice_command.begin.description")
+                        )
+                        voiceCommandRow(
+                            String(localized: "settings.voice_command.begin_custom.command"),
+                            desc: String(localized: "settings.voice_command.begin_custom.description")
+                        )
+                        voiceCommandRow(
+                            String(localized: "settings.voice_command.begin_limitless.command"),
+                            desc: String(localized: "settings.voice_command.begin_limitless.description")
+                        )
+                        voiceCommandRow(
+                            String(localized: "settings.voice_command.end.command"),
+                            desc: String(localized: "settings.voice_command.end.description")
+                        )
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Label("Voice Commands", systemImage: "mic.fill")
+                    Label(String(localized: "settings.voice_commands"), systemImage: "mic.fill")
                 }
 
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("Mimir Cloud Processing", systemImage: "lock.shield.fill")
+                        Label(String(localized: "settings.mimir_cloud_processing"), systemImage: "lock.shield.fill")
                             .foregroundStyle(.white.opacity(0.85))
 
-                        Text("When you use Mimir, your prompt and selected duration are sent to Vindla's cloud service to generate a personalized meditation.")
+                        Text(String(localized: "settings.privacy_cloud_processing"))
                             .foregroundStyle(.white.opacity(0.7))
 
-                        Text("Avoid sharing medical details or highly sensitive personal information in Mimir prompts.")
+                        Text(String(localized: "settings.privacy_sensitive_info"))
                             .foregroundStyle(.white.opacity(0.55))
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Label("Privacy & Data", systemImage: "hand.raised.fill")
+                    Label(String(localized: "settings.privacy_data"), systemImage: "hand.raised.fill")
                 }
 
                 // Support / Information
@@ -237,7 +269,7 @@ struct SettingsView: View {
                         manager.hasSeenOnboarding = false
                         dismiss()
                     } label: {
-                        Label("Show Intro Guide", systemImage: "sparkles")
+                        Label(String(localized: "settings.show_intro_guide"), systemImage: "sparkles")
                     }
                 }
 
@@ -246,11 +278,11 @@ struct SettingsView: View {
                     Link("Terms of Use", destination: URL(string: "https://vindla-three.vercel.app/terms")!)
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(String(localized: "nav.settings"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button(String(localized: "ui.done")) {
                         dismiss()
                     }
                     .fontWeight(.medium)
@@ -262,6 +294,11 @@ struct SettingsView: View {
                     .ignoresSafeArea()
             )
             .preferredColorScheme(.dark)
+            .alert(String(localized: "settings.language.restart_required"), isPresented: $showLanguageRestartAlert) {
+                Button(String(localized: "ui.ok"), role: .cancel) { }
+            } message: {
+                Text(String(localized: "settings.language.restart_message"))
+            }
         }
     }
 
@@ -311,15 +348,15 @@ struct SoundSelectionView: View {
     ]
     
     private let ambientDescriptions: [SoundEngine.AmbientSound: String] = [
-        .delta: "Promotes deep sleep and physical healing.",
-        .alpha: "Encourages relaxed focus and creative problem-solving.",
-        .beta: "Enhances concentration and active thinking.",
-        .rain: "Plays gentle rain sounds during your session.",
-        .whiteNoise: "Bright static that masks distracting background sounds.",
-        .pinkNoise: "Balanced static, like a soothing distant waterfall.",
-        .brownNoise: "Deep, warm static, like a distant rolling ocean.",
-        .solfeggioLove: "528 Hz - The 'Miracle' tone, promotes repair and harmony.",
-        .solfeggioNature: "432 Hz - Mathematical tuning aligned with nature."
+        .delta: String(localized: "sound.delta.description"),
+        .alpha: String(localized: "sound.alpha.description"),
+        .beta: String(localized: "sound.beta.description"),
+        .rain: String(localized: "sound.rain.description"),
+        .whiteNoise: String(localized: "sound.white_noise.description"),
+        .pinkNoise: String(localized: "sound.pink_noise.description"),
+        .brownNoise: String(localized: "sound.brown_noise.description"),
+        .solfeggioLove: String(localized: "sound.solfeggio_love.description"),
+        .solfeggioNature: String(localized: "sound.solfeggio_nature.description")
     ]
     
     var body: some View {
@@ -330,11 +367,11 @@ struct SoundSelectionView: View {
                         toneRow(sound)
                     }
                 } footer: {
-                    Text("These gentle tones mark the beginning and end of your meditation.")
+                    Text(String(localized: "settings.chimes_help"))
                         .foregroundStyle(.white.opacity(0.6))
                 }
             } else {
-                Section("Nature & Noise") {
+                Section(String(localized: "settings.nature_and_noise")) {
                     ambientRow(.none)
                     ambientRow(.rain)
                     ambientRow(.brownNoise)
@@ -347,13 +384,13 @@ struct SoundSelectionView: View {
                     ambientRow(.alpha)
                     ambientRow(.beta)
                 } header: {
-                    Text("Binaural Beats")
+                    Text(String(localized: "settings.binaural_beats"))
                 } footer: {
-                    Text("Binaural beats use two slightly different frequencies to guide your brainwaves into specific mental states.")
+                    Text(String(localized: "settings.binaural_beats_help"))
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
-                Section("Solfeggio Frequencies") {
+                Section(String(localized: "settings.solfeggio_frequencies")) {
                     ambientRow(.solfeggioNature)
                     ambientRow(.solfeggioLove)
                 }
@@ -367,8 +404,8 @@ struct SoundSelectionView: View {
         .sheet(isPresented: $showingPurchaseSheet) {
             premiumPurchaseModal
         }
-        .alert("Purchase Status", isPresented: $showingPurchaseStatus) {
-            Button("OK", role: .cancel) { }
+        .alert(String(localized: "alerts.purchase_status"), isPresented: $showingPurchaseStatus) {
+            Button(String(localized: "ui.ok"), role: .cancel) { }
         } message: {
             Text(purchaseStatusMessage)
         }
@@ -376,9 +413,9 @@ struct SoundSelectionView: View {
     
     private func titleForMode() -> String {
         switch mode {
-        case .start: return "Start Sound"
-        case .end: return "End Sound"
-        case .ambience: return "Ambience"
+        case .start: return String(localized: "settings.start_sound")
+        case .end: return String(localized: "settings.end_sound")
+        case .ambience: return String(localized: "settings.ambience")
         }
     }
     
@@ -521,10 +558,10 @@ struct SoundSelectionView: View {
                     .foregroundStyle(.blue)
                 
                 VStack(spacing: 8) {
-                    Text("Unlock Premium Sound Library")
+                    Text(String(localized: "settings.unlock_premium_sound_library"))
                         .font(.title2.bold())
                     
-                    Text("\(selectedLockedSoundName) is part of the full premium sound library, which unlocks every premium tone and ambience.")
+                    Text(String(format: String(localized: "settings.locked_sound_message_format"), selectedLockedSoundName))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -542,7 +579,7 @@ struct SoundSelectionView: View {
                             }
                         }
                     } label: {
-                        Text("Unlock Premium Library - $4.99")
+                        Text(String(localized: "settings.unlock_premium_library"))
                             .font(.headline)
                             .foregroundStyle(.black)
                             .frame(maxWidth: .infinity)
@@ -556,11 +593,11 @@ struct SoundSelectionView: View {
                 
                 Spacer()
             }
-            .navigationTitle("Premium Audio")
+            .navigationTitle(String(localized: "nav.premium_audio"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
+                    Button(String(localized: "ui.close")) {
                         showingPurchaseSheet = false
                         stopPreview()
                     }

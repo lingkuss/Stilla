@@ -27,10 +27,10 @@ struct KAIPaywallView: View {
                 }
                 
                 VStack(spacing: 16) {
-                    Text("Unlock Unlimited MIMIR")
+                    Text(String(localized: "paywall.title"))
                         .font(.system(size: 28, weight: .bold, design: .serif))
                     
-                    Text("Experience the full power of your personal AI guide with unlimited personalized meditation generation.")
+                    Text(String(localized: "paywall.subtitle"))
                         .font(.system(size: 16))
                         .foregroundStyle(.white.opacity(0.6))
                         .multilineTextAlignment(.center)
@@ -39,10 +39,10 @@ struct KAIPaywallView: View {
                 
                 // Benefit List
                 VStack(alignment: .leading, spacing: 16) {
-                    BenefitRow(icon: "infinity", text: "Unlimited AI Meditations")
-                    BenefitRow(icon: "brain.head.profile", text: "Deep Personalized Guidance")
-                    BenefitRow(icon: "person.2.fill", text: "All Personas Always Available")
-                    BenefitRow(icon: "books.vertical.fill", text: "Replay Your Saved Mimir Library")
+                    BenefitRow(icon: "infinity", text: String(localized: "paywall.benefit.unlimited"))
+                    BenefitRow(icon: "brain.head.profile", text: String(localized: "paywall.benefit.guidance"))
+                    BenefitRow(icon: "person.2.fill", text: String(localized: "paywall.benefit.personas"))
+                    BenefitRow(icon: "books.vertical.fill", text: String(localized: "paywall.benefit.library"))
                 }
                 .padding(.top, 20)
                 
@@ -60,7 +60,7 @@ struct KAIPaywallView: View {
                     }
                 } label: {
                     VStack(spacing: 4) {
-                        Text("Subscribe for \(kaiPriceText)")
+                        Text(String(format: String(localized: "paywall.subscribe.format"), kaiPriceText))
                             .font(.system(size: 18, weight: .semibold))
                     }
                     .foregroundStyle(.black)
@@ -70,12 +70,12 @@ struct KAIPaywallView: View {
                 }
                 .padding(.horizontal, 32)
                 
-                Button("Restore Purchases") {
+                Button(String(localized: "paywall.restore")) {
                     Task {
                         do {
                             try await AppStore.sync()
                         } catch {
-                            statusMessage = "Restore couldn't be completed right now. Please try again in a moment."
+                            statusMessage = String(localized: "paywall.restore.error")
                             showingStatus = true
                             return
                         }
@@ -83,7 +83,7 @@ struct KAIPaywallView: View {
                         if store.isVindlaProSubscribed {
                             dismiss()
                         } else {
-                            statusMessage = "No active Mimir subscription was found to restore."
+                            statusMessage = String(localized: "paywall.restore.none")
                             showingStatus = true
                         }
                     }
@@ -92,8 +92,8 @@ struct KAIPaywallView: View {
                 .foregroundStyle(.white.opacity(0.4))
 
                 HStack(spacing: 16) {
-                    Link("Privacy Policy", destination: URL(string: "https://vindla-three.vercel.app/privacy")!)
-                    Link("Terms of Use", destination: URL(string: "https://vindla-three.vercel.app/terms")!)
+                    Link(String(localized: "paywall.privacy"), destination: URL(string: "https://vindla-three.vercel.app/privacy")!)
+                    Link(String(localized: "paywall.terms"), destination: URL(string: "https://vindla-three.vercel.app/terms")!)
                 }
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(.white.opacity(0.4))
@@ -101,8 +101,8 @@ struct KAIPaywallView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .alert("Purchase Status", isPresented: $showingStatus) {
-            Button("OK", role: .cancel) { }
+        .alert(String(localized: "paywall.alert.title"), isPresented: $showingStatus) {
+            Button(String(localized: "common.ok"), role: .cancel) { }
         } message: {
             Text(statusMessage)
         }
@@ -117,11 +117,11 @@ struct KAIPaywallView: View {
         case .success:
             return
         case .cancelled:
-            statusMessage = "Purchase cancelled."
+            statusMessage = String(localized: "purchase.cancelled")
         case .pending:
-            statusMessage = "Your subscription purchase is pending approval."
+            statusMessage = String(localized: "purchase.pending")
         case .unavailable:
-            statusMessage = "Mimir Pro isn't available right now. Check your App Store product configuration."
+            statusMessage = String(localized: "purchase.unavailable")
         case .failed(let message):
             statusMessage = message
         }

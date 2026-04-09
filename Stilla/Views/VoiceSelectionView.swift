@@ -13,17 +13,17 @@ struct VoiceSelectionView: View {
                 Section {
                     if voices.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("No high-quality voices found.")
+                            Text(String(localized: "voice.none_found"))
                                 .font(.headline)
-                            Text("Mimir works best with Enhanced or Premium voices. You can download them in your iPhone Settings.")
+                            Text(String(localized: "voice.quality_help"))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                             
                             VStack(alignment: .leading, spacing: 8) {
-                                Label("Open iOS Settings", systemImage: "gear")
-                                Label("Go to Accessibility", systemImage: "accessibility")
-                                Label("Spoken Content > Voices", systemImage: "mouth")
-                                Label("Download an 'Enhanced' English voice", systemImage: "icloud.and.arrow.down")
+                                Label(String(localized: "voice.open_ios_settings"), systemImage: "gear")
+                                Label(String(localized: "voice.go_to_accessibility"), systemImage: "accessibility")
+                                Label(String(localized: "voice.spoken_content_path"), systemImage: "mouth")
+                                Label(String(localized: "voice.download_enhanced"), systemImage: "icloud.and.arrow.down")
                             }
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -53,14 +53,14 @@ struct VoiceSelectionView: View {
                                     Spacer()
                                     
                                     if voice.quality == .premium {
-                                        Text("PREMIUM")
+                                        Text(String(localized: "voice.quality.premium"))
                                             .font(.system(size: 10, weight: .bold))
                                             .padding(.horizontal, 8)
                                             .padding(.vertical, 4)
                                             .background(Capsule().fill(Color.orange.opacity(0.2)))
                                             .foregroundStyle(.orange)
                                     } else if voice.quality == .enhanced {
-                                        Text("ENHANCED")
+                                        Text(String(localized: "voice.quality.enhanced"))
                                             .font(.system(size: 10, weight: .bold))
                                             .padding(.horizontal, 8)
                                             .padding(.vertical, 4)
@@ -77,18 +77,18 @@ struct VoiceSelectionView: View {
                         }
                     }
                 } header: {
-                    Text("AVAILABLE VOICES")
+                    Text(String(localized: "voice.available_header"))
                 } footer: {
                     if !voices.isEmpty {
-                        Text("Higher quality voices provide a more natural, human-like guidance from Mimir.")
+                        Text(String(localized: "voice.quality_footer"))
                     }
                 }
             }
-            .navigationTitle("Mimir's Voice Studio")
+            .navigationTitle(String(localized: "nav.voice_studio"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "ui.done")) { dismiss() }
                 }
             }
         }

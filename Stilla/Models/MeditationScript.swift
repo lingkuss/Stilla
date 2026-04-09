@@ -439,3 +439,32 @@ struct KaiPersonality: Identifiable, Codable, Hashable {
         all.first(where: { $0.id == id }) ?? .default
     }
 }
+
+extension KaiPersonality {
+    private func localizedValue(_ key: String, fallback: String) -> String {
+        let value = Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        return value == key ? fallback : value
+    }
+
+    var localizedName: String {
+        localizedValue("persona.\(id).name", fallback: name)
+    }
+
+    var localizedShortDescription: String {
+        localizedValue("persona.\(id).short", fallback: shortDescription)
+    }
+
+    var localizedLongDescription: String {
+        localizedValue("persona.\(id).long", fallback: longDescription)
+    }
+
+    var localizedSampleLine: String {
+        localizedValue("persona.\(id).sample", fallback: sampleLine)
+    }
+
+    var localizedTraits: [String] {
+        traits.enumerated().map { index, fallback in
+            localizedValue("persona.\(id).trait.\(index + 1)", fallback: fallback)
+        }
+    }
+}
