@@ -160,7 +160,7 @@
 "voice.open_ios_settings" = "Öppna iOS-inställningar";
 "voice.go_to_accessibility" = "Gå till Hjälpmedel";
 "voice.spoken_content_path" = "Talat innehåll > Röster";
-"voice.download_enhanced" = "Ladda ner en 'Enhanced'-engelsk röst";
+"voice.download_enhanced" = "Ladda ner en 'Enhanced'-röst för ditt språk";
 "voice.quality.premium" = "PREMIUM";
 "voice.quality.enhanced" = "ENHANCED";
 "voice.available_header" = "TILLGÄNGLIGA RÖSTER";
@@ -237,6 +237,7 @@
 "settings.language.system" = "Systemstandard";
 "settings.language.english" = "Engelska";
 "settings.language.swedish" = "Svenska";
+"settings.language.spanish" = "Spanska";
 "settings.app_language_footer" = "Byt appspråk för testning eller preferens. Starta om appen för att tillämpa alla översatta texter konsekvent.";
 "settings.language.restart_required" = "Omstart krävs";
 "settings.language.restart_message" = "Språket har uppdaterats. Stäng och öppna Vindla igen för att tillämpa ändringen fullt ut.";

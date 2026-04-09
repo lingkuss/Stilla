@@ -90,7 +90,7 @@
 "AVAILABLE VOICES" = "AVAILABLE VOICES";
 "Choose a high-quality natural voice for Mimir." = "Choose a high-quality natural voice for Mimir.";
 "No high-quality voices found." = "No high-quality voices found.";
-"Download an 'Enhanced' English voice" = "Download an 'Enhanced' English voice";
+"Download an 'Enhanced' English voice" = "Download an 'Enhanced' voice for your language";
 "Spoken Content > Voices" = "Spoken Content > Voices";
 "Volume Mix" = "Volume Mix";
 "Haptic Feedback" = "Haptic Feedback";
@@ -237,6 +237,7 @@
 "settings.language.system" = "System Default";
 "settings.language.english" = "English";
 "settings.language.swedish" = "Swedish";
+"settings.language.spanish" = "Spanish";
 "settings.app_language_footer" = "Switch app language for testing or preference. Restart the app to apply all localized strings consistently.";
 "settings.language.restart_required" = "Restart Required";
 "settings.language.restart_message" = "Language updated. Please close and reopen Vindla to fully apply the change.";

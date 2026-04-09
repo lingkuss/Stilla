@@ -5,6 +5,7 @@ enum AppLocalization {
         case system
         case english
         case swedish
+        case spanish
 
         var id: String { rawValue }
 
@@ -16,6 +17,8 @@ enum AppLocalization {
                 return "en"
             case .swedish:
                 return "sv"
+            case .spanish:
+                return "es"
             }
         }
     }

@@ -208,6 +208,7 @@ struct SettingsView: View {
                         Text(String(localized: "settings.language.system")).tag(AppLocalization.LanguageOption.system.rawValue)
                         Text(String(localized: "settings.language.english")).tag(AppLocalization.LanguageOption.english.rawValue)
                         Text(String(localized: "settings.language.swedish")).tag(AppLocalization.LanguageOption.swedish.rawValue)
+                        Text(String(localized: "settings.language.spanish")).tag(AppLocalization.LanguageOption.spanish.rawValue)
                     }
                     .onChange(of: appLanguageOverride) { _, newValue in
                         AppLocalization.applyLanguageOverride(rawValue: newValue)

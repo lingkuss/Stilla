@@ -15,6 +15,10 @@ struct MeditationShortcuts: AppShortcutsProvider {
                 "Starta meditation med \(.applicationName)",
                 "Meditera med \(.applicationName)",
                 "Meditera i \(\.$duration) med \(.applicationName)",
+                "Inicia \(.applicationName)",
+                "Inicia meditación con \(.applicationName)",
+                "Meditar con \(.applicationName)",
+                "Meditar \(\.$duration) con \(.applicationName)",
             ],
             shortTitle: "intent.shortcut.start.short_title",
             systemImageName: "sparkles"
@@ -27,6 +31,8 @@ struct MeditationShortcuts: AppShortcutsProvider {
                 "Begin limitless with \(.applicationName)",
                 "Starta obegransad meditation med \(.applicationName)",
                 "Starta obegransad med \(.applicationName)",
+                "Inicia meditación ilimitada con \(.applicationName)",
+                "Inicia ilimitada con \(.applicationName)",
             ],
             shortTitle: "intent.shortcut.start_open_ended.short_title",
             systemImageName: "stopwatch"
@@ -41,6 +47,9 @@ struct MeditationShortcuts: AppShortcutsProvider {
                 "Stoppa \(.applicationName)",
                 "Stoppa meditation med \(.applicationName)",
                 "Avsluta meditation med \(.applicationName)",
+                "Termina \(.applicationName)",
+                "Termina meditación con \(.applicationName)",
+                "Detener meditación con \(.applicationName)",
             ],
             shortTitle: "intent.shortcut.stop.short_title",
             systemImageName: "stop.circle"
@@ -55,6 +64,9 @@ struct MeditationShortcuts: AppShortcutsProvider {
                 "Be Mimir om en meditation i \(.applicationName)",
                 "Be Mimir om en \(\.$duration) meditation i \(.applicationName)",
                 "Skapa en meditation med Mimir i \(.applicationName)",
+                "Pide a Mimir una meditación en \(.applicationName)",
+                "Pide a Mimir una meditación de \(\.$duration) en \(.applicationName)",
+                "Genera una meditación con Mimir en \(.applicationName)",
             ],
             shortTitle: "intent.shortcut.start_kai.short_title",
             systemImageName: "sparkles"

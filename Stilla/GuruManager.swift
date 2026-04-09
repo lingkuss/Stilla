@@ -35,7 +35,21 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
 
     func previewVoice(identifier: String) {
         stop()
-        let utterance = AVSpeechUtterance(string: "Hello, I am Mimir. This is my voice. I look forward to our practice together.")
+        let previewText: String
+        if let voice = AVSpeechSynthesisVoice(identifier: identifier) {
+            let langCode = Locale(identifier: voice.language).language.languageCode?.identifier.lowercased() ?? "en"
+            switch langCode {
+            case "es":
+                previewText = "Hola, soy Mimir. Esta es mi voz. Espero con ilusión nuestra práctica juntos."
+            case "sv":
+                previewText = "Hej, jag är Mimir. Det här är min röst. Jag ser fram emot vår övning tillsammans."
+            default:
+                previewText = "Hello, I am Mimir. This is my voice. I look forward to our practice together."
+            }
+        } else {
+            previewText = "Hello, I am Mimir. This is my voice. I look forward to our practice together."
+        }
+        let utterance = AVSpeechUtterance(string: previewText)
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9
         if let voice = AVSpeechSynthesisVoice(identifier: identifier) {

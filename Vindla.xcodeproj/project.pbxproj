@@ -11,6 +11,7 @@
 		6414BCF72F883CF6009BF848 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6414BCF62F883CF6009BF848 /* AppLocalization.swift */; };
 		6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BCFA2F883D4C009BF848 /* Localizable.strings */; };
 		6414BCFF2F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BCFD2F883D4C009BF848 /* Localizable.strings */; };
+		6414BD022F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BD002F883D4C009BF848 /* Localizable.strings */; };
 		64F9FE2B2F7BE1F100BBB344 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */; };
 		64F9FE2D2F7BE1F100BBB344 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */; };
 		64F9FE3C2F7BE1F100BBB344 /* MeditationWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -75,6 +76,7 @@
 		6414BCF62F883CF6009BF848 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		6414BCFB2F883D4C009BF848 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		6414BCFE2F883D4C009BF848 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = Localizable.strings; sourceTree = "<group>"; };
+		6414BD012F883D4C009BF848 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
 		64F9FE232F7BE17400BBB344 /* Vindla.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vindla.entitlements; sourceTree = "<group>"; };
 		64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MeditationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -161,6 +163,14 @@
 			path = sv.lproj;
 			sourceTree = "<group>";
 		};
+		6414BCFA2F883D3A009BF849 /* es.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				6414BD002F883D4C009BF848 /* Localizable.strings */,
+			);
+			path = es.lproj;
+			sourceTree = "<group>";
+		};
 		64F9FE292F7BE1F100BBB344 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +209,7 @@
 				D10008 /* Services */,
 				6414BCF82F883D3A009BF848 /* en.lproj */,
 				6414BCF92F883D3A009BF848 /* sv.lproj */,
+				6414BCFA2F883D3A009BF849 /* es.lproj */,
 			);
 			path = Stilla;
 			sourceTree = "<group>";
@@ -341,6 +352,7 @@
 				en,
 				Base,
 				sv,
+				es,
 			);
 			mainGroup = D10001;
 			productRefGroup = D10005 /* Products */;
@@ -368,6 +380,7 @@
 				A10010 /* Assets.xcassets in Resources */,
 				6414BCFF2F883D4C009BF848 /* Localizable.strings in Resources */,
 				6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */,
+				6414BD022F883D4C009BF848 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +454,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				6414BCFE2F883D4C009BF848 /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		6414BD002F883D4C009BF848 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6414BD012F883D4C009BF848 /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
