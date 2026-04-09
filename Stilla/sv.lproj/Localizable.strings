@@ -238,6 +238,9 @@
 "settings.language.english" = "Engelska";
 "settings.language.swedish" = "Svenska";
 "settings.language.spanish" = "Spanska";
+"settings.language.french" = "Franska";
+"settings.language.norwegian" = "Norska";
+"settings.language.danish" = "Danska";
 "settings.app_language_footer" = "Byt appspråk för testning eller preferens. Starta om appen för att tillämpa alla översatta texter konsekvent.";
 "settings.language.restart_required" = "Omstart krävs";
 "settings.language.restart_message" = "Språket har uppdaterats. Stäng och öppna Vindla igen för att tillämpa ändringen fullt ut.";

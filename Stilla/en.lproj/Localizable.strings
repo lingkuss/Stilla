@@ -238,6 +238,9 @@
 "settings.language.english" = "English";
 "settings.language.swedish" = "Swedish";
 "settings.language.spanish" = "Spanish";
+"settings.language.french" = "French";
+"settings.language.norwegian" = "Norwegian";
+"settings.language.danish" = "Danish";
 "settings.app_language_footer" = "Switch app language for testing or preference. Restart the app to apply all localized strings consistently.";
 "settings.language.restart_required" = "Restart Required";
 "settings.language.restart_message" = "Language updated. Please close and reopen Vindla to fully apply the change.";

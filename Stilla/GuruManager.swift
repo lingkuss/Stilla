@@ -43,6 +43,12 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
                 previewText = "Hola, soy Mimir. Esta es mi voz. Espero con ilusión nuestra práctica juntos."
             case "sv":
                 previewText = "Hej, jag är Mimir. Det här är min röst. Jag ser fram emot vår övning tillsammans."
+            case "fr":
+                previewText = "Bonjour, je suis Mimir. Voici ma voix. J'ai hâte de pratiquer ensemble."
+            case "nb", "no":
+                previewText = "Hei, jeg er Mimir. Dette er stemmen min. Jeg ser frem til vår øvelse sammen."
+            case "da":
+                previewText = "Hej, jeg er Mimir. Dette er min stemme. Jeg glæder mig til vores øvelse sammen."
             default:
                 previewText = "Hello, I am Mimir. This is my voice. I look forward to our practice together."
             }

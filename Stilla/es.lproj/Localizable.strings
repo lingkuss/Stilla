@@ -238,6 +238,9 @@
 "settings.language.english" = "Inglés";
 "settings.language.swedish" = "Sueco";
 "settings.language.spanish" = "Español";
+"settings.language.french" = "Francés";
+"settings.language.norwegian" = "Noruego";
+"settings.language.danish" = "Danés";
 "settings.app_language_footer" = "Cambia el idioma de la app para probar o por preferencia. Reinicia la app para aplicar todas las cadenas traducidas correctamente.";
 "settings.language.restart_required" = "Reinicio necesario";
 "settings.language.restart_message" = "Idioma actualizado. Cierra y vuelve a abrir Vindla para aplicar el cambio completamente.";
