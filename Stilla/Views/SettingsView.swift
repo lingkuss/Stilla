@@ -98,6 +98,24 @@ struct SettingsView: View {
                         }
                     }
                     .padding(.vertical, 4)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(String(localized: "settings.mimir_voice"))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        HStack(spacing: 12) {
+                            Image(systemName: "speaker.wave.1")
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+
+                            Slider(value: Bindable(manager).mimirVoiceVolume, in: 0...1)
+
+                            Image(systemName: "speaker.wave.3")
+                                .foregroundStyle(.secondary)
+                                .font(.footnote)
+                        }
+                    }
+                    .padding(.vertical, 4)
                 } header: {
                     Label(String(localized: "settings.volume_mix"), systemImage: "slider.horizontal.3")
                 } footer: {

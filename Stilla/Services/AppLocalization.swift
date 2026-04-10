@@ -76,7 +76,11 @@ enum AppLocalization {
             codes.append("en")
         }
 
-        return Array(Set(codes))
+        var orderedUnique: [String] = []
+        for code in codes where !orderedUnique.contains(code) {
+            orderedUnique.append(code)
+        }
+        return orderedUnique
     }
 
     static func applyLanguageOverride(rawValue: String) {

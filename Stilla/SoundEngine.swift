@@ -436,7 +436,8 @@ final class SoundEngine {
 
         // Simple low-pass filter state
         var filtered: Double = 0
-        let volume: Double = 0.08
+        // Breathing cues follow the same mix as chimes/signals (toneVolume).
+        let volume: Double = Double(toneVolume) * 0.16
 
         for i in 0..<frameCount {
             let t = Double(i) / sampleRate

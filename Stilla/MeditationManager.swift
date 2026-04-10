@@ -6,6 +6,7 @@ import UserNotifications
 import Observation
 import HealthKit
 import ActivityKit
+import AudioToolbox
 
 enum HomeViewMode: String, Codable {
     case hero
@@ -78,6 +79,12 @@ final class MeditationManager {
         didSet {
             UserDefaults.standard.set(toneVolume, forKey: "toneVolume")
             soundEngine.toneVolume = toneVolume
+        }
+    }
+
+    var mimirVoiceVolume: Float {
+        didSet {
+            UserDefaults.standard.set(mimirVoiceVolume, forKey: "mimirVoiceVolume")
         }
     }
 
@@ -402,6 +409,20 @@ final class MeditationManager {
     // MARK: - Private state
     let soundEngine = SoundEngine()
     private var timer: Timer?
+    private let sessionHapticGenerator = UIImpactFeedbackGenerator(style: .medium)
+    private let breathingHapticGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private let breathingNotificationGenerator = UINotificationFeedbackGenerator()
+
+    private func triggerBreathingHaptic() {
+        DispatchQueue.main.async {
+            self.breathingHapticGenerator.prepare()
+            self.breathingHapticGenerator.impactOccurred(intensity: 1.0)
+            self.breathingNotificationGenerator.prepare()
+            self.breathingNotificationGenerator.notificationOccurred(.warning)
+            // Fallback vibration for devices/settings where feedback generators are too subtle.
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        }
+    }
 
     init() {
         // Load duration
@@ -429,6 +450,12 @@ final class MeditationManager {
             self.toneVolume = 0.5
         } else {
             self.toneVolume = UserDefaults.standard.float(forKey: "toneVolume")
+        }
+
+        if UserDefaults.standard.object(forKey: "mimirVoiceVolume") == nil {
+            self.mimirVoiceVolume = 0.5
+        } else {
+            self.mimirVoiceVolume = UserDefaults.standard.float(forKey: "mimirVoiceVolume")
         }
         
         if UserDefaults.standard.object(forKey: "hapticEnabled") == nil {
@@ -548,7 +575,8 @@ final class MeditationManager {
             soundEngine.startAmbientSound(ambientSound)
         }
         if hapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            sessionHapticGenerator.prepare()
+            sessionHapticGenerator.impactOccurred()
         }
         
         if let script = currentScript {
@@ -767,12 +795,16 @@ final class MeditationManager {
 
     func playBreathingCue(phase: String, duration: Double) {
         let hasSoundAccess = StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
+        let isBreathTransition = (phase == "Inhale" || phase == "Exhale")
+
         switch breathingCueMode {
-        case .off: break
+        case .off:
+            break
+
         case .haptic:
-            if phase == "Inhale" || phase == "Exhale" {
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-            }
+            guard hapticEnabled, isBreathTransition else { return }
+            triggerBreathingHaptic()
+
         case .sound:
             guard hasSoundAccess else { return }
             if phase == "Inhale" {
@@ -780,9 +812,10 @@ final class MeditationManager {
             } else if phase == "Exhale" {
                 soundEngine.playExhaleBreath(duration: duration)
             }
+
         case .both:
-            if phase == "Inhale" || phase == "Exhale" {
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            if hapticEnabled, isBreathTransition {
+                triggerBreathingHaptic()
             }
             if hasSoundAccess {
                 if phase == "Inhale" {

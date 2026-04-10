@@ -58,6 +58,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         let utterance = AVSpeechUtterance(string: previewText)
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9
+        utterance.volume = MeditationManager.shared.mimirVoiceVolume
         if let voice = AVSpeechSynthesisVoice(identifier: identifier) {
             utterance.voice = voice
         }
@@ -79,7 +80,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         let utterance = AVSpeechUtterance(string: trimmed)
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9
-        utterance.volume = 1.0
+        utterance.volume = MeditationManager.shared.mimirVoiceVolume
         let voiceId = MeditationManager.shared.kaiVoiceIdentifier
         if let voice = AVSpeechSynthesisVoice(identifier: voiceId) {
             utterance.voice = voice
@@ -100,26 +101,36 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
 
     func findBestAvailableVoice() -> AVSpeechSynthesisVoice? {
         let allVoices = AVSpeechSynthesisVoice.speechVoices()
-        let candidateVoices = allVoices.filter { isPreferredLanguage($0) }
-        let preferredPool = candidateVoices.isEmpty ? allVoices : candidateVoices
+        let preferredCodes = preferredVoiceLanguages
 
-        if let premiumFemale = preferredPool.first(where: { $0.quality == .premium && $0.gender == .female }) {
-            return premiumFemale
+        func voiceLanguageCode(_ voice: AVSpeechSynthesisVoice) -> String {
+            Locale(identifier: voice.language).language.languageCode?.identifier.lowercased() ?? ""
         }
 
-        if let enhancedFemale = preferredPool.first(where: { $0.quality == .enhanced && $0.gender == .female }) {
-            return enhancedFemale
+        func chooseBest(in voices: [AVSpeechSynthesisVoice]) -> AVSpeechSynthesisVoice? {
+            if let premiumFemale = voices.first(where: { $0.quality == .premium && $0.gender == .female }) {
+                return premiumFemale
+            }
+            if let enhancedFemale = voices.first(where: { $0.quality == .enhanced && $0.gender == .female }) {
+                return enhancedFemale
+            }
+            if let premium = voices.first(where: { $0.quality == .premium }) {
+                return premium
+            }
+            if let enhanced = voices.first(where: { $0.quality == .enhanced }) {
+                return enhanced
+            }
+            return voices.first
         }
 
-        if let premium = preferredPool.first(where: { $0.quality == .premium }) {
-            return premium
+        for code in preferredCodes {
+            let localizedVoices = allVoices.filter { voiceLanguageCode($0) == code }
+            if let best = chooseBest(in: localizedVoices) {
+                return best
+            }
         }
 
-        if let enhanced = preferredPool.first(where: { $0.quality == .enhanced }) {
-            return enhanced
-        }
-
-        return preferredPool.first
+        return chooseBest(in: allVoices)
     }
 
     var availableHighQualityVoices: [AVSpeechSynthesisVoice] {
@@ -154,7 +165,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         // Zen voice settings
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9 // Grounded and deep
-        utterance.volume = 1.0
+        utterance.volume = MeditationManager.shared.mimirVoiceVolume
         
         // Select the chosen voice via MeditationManager
         let voiceId = MeditationManager.shared.kaiVoiceIdentifier
