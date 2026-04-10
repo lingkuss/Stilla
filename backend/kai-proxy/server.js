@@ -7,6 +7,13 @@ import crypto from "crypto";
 
 const kv = process.env.REDIS_URL ? new Redis(process.env.REDIS_URL) : null;
 
+// Catch background connection errors to prevent unhandled exceptions crashing the serverless function
+if (kv) {
+    kv.on("error", (err) => {
+        console.error("[Redis Error]:", err.message);
+    });
+}
+
 const port = Number(process.env.PORT || 8787);
 const model = process.env.OPENAI_MODEL || "gpt-5.4-mini";
 const proxyToken = process.env.KAI_PROXY_TOKEN || "";
@@ -18,6 +25,9 @@ if (!openAIKey) {
 
 const openai = new OpenAI({ apiKey: openAIKey });
 const app = express();
+
+// Trust the Vercel edge proxy so that rate limiting handles the real client IP (x-forwarded-for)
+app.set("trust proxy", 1);
 
 app.use(cors({
     origin: ["https://vindla.app", "https://vindla-three.vercel.app", "http://localhost:3000"],
@@ -37,7 +47,7 @@ app.get("/health", (_req, res) => {
 
 const generateLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 100,
+    max: 30,
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: "Too many requests. Please try again later." },
@@ -67,6 +77,8 @@ app.post("/kai/generate", generateLimiter, async (req, res) => {
                 error: "Invalid request. Expecting non-empty mood and durationMinutes between 1 and 180."
             });
         }
+
+        console.log(`[Generate] Model: ${model} | IP: ${req.ip} | Mood: "${mood}" | Duration: ${durationMinutes}m | Persona: "${personalityName}"`);
 
         const systemPrompt = buildSystemPrompt(mood, durationMinutes, personalityName, personalityPrompt);
         const completion = await openai.chat.completions.create({
@@ -111,7 +123,7 @@ app.post("/kai/generate", generateLimiter, async (req, res) => {
 
 const shareLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 100,
+    max: 30,
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: "Too many share attempts. Please try again later." },
