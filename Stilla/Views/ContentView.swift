@@ -233,13 +233,13 @@ struct ContentView: View {
     }
 
     private var latestKaiHeader: String {
-        let fallback = "Mimir Journey"
+        let fallback = String(localized: "reflection.fallback_title")
         let header = manager.latestSessionMemory?.proactiveHeader?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
         return header.isEmpty ? fallback : header
     }
 
     private var latestKaiBody: String {
-        let fallback = "Describe your mood. Mimir will curate your path."
+        let fallback = String(localized: "content.home_proactive_fallback_body")
         let body = manager.latestSessionMemory?.proactiveBody?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
         return body.isEmpty ? fallback : body
     }

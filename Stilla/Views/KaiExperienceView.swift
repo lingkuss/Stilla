@@ -473,21 +473,21 @@ struct KaiExperienceView: View {
                 dismiss()
             } catch {
                 if case KaiBrainService.BrainError.serviceUnavailable = error {
-                    errorTitle = "Mimir Not Configured"
-                    errorMessage = "Mimir is not configured for production yet. Add your backend URL before requesting personalized sessions."
+                    errorTitle = String(localized: "kai.error.not_configured.title")
+                    errorMessage = String(localized: "kai.error.not_configured.message")
                 } else if let urlError = error as? URLError {
-                    errorTitle = "Connection Problem"
+                    errorTitle = String(localized: "kai.error.connection.title")
                     switch urlError.code {
                     case .notConnectedToInternet, .networkConnectionLost:
-                        errorMessage = "You're offline. Reconnect to the internet and try generating your Mimir session again."
+                        errorMessage = String(localized: "kai.error.connection.offline")
                     case .timedOut:
-                        errorMessage = "Mimir took too long to respond. Please try again in a moment."
+                        errorMessage = String(localized: "kai.error.connection.timeout")
                     default:
-                        errorMessage = "Mimir couldn't be reached right now. Please try again shortly."
+                        errorMessage = String(localized: "kai.error.connection.generic")
                     }
                 } else {
                     errorTitle = String(localized: "kai.error.resting.title")
-                    errorMessage = "I'm having trouble aligning your path right now. Please check your internet connection or try again in a moment."
+                    errorMessage = String(localized: "kai.error.resting.message")
                 }
                 showingError = true
                 isGenerating = false

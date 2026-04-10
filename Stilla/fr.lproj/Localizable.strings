@@ -488,4 +488,11 @@
 "intent.shortcut.stop.short_title" = "Terminer la méditation";
 "intent.shortcut.start_kai.short_title" = "Demander à Mimir";
 
+// MARK: - Kai Error Messages
+"kai.error.not_configured.title" = "Mimir non configuré";
+"kai.error.not_configured.message" = "Mimir n'est pas encore configuré pour la production. Ajoutez votre URL backend avant de demander des sessions personnalisées.";
+"kai.error.connection.title" = "Problème de connexion";
+"kai.error.connection.offline" = "Vous êtes hors ligne. Reconnectez-vous à internet et réessayez de générer votre session Mimir.";
+"kai.error.connection.timeout" = "Mimir a mis trop de temps à répondre. Veuillez réessayer dans un instant.";
+"kai.error.connection.generic" = "Impossible de joindre Mimir pour le moment. Veuillez réessayer sous peu.";
 

@@ -87,8 +87,9 @@ class SpeechManager {
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         
-        audioEngine = AVAudioEngine()
-        let inputNode = audioEngine!.inputNode
+        let engine = AVAudioEngine()
+        audioEngine = engine
+        let inputNode = engine.inputNode
         
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { return }
@@ -112,8 +113,8 @@ class SpeechManager {
             self.recognitionRequest?.append(buffer)
         }
         
-        audioEngine?.prepare()
-        try audioEngine?.start()
+        engine.prepare()
+        try engine.start()
     }
     
     func stopRecording() {

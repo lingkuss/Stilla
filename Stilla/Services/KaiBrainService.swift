@@ -1,27 +1,5 @@
 import Foundation
 
-/// Internal protocol to allow seamless switching between iCloud KVS and UserDefaults.
-protocol KeyValueStoring {
-    func set(_ value: Any?, forKey defaultName: String)
-    func string(forKey defaultName: String) -> String?
-    func longLong(forKey defaultName: String) -> Int64
-    func synchronize() -> Bool
-}
-
-class UserDefaultsStore: KeyValueStoring {
-    func set(_ value: Any?, forKey defaultName: String) { UserDefaults.standard.set(value, forKey: defaultName) }
-    func string(forKey defaultName: String) -> String? { UserDefaults.standard.string(forKey: defaultName) }
-    func longLong(forKey defaultName: String) -> Int64 { Int64(UserDefaults.standard.integer(forKey: defaultName)) }
-    func synchronize() -> Bool { UserDefaults.standard.synchronize() }
-}
-
-class ICloudStore: KeyValueStoring {
-    func set(_ value: Any?, forKey defaultName: String) { NSUbiquitousKeyValueStore.default.set(value, forKey: defaultName) }
-    func string(forKey defaultName: String) -> String? { NSUbiquitousKeyValueStore.default.string(forKey: defaultName) }
-    func longLong(forKey defaultName: String) -> Int64 { NSUbiquitousKeyValueStore.default.longLong(forKey: defaultName) }
-    func synchronize() -> Bool { NSUbiquitousKeyValueStore.default.synchronize() }
-}
-
 final class KaiBrainService {
     static let shared = KaiBrainService()
     
@@ -30,26 +8,24 @@ final class KaiBrainService {
     private let freeGenCountKey = "kai.free_gen_count"
 
     private var proxyURL: URL {
-        Secrets.kaiBackendURL ?? URL(string: "https://stilla-three.vercel.app/kai/generate")!
+        Secrets.kaiBackendURL ?? URL(string: "https://vindla-api.vercel.app/kai/generate")!
     }
 
-    /// Strategy: Probe for iCloud first. If unavailable (e.g. personal dev team),
-    /// fall back to local UserDefaults.
-    private var store: KeyValueStoring {
-        if NSUbiquitousKeyValueStore.default.synchronize() {
-            return ICloudStore()
-        }
-        return UserDefaultsStore()
+    /// True if the user is signed into iCloud. Uses ubiquityIdentityToken which is
+    /// the only reliable way to detect iCloud availability at runtime.
+    private var isICloudAvailable: Bool {
+        FileManager.default.ubiquityIdentityToken != nil
     }
 
     /// Remaining free credits this month (0…3).
+    /// Reads from iCloud KVS if available, otherwise UserDefaults.
     var freeCreditsRemaining: Int {
         let currentMonth = currentMonthTag
-        let storedMonth = store.string(forKey: freeGenMonthKey) ?? ""
+        let storedMonth = readString(forKey: freeGenMonthKey) ?? ""
         if storedMonth != currentMonth {
             return maxFreeCredits
         }
-        let used = Int(store.longLong(forKey: freeGenCountKey))
+        let used = Int(readInt64(forKey: freeGenCountKey))
         return max(0, maxFreeCredits - used)
     }
 
@@ -59,22 +35,48 @@ final class KaiBrainService {
 
     func recordFreeGeneration() {
         let currentMonth = currentMonthTag
-        let storedMonth = store.string(forKey: freeGenMonthKey) ?? ""
+        let storedMonth = readString(forKey: freeGenMonthKey) ?? ""
 
+        let newCount: Int64
         if storedMonth != currentMonth {
-            store.set(currentMonth, forKey: freeGenMonthKey)
-            store.set(Int64(1), forKey: freeGenCountKey)
+            newCount = 1
         } else {
-            let used = store.longLong(forKey: freeGenCountKey)
-            store.set(used + 1, forKey: freeGenCountKey)
+            newCount = readInt64(forKey: freeGenCountKey) + 1
         }
-        
-        // Mirror to both for a smooth future transition
-        UserDefaults.standard.set(currentMonth, forKey: freeGenMonthKey)
-        let totalUsed = store.longLong(forKey: freeGenCountKey)
-        UserDefaults.standard.set(totalUsed, forKey: freeGenCountKey)
-        
-        _ = store.synchronize()
+
+        // Always write to both stores for consistency
+        write(currentMonth, forKey: freeGenMonthKey)
+        write(newCount, forKey: freeGenCountKey)
+    }
+
+    // MARK: - Private Read/Write Helpers
+
+    /// Read from iCloud KVS first (source of truth), fall back to UserDefaults.
+    private func readString(forKey key: String) -> String? {
+        if isICloudAvailable {
+            return NSUbiquitousKeyValueStore.default.string(forKey: key)
+                ?? UserDefaults.standard.string(forKey: key)
+        }
+        return UserDefaults.standard.string(forKey: key)
+    }
+
+    private func readInt64(forKey key: String) -> Int64 {
+        if isICloudAvailable {
+            let iCloudVal = NSUbiquitousKeyValueStore.default.longLong(forKey: key)
+            if iCloudVal != 0 { return iCloudVal }
+            return Int64(UserDefaults.standard.integer(forKey: key))
+        }
+        return Int64(UserDefaults.standard.integer(forKey: key))
+    }
+
+    /// Write to both iCloud KVS and UserDefaults so data is always available
+    /// regardless of iCloud state.
+    private func write(_ value: Any?, forKey key: String) {
+        UserDefaults.standard.set(value, forKey: key)
+        if isICloudAvailable {
+            NSUbiquitousKeyValueStore.default.set(value, forKey: key)
+            NSUbiquitousKeyValueStore.default.synchronize()
+        }
     }
 
     private var currentMonthTag: String {

@@ -330,6 +330,7 @@
 "content.action.done" = "FERDIG";
 "content.mode.simple_timer" = "Enkel tidtaker";
 "content.mode.mimir" = "Mimir-modus";
+"content.home_proactive_fallback_body" = "Beskriv humøret ditt. Mimir vil kuratere veien din.";
 
 "stats.streak" = "Rekke";
 "stats.daily_avg" = "Daglig snitt";
@@ -488,4 +489,11 @@
 "intent.shortcut.stop.short_title" = "Avslutt meditasjon";
 "intent.shortcut.start_kai.short_title" = "Be Mimir";
 
+// MARK: - Kai Error Messages
+"kai.error.not_configured.title" = "Mimir er ikke konfigurert";
+"kai.error.not_configured.message" = "Mimir er ikke konfigurert for produksjon ennå. Legg til backend-URLen din før du ber om personlige sesjoner.";
+"kai.error.connection.title" = "Tilkoblingsproblem";
+"kai.error.connection.offline" = "Du er frakoblet. Koble til nettet igjen og prøv å generere Mimir-sesjonen din på nytt.";
+"kai.error.connection.timeout" = "Mimir brukte for lang tid på å svare. Prøv igjen om et øyeblikk.";
+"kai.error.connection.generic" = "Mimir kunne ikke nås akkurat nå. Prøv igjen snart.";
 

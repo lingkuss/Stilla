@@ -330,6 +330,7 @@
 "content.action.done" = "HECHO";
 "content.mode.simple_timer" = "Temporizador simple";
 "content.mode.mimir" = "Modo Mimir";
+"content.home_proactive_fallback_body" = "Describe tu estado de ánimo. Mimir creará tu camino.";
 
 "stats.streak" = "Racha";
 "stats.daily_avg" = "Media diaria";
@@ -488,4 +489,11 @@
 "intent.shortcut.stop.short_title" = "Terminar meditación";
 "intent.shortcut.start_kai.short_title" = "Pedir a Mimir";
 
+// MARK: - Kai Error Messages
+"kai.error.not_configured.title" = "Mimir no configurado";
+"kai.error.not_configured.message" = "Mimir aún no está configurado para producción. Añade la URL del backend antes de solicitar sesiones personalizadas.";
+"kai.error.connection.title" = "Problema de conexión";
+"kai.error.connection.offline" = "Estás sin conexión. Conéctate a internet e intenta generar tu sesión con Mimir de nuevo.";
+"kai.error.connection.timeout" = "Mimir tardó demasiado en responder. Inténtalo de nuevo en un momento.";
+"kai.error.connection.generic" = "No se pudo conectar con Mimir en este momento. Inténtalo de nuevo en breve.";
 
