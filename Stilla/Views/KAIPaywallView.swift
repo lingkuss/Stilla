@@ -48,27 +48,39 @@ struct KAIPaywallView: View {
                 
                 Spacer()
                 
-                // Purchase Button
-                Button {
-                    Task {
-                        let outcome = await StoreKitManager.shared.purchase(StoreKitManager.vindlaProID)
-                        if case .success = outcome {
-                            dismiss()
-                        } else {
-                            present(outcome)
+                VStack(spacing: 12) {
+                    // Purchase Button
+                    Button {
+                        Task {
+                            let outcome = await StoreKitManager.shared.purchase(StoreKitManager.vindlaProID)
+                            if case .success = outcome {
+                                dismiss()
+                            } else {
+                                present(outcome)
+                            }
                         }
+                    } label: {
+                        Text(String(localized: "paywall.trial.title"))
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background {
+                                Capsule()
+                                    .fill(LinearGradient(colors: [.indigo, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .shadow(color: .indigo.opacity(0.4), radius: 15, x: 0, y: 8)
+                            }
+                            .overlay(
+                                Capsule()
+                                    .strokeBorder(LinearGradient(colors: [.white.opacity(0.4), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
+                            )
                     }
-                } label: {
-                    VStack(spacing: 4) {
-                        Text(String(format: String(localized: "paywall.subscribe.format"), kaiPriceText))
-                            .font(.system(size: 18, weight: .semibold))
-                    }
-                    .foregroundStyle(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20)
-                    .background(Capsule().fill(.white))
+                    .padding(.horizontal, 32)
+                    
+                    Text(String(format: String(localized: "paywall.trial.subtitle.format"), kaiPriceText))
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.5))
                 }
-                .padding(.horizontal, 32)
                 
                 Button(String(localized: "paywall.restore")) {
                     Task {
@@ -109,7 +121,7 @@ struct KAIPaywallView: View {
     }
 
     private var kaiPriceText: String {
-        store.products.first(where: { $0.id == StoreKitManager.vindlaProID }).map { "\($0.displayPrice)/mo" } ?? "$4.99/mo"
+        store.products.first(where: { $0.id == StoreKitManager.vindlaProID }).map { "\($0.displayPrice)" } ?? "$4.99"
     }
 
     private func present(_ outcome: StoreKitManager.PurchaseOutcome) {

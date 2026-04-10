@@ -4,7 +4,8 @@
 "paywall.benefit.guidance" = "Djup personligt anpassad guidning";
 "paywall.benefit.personas" = "Alla personligheter alltid tillgängliga";
 "paywall.benefit.library" = "Spela upp ditt sparade Mimir-bibliotek";
-"paywall.subscribe.format" = "Prenumerera för %@";
+"paywall.trial.title" = "Starta 3 dagars gratis provperiod";
+"paywall.trial.subtitle.format" = "Därefter %@/månad, avsluta när du vill.";
 "paywall.restore" = "Återställ köp";
 "paywall.restore.error" = "Återställning kunde inte slutföras just nu. Försök igen om en stund.";
 "paywall.restore.none" = "Ingen aktiv Mimir-prenumeration hittades att återställa.";

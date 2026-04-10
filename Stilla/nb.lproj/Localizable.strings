@@ -4,7 +4,8 @@
 "paywall.benefit.guidance" = "Dyp personlig veiledning";
 "paywall.benefit.personas" = "Alle personligheter alltid tilgjengelige";
 "paywall.benefit.library" = "Spill av ditt lagrede Mimir-bibliotek";
-"paywall.subscribe.format" = "Abonner for %@";
+"paywall.trial.title" = "Start 3-dagers gratis prøveperiode";
+"paywall.trial.subtitle.format" = "Deretter %@/måned, avslutt når som helst.";
 "paywall.restore" = "Gjenopprett kjøp";
 "paywall.restore.error" = "Gjenoppretting kunne ikke fullføres akkurat nå. Prøv igjen om et øyeblikk.";
 "paywall.restore.none" = "Ingen aktivt Mimir-abonnement ble funnet å gjenopprette.";

@@ -4,7 +4,8 @@
 "paywall.benefit.guidance" = "Dyb personlig vejledning";
 "paywall.benefit.personas" = "Alle personligheder altid tilgængelige";
 "paywall.benefit.library" = "Afspil dit gemte Mimir-bibliotek";
-"paywall.subscribe.format" = "Abonner for %@";
+"paywall.trial.title" = "Start 3-dages gratis prøveperiode";
+"paywall.trial.subtitle.format" = "Derefter %@/måned, opsig når som helst.";
 "paywall.restore" = "Gendan køb";
 "paywall.restore.error" = "Gendannelse kunne ikke gennemføres lige nu. Prøv igen om et øjeblik.";
 "paywall.restore.none" = "Intet aktivt Mimir-abonnement fundet at gendanne.";

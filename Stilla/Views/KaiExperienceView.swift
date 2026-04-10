@@ -413,9 +413,8 @@ struct KaiExperienceView: View {
             await StoreKitManager.shared.updateCustomerProductStatus()
             
             let isSubscribed = StoreKitManager.shared.isVindlaProSubscribed
-            let isFreeAvailable = KaiBrainService.shared.isFreeGenerationAvailable
             
-            if !isSubscribed && !isFreeAvailable {
+            if !isSubscribed {
                 isGenerating = false
                 showingPaywall = true
                 return
@@ -453,11 +452,6 @@ struct KaiExperienceView: View {
                 manager.preferredStillnessRatio = stillnessRatio
                 script.kaiPersonalityID = activePersonality.id
                 script.kaiPersonalityName = activePersonality.localizedName
-                
-                // If we got here and weren't subscribed, consume the free credit
-                if !isSubscribed {
-                    KaiBrainService.shared.recordFreeGeneration()
-                }
                 
                 // Set the script in GuruManager and start
                 GuruManager.shared.play(script: script)
@@ -734,26 +728,6 @@ struct KaiExperienceView: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
                 .background(Capsule().fill(.blue.opacity(0.1)))
-            } else {
-                HStack(spacing: 6) {
-                    Image(systemName: "bolt.fill")
-                        .font(.system(size: 10))
-                    Text({
-                        let n = KaiBrainService.shared.freeCreditsRemaining
-                        return n > 0
-                            ? String(format: String(localized: "kai.free_credits_remaining_format"), n)
-                            : String(localized: "kai.zero_credits_remaining")
-                    }())
-                        .font(.system(size: 10, weight: .bold))
-                        .kerning(1)
-                }
-                .foregroundStyle(.white.opacity(0.5))
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background {
-                    Capsule()
-                        .strokeBorder(.white.opacity(0.1), lineWidth: 1)
-                }
             }
         }
     }

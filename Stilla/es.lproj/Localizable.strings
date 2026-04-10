@@ -4,7 +4,8 @@
 "paywall.benefit.guidance" = "Guía profunda y personalizada";
 "paywall.benefit.personas" = "Todas las personalidades siempre disponibles";
 "paywall.benefit.library" = "Reproduce tu biblioteca guardada de Mimir";
-"paywall.subscribe.format" = "Suscríbete por %@";
+"paywall.trial.title" = "Comenzar prueba gratis de 3 días";
+"paywall.trial.subtitle.format" = "Luego %@/mes, cancela cuando quieras.";
 "paywall.restore" = "Restaurar compras";
 "paywall.restore.error" = "No se pudo completar la restauración en este momento. Inténtalo de nuevo en un momento.";
 "paywall.restore.none" = "No se encontró ninguna suscripción activa de Mimir para restaurar.";

@@ -135,7 +135,11 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "02ACE10D",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "6E9E02F2",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
           "localizations" : [
             {
               "description" : "Unlimited personalized meditation journeys.",
