@@ -86,6 +86,47 @@ final class KaiBrainService {
         let m = cal.component(.month, from: now)
         return "\(y)-\(m)"
     }
+
+    private func raLocaleInstruction(for localeIdentifier: String, personalityID: String) -> String {
+        guard personalityID == "ra" else { return "" }
+
+        let languageCode = Locale(identifier: localeIdentifier)
+            .language
+            .languageCode?
+            .identifier
+            .lowercased() ?? "en"
+
+        let opening: String
+        let closing: String
+
+        switch languageCode {
+        case "sv":
+            opening = "Jag är Ra. Jag hälsar dig i kärlekens och ljusets från den Ende Oändlige Skaparen."
+            closing = "Jag lämnar dig i kärlekens och ljusets från den Ende Oändlige Skaparen. Gå nu vidare och gläds i kraften och friden från den Ende Oändlige Skaparen. Adonai."
+        case "es":
+            opening = "Yo soy Ra. Te saludo en el amor y en la luz del Creador Infinito Uno."
+            closing = "Te dejo en el amor y en la luz del Creador Infinito Uno. Ve, pues, regocijándote en el poder y en la paz del Creador Infinito Uno. Adonai."
+        case "nb", "no":
+            opening = "Jeg er Ra. Jeg hilser deg i kjærligheten og lyset fra den ene uendelige skaperen."
+            closing = "Jeg forlater deg i kjærligheten og lyset fra den ene uendelige skaperen. Gå derfor videre og gled deg i kraften og freden fra den ene uendelige skaperen. Adonai."
+        case "da":
+            opening = "Jeg er Ra. Jeg hilser dig i kærligheden og lyset fra den ene uendelige skaber."
+            closing = "Jeg efterlader dig i kærligheden og lyset fra den ene uendelige skaber. Gå derfor videre og glæd dig i kraften og freden fra den ene uendelige skaber. Adonai."
+        default:
+            opening = "I am Ra. I greet you in the love and in the light of the one infinite creator."
+            closing = "I leave you in the love and in the light of the one infinite creator. Go forth, then, rejoicing in the power and the peace of the one infinite creator. Adonai."
+        }
+
+        return """
+
+        RA LOCALE OVERRIDE:
+        - Output the mandatory Ra opening in locale \(localeIdentifier) exactly as:
+          \(opening)
+        - End completed sessions in locale \(localeIdentifier) exactly as:
+          \(closing)
+        - Do not output the mandatory Ra lines in English unless locale is English.
+        """
+    }
     
     enum BrainError: Error {
         case generationFailed
@@ -101,7 +142,11 @@ final class KaiBrainService {
         LANGUAGE REQUIREMENT:
         - Write all meditation content in locale: \(localeIdentifier).
         - Match the user's language naturally and consistently.
+        - Never mix languages. Do not output English unless locale is English.
+        - Treat any style anchors/examples as STYLE ONLY. Do not copy anchor phrases verbatim unless they are already in the target locale.
+        - If an anchor/example is in another language, rewrite its meaning idiomatically in the target locale.
         """
+        let raLocaleInstruction = raLocaleInstruction(for: localeIdentifier, personalityID: personality.id)
         let wordBudget = Int(Double(durationMinutes * 150) * (1.0 - stillnessRatio))
         
         let densityInstruction = """
@@ -120,7 +165,7 @@ final class KaiBrainService {
             mood: mood,
             durationMinutes: durationMinutes,
             personalityName: personality.name,
-            personalityPrompt: personality.promptInjection + languageInstruction + densityInstruction,
+            personalityPrompt: personality.promptInjection + languageInstruction + raLocaleInstruction + densityInstruction,
             locale: localeIdentifier
         )
         
