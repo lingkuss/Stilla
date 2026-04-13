@@ -10,7 +10,11 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         let userInfo = response.notification.request.content.userInfo
-        if userInfo["open_kai"] as? Bool == true {
+        if let routineID = userInfo["routine_id"] as? String {
+            Task { @MainActor in
+                await RoutineManager.shared.applyRoutineFromNotification(id: routineID)
+            }
+        } else if userInfo["open_kai"] as? Bool == true {
             Task { @MainActor in
                 MeditationManager.shared.isSiriTriggeredKai = true
             }

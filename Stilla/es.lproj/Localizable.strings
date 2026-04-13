@@ -256,6 +256,42 @@
 "settings.unlock_premium_sound_library" = "Desbloquear biblioteca de sonido premium";
 "settings.locked_sound_message_format" = "%@ forma parte de la biblioteca completa de sonido premium, que desbloquea todos los tonos y ambientes premium.";
 "settings.unlock_premium_library" = "Desbloquear biblioteca premium - $4.99";
+"settings.routines" = "Rutinas";
+"settings.routines_help" = "Crea rutinas diarias o semanales e inicia una sesión directamente desde los recordatorios.";
+
+"routines.empty_title" = "Aún no hay rutinas";
+"routines.empty_message" = "Crea una rutina para automatizar tu horario de meditación.";
+"routines.section.schedule" = "Horario";
+"routines.section.session" = "Sesión";
+"routines.section.meditation" = "Meditación";
+"routines.title_placeholder" = "Enfoque de la mañana";
+"routines.time" = "Hora";
+"routines.session_type" = "Tipo de sesión";
+"routines.session.simple_timer" = "Temporizador simple";
+"routines.session.guided_mood" = "Guiada por estado de ánimo";
+"routines.session.guided_intention" = "Guiada por intención";
+"routines.session.saved_script" = "Script guardado";
+"routines.mood_placeholder" = "Describe el estado de ánimo para generar";
+"routines.intention" = "Intención";
+"routines.persona" = "Persona";
+"routines.saved_script" = "Script";
+"routines.saved_script_none" = "Aún no hay scripts guardados.";
+"routines.duration" = "Duración";
+"routines.technique" = "Técnica";
+"routines.ambience" = "Ambiente";
+"routines.enabled" = "Activada";
+"routines.new" = "Nueva rutina";
+"routines.edit" = "Editar rutina";
+"routines.gate.pro.title" = "Se requiere Mimir Pro";
+"routines.gate.pro.message_format" = "\"%@\" es una rutina guiada y requiere Mimir Pro.";
+"routines.gate.technique.title" = "Se requiere Biblioteca de Técnicas";
+"routines.gate.technique.message_format" = "\"%@\" usa una técnica de respiración bloqueada. Desbloquea la Biblioteca de Técnicas para ejecutar esta rutina.";
+"routines.gate.sound.title" = "Se requiere Biblioteca de Sonido";
+"routines.gate.sound.message_format" = "\"%@\" usa un sonido ambiental bloqueado. Desbloquea la Biblioteca de Sonido para ejecutar esta rutina.";
+"routines.gate.unlock_pro" = "Desbloquear Mimir Pro";
+"routines.gate.unlock_technique_format" = "Desbloquear Biblioteca de Técnicas (%@)";
+"routines.gate.unlock_sound_format" = "Desbloquear Biblioteca de Sonido (%@)";
+"routines.gate.not_now" = "Ahora no";
 
 "kai.mood_input_placeholder" = "Habla o escribe tu estado de ánimo. Mimir creará tu camino.";
 "kai.listening" = "Escuchando tu corazón...";
@@ -497,4 +533,10 @@
 "kai.error.connection.offline" = "Estás sin conexión. Conéctate a internet e intenta generar tu sesión con Mimir de nuevo.";
 "kai.error.connection.timeout" = "Mimir tardó demasiado en responder. Inténtalo de nuevo en un momento.";
 "kai.error.connection.generic" = "No se pudo conectar con Mimir en este momento. Inténtalo de nuevo en breve.";
+
+"routines.notifications_required.title" = "Permitir notificaciones para rutinas";
+"routines.notifications_required.message" = "Para ejecutar rutinas automáticamente, activa las notificaciones de Vindla en Configuración.";
+"routines.notifications_required.open_settings" = "Abrir Configuración";
+"routines.notification.title" = "Rutina lista: %@";
+"routines.notification.body" = "%@ • %d min. Toca para empezar ahora.";
 

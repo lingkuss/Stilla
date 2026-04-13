@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var currentPhase = ""
     @State private var showSavedMeditations = false
     @State private var reflectionSheetContext: ReflectionSheetContext?
+    @State private var storeManager = StoreKitManager.shared
     @AppStorage("homeViewMode") private var homeViewMode = HomeViewMode.hero
 
     private struct ReflectionSheetContext: Identifiable {
@@ -135,6 +136,12 @@ struct ContentView: View {
                 .padding(.bottom, 16)
                 .layoutPriority(1)
             }
+
+            if manager.isGeneratingGuidedSession {
+                guidedSessionLoadingOverlay
+                    .transition(.opacity)
+                    .zIndex(10)
+            }
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
@@ -242,6 +249,16 @@ struct ContentView: View {
         let fallback = String(localized: "content.home_proactive_fallback_body")
         let body = manager.latestSessionMemory?.proactiveBody?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? ""
         return body.isEmpty ? fallback : body
+    }
+
+    private var guidedSessionLoadingOverlay: some View {
+        ZStack {
+            Color(hue: 0.72, saturation: 0.4, brightness: 0.05)
+                .ignoresSafeArea()
+
+            KaiGeneratingLoadingView(personality: manager.selectedKaiPersonality)
+        }
+        .allowsHitTesting(true)
     }
 
     // MARK: - Redesign Home Views

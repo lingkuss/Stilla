@@ -256,6 +256,42 @@
 "settings.unlock_premium_sound_library" = "Lås opp premium lydbibliotek";
 "settings.locked_sound_message_format" = "%@ er en del av det komplette premium lydbiblioteket, som låser opp alle premiumtoner og atmosfærer.";
 "settings.unlock_premium_library" = "Lås opp premiumbibliotek – $4.99";
+"settings.routines" = "Rutiner";
+"settings.routines_help" = "Bygg daglige eller ukentlige rutiner og start en sesjon direkte fra påminnelser.";
+
+"routines.empty_title" = "Ingen rutiner ennå";
+"routines.empty_message" = "Opprett en rutine for å automatisere meditasjonsplanen din.";
+"routines.section.schedule" = "Plan";
+"routines.section.session" = "Økt";
+"routines.section.meditation" = "Meditasjon";
+"routines.title_placeholder" = "Morgenfokus";
+"routines.time" = "Tid";
+"routines.session_type" = "Økttype";
+"routines.session.simple_timer" = "Enkel timer";
+"routines.session.guided_mood" = "Guidet fra humør";
+"routines.session.guided_intention" = "Guidet fra intensjon";
+"routines.session.saved_script" = "Lagret script";
+"routines.mood_placeholder" = "Beskriv humøret som skal genereres";
+"routines.intention" = "Intensjon";
+"routines.persona" = "Persona";
+"routines.saved_script" = "Script";
+"routines.saved_script_none" = "Ingen lagrede script ennå.";
+"routines.duration" = "Varighet";
+"routines.technique" = "Teknikk";
+"routines.ambience" = "Atmosfære";
+"routines.enabled" = "Aktivert";
+"routines.new" = "Ny rutine";
+"routines.edit" = "Rediger rutine";
+"routines.gate.pro.title" = "Mimir Pro kreves";
+"routines.gate.pro.message_format" = "\"%@\" er en guidet rutine og krever Mimir Pro.";
+"routines.gate.technique.title" = "Teknikkbibliotek kreves";
+"routines.gate.technique.message_format" = "\"%@\" bruker en låst pusteteknikk. Lås opp teknikkbiblioteket for å kjøre denne rutinen.";
+"routines.gate.sound.title" = "Lydbibliotek kreves";
+"routines.gate.sound.message_format" = "\"%@\" bruker en låst ambience-lyd. Lås opp lydbiblioteket for å kjøre denne rutinen.";
+"routines.gate.unlock_pro" = "Lås opp Mimir Pro";
+"routines.gate.unlock_technique_format" = "Lås opp teknikkbibliotek (%@)";
+"routines.gate.unlock_sound_format" = "Lås opp lydbibliotek (%@)";
+"routines.gate.not_now" = "Ikke nå";
 
 "kai.mood_input_placeholder" = "Snakk eller skriv humøret ditt. Mimir vil forme din vei.";
 "kai.listening" = "Lytter til hjertet ditt...";
@@ -497,4 +533,10 @@
 "kai.error.connection.offline" = "Du er frakoblet. Koble til nettet igjen og prøv å generere Mimir-sesjonen din på nytt.";
 "kai.error.connection.timeout" = "Mimir brukte for lang tid på å svare. Prøv igjen om et øyeblikk.";
 "kai.error.connection.generic" = "Mimir kunne ikke nås akkurat nå. Prøv igjen snart.";
+
+"routines.notifications_required.title" = "Tillat varsler for rutiner";
+"routines.notifications_required.message" = "For å kjøre rutiner automatisk må du aktivere varsler for Vindla i Innstillinger.";
+"routines.notifications_required.open_settings" = "Åpne Innstillinger";
+"routines.notification.title" = "Rutine klar: %@";
+"routines.notification.body" = "%@ • %d min. Trykk for å starte nå.";
 

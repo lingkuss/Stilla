@@ -13,6 +13,14 @@ enum HomeViewMode: String, Codable {
     case timer
 }
 
+enum RoutineAccessGate: String, Identifiable {
+    case pro
+    case techniqueLibrary
+    case soundLibrary
+
+    var id: String { rawValue }
+}
+
 /// Central state manager for the meditation timer.
 @MainActor
 @Observable
@@ -197,6 +205,7 @@ final class MeditationManager {
 
     var pendingKaiMoodSummary: String?
     var pendingKaiIntention: String?
+    var isGeneratingGuidedSession: Bool = false
 
     var isCurrentScriptSaved: Bool {
         guard let current = currentScript else { return false }
@@ -932,6 +941,322 @@ extension MeditationManager {
 private extension Int {
     func clamped(to range: ClosedRange<Int>) -> Int {
         return Swift.max(range.lowerBound, Swift.min(self, range.upperBound))
+    }
+}
+
+enum RoutineSessionType: String, Codable, CaseIterable {
+    case simpleTimer
+    case guidedByMood
+    case guidedByIntention
+    case savedScript
+}
+
+struct MeditationRoutine: Identifiable, Codable, Hashable {
+    var id: UUID
+    var title: String
+    var hour: Int
+    var minute: Int
+    var weekdays: [Int]
+    var durationMinutes: Int
+    var techniqueID: String
+    var isEnabled: Bool
+
+    var sessionType: RoutineSessionType
+    var moodPrompt: String?
+    var intentionKey: String?
+    var personaID: String?
+    var savedScriptID: UUID?
+    var ambientSoundRaw: String
+
+    var ambientSound: SoundEngine.AmbientSound {
+        SoundEngine.AmbientSound(rawValue: ambientSoundRaw) ?? .none
+    }
+
+    init(
+        id: UUID = UUID(),
+        title: String,
+        hour: Int,
+        minute: Int,
+        weekdays: [Int],
+        durationMinutes: Int,
+        techniqueID: String,
+        isEnabled: Bool = true,
+        sessionType: RoutineSessionType = .simpleTimer,
+        moodPrompt: String? = nil,
+        intentionKey: String? = nil,
+        personaID: String? = nil,
+        savedScriptID: UUID? = nil,
+        ambientSoundRaw: String = SoundEngine.AmbientSound.none.rawValue
+    ) {
+        self.id = id
+        self.title = title
+        self.hour = hour
+        self.minute = minute
+        self.weekdays = weekdays.sorted()
+        self.durationMinutes = durationMinutes
+        self.techniqueID = techniqueID
+        self.isEnabled = isEnabled
+        self.sessionType = sessionType
+        self.moodPrompt = moodPrompt
+        self.intentionKey = intentionKey
+        self.personaID = personaID
+        self.savedScriptID = savedScriptID
+        self.ambientSoundRaw = ambientSoundRaw
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Routine"
+        hour = try container.decodeIfPresent(Int.self, forKey: .hour) ?? 8
+        minute = try container.decodeIfPresent(Int.self, forKey: .minute) ?? 0
+        weekdays = (try container.decodeIfPresent([Int].self, forKey: .weekdays) ?? [2]).sorted()
+        durationMinutes = try container.decodeIfPresent(Int.self, forKey: .durationMinutes) ?? 10
+        techniqueID = try container.decodeIfPresent(String.self, forKey: .techniqueID) ?? BreathingTechnique.defaultTechnique.id
+        isEnabled = try container.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true
+
+        sessionType = try container.decodeIfPresent(RoutineSessionType.self, forKey: .sessionType) ?? .simpleTimer
+        moodPrompt = try container.decodeIfPresent(String.self, forKey: .moodPrompt)
+        intentionKey = try container.decodeIfPresent(String.self, forKey: .intentionKey)
+        personaID = try container.decodeIfPresent(String.self, forKey: .personaID)
+        savedScriptID = try container.decodeIfPresent(UUID.self, forKey: .savedScriptID)
+        ambientSoundRaw = try container.decodeIfPresent(String.self, forKey: .ambientSoundRaw) ?? SoundEngine.AmbientSound.none.rawValue
+    }
+}
+
+@MainActor
+@Observable
+final class RoutineManager {
+    static let shared = RoutineManager()
+
+    private let storageKey = "meditation.routines.v1"
+    private let notificationPrefix = "routine."
+    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
+        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
+    ]
+
+    var routines: [MeditationRoutine] = []
+
+    private init() {
+        loadRoutines()
+        rescheduleNotifications()
+    }
+
+    func add(_ routine: MeditationRoutine) {
+        routines.append(routine)
+        routines.sort { lhs, rhs in
+            if lhs.hour == rhs.hour { return lhs.minute < rhs.minute }
+            return lhs.hour < rhs.hour
+        }
+        persistAndReschedule()
+    }
+
+    func update(_ routine: MeditationRoutine) {
+        guard let idx = routines.firstIndex(where: { $0.id == routine.id }) else { return }
+        routines[idx] = routine
+        persistAndReschedule()
+    }
+
+    func delete(_ routineID: UUID) {
+        routines.removeAll { $0.id == routineID }
+        persistAndReschedule()
+    }
+
+    func toggle(_ routineID: UUID, enabled: Bool) {
+        guard let idx = routines.firstIndex(where: { $0.id == routineID }) else { return }
+        routines[idx].isEnabled = enabled
+        persistAndReschedule()
+    }
+
+    func applyRoutineFromNotification(id: String) async {
+        guard let routineID = UUID(uuidString: id) else { return }
+        guard let routine = routines.first(where: { $0.id == routineID && $0.isEnabled }) else { return }
+
+        let manager = MeditationManager.shared
+        manager.shouldDismissSheets = true
+
+        await StoreKitManager.shared.updateCustomerProductStatus()
+
+        let allTechniques = [BreathingTechnique.defaultTechnique] + BreathingTechnique.presets + manager.userCustomTechniques
+        let resolvedTechnique = allTechniques.first(where: { $0.id == routine.techniqueID }) ?? BreathingTechnique.defaultTechnique
+
+        if resolvedTechnique.isPurchasable,
+           !StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID) {
+            return
+        }
+
+        let requestedAmbient = routine.ambientSound
+        if premiumAmbiences.contains(requestedAmbient),
+           !StoreKitManager.shared.isPurchased(StoreKitManager.soundBundleID) {
+            return
+        }
+
+        if (routine.sessionType == .guidedByMood ||
+            routine.sessionType == .guidedByIntention ||
+            routine.sessionType == .savedScript),
+           !StoreKitManager.shared.isVindlaProSubscribed {
+            return
+        }
+
+        manager.selectedTechnique = resolvedTechnique
+        manager.durationMinutes = routine.durationMinutes
+        manager.ambientSound = requestedAmbient
+
+        if manager.state == .meditating {
+            return
+        }
+
+        switch routine.sessionType {
+        case .simpleTimer:
+            manager.currentScript = nil
+            manager.isGuruEnabled = false
+            manager.start(durationMinutes: routine.durationMinutes)
+
+        case .savedScript:
+            guard let scriptID = routine.savedScriptID,
+                  let script = manager.savedMeditations.first(where: { $0.id == scriptID }) else {
+                return
+            }
+
+            manager.currentScript = script
+            manager.isGuruEnabled = true
+            manager.durationMinutes = script.durationMinutes
+            if let sharedID = script.kaiPersonalityID {
+                manager.selectedKaiPersonalityID = sharedID
+            }
+            manager.start(durationMinutes: script.durationMinutes)
+
+        case .guidedByMood, .guidedByIntention:
+            await runGeneratedRoutine(routine, manager: manager)
+        }
+    }
+
+    private func runGeneratedRoutine(_ routine: MeditationRoutine, manager: MeditationManager) async {
+        await StoreKitManager.shared.updateCustomerProductStatus()
+        guard StoreKitManager.shared.isVindlaProSubscribed else {
+            return
+        }
+
+        manager.isGeneratingGuidedSession = true
+        defer { manager.isGeneratingGuidedSession = false }
+
+        let moodText: String
+        switch routine.sessionType {
+        case .guidedByIntention:
+            if let intentionKey = routine.intentionKey {
+                moodText = "Intention: \(localizedIntentionText(for: intentionKey))"
+            } else {
+                moodText = routine.title
+            }
+        case .guidedByMood:
+            let prompt = routine.moodPrompt?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            moodText = prompt.isEmpty ? routine.title : prompt
+        case .simpleTimer, .savedScript:
+            moodText = routine.title
+        }
+
+        let persona = KaiPersonality.personality(for: routine.personaID ?? manager.selectedKaiPersonalityID)
+
+        do {
+            var script = try await KaiBrainService.shared.generateScript(
+                mood: moodText,
+                durationMinutes: routine.durationMinutes,
+                personality: persona,
+                stillnessRatio: manager.preferredStillnessRatio
+            )
+            script.kaiPersonalityID = persona.id
+            script.kaiPersonalityName = persona.localizedName
+
+            manager.pendingKaiMoodSummary = moodText
+            manager.pendingKaiIntention = routine.intentionKey.map(localizedIntentionText)
+            manager.selectedKaiPersonalityID = persona.id
+            manager.currentScript = script
+            manager.isGuruEnabled = true
+            manager.start(durationMinutes: routine.durationMinutes)
+        } catch {
+            manager.currentScript = nil
+            manager.isGuruEnabled = false
+            manager.start(durationMinutes: routine.durationMinutes)
+        }
+    }
+
+    private func localizedIntentionText(for key: String) -> String {
+        let localized = Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        return localized == key ? key : localized
+    }
+
+    nonisolated private func localizedString(_ key: String) -> String {
+        let localized = Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        return localized == key ? key : localized
+    }
+
+    nonisolated private func localizedSessionLabel(for type: RoutineSessionType) -> String {
+        switch type {
+        case .simpleTimer:
+            return localizedString("routines.session.simple_timer")
+        case .guidedByMood:
+            return localizedString("routines.session.guided_mood")
+        case .guidedByIntention:
+            return localizedString("routines.session.guided_intention")
+        case .savedScript:
+            return localizedString("routines.session.saved_script")
+        }
+    }
+
+    private func persistAndReschedule() {
+        if let data = try? JSONEncoder().encode(routines) {
+            UserDefaults.standard.set(data, forKey: storageKey)
+        }
+        rescheduleNotifications()
+    }
+
+    private func loadRoutines() {
+        guard let data = UserDefaults.standard.data(forKey: storageKey),
+              let decoded = try? JSONDecoder().decode([MeditationRoutine].self, from: data) else {
+            routines = []
+            return
+        }
+        routines = decoded
+    }
+
+    private func rescheduleNotifications() {
+        let center = UNUserNotificationCenter.current()
+        let prefix = notificationPrefix
+        let routinesSnapshot = routines
+
+        center.getPendingNotificationRequests { requests in
+            let toRemove = requests
+                .map(\.identifier)
+                .filter { $0.hasPrefix(prefix) }
+
+            center.removePendingNotificationRequests(withIdentifiers: toRemove)
+
+            for routine in routinesSnapshot where routine.isEnabled {
+                for weekday in routine.weekdays {
+                    var components = DateComponents()
+                    components.weekday = weekday
+                    components.hour = routine.hour
+                    components.minute = routine.minute
+
+                    let content = UNMutableNotificationContent()
+                    let sessionLabel = self.localizedSessionLabel(for: routine.sessionType)
+                    content.title = String(format: self.localizedString("routines.notification.title"), routine.title)
+                    content.body = String(format: self.localizedString("routines.notification.body"), sessionLabel, routine.durationMinutes)
+                    content.sound = .default
+                    content.userInfo = ["routine_id": routine.id.uuidString]
+
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+                    let identifier = "\(prefix)\(routine.id.uuidString).\(weekday)"
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+                    center.add(request) { error in
+                        if let error {
+                            print("Error scheduling routine notification: \(error)")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

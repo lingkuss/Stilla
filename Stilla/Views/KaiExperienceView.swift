@@ -17,8 +17,6 @@ struct KaiExperienceView: View {
     @State private var showingPaywall: Bool = false
     @State private var showingSettingsPrompt: Bool = false
     @State private var isPersonalityPickerExpanded = false
-    @State private var rotationAmount: Double = 0.0
-    @State private var pulseAmount: Double = 0.0
     @State private var errorTitle = String(localized: "kai.error.resting.title")
     @State private var errorMessage = String(localized: "kai.error.resting.message")
     @State private var pickedSuggestion: String? = nil
@@ -345,62 +343,7 @@ struct KaiExperienceView: View {
     }
     
     private var generatingView: some View {
-        VStack(spacing: 48) {
-            Spacer()
-
-            // Spirit Animation
-            ZStack {
-                ForEach(0..<3) { i in
-                    Circle()
-                        .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .frame(width: 100, height: 100)
-                        .blur(radius: 40)
-                        .scaleEffect(0.8 + (pulseAmount * 0.4))
-                        .offset(x: CGFloat(sin(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0),
-                                y: CGFloat(cos(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0))
-                }
-
-                Circle()
-                    .stroke(
-                        AngularGradient(colors: [.white.opacity(0.0), .white.opacity(0.3), .white.opacity(0.0)], center: .center),
-                        style: StrokeStyle(lineWidth: 1, lineCap: .round)
-                    )
-                    .frame(width: 140, height: 140)
-                    .rotationEffect(.degrees(rotationAmount))
-
-                Image(activePersonality.imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 96, height: 96)
-                    .clipped()
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .strokeBorder(.white.opacity(0.2), lineWidth: 0.5)
-                    )
-            }
-            .onAppear {
-                withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
-                    rotationAmount = 360.0
-                }
-                withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
-                    pulseAmount = 1.0
-                }
-            }
-
-            VStack(spacing: 16) {
-                Text(loadingHeadline)
-                    .font(.system(size: 20, weight: .light, design: .serif))
-                    .italic()
-                Text(loadingSubheadline)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.white.opacity(0.4))
-            }
-            .multilineTextAlignment(.center)
-
-            Spacer()
-            Spacer()
-        }
+        KaiGeneratingLoadingView(personality: activePersonality)
     }
     
     @MainActor
@@ -668,52 +611,6 @@ struct KaiExperienceView: View {
         Bundle.main.localizedString(forKey: key, value: key, table: nil)
     }
 
-    private var loadingHeadline: String {
-        switch activePersonality.id {
-        case "zen_minimalist":
-            return String(localized: "kai.loading.headline.zen_minimalist")
-        case "warm_guardian":
-            return String(localized: "kai.loading.headline.warm_guardian")
-        case "modern_realist":
-            return String(localized: "kai.loading.headline.modern_realist")
-        case "cosmic_sage":
-            return String(localized: "kai.loading.headline.cosmic_sage")
-        case "reflective_analyst":
-            return String(localized: "kai.loading.headline.reflective_analyst")
-        case "philosopher":
-            return String(localized: "kai.loading.headline.philosopher")
-        case "ra":
-            return String(localized: "kai.loading.headline.ra")
-        case "shadow_guide":
-            return String(localized: "kai.loading.headline.shadow_guide")
-        default:
-            return String(localized: "kai.loading.headline.default")
-        }
-    }
-
-    private var loadingSubheadline: String {
-        switch activePersonality.id {
-        case "zen_minimalist":
-            return String(localized: "kai.loading.subheadline.zen_minimalist")
-        case "warm_guardian":
-            return String(localized: "kai.loading.subheadline.warm_guardian")
-        case "modern_realist":
-            return String(localized: "kai.loading.subheadline.modern_realist")
-        case "cosmic_sage":
-            return String(localized: "kai.loading.subheadline.cosmic_sage")
-        case "reflective_analyst":
-            return String(localized: "kai.loading.subheadline.reflective_analyst")
-        case "philosopher":
-            return String(localized: "kai.loading.subheadline.philosopher")
-        case "ra":
-            return String(localized: "kai.loading.subheadline.ra")
-        case "shadow_guide":
-            return String(localized: "kai.loading.subheadline.shadow_guide")
-        default:
-            return String(localized: "kai.loading.subheadline.default")
-        }
-    }
-
     private var statusBadge: some View {
         Group {
             if store.isVindlaProSubscribed {
@@ -754,6 +651,119 @@ struct KaiExperienceView: View {
                 endPoint: .bottom
             )
         )
+    }
+}
+
+struct KaiGeneratingLoadingView: View {
+    let personality: KaiPersonality
+
+    @State private var rotationAmount: Double = 0.0
+    @State private var pulseAmount: Double = 0.0
+
+    var body: some View {
+        VStack(spacing: 48) {
+            Spacer()
+
+            ZStack {
+                ForEach(0..<3, id: \.self) { i in
+                    Circle()
+                        .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .frame(width: 100, height: 100)
+                        .blur(radius: 40)
+                        .scaleEffect(0.8 + (pulseAmount * 0.4))
+                        .offset(
+                            x: CGFloat(sin(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0),
+                            y: CGFloat(cos(Double(i) * 2.0 + rotationAmount * Double.pi / 180.0) * 20.0)
+                        )
+                }
+
+                Circle()
+                    .stroke(
+                        AngularGradient(colors: [.white.opacity(0.0), .white.opacity(0.3), .white.opacity(0.0)], center: .center),
+                        style: StrokeStyle(lineWidth: 1, lineCap: .round)
+                    )
+                    .frame(width: 140, height: 140)
+                    .rotationEffect(.degrees(rotationAmount))
+
+                Image(personality.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 96, height: 96)
+                    .clipped()
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .strokeBorder(.white.opacity(0.2), lineWidth: 0.5)
+                    )
+            }
+            .onAppear {
+                withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
+                    rotationAmount = 360.0
+                }
+                withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                    pulseAmount = 1.0
+                }
+            }
+
+            VStack(spacing: 16) {
+                Text(loadingHeadline)
+                    .font(.system(size: 20, weight: .light, design: .serif))
+                    .italic()
+                Text(loadingSubheadline)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
+            .multilineTextAlignment(.center)
+
+            Spacer()
+            Spacer()
+        }
+    }
+
+    private var loadingHeadline: String {
+        switch personality.id {
+        case "zen_minimalist":
+            return String(localized: "kai.loading.headline.zen_minimalist")
+        case "warm_guardian":
+            return String(localized: "kai.loading.headline.warm_guardian")
+        case "modern_realist":
+            return String(localized: "kai.loading.headline.modern_realist")
+        case "cosmic_sage":
+            return String(localized: "kai.loading.headline.cosmic_sage")
+        case "reflective_analyst":
+            return String(localized: "kai.loading.headline.reflective_analyst")
+        case "philosopher":
+            return String(localized: "kai.loading.headline.philosopher")
+        case "ra":
+            return String(localized: "kai.loading.headline.ra")
+        case "shadow_guide":
+            return String(localized: "kai.loading.headline.shadow_guide")
+        default:
+            return String(localized: "kai.loading.headline.default")
+        }
+    }
+
+    private var loadingSubheadline: String {
+        switch personality.id {
+        case "zen_minimalist":
+            return String(localized: "kai.loading.subheadline.zen_minimalist")
+        case "warm_guardian":
+            return String(localized: "kai.loading.subheadline.warm_guardian")
+        case "modern_realist":
+            return String(localized: "kai.loading.subheadline.modern_realist")
+        case "cosmic_sage":
+            return String(localized: "kai.loading.subheadline.cosmic_sage")
+        case "reflective_analyst":
+            return String(localized: "kai.loading.subheadline.reflective_analyst")
+        case "philosopher":
+            return String(localized: "kai.loading.subheadline.philosopher")
+        case "ra":
+            return String(localized: "kai.loading.subheadline.ra")
+        case "shadow_guide":
+            return String(localized: "kai.loading.subheadline.shadow_guide")
+        default:
+            return String(localized: "kai.loading.subheadline.default")
+        }
     }
 }
 

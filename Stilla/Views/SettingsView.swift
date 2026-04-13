@@ -1,11 +1,13 @@
 import SwiftUI
 import AVFoundation
+import UIKit
 
 struct SettingsView: View {
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
     @AppStorage("app.language.override") private var appLanguageOverride = AppLocalization.LanguageOption.system.rawValue
     @State private var showLanguageRestartAlert = false
+    @State private var routineManager = RoutineManager.shared
 
     var body: some View {
         @Bindable var manager = manager
@@ -201,6 +203,23 @@ struct SettingsView: View {
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
+                Section {
+                    NavigationLink {
+                        RoutineListView()
+                            .environment(manager)
+                    } label: {
+                        HStack {
+                            Label(String(localized: "settings.routines"), systemImage: "calendar.badge.clock")
+                            Spacer()
+                            Text("\(routineManager.routines.filter(\.isEnabled).count)")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                } footer: {
+                    Text(String(localized: "settings.routines_help"))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+
                 // Kai's Voice
                 Section {
                     NavigationLink {
@@ -339,6 +358,575 @@ struct SettingsView: View {
         }
     }
 }
+
+struct RoutineListView: View {
+    @Environment(MeditationManager.self) private var manager
+    @State private var routineManager = RoutineManager.shared
+    @State private var editingRoutine: MeditationRoutine?
+    @State private var creatingRoutine = false
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if routineManager.routines.isEmpty {
+                    ContentUnavailableView(
+                        String(localized: "routines.empty_title"),
+                        systemImage: "calendar.badge.exclamationmark",
+                        description: Text(String(localized: "routines.empty_message"))
+                    )
+                    .padding(.horizontal, 24)
+                } else {
+                    List {
+                        ForEach(routineManager.routines) { routine in
+                            routineRow(routine)
+                                .listRowBackground(Color.white.opacity(0.04))
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    editingRoutine = routine
+                                }
+                        }
+                        .onDelete { indexSet in
+                            for idx in indexSet {
+                                let id = routineManager.routines[idx].id
+                                routineManager.delete(id)
+                            }
+                        }
+                    }
+                    .scrollContentBackground(.hidden)
+                }
+            }
+            .navigationTitle(String(localized: "settings.routines"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        creatingRoutine = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.10).ignoresSafeArea())
+            .sheet(item: $editingRoutine) { routine in
+                RoutineEditorView(routine: routine) { updated in
+                    routineManager.update(updated)
+                }
+                .environment(manager)
+            }
+            .sheet(isPresented: $creatingRoutine) {
+                RoutineEditorView(routine: nil) { created in
+                    routineManager.add(created)
+                }
+                .environment(manager)
+            }
+        }
+        .preferredColorScheme(.dark)
+    }
+
+    private func routineRow(_ routine: MeditationRoutine) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(routine.title)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                Text("\(formattedTime(hour: routine.hour, minute: routine.minute)) • \(weekdaySummary(routine.weekdays))")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.75))
+                Text("\(sessionLabel(for: routine)) • \(routine.durationMinutes) min • \(techniqueName(for: routine.techniqueID))")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.55))
+                Text("\(String(localized: "routines.ambience")): \(routine.ambientSound.rawValue)")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.45))
+            }
+
+            Spacer()
+
+            Toggle("", isOn: Binding(
+                get: { routine.isEnabled },
+                set: { routineManager.toggle(routine.id, enabled: $0) }
+            ))
+            .labelsHidden()
+            .tint(Color(hue: 0.55, saturation: 0.6, brightness: 0.7))
+        }
+        .padding(.vertical, 6)
+    }
+
+    private func formattedTime(hour: Int, minute: Int) -> String {
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = minute
+        let date = Calendar.current.date(from: components) ?? Date()
+        return date.formatted(date: .omitted, time: .shortened)
+    }
+
+    private func weekdaySummary(_ weekdays: [Int]) -> String {
+        let symbols = Calendar.current.veryShortWeekdaySymbols
+        let mapped = weekdays.compactMap { weekday -> String? in
+            let idx = weekday - 1
+            guard symbols.indices.contains(idx) else { return nil }
+            return symbols[idx]
+        }
+        return mapped.joined(separator: " ")
+    }
+
+    private func techniqueName(for id: String) -> String {
+        let all = [BreathingTechnique.defaultTechnique] + BreathingTechnique.presets + manager.userCustomTechniques
+        return all.first(where: { $0.id == id })?.localizedName ?? BreathingTechnique.defaultTechnique.localizedName
+    }
+
+    private func sessionLabel(for routine: MeditationRoutine) -> String {
+        switch routine.sessionType {
+        case .simpleTimer:
+            return String(localized: "routines.session.simple_timer")
+        case .guidedByMood:
+            return String(localized: "routines.session.guided_mood")
+        case .guidedByIntention:
+            return String(localized: "routines.session.guided_intention")
+        case .savedScript:
+            return String(localized: "routines.session.saved_script")
+        }
+    }
+}
+
+private struct RoutineEditorView: View {
+    let routine: MeditationRoutine?
+    let onSave: (MeditationRoutine) -> Void
+
+    @Environment(MeditationManager.self) private var manager
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var title = ""
+    @State private var selectedTime = Date()
+    @State private var selectedWeekdays: Set<Int> = []
+    @State private var selectedDuration = 10
+    @State private var selectedTechniqueID = BreathingTechnique.defaultTechnique.id
+    @State private var selectedAmbientSoundRaw = SoundEngine.AmbientSound.none.rawValue
+    @State private var selectedSessionType: RoutineSessionType = .simpleTimer
+    @State private var moodPrompt = ""
+    @State private var selectedIntentionKey: String?
+    @State private var selectedPersonaID = KaiPersonality.default.id
+    @State private var selectedSavedScriptID: UUID?
+    @State private var isEnabled = true
+    @State private var showingNotificationDeniedAlert = false
+    @State private var storeManager = StoreKitManager.shared
+    @State private var gateToUnlock: RoutineAccessGate?
+    @State private var pendingAccessGates: [RoutineAccessGate] = []
+    @State private var pendingRoutineForSave: MeditationRoutine?
+    @State private var purchaseStatusMessage = ""
+    @State private var showingPurchaseStatus = false
+
+    private let intentionKeys = [
+        "intention.creative_flow", "intention.deep_stress", "intention.sleep_prep",
+        "intention.morning_spark", "intention.anxiety_calm", "intention.grateful_heart",
+        "intention.focus_reset", "intention.body_ease", "intention.confidence_boost",
+        "intention.gentle_clarity", "intention.evening_unwind", "intention.self_compassion"
+    ]
+
+    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
+        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
+    ]
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section(String(localized: "routines.section.schedule")) {
+                    TextField(String(localized: "routines.title_placeholder"), text: $title)
+                    DatePicker(String(localized: "routines.time"), selection: $selectedTime, displayedComponents: .hourAndMinute)
+
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 7), spacing: 6) {
+                        ForEach(orderedWeekdays, id: \.weekday) { item in
+                            let selected = selectedWeekdays.contains(item.weekday)
+                            Button {
+                                if selected {
+                                    selectedWeekdays.remove(item.weekday)
+                                } else {
+                                    selectedWeekdays.insert(item.weekday)
+                                }
+                            } label: {
+                                Text(item.symbol)
+                                    .font(.caption.weight(.semibold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                                    .background(selected ? Color(hue: 0.55, saturation: 0.6, brightness: 0.7) : Color.white.opacity(0.08))
+                                    .foregroundStyle(selected ? .black : .white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+
+                Section(String(localized: "routines.section.session")) {
+                    Picker(String(localized: "routines.session_type"), selection: $selectedSessionType) {
+                        Text(String(localized: "routines.session.simple_timer")).tag(RoutineSessionType.simpleTimer)
+                        Text(String(localized: "routines.session.guided_mood")).tag(RoutineSessionType.guidedByMood)
+                        Text(String(localized: "routines.session.guided_intention")).tag(RoutineSessionType.guidedByIntention)
+                        Text(String(localized: "routines.session.saved_script")).tag(RoutineSessionType.savedScript)
+                    }
+
+                    if selectedSessionType == .guidedByMood {
+                        TextField(String(localized: "routines.mood_placeholder"), text: $moodPrompt, axis: .vertical)
+                            .lineLimit(2...4)
+                    }
+
+                    if selectedSessionType == .guidedByIntention {
+                        Picker(String(localized: "routines.intention"), selection: Binding(
+                            get: { selectedIntentionKey ?? intentionKeys.first ?? "" },
+                            set: { selectedIntentionKey = $0 }
+                        )) {
+                            ForEach(intentionKeys, id: \.self) { key in
+                                Text(localizedText(for: key)).tag(key)
+                            }
+                        }
+                    }
+
+                    if selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention {
+                        Picker(String(localized: "routines.persona"), selection: $selectedPersonaID) {
+                            ForEach(KaiPersonality.all) { persona in
+                                Text(persona.localizedName).tag(persona.id)
+                            }
+                        }
+                    }
+
+                    if selectedSessionType == .savedScript {
+                        if manager.savedMeditations.isEmpty {
+                            Text(String(localized: "routines.saved_script_none"))
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Picker(String(localized: "routines.saved_script"), selection: Binding(
+                                get: { selectedSavedScriptID ?? manager.savedMeditations.first!.id },
+                                set: { selectedSavedScriptID = $0 }
+                            )) {
+                                ForEach(manager.savedMeditations, id: \.id) { script in
+                                    Text(script.title).tag(script.id)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Section(String(localized: "routines.section.meditation")) {
+                    if selectedSessionType == .savedScript, let script = selectedSavedScript {
+                        HStack {
+                            Text(String(localized: "routines.duration"))
+                            Spacer()
+                            Text("\(script.durationMinutes) min")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else {
+                        Picker(String(localized: "routines.duration"), selection: $selectedDuration) {
+                            ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { duration in
+                                Text("\(duration) min").tag(duration)
+                            }
+                        }
+                    }
+
+                    Picker(String(localized: "routines.technique"), selection: $selectedTechniqueID) {
+                        ForEach(availableTechniques, id: \.id) { technique in
+                            Text(technique.localizedName).tag(technique.id)
+                        }
+                    }
+
+                    Picker(String(localized: "routines.ambience"), selection: $selectedAmbientSoundRaw) {
+                        ForEach(SoundEngine.AmbientSound.allCases, id: \.rawValue) { sound in
+                            Text(sound.rawValue).tag(sound.rawValue)
+                        }
+                    }
+
+                    Toggle(String(localized: "routines.enabled"), isOn: $isEnabled)
+                }
+            }
+            .navigationTitle(routine == nil ? String(localized: "routines.new") : String(localized: "routines.edit"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(String(localized: "ui.cancel")) { dismiss() }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(String(localized: "ui.save")) {
+                        Task {
+                            await saveRoutine()
+                        }
+                    }
+                    .disabled(!canSave)
+                }
+            }
+            .onAppear(perform: loadExisting)
+            .onChange(of: selectedSessionType) { _, newValue in
+                if newValue == .guidedByIntention && selectedIntentionKey == nil {
+                    selectedIntentionKey = intentionKeys.first
+                }
+                if newValue == .savedScript && selectedSavedScriptID == nil {
+                    selectedSavedScriptID = manager.savedMeditations.first?.id
+                }
+                if newValue == .savedScript, let script = selectedSavedScript {
+                    selectedDuration = script.durationMinutes
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+        .alert(String(localized: "routines.notifications_required.title"), isPresented: $showingNotificationDeniedAlert) {
+            Button(String(localized: "ui.cancel"), role: .cancel) { }
+            Button(String(localized: "routines.notifications_required.open_settings")) {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                UIApplication.shared.open(url)
+            }
+        } message: {
+            Text(String(localized: "routines.notifications_required.message"))
+        }
+        .alert(item: $gateToUnlock) { gate in
+            Alert(
+                title: Text(routineAccessTitle(for: gate)),
+                message: Text(routineAccessMessage(for: gate)),
+                primaryButton: .default(Text(routineAccessUnlockLabel(for: gate))) {
+                    Task {
+                        await unlockGateAndContinue(gate)
+                    }
+                },
+                secondaryButton: .cancel(Text(String(localized: "routines.gate.not_now"))) {
+                    gateToUnlock = nil
+                    pendingAccessGates = []
+                    pendingRoutineForSave = nil
+                }
+            )
+        }
+        .alert(String(localized: "paywall.alert.title"), isPresented: $showingPurchaseStatus) {
+            Button(String(localized: "common.ok"), role: .cancel) { }
+        } message: {
+            Text(purchaseStatusMessage)
+        }
+    }
+
+    private var availableTechniques: [BreathingTechnique] {
+        let merged = [BreathingTechnique.defaultTechnique] + BreathingTechnique.presets + manager.userCustomTechniques
+        var seen = Set<String>()
+        return merged.filter { seen.insert($0.id).inserted }
+    }
+
+    private var selectedSavedScript: MeditationScript? {
+        guard let selectedSavedScriptID else { return nil }
+        return manager.savedMeditations.first(where: { $0.id == selectedSavedScriptID })
+    }
+
+    private var canSave: Bool {
+        let hasTitle = !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasDays = !selectedWeekdays.isEmpty
+        let hasSavedScript = selectedSessionType != .savedScript || selectedSavedScriptID != nil
+        let hasIntention = selectedSessionType != .guidedByIntention || selectedIntentionKey != nil
+        return hasTitle && hasDays && hasSavedScript && hasIntention
+    }
+
+    private var orderedWeekdays: [(weekday: Int, symbol: String)] {
+        let calendar = Calendar.current
+        let symbols = calendar.veryShortWeekdaySymbols
+        let first = calendar.firstWeekday
+        return (0..<7).compactMap { offset in
+            let weekday = ((first - 1 + offset) % 7) + 1
+            let idx = weekday - 1
+            guard symbols.indices.contains(idx) else { return nil }
+            return (weekday, symbols[idx])
+        }
+    }
+
+    private func localizedText(for key: String) -> String {
+        let value = Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        return value == key ? key : value
+    }
+
+    private func loadExisting() {
+        guard let routine else {
+            selectedIntentionKey = intentionKeys.first
+            selectedSavedScriptID = manager.savedMeditations.first?.id
+            return
+        }
+
+        title = routine.title
+        selectedWeekdays = Set(routine.weekdays)
+        selectedDuration = routine.durationMinutes
+        selectedTechniqueID = routine.techniqueID
+        selectedAmbientSoundRaw = routine.ambientSoundRaw
+        selectedSessionType = routine.sessionType
+        moodPrompt = routine.moodPrompt ?? ""
+        selectedIntentionKey = routine.intentionKey ?? intentionKeys.first
+        selectedPersonaID = routine.personaID ?? manager.selectedKaiPersonalityID
+        selectedSavedScriptID = routine.savedScriptID ?? manager.savedMeditations.first?.id
+        if selectedSessionType == .savedScript, let script = selectedSavedScript {
+            selectedDuration = script.durationMinutes
+        }
+        isEnabled = routine.isEnabled
+
+        var components = DateComponents()
+        components.hour = routine.hour
+        components.minute = routine.minute
+        selectedTime = Calendar.current.date(from: components) ?? Date()
+    }
+
+    private func saveRoutine() async {
+        let final = buildRoutineDraft()
+
+        await storeManager.updateCustomerProductStatus()
+        let requiredGates = accessGatesRequired(for: final)
+        if !requiredGates.isEmpty {
+            pendingRoutineForSave = final
+            pendingAccessGates = requiredGates
+            gateToUnlock = requiredGates.first
+            return
+        }
+
+        await completeSave(final)
+    }
+
+    private func completeSave(_ routineToSave: MeditationRoutine) async {
+        if routineToSave.isEnabled {
+            let granted = await NotificationManager.shared.requestAuthorization()
+            if !granted {
+                showingNotificationDeniedAlert = true
+                return
+            }
+        }
+
+        onSave(routineToSave)
+        dismiss()
+    }
+
+    private func buildRoutineDraft() -> MeditationRoutine {
+        let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+        let resolvedDuration: Int
+        if selectedSessionType == .savedScript, let script = selectedSavedScript {
+            resolvedDuration = script.durationMinutes
+        } else {
+            resolvedDuration = selectedDuration
+        }
+
+        return MeditationRoutine(
+            id: routine?.id ?? UUID(),
+            title: title.trimmingCharacters(in: .whitespacesAndNewlines),
+            hour: timeComponents.hour ?? 8,
+            minute: timeComponents.minute ?? 0,
+            weekdays: Array(selectedWeekdays).sorted(),
+            durationMinutes: resolvedDuration,
+            techniqueID: selectedTechniqueID,
+            isEnabled: isEnabled,
+            sessionType: selectedSessionType,
+            moodPrompt: selectedSessionType == .guidedByMood ? moodPrompt.trimmingCharacters(in: .whitespacesAndNewlines) : nil,
+            intentionKey: selectedSessionType == .guidedByIntention ? selectedIntentionKey : nil,
+            personaID: (selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention) ? selectedPersonaID : nil,
+            savedScriptID: selectedSessionType == .savedScript ? selectedSavedScriptID : nil,
+            ambientSoundRaw: selectedAmbientSoundRaw
+        )
+    }
+
+    private func accessGatesRequired(for routine: MeditationRoutine) -> [RoutineAccessGate] {
+        var gates: [RoutineAccessGate] = []
+
+        if routine.sessionType == .guidedByMood ||
+            routine.sessionType == .guidedByIntention ||
+            routine.sessionType == .savedScript {
+            if !storeManager.isVindlaProSubscribed {
+                gates.append(.pro)
+            }
+        }
+
+        if let selectedTechnique = availableTechniques.first(where: { $0.id == routine.techniqueID }),
+           selectedTechnique.isPurchasable,
+           !storeManager.isPurchased(StoreKitManager.techniqueLibraryID) {
+            gates.append(.techniqueLibrary)
+        }
+
+        if premiumAmbiences.contains(routine.ambientSound),
+           !storeManager.isPurchased(StoreKitManager.soundBundleID) {
+            gates.append(.soundLibrary)
+        }
+
+        return gates
+    }
+
+    private func routineAccessTitle(for gate: RoutineAccessGate) -> String {
+        switch gate {
+        case .pro:
+            return String(localized: "routines.gate.pro.title")
+        case .techniqueLibrary:
+            return String(localized: "routines.gate.technique.title")
+        case .soundLibrary:
+            return String(localized: "routines.gate.sound.title")
+        }
+    }
+
+    private func routineAccessMessage(for gate: RoutineAccessGate) -> String {
+        let routineTitle = pendingRoutineForSave?.title ?? title.trimmingCharacters(in: .whitespacesAndNewlines)
+        switch gate {
+        case .pro:
+            return String(format: String(localized: "routines.gate.pro.message_format"), routineTitle)
+        case .techniqueLibrary:
+            return String(format: String(localized: "routines.gate.technique.message_format"), routineTitle)
+        case .soundLibrary:
+            return String(format: String(localized: "routines.gate.sound.message_format"), routineTitle)
+        }
+    }
+
+    private func routineAccessUnlockLabel(for gate: RoutineAccessGate) -> String {
+        switch gate {
+        case .pro:
+            return String(localized: "routines.gate.unlock_pro")
+        case .techniqueLibrary:
+            let price = storeManager.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99")
+            return String(format: String(localized: "routines.gate.unlock_technique_format"), price)
+        case .soundLibrary:
+            let price = storeManager.displayPrice(for: StoreKitManager.soundBundleID, fallback: "$4.99")
+            return String(format: String(localized: "routines.gate.unlock_sound_format"), price)
+        }
+    }
+
+    private func unlockGateAndContinue(_ gate: RoutineAccessGate) async {
+        let outcome: StoreKitManager.PurchaseOutcome
+        switch gate {
+        case .pro:
+            outcome = await storeManager.purchase(StoreKitManager.vindlaProID)
+        case .techniqueLibrary:
+            outcome = await storeManager.purchase(StoreKitManager.techniqueLibraryID)
+        case .soundLibrary:
+            outcome = await storeManager.purchase(StoreKitManager.soundBundleID)
+        }
+
+        await storeManager.updateCustomerProductStatus()
+
+        guard case .success = outcome else {
+            presentPurchaseStatus(outcome)
+            return
+        }
+
+        pendingAccessGates.removeAll(where: { $0 == gate })
+
+        if let nextGate = pendingAccessGates.first {
+            gateToUnlock = nextGate
+            return
+        }
+
+        guard let pending = pendingRoutineForSave else { return }
+        gateToUnlock = nil
+        pendingAccessGates = []
+        pendingRoutineForSave = nil
+        await completeSave(pending)
+    }
+
+    private func presentPurchaseStatus(_ outcome: StoreKitManager.PurchaseOutcome) {
+        switch outcome {
+        case .success:
+            return
+        case .cancelled:
+            purchaseStatusMessage = String(localized: "purchase.cancelled")
+        case .pending:
+            purchaseStatusMessage = String(localized: "purchase.pending")
+        case .unavailable:
+            purchaseStatusMessage = String(localized: "purchase.unavailable")
+        case .failed(let message):
+            purchaseStatusMessage = message
+        }
+        showingPurchaseStatus = true
+    }
+}
+
 import SwiftUI
 import StoreKit
 
