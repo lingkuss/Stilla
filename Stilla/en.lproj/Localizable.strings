@@ -388,6 +388,16 @@
 "sound.brown_noise.description" = "Deep, warm static, like a distant rolling ocean.";
 "sound.solfeggio_love.description" = "528 Hz - The 'Miracle' tone, promotes repair and harmony.";
 "sound.solfeggio_nature.description" = "432 Hz - Mathematical tuning aligned with nature.";
+"None" = "None";
+"Rain Ambience" = "Rain Ambience";
+"White Noise" = "White Noise";
+"Pink Noise" = "Pink Noise";
+"Brown Noise" = "Brown Noise";
+"Deep Sleep (Delta)" = "Deep Sleep (Delta)";
+"Creativity (Alpha)" = "Creativity (Alpha)";
+"Focus (Beta)" = "Focus (Beta)";
+"Love Frequency (528 Hz)" = "Love Frequency (528 Hz)";
+"Nature's Pitch (432 Hz)" = "Nature's Pitch (432 Hz)";
 
 "intention.creative_flow" = "Creative Flow";
 "intention.deep_stress" = "Deep Stress";

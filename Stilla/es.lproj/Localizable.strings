@@ -388,6 +388,16 @@
 "sound.brown_noise.description" = "Ruido profundo y cálido, como un océano lejano.";
 "sound.solfeggio_love.description" = "528 Hz - El tono 'Milagro', promueve la reparación y la armonía.";
 "sound.solfeggio_nature.description" = "432 Hz - Afinación matemática alineada con la naturaleza.";
+"None" = "Ninguno";
+"Rain Ambience" = "Ambiente de lluvia";
+"White Noise" = "Ruido blanco";
+"Pink Noise" = "Ruido rosa";
+"Brown Noise" = "Ruido marrón";
+"Deep Sleep (Delta)" = "Sueño profundo (Delta)";
+"Creativity (Alpha)" = "Creatividad (Alfa)";
+"Focus (Beta)" = "Enfoque (Beta)";
+"Love Frequency (528 Hz)" = "Frecuencia del amor (528 Hz)";
+"Nature's Pitch (432 Hz)" = "Tono de la naturaleza (432 Hz)";
 
 "intention.creative_flow" = "Flujo creativo";
 "intention.deep_stress" = "Estrés profundo";

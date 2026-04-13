@@ -388,6 +388,16 @@
 "sound.brown_noise.description" = "Djupt, varmt brus, som ett avlägset rullande hav.";
 "sound.solfeggio_love.description" = "528 Hz - 'Mirakeltonen', främjar återhämtning och harmoni.";
 "sound.solfeggio_nature.description" = "432 Hz - Matematisk stämning i linje med naturen.";
+"None" = "Ingen";
+"Rain Ambience" = "Regnatmosfär";
+"White Noise" = "Vitt brus";
+"Pink Noise" = "Rosa brus";
+"Brown Noise" = "Brunt brus";
+"Deep Sleep (Delta)" = "Djupsömn (Delta)";
+"Creativity (Alpha)" = "Kreativitet (Alfa)";
+"Focus (Beta)" = "Fokus (Beta)";
+"Love Frequency (528 Hz)" = "Kärleksfrekvens (528 Hz)";
+"Nature's Pitch (432 Hz)" = "Naturens tonhöjd (432 Hz)";
 
 "intention.creative_flow" = "Kreativt flow";
 "intention.deep_stress" = "Djup stress";

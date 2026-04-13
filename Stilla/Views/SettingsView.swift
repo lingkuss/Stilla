@@ -432,10 +432,10 @@ struct RoutineListView: View {
                 Text("\(formattedTime(hour: routine.hour, minute: routine.minute)) • \(weekdaySummary(routine.weekdays))")
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.75))
-                Text("\(sessionLabel(for: routine)) • \(routine.durationMinutes) min • \(techniqueName(for: routine.techniqueID))")
+                Text("\(sessionLabel(for: routine)) • \(minutesLabel(for: routine.durationMinutes)) • \(techniqueName(for: routine.techniqueID))")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.55))
-                Text("\(String(localized: "routines.ambience")): \(routine.ambientSound.rawValue)")
+                Text("\(String(localized: "routines.ambience")): \(ambientName(for: routine.ambientSound))")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.45))
             }
@@ -473,6 +473,20 @@ struct RoutineListView: View {
     private func techniqueName(for id: String) -> String {
         let all = [BreathingTechnique.defaultTechnique] + BreathingTechnique.presets + manager.userCustomTechniques
         return all.first(where: { $0.id == id })?.localizedName ?? BreathingTechnique.defaultTechnique.localizedName
+    }
+
+    private func minutesLabel(for minutes: Int) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute]
+        formatter.unitsStyle = .abbreviated
+        formatter.zeroFormattingBehavior = .dropAll
+        return formatter.string(from: TimeInterval(minutes * 60)) ?? "\(minutes) min"
+    }
+
+    private func ambientName(for sound: SoundEngine.AmbientSound) -> String {
+        let key = sound.rawValue
+        let value = Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        return value == key ? sound.rawValue : value
     }
 
     private func sessionLabel(for routine: MeditationRoutine) -> String {
@@ -611,13 +625,13 @@ private struct RoutineEditorView: View {
                         HStack {
                             Text(String(localized: "routines.duration"))
                             Spacer()
-                            Text("\(script.durationMinutes) min")
+                            Text(minutesLabel(for: script.durationMinutes))
                                 .foregroundStyle(.secondary)
                         }
                     } else {
                         Picker(String(localized: "routines.duration"), selection: $selectedDuration) {
                             ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { duration in
-                                Text("\(duration) min").tag(duration)
+                                Text(minutesLabel(for: duration)).tag(duration)
                             }
                         }
                     }
@@ -630,7 +644,7 @@ private struct RoutineEditorView: View {
 
                     Picker(String(localized: "routines.ambience"), selection: $selectedAmbientSoundRaw) {
                         ForEach(SoundEngine.AmbientSound.allCases, id: \.rawValue) { sound in
-                            Text(sound.rawValue).tag(sound.rawValue)
+                            Text(localizedText(for: sound.rawValue)).tag(sound.rawValue)
                         }
                     }
 
@@ -732,6 +746,14 @@ private struct RoutineEditorView: View {
     private func localizedText(for key: String) -> String {
         let value = Bundle.main.localizedString(forKey: key, value: key, table: nil)
         return value == key ? key : value
+    }
+
+    private func minutesLabel(for minutes: Int) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute]
+        formatter.unitsStyle = .abbreviated
+        formatter.zeroFormattingBehavior = .dropAll
+        return formatter.string(from: TimeInterval(minutes * 60)) ?? "\(minutes) min"
     }
 
     private func loadExisting() {
