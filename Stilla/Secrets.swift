@@ -26,6 +26,11 @@ enum Secrets {
         urlValue(forInfoDictionaryKey: "KAIShareWebBaseURL")
     }
 
+    /// Optional endpoint used to generate full sleep stories.
+    static var kaiSleepStoryBackendURL: URL? {
+        urlValue(forInfoDictionaryKey: "KAISleepStoryBackendURL")
+    }
+
     /// Optional shared secret forwarded to your proxy. This is not a substitute for server-side auth,
     /// but it provides a simple first gate while you stand up proper protection and rate limiting.
     static var kaiBackendToken: String? {

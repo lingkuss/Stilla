@@ -1,5 +1,10 @@
 import Foundation
 
+enum ScriptContentType: String, Codable {
+    case meditation
+    case sleepStory
+}
+
 struct ScriptStep: Identifiable, Codable {
     var id = UUID()
     let text: String
@@ -23,6 +28,7 @@ struct MeditationScript: Identifiable, Codable {
     var guidanceBody: String?
     var suggestionOptions: [String]
     var createdAt: Date
+    var contentType: ScriptContentType
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -37,6 +43,7 @@ struct MeditationScript: Identifiable, Codable {
         case guidanceBody
         case suggestionOptions = "suggestions"
         case createdAt
+        case contentType
     }
 
     init(
@@ -51,7 +58,8 @@ struct MeditationScript: Identifiable, Codable {
         guidanceHeader: String? = nil,
         guidanceBody: String? = nil,
         suggestionOptions: [String] = [],
-        createdAt: Date = Date()
+        createdAt: Date = Date(),
+        contentType: ScriptContentType = .meditation
     ) {
         self.id = id
         self.title = title
@@ -65,6 +73,7 @@ struct MeditationScript: Identifiable, Codable {
         self.guidanceBody = guidanceBody
         self.suggestionOptions = suggestionOptions
         self.createdAt = createdAt
+        self.contentType = contentType
     }
 
     init(from decoder: Decoder) throws {
@@ -81,10 +90,15 @@ struct MeditationScript: Identifiable, Codable {
         guidanceBody = try container.decodeIfPresent(String.self, forKey: .guidanceBody)
         suggestionOptions = try container.decodeIfPresent([String].self, forKey: .suggestionOptions) ?? []
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
+        contentType = try container.decodeIfPresent(ScriptContentType.self, forKey: .contentType) ?? .meditation
     }
 }
 
 extension MeditationScript {
+    var isSleepStory: Bool {
+        contentType == .sleepStory
+    }
+
     var generatedPersonality: KaiPersonality? {
         guard let kaiPersonalityID else { return nil }
         return KaiPersonality.all.first(where: { $0.id == kaiPersonalityID })

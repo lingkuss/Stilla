@@ -119,6 +119,87 @@ app.post("/kai/generate", generateLimiter, async (req, res) => {
     }
 });
 
+app.post("/kai/sleep/generate", generateLimiter, async (req, res) => {
+    try {
+        if (proxyToken) {
+            const authHeader = req.headers.authorization || "";
+            const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+            if (bearerToken !== proxyToken) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+        }
+
+        const themeTitle = typeof req.body?.themeTitle === "string" ? req.body.themeTitle.trim() : "";
+        const themeSubtitle = typeof req.body?.themeSubtitle === "string" ? req.body.themeSubtitle.trim() : "";
+        const locale = typeof req.body?.locale === "string" ? req.body.locale.trim() : "en";
+        const durationMinutes = Number(req.body?.durationMinutes);
+        const excludeTitles = Array.isArray(req.body?.excludeTitles)
+            ? req.body.excludeTitles
+                .map((v) => (typeof v === "string" ? v.trim() : ""))
+                .filter((v) => v.length > 0)
+                .slice(0, 20)
+            : [];
+
+        if (!themeTitle || !Number.isInteger(durationMinutes) || durationMinutes < 1 || durationMinutes > 180) {
+            return res.status(400).json({
+                error: "Invalid request. Expecting themeTitle and durationMinutes between 1 and 180."
+            });
+        }
+
+        console.log(`[SleepGenerate] Model: ${model} | IP: ${req.ip} | Theme: "${themeTitle}" | Duration: ${durationMinutes}m | Locale: ${locale}`);
+
+        const systemPrompt = buildSleepSystemPrompt({
+            themeTitle,
+            themeSubtitle,
+            durationMinutes,
+            locale,
+            excludeTitles
+        });
+
+        const completion = await openai.chat.completions.create({
+            model,
+            response_format: { type: "json_object" },
+            temperature: 0.8,
+            messages: [
+                {
+                    role: "system",
+                    content: systemPrompt
+                },
+                {
+                    role: "user",
+                    content: `Generate a ${durationMinutes}-minute sleep story for "${themeTitle}" and include six fresh next headers.`
+                }
+            ]
+        });
+
+        const content = completion.choices[0]?.message?.content;
+        if (!content) {
+            return res.status(502).json({ error: "OpenAI returned an empty response." });
+        }
+
+        let parsed;
+        try {
+            parsed = JSON.parse(content);
+        } catch {
+            return res.status(502).json({ error: "OpenAI returned invalid JSON." });
+        }
+
+        const storyRaw = parsed?.story ?? parsed;
+        const validatedStory = normalizeScript(storyRaw, durationMinutes);
+        const nextHeaders = normalizeSleepHeaders(parsed?.nextHeaders, excludeTitles);
+
+        return res.json({
+            story: validatedStory,
+            nextHeaders
+        });
+    } catch (error) {
+        console.error("Kai sleep proxy failure:", error);
+        return res.status(500).json({
+            error: "Unable to generate a sleep story right now."
+        });
+    }
+});
+
 // --- NEW SHARING ENDPOINTS ---
 
 const shareLimiter = rateLimit({
@@ -288,6 +369,171 @@ function normalizeScript(raw, requestedDuration) {
         durationMinutes,
         steps
     };
+}
+
+function buildSleepSystemPrompt({ themeTitle, themeSubtitle, durationMinutes, locale, excludeTitles }) {
+    const subtitleLine = themeSubtitle ? `- Theme subtitle/context: ${themeSubtitle}` : "- Theme subtitle/context: none";
+    const excluded = excludeTitles.length > 0
+        ? excludeTitles.map((t) => `  - ${t}`).join("\n")
+        : "  - none";
+    const minWordTarget = Math.max(220, durationMinutes * 80);
+    const maxWordTarget = Math.max(minWordTarget + 80, durationMinutes * 105);
+
+    return `
+You are Kai, generating sleep-first content.
+
+Produce ONLY raw JSON with this exact top-level shape:
+{
+  "story": {
+    "title": "Short bedtime title",
+    "durationMinutes": ${durationMinutes},
+    "steps": [
+      { "text": "Soft narration sentence(s)", "pauseDuration": 1.0 }
+    ]
+  },
+  "nextHeaders": [
+    { "id": "kebab-case-id", "title": "Header title", "subtitle": "Optional subtitle" }
+  ]
+}
+
+Requirements for "story":
+- Locale: ${locale}
+- Theme: ${themeTitle}
+${subtitleLine}
+- Optimize for sleep onset: low-arousal, calm, safe, repetitive, no cliffhangers.
+- Avoid fear, danger, urgency, conflict, loud surprises, or emotionally activating twists.
+- Keep narration flowing like one continuous bedtime story.
+- Write enough actual narration for the full duration.
+- Target total narration length: ${minWordTarget}-${maxWordTarget} words.
+- If the story is too short, add more gentle descriptive narration (do NOT add filler silence).
+- Use short-to-moderate pauseDuration values, usually around 0.8 to 1.3 seconds.
+- Keep most paragraph/step transitions close to about 1 second.
+- Only use a longer breath pause when truly needed for natural phrasing.
+- Total timing should fit ${durationMinutes} minutes (${durationMinutes * 60} seconds) closely.
+- Balance BOTH spoken text length and pauseDuration values so the story doesn't end early.
+- Keep guidance non-medical and non-diagnostic.
+- Story quality must feel premium and specific, not generic.
+- Use a clear arc with four phases:
+  1) Arrival in place
+  2) Gentle exploration
+  3) Deepening calm repetition
+  4) Soft fade-out
+- Keep one consistent setting and perspective for the full story.
+- Reuse the same 3-5 motifs throughout (objects, sounds, textures, light).
+- Include vivid but calm sensory detail (sound, touch, temperature, light, scent).
+- Use concrete imagery over abstract wellness language.
+- Forbidden generic filler phrases:
+  - "you are safe here"
+  - "let go of stress"
+  - "drift into sleep" (more than once)
+  - "relax your body" (repeated)
+  - "calm your mind" (repeated)
+- Avoid list-like instruction tone. It must read like a story, not a script of commands.
+- Avoid introducing new locations/characters after 60% of the story.
+- Final 20% should gradually simplify language, slow imagery, and gently taper to near-silence.
+
+Requirements for "nextHeaders":
+- Return exactly 6 headers.
+- Keep each title short and evocative (2-6 words).
+- Ensure they are substantially different from each other.
+- Do not repeat these excluded titles:
+${excluded}
+- If subtitle is provided, keep it under 12 words.
+- Headers must feel distinctive and specific, not generic wellness labels.
+- Avoid generic titles like "Calm Night", "Peaceful Sleep", "Deep Rest", "Gentle Dreams".
+- Prefer unusual-but-soothing hooks tied to place, object, or quiet action.
+
+Respond ONLY with raw JSON, no markdown.
+`.trim();
+}
+
+function normalizeSleepHeaders(rawHeaders, excludedTitles) {
+    const excluded = new Set(
+        excludedTitles.map((t) => t.trim().toLowerCase()).filter(Boolean)
+    );
+
+    const fallback = fallbackSleepHeaders(excludedTitles);
+    if (!Array.isArray(rawHeaders)) {
+        return fallback;
+    }
+
+    const normalized = [];
+    for (const item of rawHeaders) {
+        const title = typeof item?.title === "string" ? item.title.trim() : "";
+        if (!title) continue;
+        if (excluded.has(title.toLowerCase())) continue;
+
+        const subtitle = typeof item?.subtitle === "string" ? item.subtitle.trim() : "";
+        const id = typeof item?.id === "string" && item.id.trim()
+            ? item.id.trim()
+            : slugify(title);
+
+        normalized.push({
+            id,
+            title,
+            subtitle: subtitle || null
+        });
+    }
+
+    const deduped = [];
+    const seen = new Set();
+    for (const item of normalized) {
+        const key = item.title.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        deduped.push(item);
+    }
+
+    if (deduped.length >= 6) {
+        return deduped.slice(0, 6);
+    }
+
+    const extras = fallbackSleepHeaders([...excludedTitles, ...deduped.map((h) => h.title)]);
+    return deduped.concat(extras).slice(0, 6);
+}
+
+function fallbackSleepHeaders(excludedTitles = []) {
+    const defaults = [
+        { id: "astronomers-attic", title: "The Astronomer's Attic", subtitle: "Dusty maps, brass lenses, and starlight on wood" },
+        { id: "midnight-tram", title: "Last Tram Through the Rain", subtitle: "Window fog, dim stations, and quiet city hum" },
+        { id: "orchard-watchtower", title: "The Orchard Watchtower", subtitle: "Apple leaves, lantern glow, and slow night wind" },
+        { id: "paper-lantern-river", title: "Paper Lantern River", subtitle: "Boats drifting under bridges in warm silence" },
+        { id: "salt-glasshouse", title: "The Salt Glasshouse", subtitle: "Sea mist on panes and soft echoing steps" },
+        { id: "winter-post-office", title: "Winter Post Office", subtitle: "Unsent letters, ticking clock, and stove heat" },
+        { id: "cedar-bathhouse", title: "The Cedar Bathhouse", subtitle: "Steam, cedar walls, and still midnight water" },
+        { id: "lighthouse-kitchen", title: "Kitchen in the Lighthouse", subtitle: "Kettle warmth and waves turning below" },
+        { id: "snowfield-observatory", title: "Snowfield Observatory", subtitle: "Red lamps, wool blankets, and distant sky" },
+        { id: "night-greenmarket", title: "Greenmarket After Closing", subtitle: "Crates, canvas awnings, and soft street rain" },
+        { id: "quarry-garden", title: "The Quarry Garden", subtitle: "Stone paths, moss walls, and moonlit water" },
+        { id: "river-mill-loft", title: "Loft Above the River Mill", subtitle: "Timber beams and a wheel turning slowly" }
+    ];
+
+    const excluded = new Set(
+        excludedTitles.map((t) => t.trim().toLowerCase()).filter(Boolean)
+    );
+
+    const available = defaults.filter((item) => !excluded.has(item.title.toLowerCase()));
+    const source = available.length > 0 ? available : defaults;
+    return shuffle(source).slice(0, 6);
+}
+
+function slugify(value) {
+    return value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .slice(0, 48);
+}
+
+function shuffle(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
 }
 
 export default app;

@@ -48,6 +48,21 @@ curl -X POST http://localhost:8787/kai/generate \
   -d '{"mood":"Need help calming down before sleep","durationMinutes":10}'
 ```
 
+Generate a sleep story + next headers in one call:
+
+```bash
+curl -X POST http://localhost:8787/kai/sleep/generate \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_PROXY_TOKEN" \
+  -d '{
+    "themeTitle":"Lanterns in the Harbor",
+    "themeSubtitle":"Soft waves and distant lights",
+    "durationMinutes":20,
+    "locale":"en",
+    "excludeTitles":["Lanterns in the Harbor"]
+  }'
+```
+
 ## Deploy Options
 
 This folder works well on:
@@ -67,11 +82,13 @@ Use:
 Set these keys in `Stilla/Info.plist` or via build settings:
 
 - `KAIBackendURL` = your deployed `/kai/generate` endpoint
+- `KAISleepStoryBackendURL` = your deployed `/kai/sleep/generate` endpoint (optional; defaults by path)
 - `KAIBackendToken` = same value as `KAI_PROXY_TOKEN` if you use one
 
 Example:
 
 - `KAIBackendURL` = `https://your-domain.com/kai/generate`
+- `KAISleepStoryBackendURL` = `https://your-domain.com/kai/sleep/generate`
 - `KAIBackendToken` = `your_random_long_string`
 
 ## Production Notes

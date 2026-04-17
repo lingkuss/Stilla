@@ -11,6 +11,20 @@ final class KaiBrainService {
         Secrets.kaiBackendURL ?? URL(string: "https://vindla-api.vercel.app/kai/generate")!
     }
 
+    private var sleepStoryURL: URL {
+        if let explicit = Secrets.kaiSleepStoryBackendURL {
+            return explicit
+        }
+
+        guard var components = URLComponents(url: proxyURL, resolvingAgainstBaseURL: false) else {
+            return proxyURL
+        }
+        components.query = nil
+        components.fragment = nil
+        components.path = "/kai/sleep/generate"
+        return components.url ?? proxyURL
+    }
+
     /// True if the user is signed into iCloud. Uses ubiquityIdentityToken which is
     /// the only reliable way to detect iCloud availability at runtime.
     private var isICloudAvailable: Bool {
@@ -135,6 +149,85 @@ final class KaiBrainService {
         case serviceUnavailable
     }
 
+    func generateSleepStory(
+        themeTitle: String,
+        themeSubtitle: String?,
+        durationMinutes: Int,
+        excluding recentTitles: [String]
+    ) async throws -> SleepStoryGenerationResult {
+        let localeIdentifier = AppLocalization.currentLocaleIdentifier
+        let request = SleepStoryGenerationRequest(
+            themeTitle: themeTitle,
+            themeSubtitle: themeSubtitle,
+            durationMinutes: durationMinutes,
+            locale: localeIdentifier,
+            excludeTitles: recentTitles
+        )
+
+        var urlRequest = URLRequest(url: sleepStoryURL)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        if let token = Secrets.kaiBackendToken {
+            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        urlRequest.httpBody = try JSONEncoder().encode(request)
+
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw BrainError.generationFailed
+        }
+
+        if httpResponse.statusCode != 200 {
+            throw BrainError.generationFailed
+        }
+
+        let decoder = JSONDecoder()
+
+        let script: MeditationScript
+        let headersFromResponse: [SleepStoryHeader]
+        if let payload = try? decoder.decode(SleepStoryGenerationEnvelope.self, from: data) {
+            script = payload.story
+            headersFromResponse = payload.nextHeaders
+                .filter { !$0.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        } else {
+            script = try decoder.decode(MeditationScript.self, from: data)
+            headersFromResponse = []
+        }
+
+        var normalizedScript = script
+        normalizedScript = normalizeSleepStoryFlow(normalizedScript)
+        normalizedScript.contentType = .sleepStory
+        normalizedScript.durationMinutes = durationMinutes
+        if normalizedScript.tags.contains(where: { $0.caseInsensitiveCompare("Sleep Story") == .orderedSame }) == false {
+            normalizedScript.tags.append("Sleep Story")
+        }
+
+        let nextHeaders = headersFromResponse.isEmpty
+            ? fallbackSleepStoryHeaders(excluding: recentTitles)
+            : headersFromResponse
+
+        return SleepStoryGenerationResult(script: normalizedScript, nextHeaders: nextHeaders)
+    }
+
+    func fallbackSleepStoryHeaders(excluding recentTitles: [String], count: Int = 6) -> [SleepStoryHeader] {
+        let normalizedRecent = Set(recentTitles.map(Self.normalizedHeaderTitle))
+        let available = Self.defaultSleepStoryHeaders.filter { header in
+            !normalizedRecent.contains(Self.normalizedHeaderTitle(header.title))
+        }
+
+        let source = available.isEmpty ? Self.defaultSleepStoryHeaders : available
+        return Array(source.shuffled().prefix(max(1, count)))
+    }
+}
+
+struct SleepStoryGenerationResult {
+    let script: MeditationScript
+    let nextHeaders: [SleepStoryHeader]
+}
+
+extension KaiBrainService {
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let languageInstruction = """
@@ -204,8 +297,8 @@ final class KaiBrainService {
             throw BrainError.invalidResponse
         }
     }
-    
-    private func normalizeScriptDuration(_ script: MeditationScript) -> MeditationScript {
+
+    func normalizeScriptDuration(_ script: MeditationScript) -> MeditationScript {
         let startDelay = 2.0 // GuruManager delay
         let targetSeconds = Double(script.durationMinutes * 60) - startDelay
         let secondsPerChar = 0.07 // Calibrated for typical iOS voice rate
@@ -240,6 +333,27 @@ final class KaiBrainService {
         normalized.steps = newSteps
         return normalized
     }
+
+    func normalizeSleepStoryFlow(_ script: MeditationScript) -> MeditationScript {
+        var adjusted = script
+        let steps = script.steps.map { step in
+            let text = step.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            let chars = text.count
+
+            var pause: TimeInterval = 0.9
+            if chars > 120 { pause += 0.1 }
+            if chars > 190 { pause += 0.15 }
+            if text.contains(",") || text.contains(";") { pause += 0.05 }
+            if text.contains(".") || text.contains("!") || text.contains("?") { pause += 0.08 }
+
+            // Keep flow gentle and readable with about 1s between story beats.
+            pause = min(1.35, max(0.75, pause))
+            pause = min(1.6, max(0.75, pause))
+            return ScriptStep(text: step.text, pauseDuration: pause)
+        }
+        adjusted.steps = steps
+        return adjusted
+    }
 }
 
 private struct KaiGenerationRequest: Codable {
@@ -248,4 +362,44 @@ private struct KaiGenerationRequest: Codable {
     let personalityName: String
     let personalityPrompt: String
     let locale: String
+}
+
+struct SleepStoryHeader: Identifiable, Codable, Hashable {
+    let id: String
+    let title: String
+    let subtitle: String?
+}
+
+private struct SleepStoryGenerationRequest: Codable {
+    let themeTitle: String
+    let themeSubtitle: String?
+    let durationMinutes: Int
+    let locale: String
+    let excludeTitles: [String]
+}
+
+private struct SleepStoryGenerationEnvelope: Codable {
+    let story: MeditationScript
+    let nextHeaders: [SleepStoryHeader]
+}
+
+private extension KaiBrainService {
+    static let defaultSleepStoryHeaders: [SleepStoryHeader] = [
+        SleepStoryHeader(id: "astronomers-attic", title: "The Astronomer's Attic", subtitle: "Dusty maps, brass lenses, and starlight on wood"),
+        SleepStoryHeader(id: "midnight-tram", title: "Last Tram Through the Rain", subtitle: "Window fog, dim stations, and quiet city hum"),
+        SleepStoryHeader(id: "orchard-watchtower", title: "The Orchard Watchtower", subtitle: "Apple leaves, lantern glow, and slow night wind"),
+        SleepStoryHeader(id: "paper-lantern-river", title: "Paper Lantern River", subtitle: "Boats drifting under bridges in warm silence"),
+        SleepStoryHeader(id: "salt-glasshouse", title: "The Salt Glasshouse", subtitle: "Sea mist on panes and soft echoing steps"),
+        SleepStoryHeader(id: "winter-post-office", title: "Winter Post Office", subtitle: "Unsent letters, ticking clock, and stove heat"),
+        SleepStoryHeader(id: "cedar-bathhouse", title: "The Cedar Bathhouse", subtitle: "Steam, cedar walls, and still midnight water"),
+        SleepStoryHeader(id: "lighthouse-kitchen", title: "Kitchen in the Lighthouse", subtitle: "Kettle warmth and waves turning below"),
+        SleepStoryHeader(id: "snowfield-observatory", title: "Snowfield Observatory", subtitle: "Red lamps, wool blankets, and distant sky"),
+        SleepStoryHeader(id: "night-greenmarket", title: "Greenmarket After Closing", subtitle: "Crates, canvas awnings, and soft street rain"),
+        SleepStoryHeader(id: "quarry-garden", title: "The Quarry Garden", subtitle: "Stone paths, moss walls, and moonlit water"),
+        SleepStoryHeader(id: "river-mill-loft", title: "Loft Above the River Mill", subtitle: "Timber beams and a wheel turning slowly")
+    ]
+
+    static func normalizedHeaderTitle(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
 }

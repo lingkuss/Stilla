@@ -162,8 +162,10 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         
         MeditationManager.shared.updateLiveActivity(phrase: step.text)
         
-        // Zen voice settings
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        // Sleep stories use a slower narration pace to feel calmer and less rushed.
+        utterance.rate = script.isSleepStory
+            ? AVSpeechUtteranceDefaultSpeechRate * 0.8
+            : AVSpeechUtteranceDefaultSpeechRate
         utterance.pitchMultiplier = 0.9 // Grounded and deep
         utterance.volume = MeditationManager.shared.mimirVoiceVolume
         

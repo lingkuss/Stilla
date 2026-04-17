@@ -497,3 +497,21 @@
 "kai.error.connection.timeout" = "Mimir a mis trop de temps à répondre. Veuillez réessayer dans un instant.";
 "kai.error.connection.generic" = "Impossible de joindre Mimir pour le moment. Veuillez réessayer sous peu.";
 
+
+"library.type.sleep_story" = "Histoire pour dormir";
+"reflection.save_sleep_story" = "Enregistrer l'histoire pour dormir dans la bibliothèque";
+"content.start_sleep_stories" = "Démarrer les histoires pour dormir";
+"content.sleep_stories_hint" = "HISTOIRES POUR DORMIR ∞ Glissez vers le repos";
+"sleep.title" = "Histoires pour dormir";
+"sleep.subtitle" = "Choisissez un thème et laissez Mimir vous guider vers le sommeil.";
+"sleep.help" = "Les thèmes se renouvellent au fil du temps pour que chaque demande paraisse nouvelle.";
+"sleep.pick_story" = "CHOISIR UNE HISTOIRE";
+"sleep.refresh" = "Actualiser";
+"sleep.duration" = "DURÉE";
+"sleep.play" = "Lancer l'histoire pour dormir";
+"sleep.generating" = "Création de votre histoire pour dormir...";
+"sleep.error.title" = "Impossible de créer l'histoire";
+"sleep.error.message" = "Vérifiez votre connexion et réessayez.";
+
+"sleep.post_session.title" = "Histoire pour dormir terminée";
+"sleep.post_session.body" = "Si elle vous a plu, enregistrez-la dans votre bibliothèque pour la réécouter quand vous voulez.";

@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var showStats = false
     @State private var showTechniques = false
     @State private var showKaiExperience = false
+    @State private var showSleepStories = false
     @State private var showAddDuration = false
     @State private var customDurationText = ""
     @State private var kaiShimmer = false
@@ -15,6 +16,7 @@ struct ContentView: View {
     @State private var currentPhase = ""
     @State private var showSavedMeditations = false
     @State private var reflectionSheetContext: ReflectionSheetContext?
+    @State private var showSleepStoryCompletion = false
     @State private var storeManager = StoreKitManager.shared
     @AppStorage("homeViewMode") private var homeViewMode = HomeViewMode.hero
 
@@ -181,6 +183,10 @@ struct ContentView: View {
             KaiExperienceView()
                 .environment(manager)
         }
+        .sheet(isPresented: $showSleepStories) {
+            SleepStoriesExperienceView()
+                .environment(manager)
+        }
         .sheet(isPresented: $showSavedMeditations) {
             SavedMeditationsLibraryView()
                 .environment(manager)
@@ -194,6 +200,12 @@ struct ContentView: View {
                 defaultReminderTime: context.defaultReminderTime
             )
             .environment(manager)
+        }
+        .sheet(isPresented: $showSleepStoryCompletion, onDismiss: {
+            manager.reset()
+        }) {
+            SleepStoryCompletionView()
+                .environment(manager)
         }
         .alert(String(localized: "alerts.custom_duration"), isPresented: $showAddDuration) {
             TextField(String(localized: "content.custom_duration_minutes_placeholder"), text: $customDurationText)
@@ -214,6 +226,10 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.6), value: manager.state)
         .onChange(of: manager.state) { _, newValue in
             guard newValue == .complete else { return }
+            if manager.currentScript?.isSleepStory == true {
+                showSleepStoryCompletion = true
+                return
+            }
             guard let sessionID = manager.lastCompletedSessionID else { return }
             reflectionSheetContext = ReflectionSheetContext(
                 sessionID: sessionID,
@@ -227,8 +243,10 @@ struct ContentView: View {
                 showStats = false
                 showTechniques = false
                 showKaiExperience = false
+                showSleepStories = false
                 showSavedMeditations = false
                 reflectionSheetContext = nil
+                showSleepStoryCompletion = false
                 manager.shouldDismissSheets = false
             }
         }
@@ -336,6 +354,27 @@ struct ContentView: View {
                 }
             }
             .buttonStyle(.plain)
+
+            Button(action: {
+                showSleepStories = true
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }) {
+                HStack(spacing: 10) {
+                    Image(systemName: "moon.stars.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                    Text(String(localized: "content.start_sleep_stories"))
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundStyle(.white.opacity(0.9))
+                .padding(.horizontal, 22)
+                .padding(.vertical, 12)
+                .background(Capsule().fill(Color.white.opacity(0.08)))
+                .overlay(
+                    Capsule()
+                        .strokeBorder(Color.white.opacity(0.14), lineWidth: 1)
+                )
+            }
+            .buttonStyle(.plain)
             
             Spacer()
         }
@@ -411,6 +450,36 @@ struct ContentView: View {
                     kaiShimmer = true
                     kaiPulse = true
                 }
+
+                Button(action: {
+                    showSleepStories = true
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "moon.stars.fill")
+                            .font(.system(size: 12, weight: .semibold))
+                        Text(String(localized: "content.sleep_stories_hint"))
+                            .font(.system(size: 11, weight: .medium))
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.white.opacity(0.35))
+                    }
+                    .foregroundStyle(.white.opacity(0.75))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.white.opacity(0.04))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
+                            )
+                    )
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
             }
             
             Spacer()

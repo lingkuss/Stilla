@@ -550,3 +550,21 @@
 "routines.notification.title" = "Rutine klar: %@";
 "routines.notification.body" = "%@ • %d min. Trykk for å starte nå.";
 
+
+"library.type.sleep_story" = "Søvnhistorie";
+"reflection.save_sleep_story" = "Lagre søvnhistorie i biblioteket";
+"content.start_sleep_stories" = "Start søvnhistorier";
+"content.sleep_stories_hint" = "SØVNHISTORIER ∞ Glid inn i hvile";
+"sleep.title" = "Søvnhistorier";
+"sleep.subtitle" = "Velg et historietema og la Mimir guide deg inn i søvn.";
+"sleep.help" = "Temaene fornyes over tid slik at hver forespørsel føles ny.";
+"sleep.pick_story" = "VELG EN HISTORIE";
+"sleep.refresh" = "Oppdater";
+"sleep.duration" = "VARIGHET";
+"sleep.play" = "Spill av søvnhistorie";
+"sleep.generating" = "Lager søvnhistorien din...";
+"sleep.error.title" = "Kunne ikke lage historie";
+"sleep.error.message" = "Sjekk tilkoblingen din og prøv igjen.";
+
+"sleep.post_session.title" = "Søvnhistorien er ferdig";
+"sleep.post_session.body" = "Hvis du likte den, kan du lagre den i biblioteket og spille den av igjen når som helst.";

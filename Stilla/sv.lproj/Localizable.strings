@@ -550,3 +550,21 @@
 "routines.notification.title" = "Rutin redo: %@";
 "routines.notification.body" = "%@ • %d min. Tryck för att starta nu.";
 
+
+"library.type.sleep_story" = "Sömnsaga";
+"reflection.save_sleep_story" = "Spara sömnsaga till biblioteket";
+"content.start_sleep_stories" = "Starta sömnsagor";
+"content.sleep_stories_hint" = "SÖMNSAGOR ∞ Glid in i vila";
+"sleep.title" = "Sömnsagor";
+"sleep.subtitle" = "Välj ett sagotema och låt Mimir guida dig till sömn.";
+"sleep.help" = "Teman förnyas över tid så att varje förfrågan känns ny.";
+"sleep.pick_story" = "VÄLJ EN SAGA";
+"sleep.refresh" = "Uppdatera";
+"sleep.duration" = "LÄNGD";
+"sleep.play" = "Spela sömnsaga";
+"sleep.generating" = "Skapar din sömnsaga...";
+"sleep.error.title" = "Kunde inte skapa saga";
+"sleep.error.message" = "Kontrollera din anslutning och försök igen.";
+
+"sleep.post_session.title" = "Sömnsagan är klar";
+"sleep.post_session.body" = "Om du gillade den kan du spara den i biblioteket och spela upp den igen när som helst.";

@@ -324,6 +324,10 @@ struct SavedMeditationRow: View {
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 48, height: 48)
                                 .clipShape(Circle())
+                        } else if script.isSleepStory {
+                            Image(systemName: "moon.stars.fill")
+                                .font(.system(size: 18))
+                                .foregroundStyle(Color(hue: 0.6, saturation: 0.35, brightness: 0.95))
                         } else {
                             Image(systemName: script.isFavorite ? "heart.fill" : "quote.bubble.fill")
                                 .font(.system(size: 18))
@@ -354,6 +358,10 @@ struct SavedMeditationRow: View {
 
                         if let personalityName = script.resolvedKaiPersonalityName {
                             personalityBadge(personalityName)
+                        }
+
+                        if script.isSleepStory {
+                            contentTypeBadge(String(localized: "library.type.sleep_story"))
                         }
 
                         if !script.tags.isEmpty {
@@ -593,6 +601,19 @@ struct SavedMeditationRow: View {
             .overlay(
                 Capsule()
                     .strokeBorder(Color(hue: 0.55, saturation: 0.3, brightness: 0.85).opacity(0.35), lineWidth: 1)
+            )
+    }
+
+    private func contentTypeBadge(_ title: String) -> some View {
+        Text(title)
+            .font(.system(size: 10, weight: .semibold))
+            .foregroundStyle(.white.opacity(0.85))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(Color.white.opacity(0.1)))
+            .overlay(
+                Capsule()
+                    .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
             )
     }
 }

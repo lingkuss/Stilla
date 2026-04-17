@@ -560,6 +560,7 @@ final class MeditationManager {
 
     func start(durationMinutes minutes: Int, isShared: Bool = false) {
         guard state != .meditating else { return }
+        let isSleepStorySession = currentScript?.isSleepStory == true
         self.isSharedSession = isShared
         self.durationMinutes = minutes
         if minutes == 0 {
@@ -579,7 +580,9 @@ final class MeditationManager {
         activeSessionIntention = normalizedMemoryText(pendingKaiIntention)
         pendingKaiMoodSummary = nil
         pendingKaiIntention = nil
-        soundEngine.playSound(startSound)
+        if !isSleepStorySession {
+            soundEngine.playSound(startSound)
+        }
         if ambientSound != .none {
             soundEngine.startAmbientSound(ambientSound)
         }
@@ -644,6 +647,7 @@ final class MeditationManager {
         let personality = currentScript?.generatedPersonality
             ?? {
                 guard currentScript != nil, isGuruEnabled else { return nil }
+                if currentScript?.isSleepStory == true { return nil }
                 return selectedKaiPersonality
             }()
         let attributes = LiveTimerAttributes(
@@ -857,10 +861,12 @@ final class MeditationManager {
     }
 
     private func finish() {
+        let wasSleepStorySession = currentScript?.isSleepStory == true
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
         if let startDate = sessionStartDate,
            sessionSeconds > 0,
            !isSharedSession, // Skip memory logging for shared sessions
+           currentScript?.isSleepStory != true, // Sleep stories should not replace proactive Mimir memory
            (currentScript != nil || activeSessionMoodSummary != nil || activeSessionIntention != nil) {
             let memory = SessionMemory(
                 startedAt: startDate,
@@ -885,7 +891,9 @@ final class MeditationManager {
         state = .complete
         if !isOpenEnded { remainingSeconds = 0 }
         soundEngine.stopAll()
-        soundEngine.playSound(endSound)
+        if !wasSleepStorySession {
+            soundEngine.playSound(endSound)
+        }
         GuruManager.shared.stop()
         endLiveActivity()
         if hapticEnabled {

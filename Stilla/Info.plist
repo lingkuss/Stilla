@@ -30,9 +30,9 @@
 	<key>KAIBackendToken</key>
 	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
 	<key>KAIBackendURL</key>
-	<string>https://vindla-api.vercel.app/kai/generate</string>
+	<string>https://vindla-48l3n74ti-lingkuss-8655s-projects.vercel.app/kai/generate</string>
 	<key>KAIShareBackendURL</key>
-	<string>https://vindla-api.vercel.app/kai/share</string>
+	<string>https://vindla-48l3n74ti-lingkuss-8655s-projects.vercel.app/kai/share</string>
 	<key>KAIShareWebBaseURL</key>
 	<string>https://vindla-three.vercel.app</string>
 	<key>LSRequiresIPhoneOS</key>

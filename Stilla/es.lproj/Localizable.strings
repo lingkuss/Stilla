@@ -550,3 +550,21 @@
 "routines.notification.title" = "Rutina lista: %@";
 "routines.notification.body" = "%@ • %d min. Toca para empezar ahora.";
 
+
+"library.type.sleep_story" = "Historia para dormir";
+"reflection.save_sleep_story" = "Guardar historia para dormir en la biblioteca";
+"content.start_sleep_stories" = "Iniciar historias para dormir";
+"content.sleep_stories_hint" = "HISTORIAS PARA DORMIR ∞ Déjate llevar al descanso";
+"sleep.title" = "Historias para dormir";
+"sleep.subtitle" = "Elige un tema y deja que Mimir te guíe hacia el sueño.";
+"sleep.help" = "Los temas se renuevan con el tiempo para que cada solicitud se sienta nueva.";
+"sleep.pick_story" = "ELIGE UNA HISTORIA";
+"sleep.refresh" = "Actualizar";
+"sleep.duration" = "DURACIÓN";
+"sleep.play" = "Reproducir historia para dormir";
+"sleep.generating" = "Creando tu historia para dormir...";
+"sleep.error.title" = "No se pudo crear la historia";
+"sleep.error.message" = "Revisa tu conexión e inténtalo de nuevo.";
+
+"sleep.post_session.title" = "Historia para dormir terminada";
+"sleep.post_session.body" = "Si te gustó, guárdala en tu biblioteca y vuelve a escucharla cuando quieras.";

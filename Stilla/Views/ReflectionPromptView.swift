@@ -219,7 +219,7 @@ struct ReflectionPromptView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "books.vertical.fill")
-                        Text(String(localized: "reflection.save_exercise"))
+                        Text(saveScriptButtonTitle)
                     }
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.white.opacity(0.8))
@@ -354,6 +354,13 @@ struct ReflectionPromptView: View {
 
     private var fallbackScript: MeditationScript {
         MeditationScript(title: String(localized: "reflection.fallback_title"), durationMinutes: 10, steps: [])
+    }
+
+    private var saveScriptButtonTitle: String {
+        if manager.currentScript?.isSleepStory == true {
+            return String(localized: "reflection.save_sleep_story")
+        }
+        return String(localized: "reflection.save_exercise")
     }
 
     private var lastSessionScript: MeditationScript? {
