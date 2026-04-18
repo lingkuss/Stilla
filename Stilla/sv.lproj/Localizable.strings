@@ -568,3 +568,7 @@
 
 "sleep.post_session.title" = "Sömnsagan är klar";
 "sleep.post_session.body" = "Om du gillade den kan du spara den i biblioteket och spela upp den igen när som helst.";
+"settings.soundscapes" = "Ljudlandskap";
+"sound.ancient_flora.description" = "Ett fridfullt, loopande spår av antika botaniska toner.";
+
+"sound.green_canopy.description" = "En lugnande loop av ett levande lövverk i rörelse.";

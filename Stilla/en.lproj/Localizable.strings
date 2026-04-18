@@ -566,3 +566,7 @@
 
 "sleep.post_session.title" = "Sleep Story Finished";
 "sleep.post_session.body" = "If you liked this one, save it to your library and replay it anytime.";
+"settings.soundscapes" = "Soundscapes";
+"sound.ancient_flora.description" = "A gentle loop of ancient botanical tones.";
+
+"sound.green_canopy.description" = "A soothing loop of vibrant canopy rustling.";

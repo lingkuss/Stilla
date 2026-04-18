@@ -976,7 +976,7 @@ struct SoundSelectionView: View {
     ]
 
     private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
-        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
+        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature, .ancientFlora, .greenCanopy
     ]
     
     private let ambientDescriptions: [SoundEngine.AmbientSound: String] = [
@@ -988,46 +988,47 @@ struct SoundSelectionView: View {
         .pinkNoise: String(localized: "sound.pink_noise.description"),
         .brownNoise: String(localized: "sound.brown_noise.description"),
         .solfeggioLove: String(localized: "sound.solfeggio_love.description"),
-        .solfeggioNature: String(localized: "sound.solfeggio_nature.description")
+        .solfeggioNature: String(localized: "sound.solfeggio_nature.description"),
+        .ancientFlora: String(localized: "sound.ancient_flora.description", defaultValue: "A gentle loop of ancient botanical tones."),
+        .greenCanopy: String(localized: "sound.green_canopy.description", defaultValue: "A soothing loop of vibrant canopy rustling.")
     ]
     
+    private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
+    
     var body: some View {
-        List {
+        ScrollView {
             if mode == .start || mode == .end {
-                Section {
-                    ForEach(SoundEngine.Sound.allCases, id: \.self) { sound in
-                        toneRow(sound)
-                    }
-                } footer: {
+                VStack(alignment: .leading, spacing: 16) {
                     Text(String(localized: "settings.chimes_help"))
+                        .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.6))
+                        .padding(.bottom, 4)
+
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(SoundEngine.Sound.allCases, id: \.self) { sound in
+                            toneCard(sound)
+                        }
+                    }
                 }
+                .padding()
             } else {
-                Section(String(localized: "settings.nature_and_noise")) {
-                    ambientRow(.none)
-                    ambientRow(.rain)
-                    ambientRow(.brownNoise)
-                    ambientRow(.pinkNoise)
-                    ambientRow(.whiteNoise)
-                }
+                VStack(alignment: .leading, spacing: 24) {
+                    soundSection(title: String(localized: "settings.nature_and_noise"), items: [.none, .rain, .brownNoise, .pinkNoise, .whiteNoise])
+                    
+                    soundSection(
+                        title: String(localized: "settings.binaural_beats"),
+                        helpText: String(localized: "settings.binaural_beats_help"),
+                        items: [.delta, .alpha, .beta]
+                    )
 
-                Section {
-                    ambientRow(.delta)
-                    ambientRow(.alpha)
-                    ambientRow(.beta)
-                } header: {
-                    Text(String(localized: "settings.binaural_beats"))
-                } footer: {
-                    Text(String(localized: "settings.binaural_beats_help"))
-                        .foregroundStyle(.white.opacity(0.6))
+                    soundSection(title: String(localized: "settings.solfeggio_frequencies"), items: [.solfeggioNature, .solfeggioLove])
+                    
+                    soundSection(title: String(localized: "settings.soundscapes", defaultValue: "Soundscapes"), items: [.ancientFlora, .greenCanopy])
                 }
-
-                Section(String(localized: "settings.solfeggio_frequencies")) {
-                    ambientRow(.solfeggioNature)
-                    ambientRow(.solfeggioLove)
-                }
+                .padding()
             }
         }
+        .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.10).ignoresSafeArea())
         .navigationTitle(titleForMode())
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
@@ -1051,9 +1052,31 @@ struct SoundSelectionView: View {
         }
     }
     
-    // MARK: - Row Views
+    // MARK: - Grid Views
     
-    private func toneRow(_ sound: SoundEngine.Sound) -> some View {
+    private func soundSection(title: String, helpText: String? = nil, items: [SoundEngine.AmbientSound]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                
+                if let helpText {
+                    Text(helpText)
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+            }
+            
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(items, id: \.self) { ambient in
+                    ambientCard(ambient)
+                }
+            }
+        }
+    }
+
+    private func toneCard(_ sound: SoundEngine.Sound) -> some View {
         let isSelected = (mode == .start && manager.startSound == sound) || (mode == .end && manager.endSound == sound)
         let isPremium = premiumTones.contains(sound)
         let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
@@ -1061,48 +1084,80 @@ struct SoundSelectionView: View {
         return Button {
             handleToneTap(sound, isLocked: isLocked)
         } label: {
-            HStack {
-                Text(sound.rawValue)
-                    .foregroundStyle(isSelected ? .blue : .primary)
-                Spacer()
-                if isLocked {
-                    Image(systemName: "lock.fill")
-                        .foregroundStyle(.secondary)
-                } else if isSelected {
-                    Image(systemName: "checkmark")
-                        .foregroundStyle(.blue)
-                }
-            }
+            cardContent(name: sound.rawValue, description: nil, isSelected: isSelected, isLocked: isLocked)
         }
+        .buttonStyle(.plain)
     }
     
-    private func ambientRow(_ ambient: SoundEngine.AmbientSound) -> some View {
+    private func ambientCard(_ ambient: SoundEngine.AmbientSound) -> some View {
         let isSelected = manager.ambientSound == ambient
         let isPremium = premiumAmbiences.contains(ambient)
         let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
+        let desc = ambientDescriptions[ambient] ?? " "
         
         return Button {
             handleAmbientTap(ambient, isLocked: isLocked)
         } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(ambient.rawValue)
-                        .foregroundStyle(isSelected ? .blue : .primary)
-                    if let desc = ambientDescriptions[ambient], ambient != .none {
-                        Text(desc)
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.7))
-                    }
+            cardContent(name: ambient.rawValue, description: desc, isSelected: isSelected, isLocked: isLocked)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func cardContent(name: String, description: String?, isSelected: Bool, isLocked: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ZStack(alignment: .topTrailing) {
+                if name == "None" {
+                    Rectangle()
+                        .fill(Color.white.opacity(0.05))
+                        .aspectRatio(1, contentMode: .fit)
+                        .overlay {
+                            Image(systemName: "speaker.slash")
+                                .font(.largeTitle)
+                                .foregroundStyle(.secondary)
+                        }
+                } else {
+                    Image(name)
+                        .resizable()
+                        .aspectRatio(1, contentMode: .fill)
                 }
-                Spacer()
+
                 if isLocked {
                     Image(systemName: "lock.fill")
-                        .foregroundStyle(.secondary)
+                        .font(.footnote)
+                        .padding(6)
+                        .background(.black.opacity(0.6))
+                        .clipShape(Circle())
+                        .padding(8)
+                        .foregroundStyle(.white)
                 } else if isSelected {
-                    Image(systemName: "checkmark")
-                        .foregroundStyle(.blue)
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(.white, .blue)
+                        .padding(8)
                 }
             }
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(isSelected ? Color.blue : Color.white.opacity(0.1), lineWidth: isSelected ? 3 : 1)
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(name)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(isSelected ? .blue : .primary)
+                    .lineLimit(1)
+                
+                if let description {
+                    Text(description)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                        .frame(maxWidth: .infinity, minHeight: 32, alignment: .topLeading)
+                }
+            }
+            .padding(.horizontal, 4)
+            .padding(.top, 8)
         }
     }
     

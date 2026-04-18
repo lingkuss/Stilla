@@ -1,11 +1,12 @@
 import AVFoundation
 import Foundation
+import UIKit
 
 /// Procedurally generates peaceful meditation sounds using AVAudioEngine.
 final class SoundEngine {
     private let engine = AVAudioEngine()
     private let toneNode = AVAudioPlayerNode()
-
+    private let loopNode = AVAudioPlayerNode()
     private let breathNode = AVAudioPlayerNode()
     private var isRunning = false
     private var ambientSourceNode: AVAudioSourceNode?
@@ -44,6 +45,8 @@ final class SoundEngine {
         case beta = "Focus (Beta)"
         case solfeggioLove = "Love Frequency (528 Hz)"
         case solfeggioNature = "Nature's Pitch (432 Hz)"
+        case ancientFlora = "Ancient Flora"
+        case greenCanopy = "Green Canopy"
     }
 
 
@@ -52,13 +55,21 @@ final class SoundEngine {
         set { toneNode.volume = newValue }
     }
     
-    var ambientVolume: Float = 0.5
+    var ambientVolume: Float = 0.5 {
+        didSet {
+            loopNode.volume = ambientVolume
+        }
+    }
 
     init() {
         engine.attach(toneNode)
         engine.attach(breathNode)
+        engine.attach(loopNode)
         setupAmbientSourceNode()
         configureAudioSession()
+        
+        engine.connect(loopNode, to: engine.mainMixerNode, format: nil)
+        loopNode.volume = ambientVolume
     }
 
 
@@ -95,7 +106,7 @@ final class SoundEngine {
     
     private func generateSample(for sound: AmbientSound, volume: Double, sampleRate: Double) -> (left: Double, right: Double) {
         switch sound {
-        case .none:
+        case .none, .ancientFlora, .greenCanopy:
             return (0, 0)
             
         case .whiteNoise:
@@ -204,16 +215,50 @@ final class SoundEngine {
             currentAmbientSound = sound
             try? engine.start()
             isRunning = true
+            handleLoopPlayback(for: sound)
         } else if sound != currentAmbientSound {
             nextAmbientSound = sound
             transitionFrames = 0
             isTransitioning = true
+            handleLoopPlayback(for: sound)
+        }
+    }
+
+    private func handleLoopPlayback(for sound: AmbientSound) {
+        if sound == .ancientFlora || sound == .greenCanopy {
+            let assetName = sound == .ancientFlora ? "Ancient Flora Audio" : "Green Canopy Audio"
+            if let buffer = loadLoopAsset(named: assetName) {
+                loopNode.stop()
+                loopNode.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
+                loopNode.play()
+            }
+        } else {
+            loopNode.stop()
+        }
+    }
+    
+    private func loadLoopAsset(named name: String) -> AVAudioPCMBuffer? {
+        guard let dataAsset = NSDataAsset(name: name) else { return nil }
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(name).m4a")
+        
+        do {
+            if !FileManager.default.fileExists(atPath: tempURL.path) {
+                try dataAsset.data.write(to: tempURL)
+            }
+            let file = try AVAudioFile(forReading: tempURL)
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length)) else { return nil }
+            try file.read(into: buffer)
+            return buffer
+        } catch {
+            print("Error loading loop asset \(name): \(error)")
+            return nil
         }
     }
 
     func stopAll() {
         toneNode.stop()
         breathNode.stop()
+        loopNode.stop()
         currentAmbientSound = .none
         
         // Reset phases to avoid clicks on restart
