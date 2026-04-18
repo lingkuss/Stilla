@@ -1,0 +1,9 @@
+#include "Base.xcconfig"
+
+APP_ENV_NAME = production
+
+// Optional local and CI overrides (not committed):
+// - Config/Release.local.xcconfig
+// - Config/Release.ci.xcconfig
+#include? "Release.local.xcconfig"
+#include? "Release.ci.xcconfig"

@@ -101,6 +101,11 @@
 		64F9FE712F8082E300BBB344 /* ShareSessionPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSessionPayload.swift; sourceTree = "<group>"; };
 		64F9FE732F8082F700BBB344 /* ShareSessionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSessionCardView.swift; sourceTree = "<group>"; };
 		64F9FE752F8082FC00BBB344 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		64FA0C112F90F14E003951DC /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		64FA0C122F90F14E003951DC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		64FA0C132F90F14E003951DC /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		64FA0C142F90F14E003951DC /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
+		64FA0C152F90F14E003951DC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B10001 /* VindlaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VindlaApp.swift; sourceTree = "<group>"; };
 		B10002 /* MeditationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationManager.swift; sourceTree = "<group>"; };
 		B10003 /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
@@ -216,15 +221,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D10001 = {
-			isa = PBXGroup;
-			children = (
-				640598A62F76CAF500B0F381 /* Products.storekit */,
-				D10002 /* Stilla */,
-				64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */,
-				64F9FE292F7BE1F100BBB344 /* Frameworks */,
-				D10005 /* Products */,
-			);
+			D10001 = {
+				isa = PBXGroup;
+				children = (
+					640598A62F76CAF500B0F381 /* Products.storekit */,
+					D10009 /* Config */,
+					D10002 /* Stilla */,
+					64F9FE2E2F7BE1F100BBB344 /* MeditationWidget */,
+					64F9FE292F7BE1F100BBB344 /* Frameworks */,
+					D10005 /* Products */,
+				);
 			sourceTree = "<group>";
 		};
 		D10002 /* Stilla */ = {
@@ -322,6 +328,18 @@
 				6414BCF62F883CF6009BF848 /* AppLocalization.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		D10009 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				64FA0C112F90F14E003951DC /* Base.xcconfig */,
+				64FA0C122F90F14E003951DC /* Debug.xcconfig */,
+				64FA0C132F90F14E003951DC /* Release.xcconfig */,
+				64FA0C142F90F14E003951DC /* Staging.xcconfig */,
+				64FA0C152F90F14E003951DC /* README.md */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -729,6 +747,7 @@
 		};
 		F10006 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 64FA0C122F90F14E003951DC /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -763,6 +782,7 @@
 		};
 		F10007 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 64FA0C132F90F14E003951DC /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

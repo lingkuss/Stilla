@@ -560,3 +560,13 @@ final class SoundEngine {
         node.play()
     }
 }
+
+extension SoundEngine.AmbientSound {
+    /// Single source of truth for ambiences gated by the sound bundle purchase.
+    static let premiumForSoundBundle: Set<Self> = [
+        .delta, .alpha, .beta,
+        .whiteNoise, .pinkNoise, .brownNoise,
+        .solfeggioLove, .solfeggioNature,
+        .ancientFlora, .greenCanopy
+    ]
+}

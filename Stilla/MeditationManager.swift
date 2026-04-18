@@ -1039,9 +1039,6 @@ final class RoutineManager {
 
     private let storageKey = "meditation.routines.v1"
     private let notificationPrefix = "routine."
-    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
-        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
-    ]
 
     var routines: [MeditationRoutine] = []
 
@@ -1094,7 +1091,7 @@ final class RoutineManager {
         }
 
         let requestedAmbient = routine.ambientSound
-        if premiumAmbiences.contains(requestedAmbient),
+        if SoundEngine.AmbientSound.premiumForSoundBundle.contains(requestedAmbient),
            !StoreKitManager.shared.isPurchased(StoreKitManager.soundBundleID) {
             return
         }
@@ -1106,13 +1103,13 @@ final class RoutineManager {
             return
         }
 
-        manager.selectedTechnique = resolvedTechnique
-        manager.durationMinutes = routine.durationMinutes
-        manager.ambientSound = requestedAmbient
-
         if manager.state == .meditating {
             return
         }
+
+        manager.selectedTechnique = resolvedTechnique
+        manager.durationMinutes = routine.durationMinutes
+        manager.ambientSound = requestedAmbient
 
         switch routine.sessionType {
         case .simpleTimer:

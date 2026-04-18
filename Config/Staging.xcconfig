@@ -1,0 +1,13 @@
+#include "Base.xcconfig"
+
+APP_ENV_NAME = staging
+
+// Intentionally defaults to production URLs until overridden in CI/local staging files.
+// Override these in Config/Staging.local.xcconfig or Config/Staging.ci.xcconfig:
+// KAI_BACKEND_URL
+// KAI_SHARE_BACKEND_URL
+// KAI_SHARE_WEB_BASE_URL
+// KAI_ATTEST_BASE_URL
+
+#include? "Staging.local.xcconfig"
+#include? "Staging.ci.xcconfig"

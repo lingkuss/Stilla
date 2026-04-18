@@ -67,6 +67,12 @@ enum Secrets {
             return nil
         }
 
+        #if DEBUG
+        if rawValue.contains("$(") {
+            print("⚠️ Secrets: unresolved build setting for \(key): \(rawValue)")
+        }
+        #endif
+
         let cleaned = rawValue.unicodeScalars
             .filter { !$0.properties.isWhitespace && !$0.properties.isDefaultIgnorableCodePoint }
             .map(String.init)
@@ -74,4 +80,18 @@ enum Secrets {
 
         return URL(string: cleaned)
     }
+
+    #if DEBUG
+    static func debugPrintResolvedConfig() {
+        let config = (Bundle.main.object(forInfoDictionaryKey: "APP_ENV_NAME") as? String) ?? "(missing)"
+        let backend = Bundle.main.object(forInfoDictionaryKey: "KAIBackendURL") as? String ?? "(missing)"
+        let share = Bundle.main.object(forInfoDictionaryKey: "KAIShareBackendURL") as? String ?? "(missing)"
+        let attest = Bundle.main.object(forInfoDictionaryKey: "KAIAttestBaseURL") as? String ?? "(missing)"
+
+        print("⚙️ Build config APP_ENV_NAME=\(config)")
+        print("⚙️ KAIBackendURL=\(backend)")
+        print("⚙️ KAIShareBackendURL=\(share)")
+        print("⚙️ KAIAttestBaseURL=\(attest)")
+    }
+    #endif
 }

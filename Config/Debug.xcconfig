@@ -1,0 +1,14 @@
+#include "Base.xcconfig"
+
+APP_ENV_NAME = development
+
+KAI_BACKEND_URL = https:/$()/vindla-ice9u2tb1-lingkuss-8655s-projects.vercel.app/kai/generate
+KAI_SHARE_BACKEND_URL = https:/$()/vindla-ice9u2tb1-lingkuss-8655s-projects.vercel.app/kai/share
+KAI_SHARE_WEB_BASE_URL = https:/$()/vindla-three.vercel.app
+KAI_ATTEST_BASE_URL = https:/$()/vindla-ice9u2tb1-lingkuss-8655s-projects.vercel.app/attest
+
+// Optional local and CI overrides (not committed):
+// - Config/Debug.local.xcconfig
+// - Config/Debug.ci.xcconfig
+#include? "Debug.local.xcconfig"
+#include? "Debug.ci.xcconfig"

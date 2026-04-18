@@ -1,0 +1,10 @@
+// Shared defaults for backend environment variables.
+// These are safe defaults and can be overridden by per-config local/CI includes.
+
+APP_ENV_NAME = production
+
+// NOTE: In xcconfig, `//` starts a comment, so URLs must be written as `https:/$()/...`.
+KAI_BACKEND_URL = https:/$()/vindla-api.vercel.app/kai/generate
+KAI_SHARE_BACKEND_URL = https:/$()/vindla-api.vercel.app/kai/share
+KAI_SHARE_WEB_BASE_URL = https:/$()/vindla.app
+KAI_ATTEST_BASE_URL = https:/$()/vindla-api.vercel.app/attest

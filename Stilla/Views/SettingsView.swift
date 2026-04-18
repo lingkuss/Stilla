@@ -537,10 +537,6 @@ private struct RoutineEditorView: View {
         "intention.gentle_clarity", "intention.evening_unwind", "intention.self_compassion"
     ]
 
-    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
-        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
-    ]
-
     var body: some View {
         NavigationStack {
             Form {
@@ -856,7 +852,7 @@ private struct RoutineEditorView: View {
             gates.append(.techniqueLibrary)
         }
 
-        if premiumAmbiences.contains(routine.ambientSound),
+        if SoundEngine.AmbientSound.premiumForSoundBundle.contains(routine.ambientSound),
            !storeManager.isPurchased(StoreKitManager.soundBundleID) {
             gates.append(.soundLibrary)
         }
@@ -975,10 +971,6 @@ struct SoundSelectionView: View {
         .zenWoodblock, .bambooChime, .templeBell
     ]
 
-    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
-        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature, .ancientFlora, .greenCanopy
-    ]
-    
     private let ambientDescriptions: [SoundEngine.AmbientSound: String] = [
         .delta: String(localized: "sound.delta.description"),
         .alpha: String(localized: "sound.alpha.description"),
@@ -1091,7 +1083,7 @@ struct SoundSelectionView: View {
     
     private func ambientCard(_ ambient: SoundEngine.AmbientSound) -> some View {
         let isSelected = manager.ambientSound == ambient
-        let isPremium = premiumAmbiences.contains(ambient)
+        let isPremium = SoundEngine.AmbientSound.premiumForSoundBundle.contains(ambient)
         let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
         let desc = ambientDescriptions[ambient] ?? " "
         
