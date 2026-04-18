@@ -485,10 +485,7 @@ struct ReflectionPromptView: View {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        if let token = Secrets.kaiBackendToken {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+        try await AppAttestAuthManager.shared.authorize(&request)
 
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(payload)

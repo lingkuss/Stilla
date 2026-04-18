@@ -167,10 +167,7 @@ final class KaiBrainService {
         var urlRequest = URLRequest(url: sleepStoryURL)
         urlRequest.httpMethod = "POST"
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        if let token = Secrets.kaiBackendToken {
-            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+        try await AppAttestAuthManager.shared.authorize(&urlRequest)
 
         urlRequest.httpBody = try JSONEncoder().encode(request)
 
@@ -265,10 +262,7 @@ extension KaiBrainService {
         var urlRequest = URLRequest(url: proxyURL)
         urlRequest.httpMethod = "POST"
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        if let token = Secrets.kaiBackendToken {
-            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+        try await AppAttestAuthManager.shared.authorize(&urlRequest)
         
         urlRequest.httpBody = try JSONEncoder().encode(request)
         

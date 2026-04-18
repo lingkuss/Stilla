@@ -214,7 +214,7 @@
 
             try {
                 // Fetch from backend
-                const response = await fetch(`https://vindla-api.vercel.app/kai/share?id=${id}`);
+                const response = await fetch(`/kai/share?id=${id}`);
                 if (!response.ok) throw new Error('Session not found');
                 const payload = await response.json();
                 const scriptData = payload.s || payload.script || payload;

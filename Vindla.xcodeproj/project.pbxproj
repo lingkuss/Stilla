@@ -17,6 +17,7 @@
 		6414BD0B2F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BD092F883D4C009BF848 /* Localizable.strings */; };
 		64A6BDB42F8F8D67003951DC /* SleepStoriesExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A6BDB32F8F8D67003951DC /* SleepStoriesExperienceView.swift */; };
 		64A6BDB62F8F9D42003951DC /* SleepStoryCompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A6BDB52F8F9D42003951DC /* SleepStoryCompletionView.swift */; };
+		64B0B2A02F900B4B003951DC /* AppAttestAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B0B29F2F900B4B003951DC /* AppAttestAuthManager.swift */; };
 		64F9FE2B2F7BE1F100BBB344 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */; };
 		64F9FE2D2F7BE1F100BBB344 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F9FE2C2F7BE1F100BBB344 /* SwiftUI.framework */; };
 		64F9FE3C2F7BE1F100BBB344 /* MeditationWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -87,6 +88,7 @@
 		6414BD0A2F883D4C009BF848 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = Localizable.strings; sourceTree = "<group>"; };
 		64A6BDB32F8F8D67003951DC /* SleepStoriesExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStoriesExperienceView.swift; sourceTree = "<group>"; };
 		64A6BDB52F8F9D42003951DC /* SleepStoryCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStoryCompletionView.swift; sourceTree = "<group>"; };
+		64B0B29F2F900B4B003951DC /* AppAttestAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAttestAuthManager.swift; sourceTree = "<group>"; };
 		64F9FE232F7BE17400BBB344 /* Vindla.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vindla.entitlements; sourceTree = "<group>"; };
 		64F9FE282F7BE1F100BBB344 /* MeditationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MeditationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		64F9FE2A2F7BE1F100BBB344 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -316,6 +318,7 @@
 			children = (
 				B10020 /* SpeechManager.swift */,
 				B10021 /* KaiBrainService.swift */,
+				64B0B29F2F900B4B003951DC /* AppAttestAuthManager.swift */,
 				6414BCF62F883CF6009BF848 /* AppLocalization.swift */,
 			);
 			path = Services;
@@ -473,6 +476,7 @@
 				A10017 /* VoiceSelectionView.swift in Sources */,
 				64A6BDB62F8F9D42003951DC /* SleepStoryCompletionView.swift in Sources */,
 				A10018 /* SpeechManager.swift in Sources */,
+				64B0B2A02F900B4B003951DC /* AppAttestAuthManager.swift in Sources */,
 				A10019 /* KaiBrainService.swift in Sources */,
 				A10020 /* KaiExperienceView.swift in Sources */,
 			);

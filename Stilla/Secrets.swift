@@ -31,6 +31,21 @@ enum Secrets {
         urlValue(forInfoDictionaryKey: "KAISleepStoryBackendURL")
     }
 
+    /// Optional endpoint used to obtain App Attest challenges and token exchange.
+    /// Defaults to the same host as `KAIBackendURL`, with `/attest` path.
+    static var kaiAttestBaseURL: URL? {
+        if let explicit = urlValue(forInfoDictionaryKey: "KAIAttestBaseURL") {
+            return explicit
+        }
+
+        guard let generateURL = kaiBackendURL else { return nil }
+        var components = URLComponents(url: generateURL, resolvingAgainstBaseURL: false)
+        components?.query = nil
+        components?.fragment = nil
+        components?.path = "/attest"
+        return components?.url
+    }
+
     /// Optional shared secret forwarded to your proxy. This is not a substitute for server-side auth,
     /// but it provides a simple first gate while you stand up proper protection and rate limiting.
     static var kaiBackendToken: String? {
