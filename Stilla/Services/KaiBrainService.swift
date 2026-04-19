@@ -2,6 +2,7 @@ import Foundation
 
 final class KaiBrainService {
     static let shared = KaiBrainService()
+    static let maxAIGenerationDurationMinutes = 30
     
     private let maxFreeCredits = 3
     private let freeGenMonthKey = "kai.free_gen_month"
@@ -155,11 +156,12 @@ final class KaiBrainService {
         durationMinutes: Int,
         excluding recentTitles: [String]
     ) async throws -> SleepStoryGenerationResult {
+        let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let request = SleepStoryGenerationRequest(
             themeTitle: themeTitle,
             themeSubtitle: themeSubtitle,
-            durationMinutes: durationMinutes,
+            durationMinutes: cappedDuration,
             locale: localeIdentifier,
             excludeTitles: recentTitles
         )
@@ -196,7 +198,7 @@ final class KaiBrainService {
         var normalizedScript = script
         normalizedScript = normalizeSleepStoryFlow(normalizedScript)
         normalizedScript.contentType = .sleepStory
-        normalizedScript.durationMinutes = durationMinutes
+        normalizedScript.durationMinutes = cappedDuration
         if normalizedScript.tags.contains(where: { $0.caseInsensitiveCompare("Sleep Story") == .orderedSame }) == false {
             normalizedScript.tags.append("Sleep Story")
         }
@@ -226,6 +228,7 @@ struct SleepStoryGenerationResult {
 
 extension KaiBrainService {
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
+        let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let languageInstruction = """
 
@@ -237,13 +240,13 @@ extension KaiBrainService {
         - If an anchor/example is in another language, rewrite its meaning idiomatically in the target locale.
         """
         let raLocaleInstruction = raLocaleInstruction(for: localeIdentifier, personalityID: personality.id)
-        let wordBudget = Int(Double(durationMinutes * 150) * (1.0 - stillnessRatio))
+        let wordBudget = Int(Double(cappedDuration * 150) * (1.0 - stillnessRatio))
         
         let densityInstruction = """
         
         🎯 KAI RHYTHM TARGET:
         The user has requested a Stillness Ratio of \(Int(stillnessRatio * 100))%.
-        Your goal is to provide approximately \(wordBudget) words total for this \(durationMinutes) minute journey.
+        Your goal is to provide approximately \(wordBudget) words total for this \(cappedDuration) minute journey.
 
         EXECUTION RULES:
         1. SILENCE IS PRIMARY: To respect the word budget, you MUST use significantly longer 'pauseDuration' values (often 60–180s in high stillness).
@@ -253,7 +256,7 @@ extension KaiBrainService {
         
         let request = KaiGenerationRequest(
             mood: mood,
-            durationMinutes: durationMinutes,
+            durationMinutes: cappedDuration,
             personalityName: personality.name,
             personalityPrompt: personality.promptInjection + languageInstruction + raLocaleInstruction + densityInstruction,
             locale: localeIdentifier
@@ -285,7 +288,9 @@ extension KaiBrainService {
         
         do {
             let rawScript = try JSONDecoder().decode(MeditationScript.self, from: data)
-            return normalizeScriptDuration(rawScript)
+            var normalized = normalizeScriptDuration(rawScript)
+            normalized.durationMinutes = cappedDuration
+            return normalized
         } catch {
             print("❌ MIMIR Decoding Error: \(error)")
             throw BrainError.invalidResponse

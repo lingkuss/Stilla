@@ -1142,6 +1142,8 @@ final class RoutineManager {
             return
         }
 
+        let resolvedDuration = min(routine.durationMinutes, KaiBrainService.maxAIGenerationDurationMinutes)
+
         manager.isGeneratingGuidedSession = true
         defer { manager.isGeneratingGuidedSession = false }
 
@@ -1165,7 +1167,7 @@ final class RoutineManager {
         do {
             var script = try await KaiBrainService.shared.generateScript(
                 mood: moodText,
-                durationMinutes: routine.durationMinutes,
+                durationMinutes: resolvedDuration,
                 personality: persona,
                 stillnessRatio: manager.preferredStillnessRatio
             )
@@ -1177,11 +1179,11 @@ final class RoutineManager {
             manager.selectedKaiPersonalityID = persona.id
             manager.currentScript = script
             manager.isGuruEnabled = true
-            manager.start(durationMinutes: routine.durationMinutes)
+            manager.start(durationMinutes: resolvedDuration)
         } catch {
             manager.currentScript = nil
             manager.isGuruEnabled = false
-            manager.start(durationMinutes: routine.durationMinutes)
+            manager.start(durationMinutes: resolvedDuration)
         }
     }
 

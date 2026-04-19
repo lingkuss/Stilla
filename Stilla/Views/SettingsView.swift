@@ -537,6 +537,14 @@ private struct RoutineEditorView: View {
         "intention.gentle_clarity", "intention.evening_unwind", "intention.self_compassion"
     ]
 
+    private var availableRoutineDurations: [Int] {
+        let allDurations = manager.allDurations.filter { $0 > 0 }
+        if selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention {
+            return allDurations.filter { $0 <= KaiBrainService.maxAIGenerationDurationMinutes }
+        }
+        return allDurations
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -626,7 +634,7 @@ private struct RoutineEditorView: View {
                         }
                     } else {
                         Picker(String(localized: "routines.duration"), selection: $selectedDuration) {
-                            ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { duration in
+                            ForEach(availableRoutineDurations, id: \.self) { duration in
                                 Text(minutesLabel(for: duration)).tag(duration)
                             }
                         }
@@ -672,6 +680,9 @@ private struct RoutineEditorView: View {
                 }
                 if newValue == .savedScript, let script = selectedSavedScript {
                     selectedDuration = script.durationMinutes
+                } else if (newValue == .guidedByMood || newValue == .guidedByIntention),
+                          selectedDuration > KaiBrainService.maxAIGenerationDurationMinutes {
+                    selectedDuration = KaiBrainService.maxAIGenerationDurationMinutes
                 }
             }
         }
@@ -771,6 +782,9 @@ private struct RoutineEditorView: View {
         selectedSavedScriptID = routine.savedScriptID ?? manager.savedMeditations.first?.id
         if selectedSessionType == .savedScript, let script = selectedSavedScript {
             selectedDuration = script.durationMinutes
+        } else if (selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention),
+                  selectedDuration > KaiBrainService.maxAIGenerationDurationMinutes {
+            selectedDuration = KaiBrainService.maxAIGenerationDurationMinutes
         }
         isEnabled = routine.isEnabled
 
@@ -813,6 +827,8 @@ private struct RoutineEditorView: View {
         let resolvedDuration: Int
         if selectedSessionType == .savedScript, let script = selectedSavedScript {
             resolvedDuration = script.durationMinutes
+        } else if selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention {
+            resolvedDuration = min(selectedDuration, KaiBrainService.maxAIGenerationDurationMinutes)
         } else {
             resolvedDuration = selectedDuration
         }

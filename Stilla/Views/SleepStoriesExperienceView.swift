@@ -16,6 +16,10 @@ struct SleepStoriesExperienceView: View {
     private let hasBootstrappedHeadersKey = "sleep.story.has_bootstrapped_headers"
     private let cachedHeadersKey = "sleep.story.cached.headers"
 
+    private var availableStoryDurations: [Int] {
+        manager.allDurations.filter { $0 > 0 && $0 <= KaiBrainService.maxAIGenerationDurationMinutes }
+    }
+
     private var selectedHeader: SleepStoryHeader? {
         guard let selectedHeaderID else { return nil }
         return headers.first(where: { $0.id == selectedHeaderID })
@@ -56,6 +60,7 @@ struct SleepStoriesExperienceView: View {
             }
             .preferredColorScheme(.dark)
             .task {
+                selectedDuration = min(selectedDuration, KaiBrainService.maxAIGenerationDurationMinutes)
                 await loadHeadersIfNeeded()
             }
             .sheet(isPresented: $showingPaywall) {
@@ -149,7 +154,7 @@ struct SleepStoriesExperienceView: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { mins in
+                    ForEach(availableStoryDurations, id: \.self) { mins in
                         Button {
                             selectedDuration = mins
                         } label: {
