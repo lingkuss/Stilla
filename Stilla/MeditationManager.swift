@@ -890,7 +890,7 @@ final class MeditationManager {
         timer = nil
         state = .complete
         if !isOpenEnded { remainingSeconds = 0 }
-        soundEngine.stopAll()
+        soundEngine.stopAmbientSoundWithFadeOut()
         if !wasSleepStorySession {
             soundEngine.playSound(endSound)
         }
