@@ -33,6 +33,9 @@ struct VindlaApp: App {
     init() {
         AppLocalization.applyLanguageOverrideOnLaunch()
         configureAudioSession()
+        #if DEBUG
+        Secrets.debugPrintResolvedConfig()
+        #endif
         
         // Force iOS to refresh Siri shortcuts to catch any new additions
         Task {

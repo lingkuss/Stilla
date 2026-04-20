@@ -537,9 +537,13 @@ private struct RoutineEditorView: View {
         "intention.gentle_clarity", "intention.evening_unwind", "intention.self_compassion"
     ]
 
-    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
-        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature
-    ]
+    private var availableRoutineDurations: [Int] {
+        let allDurations = manager.allDurations.filter { $0 > 0 }
+        if selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention {
+            return allDurations.filter { $0 <= KaiBrainService.maxAIGenerationDurationMinutes }
+        }
+        return allDurations
+    }
 
     var body: some View {
         NavigationStack {
@@ -630,7 +634,7 @@ private struct RoutineEditorView: View {
                         }
                     } else {
                         Picker(String(localized: "routines.duration"), selection: $selectedDuration) {
-                            ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { duration in
+                            ForEach(availableRoutineDurations, id: \.self) { duration in
                                 Text(minutesLabel(for: duration)).tag(duration)
                             }
                         }
@@ -676,6 +680,9 @@ private struct RoutineEditorView: View {
                 }
                 if newValue == .savedScript, let script = selectedSavedScript {
                     selectedDuration = script.durationMinutes
+                } else if (newValue == .guidedByMood || newValue == .guidedByIntention),
+                          selectedDuration > KaiBrainService.maxAIGenerationDurationMinutes {
+                    selectedDuration = KaiBrainService.maxAIGenerationDurationMinutes
                 }
             }
         }
@@ -775,6 +782,9 @@ private struct RoutineEditorView: View {
         selectedSavedScriptID = routine.savedScriptID ?? manager.savedMeditations.first?.id
         if selectedSessionType == .savedScript, let script = selectedSavedScript {
             selectedDuration = script.durationMinutes
+        } else if (selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention),
+                  selectedDuration > KaiBrainService.maxAIGenerationDurationMinutes {
+            selectedDuration = KaiBrainService.maxAIGenerationDurationMinutes
         }
         isEnabled = routine.isEnabled
 
@@ -817,6 +827,8 @@ private struct RoutineEditorView: View {
         let resolvedDuration: Int
         if selectedSessionType == .savedScript, let script = selectedSavedScript {
             resolvedDuration = script.durationMinutes
+        } else if selectedSessionType == .guidedByMood || selectedSessionType == .guidedByIntention {
+            resolvedDuration = min(selectedDuration, KaiBrainService.maxAIGenerationDurationMinutes)
         } else {
             resolvedDuration = selectedDuration
         }
@@ -856,7 +868,7 @@ private struct RoutineEditorView: View {
             gates.append(.techniqueLibrary)
         }
 
-        if premiumAmbiences.contains(routine.ambientSound),
+        if SoundEngine.AmbientSound.premiumForSoundBundle.contains(routine.ambientSound),
            !storeManager.isPurchased(StoreKitManager.soundBundleID) {
             gates.append(.soundLibrary)
         }
@@ -975,10 +987,6 @@ struct SoundSelectionView: View {
         .zenWoodblock, .bambooChime, .templeBell
     ]
 
-    private let premiumAmbiences: Set<SoundEngine.AmbientSound> = [
-        .delta, .alpha, .beta, .whiteNoise, .pinkNoise, .brownNoise, .solfeggioLove, .solfeggioNature, .ancientFlora, .greenCanopy
-    ]
-    
     private let ambientDescriptions: [SoundEngine.AmbientSound: String] = [
         .delta: String(localized: "sound.delta.description"),
         .alpha: String(localized: "sound.alpha.description"),
@@ -1091,7 +1099,7 @@ struct SoundSelectionView: View {
     
     private func ambientCard(_ ambient: SoundEngine.AmbientSound) -> some View {
         let isSelected = manager.ambientSound == ambient
-        let isPremium = premiumAmbiences.contains(ambient)
+        let isPremium = SoundEngine.AmbientSound.premiumForSoundBundle.contains(ambient)
         let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
         let desc = ambientDescriptions[ambient] ?? " "
         
@@ -1301,11 +1309,11 @@ struct SoundSelectionView: View {
         case .success:
             return
         case .cancelled:
-            purchaseStatusMessage = "Purchase cancelled."
+            purchaseStatusMessage = String(localized: "purchase.cancelled")
         case .pending:
-            purchaseStatusMessage = "Your premium library purchase is pending approval."
+            purchaseStatusMessage = String(localized: "purchase.pending")
         case .unavailable:
-            purchaseStatusMessage = "The premium library isn't available right now. Check your App Store product configuration."
+            purchaseStatusMessage = String(localized: "purchase.unavailable")
         case .failed(let message):
             purchaseStatusMessage = message
         }

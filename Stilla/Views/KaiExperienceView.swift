@@ -40,6 +40,10 @@ struct KaiExperienceView: View {
     private var activePersonality: KaiPersonality {
         manager.selectedKaiPersonality
     }
+
+    private var availableAIDurations: [Int] {
+        manager.allDurations.filter { $0 > 0 && $0 <= KaiBrainService.maxAIGenerationDurationMinutes }
+    }
     
     var body: some View {
         NavigationStack {
@@ -69,7 +73,7 @@ struct KaiExperienceView: View {
                         moodText = mood
                     }
                     if let duration = manager.siriPendingDuration {
-                        selectedDuration = duration
+                        selectedDuration = min(duration, KaiBrainService.maxAIGenerationDurationMinutes)
                     }
                     
                     // Reset the flags so we don't re-trigger
@@ -82,6 +86,7 @@ struct KaiExperienceView: View {
                 }
 
                 stillnessRatio = manager.preferredStillnessRatio
+                selectedDuration = min(selectedDuration, KaiBrainService.maxAIGenerationDurationMinutes)
                 isPersonalityPickerExpanded = false
             }
             .sheet(isPresented: $showingPaywall) {
@@ -236,8 +241,7 @@ struct KaiExperienceView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
-                            // Filter out 0 (Infinite) as Kai requires a structured script duration
-                            ForEach(manager.allDurations.filter { $0 > 0 }, id: \.self) { mins in
+                            ForEach(availableAIDurations, id: \.self) { mins in
                                 Button {
                                     selectedDuration = mins
                                     UISelectionFeedbackGenerator().selectionChanged()

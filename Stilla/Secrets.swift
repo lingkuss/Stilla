@@ -31,6 +31,21 @@ enum Secrets {
         urlValue(forInfoDictionaryKey: "KAISleepStoryBackendURL")
     }
 
+    /// Optional endpoint used to obtain App Attest challenges and token exchange.
+    /// Defaults to the same host as `KAIBackendURL`, with `/attest` path.
+    static var kaiAttestBaseURL: URL? {
+        if let explicit = urlValue(forInfoDictionaryKey: "KAIAttestBaseURL") {
+            return explicit
+        }
+
+        guard let generateURL = kaiBackendURL else { return nil }
+        var components = URLComponents(url: generateURL, resolvingAgainstBaseURL: false)
+        components?.query = nil
+        components?.fragment = nil
+        components?.path = "/attest"
+        return components?.url
+    }
+
     /// Optional shared secret forwarded to your proxy. This is not a substitute for server-side auth,
     /// but it provides a simple first gate while you stand up proper protection and rate limiting.
     static var kaiBackendToken: String? {
@@ -52,6 +67,12 @@ enum Secrets {
             return nil
         }
 
+        #if DEBUG
+        if rawValue.contains("$(") {
+            print("⚠️ Secrets: unresolved build setting for \(key): \(rawValue)")
+        }
+        #endif
+
         let cleaned = rawValue.unicodeScalars
             .filter { !$0.properties.isWhitespace && !$0.properties.isDefaultIgnorableCodePoint }
             .map(String.init)
@@ -59,4 +80,18 @@ enum Secrets {
 
         return URL(string: cleaned)
     }
+
+    #if DEBUG
+    static func debugPrintResolvedConfig() {
+        let config = (Bundle.main.object(forInfoDictionaryKey: "APP_ENV_NAME") as? String) ?? "(missing)"
+        let backend = Bundle.main.object(forInfoDictionaryKey: "KAIBackendURL") as? String ?? "(missing)"
+        let share = Bundle.main.object(forInfoDictionaryKey: "KAIShareBackendURL") as? String ?? "(missing)"
+        let attest = Bundle.main.object(forInfoDictionaryKey: "KAIAttestBaseURL") as? String ?? "(missing)"
+
+        print("⚙️ Build config APP_ENV_NAME=\(config)")
+        print("⚙️ KAIBackendURL=\(backend)")
+        print("⚙️ KAIShareBackendURL=\(share)")
+        print("⚙️ KAIAttestBaseURL=\(attest)")
+    }
+    #endif
 }

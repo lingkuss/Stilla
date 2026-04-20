@@ -8,6 +8,7 @@ final class SoundEngine {
     private let toneNode = AVAudioPlayerNode()
     private let loopNode = AVAudioPlayerNode()
     private let breathNode = AVAudioPlayerNode()
+    private let ambientMixerNode = AVAudioMixerNode()
     private var isRunning = false
     private var ambientSourceNode: AVAudioSourceNode?
     private var currentAmbientSound: AmbientSound = .none
@@ -15,6 +16,10 @@ final class SoundEngine {
     private var transitionFrames: Double = 0
     private let totalTransitionFrames: Double = 0.5 * 44100 // 500ms crossfade
     private var isTransitioning: Bool = false
+    private var ambientEnvelope: Float = 1.0
+    private var ambientFadeTimer: Timer?
+    private let defaultAmbientFadeIn: TimeInterval = 3.0
+    private let defaultAmbientFadeOut: TimeInterval = 3.0
 
     
     // Generator states
@@ -57,7 +62,7 @@ final class SoundEngine {
     
     var ambientVolume: Float = 0.5 {
         didSet {
-            loopNode.volume = ambientVolume
+            applyAmbientMixVolume()
         }
     }
 
@@ -65,11 +70,14 @@ final class SoundEngine {
         engine.attach(toneNode)
         engine.attach(breathNode)
         engine.attach(loopNode)
+        engine.attach(ambientMixerNode)
         setupAmbientSourceNode()
         configureAudioSession()
-        
-        engine.connect(loopNode, to: engine.mainMixerNode, format: nil)
-        loopNode.volume = ambientVolume
+
+        engine.connect(loopNode, to: ambientMixerNode, format: nil)
+        engine.connect(ambientMixerNode, to: engine.mainMixerNode, format: nil)
+        loopNode.volume = 1.0
+        applyAmbientMixVolume()
     }
 
 
@@ -100,7 +108,7 @@ final class SoundEngine {
         
         self.ambientSourceNode = sourceNode
         engine.attach(sourceNode)
-        engine.connect(sourceNode, to: engine.mainMixerNode, format: format)
+        engine.connect(sourceNode, to: ambientMixerNode, format: format)
     }
 
     
@@ -159,7 +167,7 @@ final class SoundEngine {
 
     private func generateAmbientSample() -> (left: Double, right: Double) {
         let sampleRate: Double = 44100
-        let volume = Double(ambientVolume) * 0.2
+        let volume = 0.2
         
         if isTransitioning {
             let s1 = generateSample(for: currentAmbientSound, volume: volume, sampleRate: sampleRate)
@@ -211,16 +219,49 @@ final class SoundEngine {
     }
 
     func startAmbientSound(_ sound: AmbientSound) {
+        if sound == .none {
+            stopAmbientSoundWithFadeOut()
+            return
+        }
+
+        ambientFadeTimer?.invalidate()
+
         if !isRunning {
             currentAmbientSound = sound
             try? engine.start()
             isRunning = true
             handleLoopPlayback(for: sound)
+            if sound != .none {
+                ambientEnvelope = 0
+                applyAmbientMixVolume()
+                rampAmbientEnvelope(to: 1.0, duration: defaultAmbientFadeIn)
+            }
         } else if sound != currentAmbientSound {
             nextAmbientSound = sound
             transitionFrames = 0
             isTransitioning = true
             handleLoopPlayback(for: sound)
+            if sound != .none, ambientEnvelope < 1.0 {
+                rampAmbientEnvelope(to: 1.0, duration: defaultAmbientFadeIn)
+            }
+        }
+    }
+
+    func stopAmbientSoundWithFadeOut(duration: TimeInterval? = nil) {
+        let fadeDuration = duration ?? defaultAmbientFadeOut
+        guard currentAmbientSound != .none || nextAmbientSound != .none || isTransitioning || loopNode.isPlaying else {
+            stopEngineIfIdle()
+            return
+        }
+
+        rampAmbientEnvelope(to: 0.0, duration: fadeDuration) { [weak self] in
+            guard let self = self else { return }
+            self.currentAmbientSound = .none
+            self.nextAmbientSound = .none
+            self.isTransitioning = false
+            self.transitionFrames = 0
+            self.loopNode.stop()
+            self.stopEngineIfIdle()
         }
     }
 
@@ -256,10 +297,16 @@ final class SoundEngine {
     }
 
     func stopAll() {
+        ambientFadeTimer?.invalidate()
         toneNode.stop()
         breathNode.stop()
         loopNode.stop()
         currentAmbientSound = .none
+        nextAmbientSound = .none
+        isTransitioning = false
+        transitionFrames = 0
+        ambientEnvelope = 1.0
+        applyAmbientMixVolume()
         
         // Reset phases to avoid clicks on restart
         phase = 0
@@ -538,7 +585,11 @@ final class SoundEngine {
             return
         }
 
-        node.scheduleBuffer(buffer, at: nil, options: [], completionHandler: nil)
+        node.scheduleBuffer(buffer, at: nil, options: []) { [weak self] in
+            DispatchQueue.main.async {
+                self?.stopEngineIfIdle()
+            }
+        }
         node.play()
     }
 
@@ -559,4 +610,67 @@ final class SoundEngine {
         node.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
         node.play()
     }
+}
+
+private extension SoundEngine {
+    func applyAmbientMixVolume() {
+        ambientMixerNode.outputVolume = max(0, min(1, ambientVolume * ambientEnvelope))
+    }
+
+    func rampAmbientEnvelope(to target: Float, duration: TimeInterval, completion: (() -> Void)? = nil) {
+        ambientFadeTimer?.invalidate()
+
+        let start = ambientEnvelope
+        if duration <= 0 || abs(start - target) < 0.001 {
+            ambientEnvelope = target
+            applyAmbientMixVolume()
+            completion?()
+            return
+        }
+
+        let interval: TimeInterval = 1.0 / 60.0
+        let steps = max(1, Int(ceil(duration / interval)))
+        var stepIndex = 0
+
+        ambientFadeTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            stepIndex += 1
+            let progress = min(1.0, Float(stepIndex) / Float(steps))
+            self.ambientEnvelope = start + (target - start) * progress
+            self.applyAmbientMixVolume()
+
+            if stepIndex >= steps {
+                timer.invalidate()
+                self.ambientFadeTimer = nil
+                self.ambientEnvelope = target
+                self.applyAmbientMixVolume()
+                completion?()
+            }
+        }
+        if let fadeTimer = ambientFadeTimer {
+            RunLoop.main.add(fadeTimer, forMode: .common)
+        }
+    }
+
+    func stopEngineIfIdle() {
+        guard isRunning else { return }
+        let hasAmbient = currentAmbientSound != .none || nextAmbientSound != .none || isTransitioning || ambientEnvelope > 0.001
+        let hasActiveNodes = toneNode.isPlaying || breathNode.isPlaying || loopNode.isPlaying
+        guard !hasAmbient && !hasActiveNodes else { return }
+        engine.stop()
+        isRunning = false
+    }
+}
+
+extension SoundEngine.AmbientSound {
+    /// Single source of truth for ambiences gated by the sound bundle purchase.
+    static let premiumForSoundBundle: Set<Self> = [
+        .delta, .alpha, .beta,
+        .whiteNoise, .pinkNoise, .brownNoise,
+        .solfeggioLove, .solfeggioNature,
+        .ancientFlora, .greenCanopy
+    ]
 }

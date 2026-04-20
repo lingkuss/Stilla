@@ -70,6 +70,8 @@ DerivedData/
 .env
 .env.*
 !.env.example
+Config/*.local.xcconfig
+Config/*.ci.xcconfig
 
 ## Other
 .DS_Store

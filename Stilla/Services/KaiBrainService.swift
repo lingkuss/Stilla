@@ -2,6 +2,7 @@ import Foundation
 
 final class KaiBrainService {
     static let shared = KaiBrainService()
+    static let maxAIGenerationDurationMinutes = 30
     
     private let maxFreeCredits = 3
     private let freeGenMonthKey = "kai.free_gen_month"
@@ -155,11 +156,12 @@ final class KaiBrainService {
         durationMinutes: Int,
         excluding recentTitles: [String]
     ) async throws -> SleepStoryGenerationResult {
+        let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let request = SleepStoryGenerationRequest(
             themeTitle: themeTitle,
             themeSubtitle: themeSubtitle,
-            durationMinutes: durationMinutes,
+            durationMinutes: cappedDuration,
             locale: localeIdentifier,
             excludeTitles: recentTitles
         )
@@ -167,10 +169,7 @@ final class KaiBrainService {
         var urlRequest = URLRequest(url: sleepStoryURL)
         urlRequest.httpMethod = "POST"
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        if let token = Secrets.kaiBackendToken {
-            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+        try await AppAttestAuthManager.shared.authorize(&urlRequest)
 
         urlRequest.httpBody = try JSONEncoder().encode(request)
 
@@ -199,7 +198,7 @@ final class KaiBrainService {
         var normalizedScript = script
         normalizedScript = normalizeSleepStoryFlow(normalizedScript)
         normalizedScript.contentType = .sleepStory
-        normalizedScript.durationMinutes = durationMinutes
+        normalizedScript.durationMinutes = cappedDuration
         if normalizedScript.tags.contains(where: { $0.caseInsensitiveCompare("Sleep Story") == .orderedSame }) == false {
             normalizedScript.tags.append("Sleep Story")
         }
@@ -229,6 +228,7 @@ struct SleepStoryGenerationResult {
 
 extension KaiBrainService {
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
+        let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let languageInstruction = """
 
@@ -240,13 +240,13 @@ extension KaiBrainService {
         - If an anchor/example is in another language, rewrite its meaning idiomatically in the target locale.
         """
         let raLocaleInstruction = raLocaleInstruction(for: localeIdentifier, personalityID: personality.id)
-        let wordBudget = Int(Double(durationMinutes * 150) * (1.0 - stillnessRatio))
+        let wordBudget = Int(Double(cappedDuration * 150) * (1.0 - stillnessRatio))
         
         let densityInstruction = """
         
         🎯 KAI RHYTHM TARGET:
         The user has requested a Stillness Ratio of \(Int(stillnessRatio * 100))%.
-        Your goal is to provide approximately \(wordBudget) words total for this \(durationMinutes) minute journey.
+        Your goal is to provide approximately \(wordBudget) words total for this \(cappedDuration) minute journey.
 
         EXECUTION RULES:
         1. SILENCE IS PRIMARY: To respect the word budget, you MUST use significantly longer 'pauseDuration' values (often 60–180s in high stillness).
@@ -256,7 +256,7 @@ extension KaiBrainService {
         
         let request = KaiGenerationRequest(
             mood: mood,
-            durationMinutes: durationMinutes,
+            durationMinutes: cappedDuration,
             personalityName: personality.name,
             personalityPrompt: personality.promptInjection + languageInstruction + raLocaleInstruction + densityInstruction,
             locale: localeIdentifier
@@ -265,10 +265,7 @@ extension KaiBrainService {
         var urlRequest = URLRequest(url: proxyURL)
         urlRequest.httpMethod = "POST"
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        if let token = Secrets.kaiBackendToken {
-            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+        try await AppAttestAuthManager.shared.authorize(&urlRequest)
         
         urlRequest.httpBody = try JSONEncoder().encode(request)
         
@@ -291,7 +288,9 @@ extension KaiBrainService {
         
         do {
             let rawScript = try JSONDecoder().decode(MeditationScript.self, from: data)
-            return normalizeScriptDuration(rawScript)
+            var normalized = normalizeScriptDuration(rawScript)
+            normalized.durationMinutes = cappedDuration
+            return normalized
         } catch {
             print("❌ MIMIR Decoding Error: \(error)")
             throw BrainError.invalidResponse
@@ -385,19 +384,72 @@ private struct SleepStoryGenerationEnvelope: Codable {
 
 private extension KaiBrainService {
     static let defaultSleepStoryHeaders: [SleepStoryHeader] = [
-        SleepStoryHeader(id: "astronomers-attic", title: "The Astronomer's Attic", subtitle: "Dusty maps, brass lenses, and starlight on wood"),
-        SleepStoryHeader(id: "midnight-tram", title: "Last Tram Through the Rain", subtitle: "Window fog, dim stations, and quiet city hum"),
-        SleepStoryHeader(id: "orchard-watchtower", title: "The Orchard Watchtower", subtitle: "Apple leaves, lantern glow, and slow night wind"),
-        SleepStoryHeader(id: "paper-lantern-river", title: "Paper Lantern River", subtitle: "Boats drifting under bridges in warm silence"),
-        SleepStoryHeader(id: "salt-glasshouse", title: "The Salt Glasshouse", subtitle: "Sea mist on panes and soft echoing steps"),
-        SleepStoryHeader(id: "winter-post-office", title: "Winter Post Office", subtitle: "Unsent letters, ticking clock, and stove heat"),
-        SleepStoryHeader(id: "cedar-bathhouse", title: "The Cedar Bathhouse", subtitle: "Steam, cedar walls, and still midnight water"),
-        SleepStoryHeader(id: "lighthouse-kitchen", title: "Kitchen in the Lighthouse", subtitle: "Kettle warmth and waves turning below"),
-        SleepStoryHeader(id: "snowfield-observatory", title: "Snowfield Observatory", subtitle: "Red lamps, wool blankets, and distant sky"),
-        SleepStoryHeader(id: "night-greenmarket", title: "Greenmarket After Closing", subtitle: "Crates, canvas awnings, and soft street rain"),
-        SleepStoryHeader(id: "quarry-garden", title: "The Quarry Garden", subtitle: "Stone paths, moss walls, and moonlit water"),
-        SleepStoryHeader(id: "river-mill-loft", title: "Loft Above the River Mill", subtitle: "Timber beams and a wheel turning slowly")
+        SleepStoryHeader(
+            id: "astronomers-attic",
+            title: localizedSleepStoryHeader("astronomers-attic", component: "title", fallback: "The Astronomer's Attic"),
+            subtitle: localizedSleepStoryHeader("astronomers-attic", component: "subtitle", fallback: "Dusty maps, brass lenses, and starlight on wood")
+        ),
+        SleepStoryHeader(
+            id: "midnight-tram",
+            title: localizedSleepStoryHeader("midnight-tram", component: "title", fallback: "Last Tram Through the Rain"),
+            subtitle: localizedSleepStoryHeader("midnight-tram", component: "subtitle", fallback: "Window fog, dim stations, and quiet city hum")
+        ),
+        SleepStoryHeader(
+            id: "orchard-watchtower",
+            title: localizedSleepStoryHeader("orchard-watchtower", component: "title", fallback: "The Orchard Watchtower"),
+            subtitle: localizedSleepStoryHeader("orchard-watchtower", component: "subtitle", fallback: "Apple leaves, lantern glow, and slow night wind")
+        ),
+        SleepStoryHeader(
+            id: "paper-lantern-river",
+            title: localizedSleepStoryHeader("paper-lantern-river", component: "title", fallback: "Paper Lantern River"),
+            subtitle: localizedSleepStoryHeader("paper-lantern-river", component: "subtitle", fallback: "Boats drifting under bridges in warm silence")
+        ),
+        SleepStoryHeader(
+            id: "salt-glasshouse",
+            title: localizedSleepStoryHeader("salt-glasshouse", component: "title", fallback: "The Salt Glasshouse"),
+            subtitle: localizedSleepStoryHeader("salt-glasshouse", component: "subtitle", fallback: "Sea mist on panes and soft echoing steps")
+        ),
+        SleepStoryHeader(
+            id: "winter-post-office",
+            title: localizedSleepStoryHeader("winter-post-office", component: "title", fallback: "Winter Post Office"),
+            subtitle: localizedSleepStoryHeader("winter-post-office", component: "subtitle", fallback: "Unsent letters, ticking clock, and stove heat")
+        ),
+        SleepStoryHeader(
+            id: "cedar-bathhouse",
+            title: localizedSleepStoryHeader("cedar-bathhouse", component: "title", fallback: "The Cedar Bathhouse"),
+            subtitle: localizedSleepStoryHeader("cedar-bathhouse", component: "subtitle", fallback: "Steam, cedar walls, and still midnight water")
+        ),
+        SleepStoryHeader(
+            id: "lighthouse-kitchen",
+            title: localizedSleepStoryHeader("lighthouse-kitchen", component: "title", fallback: "Kitchen in the Lighthouse"),
+            subtitle: localizedSleepStoryHeader("lighthouse-kitchen", component: "subtitle", fallback: "Kettle warmth and waves turning below")
+        ),
+        SleepStoryHeader(
+            id: "snowfield-observatory",
+            title: localizedSleepStoryHeader("snowfield-observatory", component: "title", fallback: "Snowfield Observatory"),
+            subtitle: localizedSleepStoryHeader("snowfield-observatory", component: "subtitle", fallback: "Red lamps, wool blankets, and distant sky")
+        ),
+        SleepStoryHeader(
+            id: "night-greenmarket",
+            title: localizedSleepStoryHeader("night-greenmarket", component: "title", fallback: "Greenmarket After Closing"),
+            subtitle: localizedSleepStoryHeader("night-greenmarket", component: "subtitle", fallback: "Crates, canvas awnings, and soft street rain")
+        ),
+        SleepStoryHeader(
+            id: "quarry-garden",
+            title: localizedSleepStoryHeader("quarry-garden", component: "title", fallback: "The Quarry Garden"),
+            subtitle: localizedSleepStoryHeader("quarry-garden", component: "subtitle", fallback: "Stone paths, moss walls, and moonlit water")
+        ),
+        SleepStoryHeader(
+            id: "river-mill-loft",
+            title: localizedSleepStoryHeader("river-mill-loft", component: "title", fallback: "Loft Above the River Mill"),
+            subtitle: localizedSleepStoryHeader("river-mill-loft", component: "subtitle", fallback: "Timber beams and a wheel turning slowly")
+        )
     ]
+
+    static func localizedSleepStoryHeader(_ id: String, component: String, fallback: String) -> String {
+        let key = "sleep.header.\(id).\(component)"
+        return Bundle.main.localizedString(forKey: key, value: fallback, table: nil)
+    }
 
     static func normalizedHeaderTitle(_ value: String) -> String {
         value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()

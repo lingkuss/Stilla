@@ -25,16 +25,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>APP_ENV_NAME</key>
+	<string>$(APP_ENV_NAME)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>KAIBackendToken</key>
-	<string>9dv2EwEPfcoQdpmL0WT3ulpeweDesKCgYbyC7hgMelZ9wzp65vS4wQLyQUipQDeI</string>
 	<key>KAIBackendURL</key>
-	<string>https://vindla-48l3n74ti-lingkuss-8655s-projects.vercel.app/kai/generate</string>
+	<string>$(KAI_BACKEND_URL)</string>
 	<key>KAIShareBackendURL</key>
-	<string>https://vindla-48l3n74ti-lingkuss-8655s-projects.vercel.app/kai/share</string>
+	<string>$(KAI_SHARE_BACKEND_URL)</string>
 	<key>KAIShareWebBaseURL</key>
-	<string>https://vindla-three.vercel.app</string>
+	<string>$(KAI_SHARE_WEB_BASE_URL)</string>
+	<key>KAIAttestBaseURL</key>
+	<string>$(KAI_ATTEST_BASE_URL)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>

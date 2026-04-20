@@ -282,101 +282,122 @@ struct ContentView: View {
     // MARK: - Redesign Home Views
 
     private var heroView: some View {
-        VStack(spacing: 30) {
-            Spacer()
-            
-            // 1. Large Persona Portrait (Middle)
-            ZStack {
-                Circle()
-                    .fill(.ultraThinMaterial)
-                    .frame(width: 240, height: 240)
-                    .overlay(
-                        Circle()
-                            .stroke(LinearGradient(colors: [.white.opacity(0.2), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
-                    )
-                
-                Image(manager.selectedKaiPersonality.imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 220, height: 220)
-                    .clipShape(Circle())
-                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-            }
-            .scaleEffect(kaiPulse ? 1.02 : 1.0)
-            .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: kaiPulse)
-            
-            // 3. Message Citation (Under the image)
-            VStack(spacing: 16) {
-                Text("“\(latestKaiBody)”")
-                    .font(.system(size: 16, weight: .light))
-                    .foregroundStyle(.white.opacity(0.7))
-                    .italic()
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 60)
-                    .lineSpacing(4)
-                
-                HStack(spacing: 8) {
-                    Rectangle()
-                        .fill(.white.opacity(0.3))
-                        .frame(width: 20, height: 1)
-                    Text(String(localized: "content.mimir_label"))
-                        .font(.system(size: 10, weight: .bold))
-                        .kerning(3)
-                        .foregroundStyle(.white.opacity(0.5))
-                    Rectangle()
-                        .fill(.white.opacity(0.3))
-                        .frame(width: 20, height: 1)
-                }
-            }
-            
-            Spacer()
-            
-            // 4. Primary Action Button
-            Button(action: { 
-                showKaiExperience = true 
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            }) {
-                HStack(spacing: 12) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text(String(localized: "content.start_mimir_journey"))
-                        .font(.system(size: 16, weight: .semibold))
-                }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 32)
-                .padding(.vertical, 18)
-                .background {
-                    Capsule()
-                        .fill(LinearGradient(colors: [.indigo, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .shadow(color: .indigo.opacity(0.3), radius: 15, x: 0, y: 8)
-                }
-            }
-            .buttonStyle(.plain)
+        GeometryReader { proxy in
+            let height = proxy.size.height
+            let width = proxy.size.width
+            let compactHeight = height < 720
+            let portraitOuterSize = min(max(height * (compactHeight ? 0.26 : 0.32), 148), min(width * 0.62, 240))
+            let portraitInnerSize = max(136, portraitOuterSize - 20)
+            let verticalSpacing = compactHeight ? 18.0 : 26.0
 
-            Button(action: {
-                showSleepStories = true
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            }) {
-                HStack(spacing: 10) {
-                    Image(systemName: "moon.stars.fill")
-                        .font(.system(size: 14, weight: .semibold))
-                    Text(String(localized: "content.start_sleep_stories"))
-                        .font(.system(size: 14, weight: .semibold))
+            VStack(spacing: verticalSpacing) {
+                Spacer(minLength: compactHeight ? 8 : 18)
+
+                ZStack {
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                        .frame(width: portraitOuterSize, height: portraitOuterSize)
+                        .overlay(
+                            Circle()
+                                .stroke(LinearGradient(colors: [.white.opacity(0.2), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
+                        )
+
+                    Image(manager.selectedKaiPersonality.imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: portraitInnerSize, height: portraitInnerSize)
+                        .clipShape(Circle())
+                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
                 }
-                .foregroundStyle(.white.opacity(0.9))
-                .padding(.horizontal, 22)
-                .padding(.vertical, 12)
-                .background(Capsule().fill(Color.white.opacity(0.08)))
-                .overlay(
-                    Capsule()
-                        .strokeBorder(Color.white.opacity(0.14), lineWidth: 1)
-                )
+                .scaleEffect(kaiPulse ? 1.02 : 1.0)
+                .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: kaiPulse)
+                .layoutPriority(0)
+
+                VStack(spacing: 14) {
+                    Text(latestKaiHeader)
+                        .font(.system(size: compactHeight ? 22 : 26, weight: .light, design: .serif))
+                        .italic()
+                        .foregroundStyle(.white.opacity(0.95))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.85)
+                        .padding(.horizontal, compactHeight ? 28 : 40)
+
+                    ScrollView(.vertical, showsIndicators: false) {
+                        Text("“\(latestKaiBody)”")
+                            .font(.system(size: compactHeight ? 15 : 16, weight: .light))
+                            .foregroundStyle(.white.opacity(0.7))
+                            .italic()
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, compactHeight ? 28 : 60)
+                            .lineSpacing(4)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .frame(maxHeight: compactHeight ? 132 : 168)
+
+                    HStack(spacing: 8) {
+                        Rectangle()
+                            .fill(.white.opacity(0.3))
+                            .frame(width: 20, height: 1)
+                        Text(String(localized: "content.mimir_label"))
+                            .font(.system(size: 10, weight: .bold))
+                            .kerning(3)
+                            .foregroundStyle(.white.opacity(0.5))
+                        Rectangle()
+                            .fill(.white.opacity(0.3))
+                            .frame(width: 20, height: 1)
+                    }
+                }
+                .layoutPriority(2)
+
+                Spacer(minLength: compactHeight ? 4 : 12)
+
+                Button(action: {
+                    showKaiExperience = true
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text(String(localized: "content.start_mimir_journey"))
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 18)
+                    .background {
+                        Capsule()
+                            .fill(LinearGradient(colors: [.indigo, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                            .shadow(color: .indigo.opacity(0.3), radius: 15, x: 0, y: 8)
+                    }
+                }
+                .buttonStyle(.plain)
+
+                Button(action: {
+                    showSleepStories = true
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }) {
+                    HStack(spacing: 10) {
+                        Image(systemName: "moon.stars.fill")
+                            .font(.system(size: 14, weight: .semibold))
+                        Text(String(localized: "content.start_sleep_stories"))
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .foregroundStyle(.white.opacity(0.9))
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 12)
+                    .background(Capsule().fill(Color.white.opacity(0.08)))
+                    .overlay(
+                        Capsule()
+                            .strokeBorder(Color.white.opacity(0.14), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
+
+                Spacer(minLength: compactHeight ? 8 : 18)
             }
-            .buttonStyle(.plain)
-            
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .onAppear {
             kaiPulse = true

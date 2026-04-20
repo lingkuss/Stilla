@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import cors from "cors";
 import Redis from "ioredis";
 import crypto from "crypto";
+import { verifyAssertion, verifyAttestation } from "node-app-attest";
 
 const kv = process.env.REDIS_URL ? new Redis(process.env.REDIS_URL) : null;
 
@@ -18,9 +19,31 @@ const port = Number(process.env.PORT || 8787);
 const model = process.env.OPENAI_MODEL || "gpt-5.4-mini";
 const proxyToken = process.env.KAI_PROXY_TOKEN || "";
 const openAIKey = process.env.OPENAI_API_KEY;
+const attestTeamId = process.env.APPLE_TEAM_ID || "";
+const attestBundleId = process.env.IOS_BUNDLE_ID || "";
+const attestAllowDevelopment = process.env.APP_ATTEST_ALLOW_DEVELOPMENT === "true";
+const attestRequired = process.env.APP_ATTEST_REQUIRED !== "false";
+const legacyProxyAllowed = process.env.ALLOW_LEGACY_PROXY_TOKEN === "true";
+const appTokenSecret = process.env.APP_AUTH_TOKEN_SECRET || "";
+const appTokenTTLSeconds = Number(process.env.APP_AUTH_TOKEN_TTL_SECONDS || 900);
+const challengeTTLSeconds = Number(process.env.APP_ATTEST_CHALLENGE_TTL_SECONDS || 120);
+const maxClockSkewSeconds = Number(process.env.APP_ATTEST_MAX_CLOCK_SKEW_SECONDS || 180);
+const appId = attestTeamId && attestBundleId ? `${attestTeamId}.${attestBundleId}` : "";
 
 if (!openAIKey) {
     throw new Error("Missing OPENAI_API_KEY");
+}
+
+if (attestRequired) {
+    if (!kv) {
+        throw new Error("APP_ATTEST_REQUIRED=true requires REDIS_URL");
+    }
+    if (!appId) {
+        throw new Error("APP_ATTEST_REQUIRED=true requires APPLE_TEAM_ID and IOS_BUNDLE_ID");
+    }
+    if (!appTokenSecret) {
+        throw new Error("APP_ATTEST_REQUIRED=true requires APP_AUTH_TOKEN_SECRET");
+    }
 }
 
 const openai = new OpenAI({ apiKey: openAIKey });
@@ -53,9 +76,306 @@ const generateLimiter = rateLimit({
     message: { error: "Too many requests. Please try again later." },
 });
 
-app.post("/kai/generate", generateLimiter, async (req, res) => {
+const attestLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 120,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many attestation attempts. Please try again later." },
+});
+
+const shareReadLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 120,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many share lookups. Please try again later." },
+});
+
+function base64UrlEncode(input) {
+    const buffer = Buffer.isBuffer(input) ? input : Buffer.from(input);
+    return buffer
+        .toString("base64")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/g, "");
+}
+
+function base64UrlDecode(input) {
+    const normalized = input.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    return Buffer.from(padded, "base64");
+}
+
+function issueAppToken({ installationId, keyId }) {
+    const now = Math.floor(Date.now() / 1000);
+    const payload = {
+        sub: installationId,
+        keyId,
+        iat: now,
+        exp: now + appTokenTTLSeconds,
+        aud: "stilla-api",
+        iss: "stilla-kai-proxy",
+    };
+
+    const headerB64 = base64UrlEncode(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+    const payloadB64 = base64UrlEncode(JSON.stringify(payload));
+    const signingInput = `${headerB64}.${payloadB64}`;
+    const signature = crypto
+        .createHmac("sha256", appTokenSecret)
+        .update(signingInput)
+        .digest();
+    const sigB64 = base64UrlEncode(signature);
+    return `${signingInput}.${sigB64}`;
+}
+
+function verifyAppToken(token) {
+    if (!token) {
+        throw new Error("Missing token");
+    }
+    const parts = token.split(".");
+    if (parts.length !== 3) {
+        throw new Error("Invalid token format");
+    }
+    const [headerB64, payloadB64, signatureB64] = parts;
+    const signingInput = `${headerB64}.${payloadB64}`;
+    const expectedSig = crypto
+        .createHmac("sha256", appTokenSecret)
+        .update(signingInput)
+        .digest();
+    const actualSig = base64UrlDecode(signatureB64);
+    if (actualSig.length !== expectedSig.length || !crypto.timingSafeEqual(actualSig, expectedSig)) {
+        throw new Error("Invalid token signature");
+    }
+    const payload = JSON.parse(base64UrlDecode(payloadB64).toString("utf8"));
+    const now = Math.floor(Date.now() / 1000);
+    if (typeof payload.exp !== "number" || payload.exp <= now) {
+        throw new Error("Token expired");
+    }
+    if (payload.aud !== "stilla-api" || payload.iss !== "stilla-kai-proxy") {
+        throw new Error("Invalid token claims");
+    }
+    return payload;
+}
+
+function readBearerToken(req) {
+    const authHeader = req.headers.authorization || "";
+    if (!authHeader.startsWith("Bearer ")) {
+        return "";
+    }
+    return authHeader.slice(7);
+}
+
+function parseInstallIdentifier(value) {
+    if (typeof value !== "string") {
+        return "";
+    }
+    const trimmed = value.trim();
+    return /^[a-zA-Z0-9_-]{16,128}$/.test(trimmed) ? trimmed : "";
+}
+
+async function storeChallenge({ challenge, installationId, purpose }) {
+    const value = JSON.stringify({
+        installationId,
+        purpose,
+        createdAt: Date.now(),
+    });
+    await kv.set(`attest:challenge:${challenge}`, value, "EX", challengeTTLSeconds);
+}
+
+async function consumeChallenge(challenge) {
+    const key = `attest:challenge:${challenge}`;
+    let raw = null;
     try {
-        if (proxyToken) {
+        raw = await kv.call("GETDEL", key);
+    } catch {
+        raw = await kv.get(key);
+        if (raw) {
+            await kv.del(key);
+        }
+    }
+    return raw ? JSON.parse(raw) : null;
+}
+
+async function loadAttestationRecord(installationId) {
+    const raw = await kv.get(`attest:key:${installationId}`);
+    return raw ? JSON.parse(raw) : null;
+}
+
+async function saveAttestationRecord(installationId, record) {
+    await kv.set(`attest:key:${installationId}`, JSON.stringify(record));
+}
+
+function mintTokenResponse(installationId, keyId) {
+    const token = issueAppToken({ installationId, keyId });
+    return {
+        token,
+        expiresAt: new Date(Date.now() + appTokenTTLSeconds * 1000).toISOString(),
+    };
+}
+
+async function requireTrustedApp(req, res, next) {
+    if (!attestRequired) {
+        return next();
+    }
+
+    const bearerToken = readBearerToken(req);
+    if (!bearerToken) {
+        return res.status(401).json({ error: "Missing authorization token." });
+    }
+
+    if (legacyProxyAllowed && proxyToken && bearerToken === proxyToken) {
+        req.auth = { mode: "legacy" };
+        return next();
+    }
+
+    try {
+        const claims = verifyAppToken(bearerToken);
+        req.auth = {
+            mode: "attested",
+            installationId: claims.sub,
+            keyId: claims.keyId,
+        };
+        return next();
+    } catch (error) {
+        return res.status(401).json({ error: "Invalid app token." });
+    }
+}
+
+app.post("/attest/challenge", attestLimiter, async (req, res) => {
+    try {
+        if (!kv || !attestRequired) {
+            return res.status(503).json({ error: "Attestation is not enabled." });
+        }
+
+        const installationId = parseInstallIdentifier(req.body?.installationId);
+        const purpose = typeof req.body?.purpose === "string" ? req.body.purpose.trim() : "general";
+        if (!installationId) {
+            return res.status(400).json({ error: "Invalid installationId." });
+        }
+
+        const challenge = crypto.randomBytes(32).toString("base64url");
+        await storeChallenge({ challenge, installationId, purpose });
+
+        return res.json({
+            challenge,
+            expiresInSeconds: challengeTTLSeconds,
+        });
+    } catch (error) {
+        console.error("Challenge creation failed:", error);
+        return res.status(500).json({ error: "Could not create challenge." });
+    }
+});
+
+app.post("/attest/register", attestLimiter, async (req, res) => {
+    try {
+        if (!kv || !attestRequired) {
+            return res.status(503).json({ error: "Attestation is not enabled." });
+        }
+
+        const installationId = parseInstallIdentifier(req.body?.installationId);
+        const keyId = typeof req.body?.keyId === "string" ? req.body.keyId.trim() : "";
+        const challenge = typeof req.body?.challenge === "string" ? req.body.challenge.trim() : "";
+        const attestationB64 = typeof req.body?.attestation === "string" ? req.body.attestation.trim() : "";
+
+        if (!installationId || !keyId || !challenge || !attestationB64) {
+            return res.status(400).json({ error: "Missing required attestation fields." });
+        }
+
+        const storedChallenge = await consumeChallenge(challenge);
+        if (!storedChallenge || storedChallenge.installationId !== installationId) {
+            return res.status(401).json({ error: "Invalid or expired challenge." });
+        }
+
+        const result = verifyAttestation({
+            attestation: Buffer.from(attestationB64, "base64"),
+            challenge,
+            keyId,
+            bundleIdentifier: attestBundleId,
+            teamIdentifier: attestTeamId,
+            allowDevelopmentEnvironment: attestAllowDevelopment,
+        });
+
+        const record = {
+            installationId,
+            keyId,
+            publicKey: result.publicKey,
+            signCount: 0,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
+        await saveAttestationRecord(installationId, record);
+
+        return res.json(mintTokenResponse(installationId, keyId));
+    } catch (error) {
+        console.error("Attestation register failed:", error);
+        return res.status(401).json({ error: "Attestation verification failed." });
+    }
+});
+
+app.post("/attest/assert", attestLimiter, async (req, res) => {
+    try {
+        if (!kv || !attestRequired) {
+            return res.status(503).json({ error: "Attestation is not enabled." });
+        }
+
+        const installationId = parseInstallIdentifier(req.body?.installationId);
+        const keyId = typeof req.body?.keyId === "string" ? req.body.keyId.trim() : "";
+        const challenge = typeof req.body?.challenge === "string" ? req.body.challenge.trim() : "";
+        const payload = typeof req.body?.payload === "string" ? req.body.payload : "";
+        const assertionB64 = typeof req.body?.assertion === "string" ? req.body.assertion.trim() : "";
+
+        if (!installationId || !keyId || !challenge || !payload || !assertionB64) {
+            return res.status(400).json({ error: "Missing required assertion fields." });
+        }
+
+        const storedChallenge = await consumeChallenge(challenge);
+        if (!storedChallenge || storedChallenge.installationId !== installationId) {
+            return res.status(401).json({ error: "Invalid or expired challenge." });
+        }
+
+        const record = await loadAttestationRecord(installationId);
+        if (!record || record.keyId !== keyId || !record.publicKey) {
+            return res.status(401).json({ error: "No attestation record found." });
+        }
+
+        const parsedPayload = JSON.parse(payload);
+        if (parsedPayload.challenge !== challenge || parsedPayload.installationId !== installationId) {
+            return res.status(401).json({ error: "Assertion payload mismatch." });
+        }
+        const nowSeconds = Math.floor(Date.now() / 1000);
+        if (typeof parsedPayload.timestamp !== "number" ||
+            Math.abs(nowSeconds - parsedPayload.timestamp) > maxClockSkewSeconds) {
+            return res.status(401).json({ error: "Assertion payload timestamp is stale." });
+        }
+
+        const verification = verifyAssertion({
+            assertion: Buffer.from(assertionB64, "base64"),
+            payload,
+            publicKey: record.publicKey,
+            bundleIdentifier: attestBundleId,
+            teamIdentifier: attestTeamId,
+            signCount: Number(record.signCount || 0),
+        });
+
+        if (verification.signCount <= Number(record.signCount || 0)) {
+            return res.status(401).json({ error: "Assertion replay detected." });
+        }
+
+        record.signCount = verification.signCount;
+        record.updatedAt = Date.now();
+        await saveAttestationRecord(installationId, record);
+
+        return res.json(mintTokenResponse(installationId, keyId));
+    } catch (error) {
+        console.error("Assertion verify failed:", error);
+        return res.status(401).json({ error: "Assertion verification failed." });
+    }
+});
+
+app.post("/kai/generate", generateLimiter, requireTrustedApp, async (req, res) => {
+    try {
+        if (!attestRequired && proxyToken) {
             const authHeader = req.headers.authorization || "";
             const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
             if (bearerToken !== proxyToken) {
@@ -119,9 +439,9 @@ app.post("/kai/generate", generateLimiter, async (req, res) => {
     }
 });
 
-app.post("/kai/sleep/generate", generateLimiter, async (req, res) => {
+app.post("/kai/sleep/generate", generateLimiter, requireTrustedApp, async (req, res) => {
     try {
-        if (proxyToken) {
+        if (!attestRequired && proxyToken) {
             const authHeader = req.headers.authorization || "";
             const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
             if (bearerToken !== proxyToken) {
@@ -211,13 +531,13 @@ const shareLimiter = rateLimit({
 });
 
 // Store session JSON and return a short ID
-app.post("/kai/share", shareLimiter, async (req, res) => {
+app.post("/kai/share", shareLimiter, requireTrustedApp, async (req, res) => {
     try {
         if (!kv) {
             return res.status(503).json({ error: "Storage not configured" });
         }
 
-        if (proxyToken) {
+        if (!attestRequired && proxyToken) {
             const authHeader = req.headers.authorization || "";
             const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
             if (bearerToken !== proxyToken) {
@@ -230,12 +550,20 @@ app.post("/kai/share", shareLimiter, async (req, res) => {
             return res.status(400).json({ error: "Invalid session data" });
         }
 
-        // Generate a random 7-character ID
-        const id = crypto.randomBytes(4).toString("hex").slice(0, 7);
-
-        // Store in KV with 30 day expiry
+        // Store in KV with 30 day expiry and collision resistance.
         const ONE_MONTH = 60 * 60 * 24 * 30;
-        await kv.set(`share:${id}`, JSON.stringify(sessionData), "EX", ONE_MONTH);
+        let id = "";
+        let writeResult = null;
+        for (let attempts = 0; attempts < 5; attempts += 1) {
+            id = crypto.randomBytes(8).toString("hex").slice(0, 12);
+            writeResult = await kv.set(`share:${id}`, JSON.stringify(sessionData), "EX", ONE_MONTH, "NX");
+            if (writeResult === "OK") {
+                break;
+            }
+        }
+        if (writeResult !== "OK") {
+            return res.status(503).json({ error: "Unable to store share right now." });
+        }
 
         return res.json({ id });
     } catch (error) {
@@ -245,14 +573,14 @@ app.post("/kai/share", shareLimiter, async (req, res) => {
 });
 
 // Retrieve session JSON by ID
-app.get("/kai/share", async (req, res) => {
+app.get("/kai/share", shareReadLimiter, async (req, res) => {
     try {
         if (!kv) {
             return res.status(503).json({ error: "Storage not configured" });
         }
 
         const id = req.query.id;
-        if (typeof id !== "string" || !id) {
+        if (typeof id !== "string" || !/^[a-f0-9]{7,16}$/i.test(id)) {
             return res.status(400).json({ error: "Missing share ID" });
         }
 
