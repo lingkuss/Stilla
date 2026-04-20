@@ -1309,11 +1309,11 @@ struct SoundSelectionView: View {
         case .success:
             return
         case .cancelled:
-            purchaseStatusMessage = "Purchase cancelled."
+            purchaseStatusMessage = String(localized: "purchase.cancelled")
         case .pending:
-            purchaseStatusMessage = "Your premium library purchase is pending approval."
+            purchaseStatusMessage = String(localized: "purchase.pending")
         case .unavailable:
-            purchaseStatusMessage = "The premium library isn't available right now. Check your App Store product configuration."
+            purchaseStatusMessage = String(localized: "purchase.unavailable")
         case .failed(let message):
             purchaseStatusMessage = message
         }

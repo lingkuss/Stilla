@@ -593,12 +593,12 @@ final class MeditationManager {
         
         if let script = currentScript {
             // Start Live Activity before speech begins so updates find an active activity
-            startLiveActivity(initialPhrase: script.steps.first?.text ?? "Focusing inward...")
+            startLiveActivity(initialPhrase: script.steps.first?.text ?? String(localized: "session.live_activity.focusing_inward"))
             if isGuruEnabled {
                 GuruManager.shared.play(script: script)
             }
         } else {
-            startLiveActivity(initialPhrase: "Focusing inward...")
+            startLiveActivity(initialPhrase: String(localized: "session.live_activity.focusing_inward"))
         }
         
         timer?.invalidate()
@@ -640,10 +640,10 @@ final class MeditationManager {
     private(set) var activeKaiPersonaImageName: String?
     private(set) var activeKaiPersonaName: String?
 
-    private func startLiveActivity(initialPhrase: String = "Focusing inward...") {
+    private func startLiveActivity(initialPhrase: String = String(localized: "session.live_activity.focusing_inward")) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         
-        let title = currentScript?.title ?? "Meditation Journey"
+        let title = currentScript?.title ?? String(localized: "session.live_activity.default_title")
         let personality = currentScript?.generatedPersonality
             ?? {
                 guard currentScript != nil, isGuruEnabled else { return nil }
@@ -1015,7 +1015,7 @@ struct MeditationRoutine: Identifiable, Codable, Hashable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
-        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Routine"
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? Bundle.main.localizedString(forKey: "routines.default_title", value: "Routine", table: nil)
         hour = try container.decodeIfPresent(Int.self, forKey: .hour) ?? 8
         minute = try container.decodeIfPresent(Int.self, forKey: .minute) ?? 0
         weekdays = (try container.decodeIfPresent([Int].self, forKey: .weekdays) ?? [2]).sorted()
@@ -1151,7 +1151,10 @@ final class RoutineManager {
         switch routine.sessionType {
         case .guidedByIntention:
             if let intentionKey = routine.intentionKey {
-                moodText = "Intention: \(localizedIntentionText(for: intentionKey))"
+                moodText = String(
+                    format: localizedString("routines.intention.prompt_format"),
+                    localizedIntentionText(for: intentionKey)
+                )
             } else {
                 moodText = routine.title
             }
@@ -1292,8 +1295,8 @@ class NotificationManager: ObservableObject {
     func scheduleDailyReminder(at date: Date) {
         cancelAllReminders()
         let content = UNMutableNotificationContent()
-        content.title = "Time for your breath"
-        content.body = "Take a few minutes for yourself with Vindla."
+        content.title = String(localized: "notifications.daily.title")
+        content.body = String(localized: "notifications.daily.body")
         content.sound = .default
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .minute], from: date)
@@ -1314,11 +1317,13 @@ class NotificationManager: ObservableObject {
         cancelNextSessionReminder()
         let content = UNMutableNotificationContent()
         let trimmedPersona = personaName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        content.title = trimmedPersona.isEmpty ? "See you soon" : "Mimir • \(trimmedPersona)"
+        content.title = trimmedPersona.isEmpty
+            ? String(localized: "notifications.next.title_default")
+            : String(format: String(localized: "notifications.next.title_persona_format"), trimmedPersona)
         let trimmedSuggestion = suggestionText?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         content.body = trimmedSuggestion.isEmpty
-            ? "Ready for another moment of calm?"
-            : "Ready to \(trimmedSuggestion)?"
+            ? String(localized: "notifications.next.body_default")
+            : String(format: String(localized: "notifications.next.body_suggestion_format"), trimmedSuggestion)
         content.sound = .default
         content.userInfo = ["open_kai": true]
         let calendar = Calendar.current
