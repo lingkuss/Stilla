@@ -606,3 +606,55 @@
 "sound.ancient_flora.description" = "Ett fridfullt, loopande spår av antika botaniska toner.";
 
 "sound.green_canopy.description" = "En lugnande loop av ett levande lövverk i rörelse.";
+"content.personalized.eyebrow" = "PERSONLIG SESSION";
+"content.personalized.title" = "Säg ditt humör och starta";
+"content.personalized.detail" = "Snabb engångsmeditation direkt från hemskärmen. Öppna hela formuläret för fler val.";
+"content.personalized.mood_placeholder" = "Hur känner du dig just nu?";
+"content.personalized.stop" = "Stoppa";
+"content.personalized.speak" = "Prata";
+"content.personalized.start_now" = "Starta nu";
+"content.personalized.more_options" = "Fler val";
+
+"content.sleep.eyebrow" = "SÖMNSAGOR";
+"content.sleep.title" = "Nattläge";
+"content.sleep.detail" = "Ett separat kvällsläge med lugnare tempo och berättelseledd guidning.";
+"content.sleep.card_title" = "Sömnsagor";
+"content.sleep.card_detail" = "Somna in med lugnande nattresor.";
+"content.sleep.open_cta" = "Öppna nattläge";
+
+"content.today_step.guiding_week" = "GUIDAR DENNA VECKA";
+"content.today_step.eyebrow" = "DAGENS STEG";
+"content.today_step.start_title" = "Starta 7-dagarsspår";
+"content.today_step.day_of_week_format" = "Dag %d av 7";
+"content.today_step.generate_next_title" = "Skapa nästa 7 dagar";
+"content.today_step.week_format" = "Vecka %d";
+"content.today_step.start_detail" = "Starta ett personligt dagligt spår som bygger meditationsvanor steg för steg med dina nuvarande guideinställningar.";
+"content.today_step.start_practice_cta" = "Starta dagens practice";
+"content.today_step.hide_details" = "Dölj detaljer";
+"content.today_step.view_details" = "Visa detaljer";
+"content.today_step.view_all_steps" = "Visa alla steg";
+"content.today_step.generate_week_cta_format" = "Skapa vecka %d";
+"content.today_step.next_week_detail_format" = "Vecka %d fördjupar din practice utan onödig press.";
+
+"content.saved_library.eyebrow" = "SPARAT BIBLIOTEK";
+"content.saved_library.title" = "Senaste sessioner";
+"content.saved_library.detail" = "Dina senaste sparade sessioner, redo att startas igen.";
+"content.saved_library.empty" = "Inga sparade sessioner ännu. Spara en session efter din practice så visas den här.";
+"content.saved_library.see_more" = "Visa mer";
+"content.saved_library.play" = "Spela sparad session";
+"content.saved_library.duration_format" = "%d min";
+"content.saved_library.created_prefix" = "Skapad %@";
+
+"journey.overview.nav_title" = "7-dagarsspår";
+"journey.overview.week_format" = "Vecka %d";
+"journey.overview.progress_complete" = "Alla steg klara";
+"journey.overview.progress" = "Framsteg";
+"journey.overview.next_step_format" = "Nästa steg: Dag %d • %@";
+"journey.overview.week_complete_detail" = "Den här veckan är klar. Nästa cykel kan byggas utifrån dina framsteg.";
+"journey.overview.all_steps" = "Alla steg";
+"journey.overview.status_today" = "Idag";
+"journey.overview.status_done" = "Klar";
+"journey.overview.status_ahead" = "Framöver";
+"journey.overview.duration_recommended_format" = "%d min rekommenderat";
+"journey.overview.start_error_title" = "Kunde inte starta dagens steg";
+"journey.overview.start_error_message" = "Försök igen om en stund. Ditt dagliga spår är fortfarande sparat.";

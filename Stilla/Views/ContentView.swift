@@ -28,6 +28,7 @@ struct ContentView: View {
     @State private var quickMoodErrorMessage = ""
     @State private var showQuickMoodError = false
     @State private var showQuickMoodSettingsPrompt = false
+    @State private var isTodayStepExpanded = false
     @State private var storeManager = StoreKitManager.shared
     @AppStorage("homeViewMode") private var homeViewMode = HomeViewMode.hero
     private let speechManager = SpeechManager.shared
@@ -336,6 +337,26 @@ struct ContentView: View {
         return body.isEmpty ? fallback : body
     }
 
+    private var latestSavedSessions: [MeditationScript] {
+        Array(manager.savedMeditations.suffix(4).reversed())
+    }
+
+    private var homeSectionTopSpacing: CGFloat { 20 }
+
+    private var savedLibraryGridColumns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: 12),
+            GridItem(.flexible(), spacing: 12)
+        ]
+    }
+
+    private static let savedSessionCreatedDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
+
     private var guidedSessionLoadingOverlay: some View {
         ZStack {
             Color(hue: 0.72, saturation: 0.4, brightness: 0.05)
@@ -355,15 +376,14 @@ struct ContentView: View {
 
                 personalizedSessionSection
                     .padding(.horizontal, 20)
-                    .padding(.top, 12)
+                    .padding(.top, homeSectionTopSpacing)
 
                 sleepStoriesSection
                     .padding(.horizontal, 20)
-                    .padding(.top, 12)
+                    .padding(.top, homeSectionTopSpacing)
 
                 heroView
-                    .frame(height: 520)
-                    .padding(.top, 4)
+                    .padding(.top, homeSectionTopSpacing)
                     .padding(.bottom, 24)
             }
             .frame(maxWidth: .infinity)
@@ -385,14 +405,14 @@ struct ContentView: View {
     private var personalizedSessionSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(
-                eyebrow: "PERSONALIZED SESSION",
-                title: "Speak your mood and start",
-                detail: "Quick one-off meditation right from home. Open full form for more options."
+                eyebrow: String(localized: "content.personalized.eyebrow"),
+                title: String(localized: "content.personalized.title"),
+                detail: String(localized: "content.personalized.detail")
             )
 
             VStack(alignment: .leading, spacing: 12) {
                 ZStack(alignment: .topTrailing) {
-                    TextField("How do you feel right now?", text: $quickMoodInput, axis: .vertical)
+                    TextField(String(localized: "content.personalized.mood_placeholder"), text: $quickMoodInput, axis: .vertical)
                         .lineLimit(2...5)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.white.opacity(0.94))
@@ -430,7 +450,7 @@ struct ContentView: View {
                                 HStack(spacing: 6) {
                                     Image(systemName: speechManager.isRecording ? "stop.fill" : "mic.fill")
                                         .font(.system(size: 12, weight: .semibold))
-                                    Text(speechManager.isRecording ? "Stop" : "Speak")
+                                    Text(speechManager.isRecording ? String(localized: "content.personalized.stop") : String(localized: "content.personalized.speak"))
                                         .font(.system(size: 11, weight: .bold))
                                 }
                                 .foregroundStyle(.white.opacity(0.95))
@@ -458,7 +478,7 @@ struct ContentView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "play.fill")
                                 .font(.system(size: 12, weight: .bold))
-                            Text("Start now")
+                            Text(String(localized: "content.personalized.start_now"))
                                 .font(.system(size: 13, weight: .bold))
                         }
                         .foregroundStyle(.black)
@@ -478,7 +498,7 @@ struct ContentView: View {
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     } label: {
                         HStack(spacing: 6) {
-                            Text("More options")
+                            Text(String(localized: "content.personalized.more_options"))
                                 .font(.system(size: 13, weight: .semibold))
                             Image(systemName: "slider.horizontal.3")
                                 .font(.system(size: 11, weight: .bold))
@@ -522,9 +542,9 @@ struct ContentView: View {
     private var sleepStoriesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(
-                eyebrow: "SLEEP STORIES",
-                title: "Night mode",
-                detail: "A separate bedtime space with slower pacing and story-led guidance."
+                eyebrow: String(localized: "content.sleep.eyebrow"),
+                title: String(localized: "content.sleep.title"),
+                detail: String(localized: "content.sleep.detail")
             )
 
             Button {
@@ -532,17 +552,17 @@ struct ContentView: View {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } label: {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Sleep Stories")
+                    Text(String(localized: "content.sleep.card_title"))
                         .font(.system(size: 22, weight: .light, design: .serif))
                         .foregroundStyle(.white.opacity(0.97))
 
-                    Text("Drift into sleep with calming nighttime journeys.")
+                    Text(String(localized: "content.sleep.card_detail"))
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(.white.opacity(0.84))
                         .multilineTextAlignment(.leading)
 
                     HStack(spacing: 6) {
-                        Text("Open bedtime mode")
+                        Text(String(localized: "content.sleep.open_cta"))
                             .font(.system(size: 12, weight: .semibold))
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .bold))
@@ -700,47 +720,26 @@ struct ContentView: View {
                 startPracticeJourneyFromHome()
             } label: {
                 VStack(alignment: .leading, spacing: 14) {
-                    HStack {
-                        Spacer(minLength: 0)
-
-                        VStack(spacing: 10) {
-                            ZStack {
+                    HStack(spacing: 10) {
+                        Image(personality.imageName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 42, height: 42)
+                            .clipShape(Circle())
+                            .overlay(
                                 Circle()
-                                    .fill(Color.white.opacity(0.08))
-                                    .frame(width: 92, height: 92)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(
-                                                LinearGradient(
-                                                    colors: [
-                                                        Color.white.opacity(0.24),
-                                                        Color.clear
-                                                    ],
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                ),
-                                                lineWidth: 1
-                                            )
-                                    )
+                                    .strokeBorder(Color.white.opacity(0.18), lineWidth: 1)
+                            )
+                            .shadow(color: .black.opacity(0.16), radius: 6, x: 0, y: 3)
 
-                                Image(personality.imageName)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 78, height: 78)
-                                    .clipShape(Circle())
-                            }
-                            .shadow(color: .black.opacity(0.22), radius: 14, x: 0, y: 8)
-
-                            VStack(spacing: 4) {
-                                Text("GUIDING THIS WEEK")
-                                    .font(.system(size: 9, weight: .bold))
-                                    .kerning(1.1)
-                                    .foregroundStyle(.white.opacity(0.45))
-
-                                Text(personality.localizedName)
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(.white.opacity(0.94))
-                            }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(String(localized: "content.today_step.guiding_week"))
+                                .font(.system(size: 9, weight: .bold))
+                                .kerning(1.1)
+                                .foregroundStyle(.white.opacity(0.45))
+                            Text(personality.localizedName)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.9))
                         }
 
                         Spacer(minLength: 0)
@@ -748,14 +747,14 @@ struct ContentView: View {
 
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("TODAY'S STEP")
+                            Text(String(localized: "content.today_step.eyebrow"))
                                 .font(.system(size: 10, weight: .bold))
                                 .kerning(1.2)
                                 .foregroundStyle(.white.opacity(0.5))
 
                             switch manager.practiceJourneyHomeCardState {
                             case .start:
-                                Text("Start 7-Day Path")
+                                Text(String(localized: "content.today_step.start_title"))
                                     .font(.system(size: 22, weight: .light, design: .serif))
                                     .foregroundStyle(.white)
 
@@ -763,15 +762,15 @@ struct ContentView: View {
                                 Text(plan.title)
                                     .font(.system(size: 22, weight: .light, design: .serif))
                                     .foregroundStyle(.white)
-                                Text("Day \(step.dayNumber) of 7")
+                                Text(String(format: String(localized: "content.today_step.day_of_week_format"), step.dayNumber))
                                     .font(.system(size: 12, weight: .semibold))
                                     .foregroundStyle(Color(red: 0.82, green: 0.94, blue: 0.86))
 
                             case .readyForNextCycle(_, let nextCycleNumber):
-                                Text("Generate Next 7 Days")
+                                Text(String(localized: "content.today_step.generate_next_title"))
                                     .font(.system(size: 22, weight: .light, design: .serif))
                                     .foregroundStyle(.white)
-                                Text("Week \(nextCycleNumber)")
+                                Text(String(format: String(localized: "content.today_step.week_format"), nextCycleNumber))
                                     .font(.system(size: 12, weight: .semibold))
                                     .foregroundStyle(Color(red: 0.82, green: 0.94, blue: 0.86))
                             }
@@ -780,46 +779,69 @@ struct ContentView: View {
 
                     switch manager.practiceJourneyHomeCardState {
                     case .start:
-                        Text("Start a personalized daily path that builds meditation consistency one step at a time, using your current guide settings.")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.68))
-                            .multilineTextAlignment(.leading)
-                        journeyPrimaryCTAChip(label: "Start day 1 now")
+                        if isTodayStepExpanded {
+                            Text(String(localized: "content.today_step.start_detail"))
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.68))
+                                .multilineTextAlignment(.leading)
+                        }
+                        journeyPrimaryCTAChip(label: String(localized: "content.today_step.start_practice_cta"))
 
                     case .active(let plan, let step):
                         Text(step.title)
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.95))
-                        Text(step.purpose)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.68))
-                            .multilineTextAlignment(.leading)
+                        if isTodayStepExpanded {
+                            Text(step.purpose)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.68))
+                                .multilineTextAlignment(.leading)
+                        }
 
                         HStack(spacing: 10) {
-                            Text(step.focus)
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(.white.opacity(0.82))
-                                .lineLimit(2)
+                            if isTodayStepExpanded {
+                                Text(step.focus)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.white.opacity(0.82))
+                                    .lineLimit(2)
+                            }
                             Spacer()
                             Text("\(plan.completedStepCount)/7")
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(Color(red: 0.82, green: 0.94, blue: 0.86))
                         }
 
-                        journeyPrimaryCTAChip(label: "Start today's step")
+                        journeyPrimaryCTAChip(label: String(localized: "content.today_step.start_practice_cta"))
 
                     case .readyForNextCycle(let goalSummary, let nextCycleNumber):
-                        Text(goalSummary)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.68))
-                            .multilineTextAlignment(.leading)
-                        Text("Week \(nextCycleNumber) will deepen the practice without adding unnecessary pressure.")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.88))
-                        journeyPrimaryCTAChip(label: "Generate week \(nextCycleNumber)")
+                        if isTodayStepExpanded {
+                            Text(goalSummary)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.68))
+                                .multilineTextAlignment(.leading)
+                            Text(String(format: String(localized: "content.today_step.next_week_detail_format"), nextCycleNumber))
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.88))
+                        }
+                        journeyPrimaryCTAChip(label: String(format: String(localized: "content.today_step.generate_week_cta_format"), nextCycleNumber))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isTodayStepExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Text(isTodayStepExpanded ? String(localized: "content.today_step.hide_details") : String(localized: "content.today_step.view_details"))
+                        .font(.system(size: 12, weight: .semibold))
+                    Image(systemName: isTodayStepExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 10, weight: .bold))
+                }
+                .foregroundStyle(.white.opacity(0.75))
             }
             .buttonStyle(.plain)
 
@@ -836,7 +858,7 @@ struct ContentView: View {
                         Spacer()
 
                         HStack(spacing: 6) {
-                            Text("View all steps")
+                            Text(String(localized: "content.today_step.view_all_steps"))
                                 .font(.system(size: 12, weight: .semibold))
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 10, weight: .bold))
@@ -922,79 +944,144 @@ struct ContentView: View {
     // MARK: - Redesign Home Views
 
     private var heroView: some View {
-        GeometryReader { proxy in
-            let height = proxy.size.height
-            let width = proxy.size.width
-            let compactHeight = height < 720
-            let portraitOuterSize = min(max(height * (compactHeight ? 0.26 : 0.32), 148), min(width * 0.62, 240))
-            let portraitInnerSize = max(136, portraitOuterSize - 20)
-            let verticalSpacing = compactHeight ? 18.0 : 26.0
+        VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 12) {
+                sectionHeader(
+                    eyebrow: String(localized: "content.saved_library.eyebrow"),
+                    title: String(localized: "content.saved_library.title"),
+                    detail: String(localized: "content.saved_library.detail")
+                )
 
-            VStack(spacing: verticalSpacing) {
-                Spacer(minLength: compactHeight ? 8 : 18)
+                VStack(spacing: 8) {
+                    if latestSavedSessions.isEmpty {
+                        Text(String(localized: "content.saved_library.empty"))
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.58))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 4)
+                    } else {
+                        LazyVGrid(columns: savedLibraryGridColumns, spacing: 12) {
+                            ForEach(latestSavedSessions) { script in
+                                VStack(alignment: .leading, spacing: 10) {
+                                    HStack(alignment: .top, spacing: 8) {
+                                        Text(script.title)
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundStyle(.white.opacity(0.92))
+                                            .lineLimit(2)
 
-                ZStack {
-                    Circle()
-                        .fill(.ultraThinMaterial)
-                        .frame(width: portraitOuterSize, height: portraitOuterSize)
-                        .overlay(
-                            Circle()
-                                .stroke(LinearGradient(colors: [.white.opacity(0.2), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
-                        )
+                                        Spacer(minLength: 4)
 
-                    Image(manager.selectedKaiPersonality.imageName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: portraitInnerSize, height: portraitInnerSize)
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-                }
-                .scaleEffect(kaiPulse ? 1.02 : 1.0)
-                .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: kaiPulse)
-                .layoutPriority(0)
+                                        Button {
+                                            startSavedScriptFromHome(script)
+                                        } label: {
+                                            Image(systemName: "play.circle.fill")
+                                                .font(.system(size: 20, weight: .semibold))
+                                                .foregroundStyle(.white.opacity(0.9))
+                                        }
+                                        .buttonStyle(.plain)
+                                        .accessibilityLabel(String(localized: "content.saved_library.play"))
+                                    }
 
-                VStack(spacing: 14) {
-                    Text(latestKaiHeader)
-                        .font(.system(size: compactHeight ? 22 : 26, weight: .light, design: .serif))
-                        .italic()
-                        .foregroundStyle(.white.opacity(0.95))
-                        .multilineTextAlignment(.center)
-                        .lineLimit(3)
-                        .minimumScaleFactor(0.85)
-                        .padding(.horizontal, compactHeight ? 28 : 40)
+                                    Text(String(format: String(localized: "content.saved_library.duration_format"), script.durationMinutes))
+                                        .font(.system(size: 12, weight: .bold))
+                                        .foregroundStyle(.white.opacity(0.78))
 
-                    ScrollView(.vertical, showsIndicators: false) {
-                        Text("“\(latestKaiBody)”")
-                            .font(.system(size: compactHeight ? 15 : 16, weight: .light))
-                            .foregroundStyle(.white.opacity(0.7))
-                            .italic()
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.horizontal, compactHeight ? 28 : 60)
-                            .lineSpacing(4)
-                            .frame(maxWidth: .infinity)
+                                    Text(
+                                        String(
+                                            format: String(localized: "content.saved_library.created_prefix"),
+                                            Self.savedSessionCreatedDateFormatter.string(from: script.createdAt)
+                                        )
+                                    )
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(.white.opacity(0.56))
+                                    .lineLimit(1)
+                                }
+                                .frame(maxWidth: .infinity, minHeight: 112, alignment: .leading)
+                                .padding(12)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(Color.white.opacity(0.05))
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
+                                )
+                            }
+                        }
                     }
-                    .frame(maxHeight: compactHeight ? 132 : 168)
+                }
 
-                    HStack(spacing: 8) {
-                        Rectangle()
-                            .fill(.white.opacity(0.3))
-                            .frame(width: 20, height: 1)
-                        Text(String(localized: "content.mimir_label"))
+                Button {
+                    showSavedMeditations = true
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                } label: {
+                    HStack(spacing: 6) {
+                        Text(String(localized: "content.saved_library.see_more"))
+                            .font(.system(size: 12, weight: .semibold))
+                        Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .bold))
-                            .kerning(3)
-                            .foregroundStyle(.white.opacity(0.5))
-                        Rectangle()
-                            .fill(.white.opacity(0.3))
-                            .frame(width: 20, height: 1)
                     }
+                    .foregroundStyle(.white.opacity(0.8))
                 }
-                .layoutPriority(2)
-
-                Spacer(minLength: compactHeight ? 18 : 28)
+                .buttonStyle(.plain)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.horizontal, 20)
+
+            ZStack {
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 188, height: 188)
+                    .overlay(
+                        Circle()
+                            .stroke(LinearGradient(colors: [.white.opacity(0.2), .clear], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
+                    )
+
+                Image(manager.selectedKaiPersonality.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 164, height: 164)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+            }
+            .scaleEffect(kaiPulse ? 1.02 : 1.0)
+            .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: kaiPulse)
+
+            VStack(spacing: 8) {
+                Text(latestKaiHeader)
+                    .font(.system(size: 24, weight: .light, design: .serif))
+                    .italic()
+                    .foregroundStyle(.white.opacity(0.95))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(3)
+                    .minimumScaleFactor(0.85)
+                    .padding(.horizontal, 32)
+
+                Text("“\(latestKaiBody)”")
+                    .font(.system(size: 15, weight: .light))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .italic()
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 36)
+                    .lineSpacing(4)
+
+                HStack(spacing: 8) {
+                    Rectangle()
+                        .fill(.white.opacity(0.3))
+                        .frame(width: 20, height: 1)
+                    Text(String(localized: "content.mimir_label"))
+                        .font(.system(size: 10, weight: .bold))
+                        .kerning(3)
+                        .foregroundStyle(.white.opacity(0.5))
+                    Rectangle()
+                        .fill(.white.opacity(0.3))
+                        .frame(width: 20, height: 1)
+                }
+                .padding(.top, 2)
+            }
         }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 14)
         .onAppear {
             kaiPulse = true
         }
@@ -1407,6 +1494,24 @@ struct ContentView: View {
                 }
                 showQuickMoodError = true
             }
+        }
+    }
+
+    private func startSavedScriptFromHome(_ script: MeditationScript) {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+
+        Task {
+            await StoreKitManager.shared.updateCustomerProductStatus()
+            guard StoreKitManager.shared.isVindlaProSubscribed else {
+                showJourneyPaywall = true
+                return
+            }
+
+            manager.durationMinutes = script.durationMinutes
+            manager.isGuruEnabled = true
+            manager.currentScript = script
+            GuruManager.shared.play(script: script)
+            manager.start(durationMinutes: script.durationMinutes)
         }
     }
 
@@ -2025,6 +2130,9 @@ struct PracticeJourneyPlanOverviewSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     let plan: PracticeJourneyPlan
+    @State private var showStartError = false
+    @State private var startErrorTitle = ""
+    @State private var startErrorMessage = ""
 
     private var currentStepID: UUID? {
         plan.nextStep?.id
@@ -2047,16 +2155,21 @@ struct PracticeJourneyPlanOverviewSheet: View {
                 .padding(.top, 24)
                 .padding(.bottom, 32)
             }
-            .navigationTitle("7-Day Path")
+            .navigationTitle(String(localized: "journey.overview.nav_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "ui.done")) { dismiss() }
                         .font(.system(size: 14, weight: .medium))
                 }
             }
             .preferredColorScheme(.dark)
             .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.07).ignoresSafeArea())
+            .alert(startErrorTitle, isPresented: $showStartError) {
+                Button(String(localized: "kai.i_understand")) { }
+            } message: {
+                Text(startErrorMessage)
+            }
         }
     }
 
@@ -2068,7 +2181,7 @@ struct PracticeJourneyPlanOverviewSheet: View {
                         .font(.system(size: 28, weight: .light, design: .serif))
                         .foregroundStyle(.white)
 
-                    Text("Week \(plan.cycleNumber)")
+                    Text(String(format: String(localized: "journey.overview.week_format"), plan.cycleNumber))
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(Color(red: 0.82, green: 0.94, blue: 0.86))
                 }
@@ -2098,7 +2211,7 @@ struct PracticeJourneyPlanOverviewSheet: View {
     private var progressSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(plan.isCompleted ? "All steps complete" : "Progress")
+                Text(plan.isCompleted ? String(localized: "journey.overview.progress_complete") : String(localized: "journey.overview.progress"))
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white.opacity(0.8))
 
@@ -2131,11 +2244,11 @@ struct PracticeJourneyPlanOverviewSheet: View {
             .frame(height: 10)
 
             if let nextStep = plan.nextStep {
-                Text("Next step: Day \(nextStep.dayNumber) • \(nextStep.title)")
+                Text(String(format: String(localized: "journey.overview.next_step_format"), nextStep.dayNumber, nextStep.title))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.white.opacity(0.6))
             } else {
-                Text("This week is complete. The next cycle can build from your progress so far.")
+                Text(String(localized: "journey.overview.week_complete_detail"))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.white.opacity(0.6))
             }
@@ -2146,7 +2259,7 @@ struct PracticeJourneyPlanOverviewSheet: View {
 
     private var stepsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("All steps")
+            Text(String(localized: "journey.overview.all_steps"))
                 .font(.system(size: 12, weight: .bold))
                 .kerning(1.1)
                 .foregroundStyle(.white.opacity(0.45))
@@ -2189,11 +2302,11 @@ struct PracticeJourneyPlanOverviewSheet: View {
                         Spacer()
 
                         if isCurrent {
-                            statusPill("Today", color: .white.opacity(0.18))
+                            statusPill(String(localized: "journey.overview.status_today"), color: .white.opacity(0.18))
                         } else if isCompleted {
-                            statusPill("Done", color: Color(red: 0.82, green: 0.94, blue: 0.86).opacity(0.22))
+                            statusPill(String(localized: "journey.overview.status_done"), color: Color(red: 0.82, green: 0.94, blue: 0.86).opacity(0.22))
                         } else {
-                            statusPill("Ahead", color: Color.white.opacity(0.08))
+                            statusPill(String(localized: "journey.overview.status_ahead"), color: Color.white.opacity(0.08))
                         }
                     }
 
@@ -2207,7 +2320,34 @@ struct PracticeJourneyPlanOverviewSheet: View {
                             .foregroundStyle(.white.opacity(0.58))
                             .lineSpacing(2)
                         infoLine(icon: "sparkles", text: step.adaptationTip)
-                        infoLine(icon: "timer", text: "\(step.suggestedDurationMinutes) min recommended")
+                        infoLine(icon: "timer", text: String(format: String(localized: "journey.overview.duration_recommended_format"), step.suggestedDurationMinutes))
+
+                        if manager.activePracticeJourneyPlan?.nextStep?.id == step.id {
+                            Button {
+                                startTodayFromOverview()
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Text(String(localized: "content.today_step.start_practice_cta"))
+                                        .font(.system(size: 12, weight: .bold))
+                                    Image(systemName: "arrow.right.circle.fill")
+                                        .font(.system(size: 13, weight: .semibold))
+                                }
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.white.opacity(0.16))
+                                )
+                                .overlay(
+                                    Capsule()
+                                        .strokeBorder(Color.white.opacity(0.22), lineWidth: 1)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(manager.isGeneratingGuidedSession)
+                            .opacity(manager.isGeneratingGuidedSession ? 0.6 : 1.0)
+                        }
                     } else if let reflection, !reflection.isEmpty {
                         infoLine(icon: "quote.bubble", text: reflection)
                     }
@@ -2284,6 +2424,34 @@ struct PracticeJourneyPlanOverviewSheet: View {
                 RoundedRectangle(cornerRadius: 24)
                     .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
             )
+    }
+
+    private func startTodayFromOverview() {
+        Task {
+            do {
+                try await manager.startTodayPracticeJourneyStep()
+                dismiss()
+            } catch {
+                if case KaiBrainService.BrainError.serviceUnavailable = error {
+                    startErrorTitle = String(localized: "kai.error.not_configured.title")
+                    startErrorMessage = String(localized: "kai.error.not_configured.message")
+                } else if let urlError = error as? URLError {
+                    startErrorTitle = String(localized: "kai.error.connection.title")
+                    switch urlError.code {
+                    case .notConnectedToInternet, .networkConnectionLost:
+                        startErrorMessage = String(localized: "kai.error.connection.offline")
+                    case .timedOut:
+                        startErrorMessage = String(localized: "kai.error.connection.timeout")
+                    default:
+                        startErrorMessage = String(localized: "kai.error.connection.generic")
+                    }
+                } else {
+                    startErrorTitle = String(localized: "journey.overview.start_error_title")
+                    startErrorMessage = String(localized: "journey.overview.start_error_message")
+                }
+                showStartError = true
+            }
+        }
     }
 }
 

@@ -602,3 +602,55 @@
 "notifications.next.title_persona_format" = "Mimir • %@";
 "notifications.next.body_default" = "Klar for enda et rolig øyeblikk?";
 "notifications.next.body_suggestion_format" = "Klar til å %@?";
+"content.personalized.eyebrow" = "PERSONLIG ØKT";
+"content.personalized.title" = "Speak your mood and start";
+"content.personalized.detail" = "Quick one-off meditation right from home. Open full form for more options.";
+"content.personalized.mood_placeholder" = "How do you feel right now?";
+"content.personalized.stop" = "Stop";
+"content.personalized.speak" = "Speak";
+"content.personalized.start_now" = "Start now";
+"content.personalized.more_options" = "More options";
+
+"content.sleep.eyebrow" = "SLEEP STORIES";
+"content.sleep.title" = "Night mode";
+"content.sleep.detail" = "A separate bedtime space with slower pacing and story-led guidance.";
+"content.sleep.card_title" = "Sleep Stories";
+"content.sleep.card_detail" = "Drift into sleep with calming nighttime journeys.";
+"content.sleep.open_cta" = "Open bedtime mode";
+
+"content.today_step.guiding_week" = "GUIDING THIS WEEK";
+"content.today_step.eyebrow" = "TODAY'S STEP";
+"content.today_step.start_title" = "Start 7-Day Path";
+"content.today_step.day_of_week_format" = "Day %d of 7";
+"content.today_step.generate_next_title" = "Generate Next 7 Days";
+"content.today_step.week_format" = "Week %d";
+"content.today_step.start_detail" = "Start a personalized daily path that builds meditation consistency one step at a time, using your current guide settings.";
+"content.today_step.start_practice_cta" = "Start today's practice";
+"content.today_step.hide_details" = "Hide details";
+"content.today_step.view_details" = "View details";
+"content.today_step.view_all_steps" = "View all steps";
+"content.today_step.generate_week_cta_format" = "Generate week %d";
+"content.today_step.next_week_detail_format" = "Week %d will deepen the practice without adding unnecessary pressure.";
+
+"content.saved_library.eyebrow" = "SAVED LIBRARY";
+"content.saved_library.title" = "Recent sessions";
+"content.saved_library.detail" = "Your latest generated sessions, ready to revisit.";
+"content.saved_library.empty" = "No saved sessions yet. Save one after a practice to see it here.";
+"content.saved_library.see_more" = "See more";
+"content.saved_library.play" = "Play saved session";
+"content.saved_library.duration_format" = "%dm";
+"content.saved_library.created_prefix" = "Created %@";
+
+"journey.overview.nav_title" = "7-Day Path";
+"journey.overview.week_format" = "Week %d";
+"journey.overview.progress_complete" = "All steps complete";
+"journey.overview.progress" = "Progress";
+"journey.overview.next_step_format" = "Next step: Day %d • %@";
+"journey.overview.week_complete_detail" = "This week is complete. The next cycle can build from your progress so far.";
+"journey.overview.all_steps" = "All steps";
+"journey.overview.status_today" = "Today";
+"journey.overview.status_done" = "Done";
+"journey.overview.status_ahead" = "Ahead";
+"journey.overview.duration_recommended_format" = "%d min recommended";
+"journey.overview.start_error_title" = "Couldn’t start today’s step";
+"journey.overview.start_error_message" = "Try again in a moment. Your daily path is still saved.";
