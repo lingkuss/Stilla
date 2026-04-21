@@ -439,6 +439,88 @@ app.post("/kai/generate", generateLimiter, requireTrustedApp, async (req, res) =
     }
 });
 
+app.post("/kai/journey/generate", generateLimiter, requireTrustedApp, async (req, res) => {
+    try {
+        if (!attestRequired && proxyToken) {
+            const authHeader = req.headers.authorization || "";
+            const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+            if (bearerToken !== proxyToken) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+        }
+
+        const goalSummary = typeof req.body?.goalSummary === "string" ? req.body.goalSummary.trim() : "";
+        const preferredDurationMinutes = Number(req.body?.preferredDurationMinutes);
+        const personalityName = typeof req.body?.personalityName === "string"
+            ? req.body.personalityName.trim()
+            : "Zen Minimalist";
+        const personalityPrompt = typeof req.body?.personalityPrompt === "string"
+            ? req.body.personalityPrompt.trim()
+            : "";
+        const stillnessRatio = Number(req.body?.stillnessRatio);
+        const locale = typeof req.body?.locale === "string" ? req.body.locale.trim() : "en";
+        const memoryContext = typeof req.body?.memoryContext === "string" ? req.body.memoryContext.trim() : "";
+        const historyContext = typeof req.body?.historyContext === "string" ? req.body.historyContext.trim() : "";
+        const cycleNumber = Number(req.body?.cycleNumber);
+
+        if (!goalSummary || !Number.isInteger(preferredDurationMinutes) || preferredDurationMinutes < 1 || preferredDurationMinutes > 30) {
+            return res.status(400).json({
+                error: "Invalid request. Expecting goalSummary and preferredDurationMinutes between 1 and 30."
+            });
+        }
+
+        console.log(`[JourneyGenerate] Model: ${model} | IP: ${req.ip} | Goal: "${goalSummary}" | Preferred: ${preferredDurationMinutes}m | Cycle: ${cycleNumber || 1}`);
+
+        const systemPrompt = buildPracticeJourneyPrompt({
+            goalSummary,
+            preferredDurationMinutes,
+            personalityName,
+            personalityPrompt,
+            stillnessRatio,
+            locale,
+            memoryContext,
+            historyContext,
+            cycleNumber: Number.isInteger(cycleNumber) && cycleNumber > 0 ? cycleNumber : 1
+        });
+
+        const completion = await openai.chat.completions.create({
+            model,
+            response_format: { type: "json_object" },
+            temperature: 0.8,
+            messages: [
+                {
+                    role: "system",
+                    content: systemPrompt
+                },
+                {
+                    role: "user",
+                    content: `Generate the next 7-day meditation progression for this user.`
+                }
+            ]
+        });
+
+        const content = completion.choices[0]?.message?.content;
+        if (!content) {
+            return res.status(502).json({ error: "OpenAI returned an empty response." });
+        }
+
+        let parsed;
+        try {
+            parsed = JSON.parse(content);
+        } catch {
+            return res.status(502).json({ error: "OpenAI returned invalid JSON." });
+        }
+
+        const validated = normalizePracticeJourneyPlan(parsed, preferredDurationMinutes, Number.isInteger(cycleNumber) && cycleNumber > 0 ? cycleNumber : 1);
+        return res.json(validated);
+    } catch (error) {
+        console.error("Kai journey proxy failure:", error);
+        return res.status(500).json({
+            error: "Unable to generate a practice journey right now."
+        });
+    }
+});
+
 app.post("/kai/sleep/generate", generateLimiter, requireTrustedApp, async (req, res) => {
     try {
         if (!attestRequired && proxyToken) {
@@ -699,6 +781,124 @@ function normalizeScript(raw, requestedDuration) {
     };
 }
 
+function buildPracticeJourneyPrompt({
+    goalSummary,
+    preferredDurationMinutes,
+    personalityName,
+    personalityPrompt,
+    stillnessRatio,
+    locale,
+    memoryContext,
+    historyContext,
+    cycleNumber
+}) {
+    const memoryLine = memoryContext ? `Recent practice context: ${memoryContext}` : "Recent practice context: none";
+    const historyLine = historyContext ? `Prior journey context: ${historyContext}` : "Prior journey context: none";
+    const stillnessPercent = Math.max(1, Math.min(99, Math.round((Number.isFinite(stillnessRatio) ? stillnessRatio : 0.5) * 100)));
+
+    return `
+You are Kai, designing a premium 7-day meditation progression.
+You must reflect the chosen persona clearly in the language and framing.
+
+Selected persona: ${personalityName}
+Persona instructions:
+${personalityPrompt}
+
+Return ONLY raw JSON with this exact top-level shape:
+{
+  "title": "Short progression title",
+  "summary": "1-2 sentence overview of how this week helps",
+  "cycleNumber": ${cycleNumber},
+  "steps": [
+    {
+      "dayNumber": 1,
+      "title": "Short day title",
+      "focus": "What today's practice centers on",
+      "purpose": "Why this day matters in the progression",
+      "meditationPrompt": "Short context prompt to guide the meditation generator",
+      "adaptationTip": "How to stay with the practice if energy or mood is low",
+      "suggestedDurationMinutes": ${preferredDurationMinutes}
+    }
+  ]
+}
+
+User context:
+- Goal / preference summary: ${goalSummary}
+- Locale: ${locale}
+- Preferred session duration: ${preferredDurationMinutes} minutes
+- Preferred stillness ratio: ${stillnessPercent}%
+- Journey cycle number: ${cycleNumber}
+- ${memoryLine}
+- ${historyLine}
+
+Requirements:
+- Return exactly 7 steps, one for each day.
+- Write all returned text in locale ${locale}. Do not mix languages.
+- Make the progression deepen gradually across the week, not jump abruptly.
+- Keep difficulty and emotional intensity adaptive so the user is less likely to churn.
+- Day 1 should feel accessible and winnable.
+- Days 2-5 can deepen focus, consistency, or self-observation.
+- Days 6-7 should feel like meaningful progression without becoming overwhelming.
+- If cycleNumber > 1, evolve the practice beyond the prior week instead of repeating it.
+- Each day must feel distinct, but still part of one coherent arc.
+- Avoid medical claims, diagnosis, therapy framing, or dependency language.
+- The "meditationPrompt" should be practical input for a later meditation-script generator.
+- The "adaptationTip" should reduce drop-off and shame. Keep it gentle and specific.
+- Keep titles short and memorable.
+- Suggested durations should usually stay within 5 minutes of the preferred duration.
+- Respond only with raw JSON.
+`.trim();
+}
+
+function normalizePracticeJourneyPlan(raw, preferredDurationMinutes, fallbackCycleNumber) {
+    const title = typeof raw?.title === "string" && raw.title.trim()
+        ? raw.title.trim()
+        : "7-Day Meditation Path";
+    const summary = typeof raw?.summary === "string" && raw.summary.trim()
+        ? raw.summary.trim()
+        : "A gentle week of meditation that builds consistency without losing flexibility.";
+    const cycleNumber = Number.isInteger(raw?.cycleNumber) && raw.cycleNumber > 0
+        ? raw.cycleNumber
+        : fallbackCycleNumber;
+    const rawSteps = Array.isArray(raw?.steps) ? raw.steps : [];
+
+    const normalized = rawSteps
+        .map((step, index) => ({
+            dayNumber: Number.isInteger(step?.dayNumber) && step.dayNumber > 0 ? step.dayNumber : index + 1,
+            title: typeof step?.title === "string" ? step.title.trim() : "",
+            focus: typeof step?.focus === "string" ? step.focus.trim() : "",
+            purpose: typeof step?.purpose === "string" ? step.purpose.trim() : "",
+            meditationPrompt: typeof step?.meditationPrompt === "string" ? step.meditationPrompt.trim() : "",
+            adaptationTip: typeof step?.adaptationTip === "string" ? step.adaptationTip.trim() : "",
+            suggestedDurationMinutes: Number(step?.suggestedDurationMinutes)
+        }))
+        .filter((step) => step.title && step.focus && step.purpose && step.meditationPrompt && step.adaptationTip)
+        .slice(0, 7)
+        .map((step, index) => ({
+            dayNumber: index + 1,
+            title: step.title,
+            focus: step.focus,
+            purpose: step.purpose,
+            meditationPrompt: step.meditationPrompt,
+            adaptationTip: step.adaptationTip,
+            suggestedDurationMinutes: clampDuration(
+                Number.isFinite(step.suggestedDurationMinutes) ? step.suggestedDurationMinutes : preferredDurationMinutes,
+                preferredDurationMinutes
+            )
+        }));
+
+    if (normalized.length !== 7) {
+        throw new Error("Generated journey did not contain 7 valid steps.");
+    }
+
+    return {
+        title,
+        summary,
+        cycleNumber,
+        steps: normalized
+    };
+}
+
 function buildSleepSystemPrompt({ themeTitle, themeSubtitle, durationMinutes, locale, excludeTitles }) {
     const subtitleLine = themeSubtitle ? `- Theme subtitle/context: ${themeSubtitle}` : "- Theme subtitle/context: none";
     const excluded = excludeTitles.length > 0
@@ -843,6 +1043,13 @@ function fallbackSleepHeaders(excludedTitles = []) {
     const available = defaults.filter((item) => !excluded.has(item.title.toLowerCase()));
     const source = available.length > 0 ? available : defaults;
     return shuffle(source).slice(0, 6);
+}
+
+function clampDuration(value, preferredDurationMinutes) {
+    const min = Math.max(3, preferredDurationMinutes - 5);
+    const max = Math.min(30, preferredDurationMinutes + 5);
+    const rounded = Math.round(value);
+    return Math.max(min, Math.min(rounded, max));
 }
 
 function slugify(value) {

@@ -29,6 +29,11 @@ struct MeditationScript: Identifiable, Codable {
     var suggestionOptions: [String]
     var createdAt: Date
     var contentType: ScriptContentType
+    var practiceJourneyPlanID: UUID?
+    var practiceJourneyStepID: UUID?
+    var practiceJourneyDayNumber: Int?
+    var practiceJourneyCycleNumber: Int?
+    var practiceJourneyTitle: String?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -44,6 +49,11 @@ struct MeditationScript: Identifiable, Codable {
         case suggestionOptions = "suggestions"
         case createdAt
         case contentType
+        case practiceJourneyPlanID
+        case practiceJourneyStepID
+        case practiceJourneyDayNumber
+        case practiceJourneyCycleNumber
+        case practiceJourneyTitle
     }
 
     init(
@@ -59,7 +69,12 @@ struct MeditationScript: Identifiable, Codable {
         guidanceBody: String? = nil,
         suggestionOptions: [String] = [],
         createdAt: Date = Date(),
-        contentType: ScriptContentType = .meditation
+        contentType: ScriptContentType = .meditation,
+        practiceJourneyPlanID: UUID? = nil,
+        practiceJourneyStepID: UUID? = nil,
+        practiceJourneyDayNumber: Int? = nil,
+        practiceJourneyCycleNumber: Int? = nil,
+        practiceJourneyTitle: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -74,6 +89,11 @@ struct MeditationScript: Identifiable, Codable {
         self.suggestionOptions = suggestionOptions
         self.createdAt = createdAt
         self.contentType = contentType
+        self.practiceJourneyPlanID = practiceJourneyPlanID
+        self.practiceJourneyStepID = practiceJourneyStepID
+        self.practiceJourneyDayNumber = practiceJourneyDayNumber
+        self.practiceJourneyCycleNumber = practiceJourneyCycleNumber
+        self.practiceJourneyTitle = practiceJourneyTitle
     }
 
     init(from decoder: Decoder) throws {
@@ -91,6 +111,11 @@ struct MeditationScript: Identifiable, Codable {
         suggestionOptions = try container.decodeIfPresent([String].self, forKey: .suggestionOptions) ?? []
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
         contentType = try container.decodeIfPresent(ScriptContentType.self, forKey: .contentType) ?? .meditation
+        practiceJourneyPlanID = try container.decodeIfPresent(UUID.self, forKey: .practiceJourneyPlanID)
+        practiceJourneyStepID = try container.decodeIfPresent(UUID.self, forKey: .practiceJourneyStepID)
+        practiceJourneyDayNumber = try container.decodeIfPresent(Int.self, forKey: .practiceJourneyDayNumber)
+        practiceJourneyCycleNumber = try container.decodeIfPresent(Int.self, forKey: .practiceJourneyCycleNumber)
+        practiceJourneyTitle = try container.decodeIfPresent(String.self, forKey: .practiceJourneyTitle)
     }
 }
 
