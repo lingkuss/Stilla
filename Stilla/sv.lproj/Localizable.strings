@@ -274,7 +274,7 @@
 "routines.mood_placeholder" = "Beskriv mood som ska genereras";
 "routines.intention" = "Intention";
 "routines.persona" = "Persona";
-"routines.saved_script" = "Script";
+"routines.saved_script" = "Manus";
 "routines.saved_script_none" = "Inga sparade script ännu.";
 "routines.duration" = "Längd";
 "routines.technique" = "Teknik";
@@ -352,7 +352,7 @@
 "content.custom_name_placeholder" = "T.ex. Mitt flöde";
 "content.add_technique" = "Lägg till teknik";
 "content.seconds_format" = "%ds";
-"content.timing.in_format" = "In %ds";
+"content.timing.in_format" = "Om %ds";
 "content.timing.out_format" = "Ut %ds";
 "content.timing.hold_format" = "Håll %ds";
 "content.technique_timing_full_format" = "In: %.0fs • Håll: %.0fs • Ut: %.0fs • Håll: %.0fs";
@@ -629,12 +629,12 @@
 "content.today_step.generate_next_title" = "Skapa nästa 7 dagar";
 "content.today_step.week_format" = "Vecka %d";
 "content.today_step.start_detail" = "Starta ett personligt dagligt spår som bygger meditationsvanor steg för steg med dina nuvarande guideinställningar.";
-"content.today_step.start_practice_cta" = "Starta dagens practice";
+"content.today_step.start_practice_cta" = "Starta dagens övning";
 "content.today_step.hide_details" = "Dölj detaljer";
 "content.today_step.view_details" = "Visa detaljer";
 "content.today_step.view_all_steps" = "Visa alla steg";
 "content.today_step.generate_week_cta_format" = "Skapa vecka %d";
-"content.today_step.next_week_detail_format" = "Vecka %d fördjupar din practice utan onödig press.";
+"content.today_step.next_week_detail_format" = "Vecka %d fördjupar din övning utan onödig press.";
 
 "content.saved_library.eyebrow" = "SPARAT BIBLIOTEK";
 "content.saved_library.title" = "Senaste sessioner";
