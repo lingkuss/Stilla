@@ -193,7 +193,7 @@ struct SettingsView: View {
                     }
 
                     if manager.dailyReminderEnabled {
-                        DatePicker("Reminder Time", selection: $manager.dailyReminderTime, displayedComponents: .hourAndMinute)
+                        DatePicker(String(localized: "settings.reminder_time"), selection: $manager.dailyReminderTime, displayedComponents: .hourAndMinute)
                             .onChange(of: manager.dailyReminderTime) { _, _ in
                                 manager.updateDailyReminder()
                             }

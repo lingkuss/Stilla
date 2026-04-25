@@ -687,7 +687,7 @@ struct ContentView: View {
                 Spacer(minLength: 0)
 
                 HStack(spacing: 6) {
-                    Text("Open")
+                    Text(String(localized: "ui.open"))
                         .font(.system(size: 12, weight: .semibold))
                     Image(systemName: "chevron.right")
                         .font(.system(size: 10, weight: .bold))
@@ -1565,37 +1565,37 @@ struct PracticeJourneyOnboardingSheet: View {
     private static let styleOptions: [JourneyTechniqueStyle] = [
         JourneyTechniqueStyle(
             id: "breath_anchor",
-            title: "Breath Anchor",
-            summary: "Simple guided attention on the breath.",
-            detail: "A great starting point when you want something steady, calming, and easy to return to.",
+            titleKey: "journey.onboarding.style.breath_anchor.title",
+            summaryKey: "journey.onboarding.style.breath_anchor.summary",
+            detailKey: "journey.onboarding.style.breath_anchor.detail",
             keywords: ["calm", "anxiety", "restless", "consistency", "steady", "stress"]
         ),
         JourneyTechniqueStyle(
             id: "body_scan",
-            title: "Body Scan",
-            summary: "Move awareness through the body and soften tension.",
-            detail: "Helpful when stress shows up physically or when you want to feel more grounded.",
+            titleKey: "journey.onboarding.style.body_scan.title",
+            summaryKey: "journey.onboarding.style.body_scan.summary",
+            detailKey: "journey.onboarding.style.body_scan.detail",
             keywords: ["tension", "body", "grounded", "sleep", "tired", "relax"]
         ),
         JourneyTechniqueStyle(
             id: "loving_kindness",
-            title: "Self-Compassion",
-            summary: "A warmer style focused on kindness and emotional ease.",
-            detail: "Useful when the practice should feel supportive rather than performance-driven.",
+            titleKey: "journey.onboarding.style.self_compassion.title",
+            summaryKey: "journey.onboarding.style.self_compassion.summary",
+            detailKey: "journey.onboarding.style.self_compassion.detail",
             keywords: ["compassion", "pressure", "hard on myself", "emotional", "kind", "gentle"]
         ),
         JourneyTechniqueStyle(
             id: "visualization",
-            title: "Guided Visualization",
-            summary: "Use mental imagery to reset, restore, or refocus.",
-            detail: "Works well when you want motivation, clarity, or a softer entry into meditation.",
+            titleKey: "journey.onboarding.style.visualization.title",
+            summaryKey: "journey.onboarding.style.visualization.summary",
+            detailKey: "journey.onboarding.style.visualization.detail",
             keywords: ["focus", "clarity", "motivation", "creative", "imagery", "reset"]
         ),
         JourneyTechniqueStyle(
             id: "open_awareness",
-            title: "Open Awareness",
-            summary: "More spacious, more still, and less tightly guided.",
-            detail: "Best when you want to go deeper over time and feel less structured.",
+            titleKey: "journey.onboarding.style.open_awareness.title",
+            summaryKey: "journey.onboarding.style.open_awareness.summary",
+            detailKey: "journey.onboarding.style.open_awareness.detail",
             keywords: ["deep", "stillness", "silence", "advanced", "spacious", "presence"]
         )
     ]
@@ -1611,7 +1611,7 @@ struct PracticeJourneyOnboardingSheet: View {
         _primaryGoal = State(initialValue: initialGoal)
         _mainObstacle = State(initialValue: initialObstacle)
         let initialStyleID = Self.styleOptions.first(where: {
-            $0.id == initialPreferredStyle || $0.title == initialPreferredStyle
+            $0.id == initialPreferredStyle || $0.localizedTitle == initialPreferredStyle
         })?.id ?? ""
         _selectedStyleID = State(initialValue: initialStyleID)
         _preferredDuration = State(initialValue: initialPreferredDuration)
@@ -1666,7 +1666,7 @@ struct PracticeJourneyOnboardingSheet: View {
     }
 
     private var primaryButtonTitle: String {
-        currentStep == totalSteps - 1 ? "Create My Path" : "Continue"
+        currentStep == totalSteps - 1 ? String(localized: "journey.onboarding.create_path") : String(localized: "ui.continue")
     }
 
     var body: some View {
@@ -1693,11 +1693,11 @@ struct PracticeJourneyOnboardingSheet: View {
                             .ignoresSafeArea(edges: .bottom)
                     )
             }
-            .navigationTitle("Your 7-Day Path")
+            .navigationTitle(String(localized: "journey.onboarding.nav_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "ui.cancel")) { dismiss() }
                         .font(.system(size: 14, weight: .medium))
                 }
             }
@@ -1709,7 +1709,7 @@ struct PracticeJourneyOnboardingSheet: View {
     private var progressHeader: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Step \(currentStep + 1) of \(totalSteps)")
+                Text(String(format: String(localized: "journey.onboarding.step_count_format"), currentStep + 1, totalSteps))
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.white.opacity(0.55))
 
@@ -1760,7 +1760,7 @@ struct PracticeJourneyOnboardingSheet: View {
     private var goalQuestion: some View {
         VStack(alignment: .leading, spacing: 14) {
             TextField(
-                "What do you want this practice to help with?",
+                String(localized: "journey.onboarding.goal_placeholder"),
                 text: $primaryGoal,
                 axis: .vertical
             )
@@ -1769,12 +1769,12 @@ struct PracticeJourneyOnboardingSheet: View {
             .background(cardBackground)
 
             quickPickRow(
-                title: "Try one",
+                title: String(localized: "journey.onboarding.try_one"),
                 options: [
-                    "feel calmer day to day",
-                    "build consistency without pressure",
-                    "sleep more easily",
-                    "steady my focus"
+                    String(localized: "journey.onboarding.goal_option.calm"),
+                    String(localized: "journey.onboarding.goal_option.consistency"),
+                    String(localized: "journey.onboarding.goal_option.sleep"),
+                    String(localized: "journey.onboarding.goal_option.focus")
                 ],
                 selection: $primaryGoal
             )
@@ -1784,7 +1784,7 @@ struct PracticeJourneyOnboardingSheet: View {
     private var obstacleQuestion: some View {
         VStack(alignment: .leading, spacing: 14) {
             TextField(
-                "What tends to get in the way? Optional.",
+                String(localized: "journey.onboarding.obstacle_placeholder"),
                 text: $mainObstacle,
                 axis: .vertical
             )
@@ -1793,17 +1793,17 @@ struct PracticeJourneyOnboardingSheet: View {
             .background(cardBackground)
 
             quickPickRow(
-                title: "Common blockers",
+                title: String(localized: "journey.onboarding.common_blockers"),
                 options: [
-                    "I get restless",
-                    "I forget to come back",
-                    "I feel too tired",
-                    "I overthink during practice"
+                    String(localized: "journey.onboarding.obstacle_option.restless"),
+                    String(localized: "journey.onboarding.obstacle_option.forget"),
+                    String(localized: "journey.onboarding.obstacle_option.tired"),
+                    String(localized: "journey.onboarding.obstacle_option.overthink")
                 ],
                 selection: $mainObstacle
             )
 
-            Text("You can skip this if you want. We’ll still build a good starting week.")
+            Text(String(localized: "journey.onboarding.obstacle_skip_help"))
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(.white.opacity(0.5))
         }
@@ -1811,7 +1811,7 @@ struct PracticeJourneyOnboardingSheet: View {
 
     private var styleQuestion: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Choose the kind of guidance that feels easiest to return to.")
+            Text(String(localized: "journey.onboarding.style_help"))
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(.white.opacity(0.6))
 
@@ -1823,7 +1823,7 @@ struct PracticeJourneyOnboardingSheet: View {
 
     private var durationQuestion: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("Pick a length that feels realistic for this first week.")
+            Text(String(localized: "journey.onboarding.duration_help"))
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(.white.opacity(0.6))
 
@@ -1861,24 +1861,24 @@ struct PracticeJourneyOnboardingSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 settingsHintRow(
                     icon: "person.crop.circle",
-                    title: "Guide",
+                    title: String(localized: "journey.onboarding.guide_label"),
                     value: manager.selectedKaiPersonality.localizedName
                 )
                 settingsHintRow(
                     icon: "circle.lefthalf.filled",
-                    title: "Stillness",
+                    title: String(localized: "journey.onboarding.stillness_label"),
                     value: stillnessDescription
                 )
                 settingsHintRow(
                     icon: "sparkles",
-                    title: "Technique",
-                    value: selectedStyle?.title ?? "Breath Anchor"
+                    title: String(localized: "journey.onboarding.technique_label"),
+                    value: selectedStyle?.localizedTitle ?? String(localized: "journey.onboarding.style.breath_anchor.title")
                 )
             }
             .padding(18)
             .background(cardBackground)
 
-            Text("We’ll use your current guide and stillness settings automatically, then shape the plan around the style you chose.")
+            Text(String(localized: "journey.onboarding.settings_help"))
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(.white.opacity(0.52))
         }
@@ -1892,7 +1892,7 @@ struct PracticeJourneyOnboardingSheet: View {
                         currentStep -= 1
                     }
                 } label: {
-                    Text("Back")
+                    Text(String(localized: "ui.back"))
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.82))
                         .padding(.horizontal, 20)
@@ -1914,7 +1914,7 @@ struct PracticeJourneyOnboardingSheet: View {
                     onContinue(
                         trimmedGoal,
                         normalizedText(mainObstacle),
-                        selectedStyle?.title,
+                        selectedStyle?.localizedTitle,
                         preferredDuration
                     )
                 } else {
@@ -1958,12 +1958,12 @@ struct PracticeJourneyOnboardingSheet: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(spacing: 8) {
-                            Text(option.title)
+                            Text(option.localizedTitle)
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundStyle(.white.opacity(0.95))
 
                             if isRecommended {
-                                Text("Suggested")
+                                Text(String(localized: "journey.onboarding.suggested"))
                                     .font(.system(size: 10, weight: .bold))
                                     .foregroundStyle(Color.black.opacity(0.75))
                                     .padding(.horizontal, 8)
@@ -1972,7 +1972,7 @@ struct PracticeJourneyOnboardingSheet: View {
                             }
                         }
 
-                        Text(option.summary)
+                        Text(option.localizedSummary)
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(.white.opacity(0.78))
                     }
@@ -1984,7 +1984,7 @@ struct PracticeJourneyOnboardingSheet: View {
                         .foregroundStyle(isSelected ? .white : .white.opacity(0.3))
                 }
 
-                Text(option.detail)
+                Text(option.localizedDetail)
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.white.opacity(0.56))
                     .lineSpacing(2)
@@ -1998,26 +1998,26 @@ struct PracticeJourneyOnboardingSheet: View {
     private var questionTitle: String {
         switch currentStep {
         case 0:
-            return "What do you want from this practice?"
+            return String(localized: "journey.onboarding.question.goal.title")
         case 1:
-            return "What usually gets in the way?"
+            return String(localized: "journey.onboarding.question.obstacle.title")
         case 2:
-            return "What type of guidance feels right?"
+            return String(localized: "journey.onboarding.question.style.title")
         default:
-            return "What pace feels realistic?"
+            return String(localized: "journey.onboarding.question.duration.title")
         }
     }
 
     private var questionSubtitle: String {
         switch currentStep {
         case 0:
-            return "We’ll use this to shape the tone and direction of your first 7 days."
+            return String(localized: "journey.onboarding.question.goal.subtitle")
         case 1:
-            return "This helps the next week feel more supportive without making the current week unpredictable."
+            return String(localized: "journey.onboarding.question.obstacle.subtitle")
         case 2:
-            return "Here are a few meditation techniques that pair well with different goals and energy levels."
+            return String(localized: "journey.onboarding.question.style.subtitle")
         default:
-            return "Starting with the right session length matters more than being ambitious."
+            return String(localized: "journey.onboarding.question.duration.subtitle")
         }
     }
 
@@ -2103,11 +2103,11 @@ struct PracticeJourneyOnboardingSheet: View {
         let percentage = Int((manager.preferredStillnessRatio * 100).rounded())
         switch percentage {
         case ..<35:
-            return "More guided"
+            return String(localized: "journey.onboarding.stillness.more_guided")
         case 35...65:
-            return "Balanced"
+            return String(localized: "journey.onboarding.stillness.balanced")
         default:
-            return "More spacious"
+            return String(localized: "journey.onboarding.stillness.more_spacious")
         }
     }
 
@@ -2119,10 +2119,22 @@ struct PracticeJourneyOnboardingSheet: View {
 
 private struct JourneyTechniqueStyle: Identifiable, Hashable {
     let id: String
-    let title: String
-    let summary: String
-    let detail: String
+    let titleKey: String
+    let summaryKey: String
+    let detailKey: String
     let keywords: [String]
+
+    var localizedTitle: String {
+        Bundle.main.localizedString(forKey: titleKey, value: titleKey, table: nil)
+    }
+
+    var localizedSummary: String {
+        Bundle.main.localizedString(forKey: summaryKey, value: summaryKey, table: nil)
+    }
+
+    var localizedDetail: String {
+        Bundle.main.localizedString(forKey: detailKey, value: detailKey, table: nil)
+    }
 }
 
 struct PracticeJourneyPlanOverviewSheet: View {
@@ -2950,23 +2962,23 @@ struct CustomTechniqueEditor: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Name") {
+                Section(String(localized: "content.custom_section_name")) {
                     TextField(String(localized: "content.custom_name_placeholder"), text: $name)
                 }
 
-                Section("Timings") {
-                    timingRow(title: "Inhale", value: $inhale)
-                    timingRow(title: "Hold (In)", value: $holdIn)
-                    timingRow(title: "Exhale", value: $exhale)
-                    timingRow(title: "Hold (Out)", value: $holdOut)
+                Section(String(localized: "content.custom_section_timings")) {
+                    timingRow(title: String(localized: "content.inhale"), value: $inhale)
+                    timingRow(title: String(localized: "content.hold_in"), value: $holdIn)
+                    timingRow(title: String(localized: "content.exhale"), value: $exhale)
+                    timingRow(title: String(localized: "content.hold_out"), value: $holdOut)
                 }
 
                 Section {
                     Button(String(localized: "content.add_technique")) {
                         let new = BreathingTechnique(
                             id: UUID().uuidString,
-                            name: name.isEmpty ? "Custom" : name,
-                            description: "Custom user technique.",
+                            name: name.isEmpty ? String(localized: "content.custom_technique_default_name") : name,
+                            description: String(localized: "content.custom_technique_default_description"),
                             inhale: inhale,
                             holdIn: holdIn,
                             exhale: exhale,
