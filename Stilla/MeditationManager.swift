@@ -21,6 +21,12 @@ enum RoutineAccessGate: String, Identifiable {
     var id: String { rawValue }
 }
 
+enum PracticeJourneyHomeCardState {
+    case start
+    case active(plan: PracticeJourneyPlan, step: PracticeJourneyStep)
+    case readyForNextCycle(goalSummary: String, nextCycleNumber: Int)
+}
+
 /// Central state manager for the meditation timer.
 @MainActor
 @Observable
@@ -152,6 +158,37 @@ final class MeditationManager {
                 UserDefaults.standard.set(data, forKey: "recentSessionMemories")
             }
         }
+    }
+
+    var activePracticeJourneyPlan: PracticeJourneyPlan? {
+        didSet {
+            if let plan = activePracticeJourneyPlan,
+               let data = try? JSONEncoder().encode(plan) {
+                UserDefaults.standard.set(data, forKey: "activePracticeJourneyPlan")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "activePracticeJourneyPlan")
+            }
+        }
+    }
+
+    var completedPracticeJourneyPlans: [PracticeJourneyPlan] {
+        didSet {
+            if let data = try? JSONEncoder().encode(completedPracticeJourneyPlans) {
+                UserDefaults.standard.set(data, forKey: "completedPracticeJourneyPlans")
+            }
+        }
+    }
+
+    var practiceJourneyPrimaryGoal: String {
+        didSet { UserDefaults.standard.set(practiceJourneyPrimaryGoal, forKey: "practiceJourneyPrimaryGoal") }
+    }
+
+    var practiceJourneyMainObstacle: String {
+        didSet { UserDefaults.standard.set(practiceJourneyMainObstacle, forKey: "practiceJourneyMainObstacle") }
+    }
+
+    var practiceJourneyPreferredStyle: String {
+        didSet { UserDefaults.standard.set(practiceJourneyPreferredStyle, forKey: "practiceJourneyPreferredStyle") }
     }
 
     var lastCompletedSessionID: UUID?
@@ -505,6 +542,24 @@ final class MeditationManager {
             decodedMemories = []
         }
         self.recentSessionMemories = decodedMemories
+
+        if let data = UserDefaults.standard.data(forKey: "activePracticeJourneyPlan"),
+           let decoded = try? JSONDecoder().decode(PracticeJourneyPlan.self, from: data) {
+            self.activePracticeJourneyPlan = decoded
+        } else {
+            self.activePracticeJourneyPlan = nil
+        }
+
+        if let data = UserDefaults.standard.data(forKey: "completedPracticeJourneyPlans"),
+           let decoded = try? JSONDecoder().decode([PracticeJourneyPlan].self, from: data) {
+            self.completedPracticeJourneyPlans = decoded
+        } else {
+            self.completedPracticeJourneyPlans = []
+        }
+
+        self.practiceJourneyPrimaryGoal = UserDefaults.standard.string(forKey: "practiceJourneyPrimaryGoal") ?? ""
+        self.practiceJourneyMainObstacle = UserDefaults.standard.string(forKey: "practiceJourneyMainObstacle") ?? ""
+        self.practiceJourneyPreferredStyle = UserDefaults.standard.string(forKey: "practiceJourneyPreferredStyle") ?? ""
         
         // Load techniques
         if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
@@ -863,6 +918,7 @@ final class MeditationManager {
     private func finish() {
         let wasSleepStorySession = currentScript?.isSleepStory == true
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
+        var completedSessionMemoryID: UUID?
         if let startDate = sessionStartDate,
            sessionSeconds > 0,
            !isSharedSession, // Skip memory logging for shared sessions
@@ -879,8 +935,12 @@ final class MeditationManager {
             )
             recentSessionMemories = Array(([memory] + recentSessionMemories).prefix(3))
             lastCompletedSessionID = memory.id
+            completedSessionMemoryID = memory.id
         } else {
             lastCompletedSessionID = nil
+        }
+        if sessionSeconds > 0, let script = currentScript {
+            completeJourneyStepIfNeeded(for: script, sessionMemoryID: completedSessionMemoryID)
         }
         if sessionSeconds > 0 {
             bestSessionSecondsStored = max(bestSessionSecondsStored, sessionSeconds)
@@ -916,6 +976,81 @@ extension MeditationManager {
         recentSessionMemories.first
     }
 
+    var practiceJourneyHomeCardState: PracticeJourneyHomeCardState {
+        if let plan = activePracticeJourneyPlan,
+           let step = plan.nextStep {
+            return .active(plan: plan, step: step)
+        }
+
+        if !completedPracticeJourneyPlans.isEmpty {
+            return .readyForNextCycle(
+                goalSummary: latestPracticeJourneyGoalSummary ?? practiceJourneyGoalSeed,
+                nextCycleNumber: (completedPracticeJourneyPlans.first?.cycleNumber ?? 0) + 1
+            )
+        }
+
+        return .start
+    }
+
+    var practiceJourneyNeedsOnboarding: Bool {
+        activePracticeJourneyPlan == nil &&
+        completedPracticeJourneyPlans.isEmpty &&
+        normalizedMemoryText(practiceJourneyPrimaryGoal) == nil
+    }
+
+    var currentPracticeJourneyStep: PracticeJourneyStep? {
+        activePracticeJourneyPlan?.nextStep
+    }
+
+    var latestPracticeJourneyGoalSummary: String? {
+        activePracticeJourneyPlan?.goalSummary ?? completedPracticeJourneyPlans.first?.goalSummary
+    }
+
+    var practiceJourneyPlanForOverview: PracticeJourneyPlan? {
+        activePracticeJourneyPlan ?? completedPracticeJourneyPlans.first
+    }
+
+    var practiceJourneyGoalSeed: String {
+        if let explicitGoal = normalizedMemoryText(practiceJourneyPrimaryGoal) {
+            var parts = ["Primary goal: \(explicitGoal)."]
+            if let obstacle = normalizedMemoryText(practiceJourneyMainObstacle) {
+                parts.append("Main obstacle: \(obstacle).")
+            }
+            if let preferredStyle = normalizedMemoryText(practiceJourneyPreferredStyle) {
+                parts.append("Preferred meditation technique: \(preferredStyle).")
+            }
+            return parts.joined(separator: " ")
+        }
+
+        if let activeGoal = normalizedMemoryText(activePracticeJourneyPlan?.goalSummary) {
+            return activeGoal
+        }
+
+        if let archivedGoal = normalizedMemoryText(completedPracticeJourneyPlans.first?.goalSummary) {
+            return archivedGoal
+        }
+
+        if let recentMemory = latestSessionMemory {
+            var parts: [String] = []
+            if let intention = normalizedMemoryText(recentMemory.intention) {
+                parts.append("Primary intention: \(intention).")
+            }
+            if let mood = normalizedMemoryText(recentMemory.moodSummary) {
+                parts.append("Recent mood or need: \(mood).")
+            }
+            if let reflection = normalizedMemoryText(recentMemory.reflection) {
+                parts.append("What is helping lately: \(reflection).")
+            }
+
+            let derived = parts.joined(separator: " ")
+            if !derived.isEmpty {
+                return derived
+            }
+        }
+
+        return "Build a steady daily meditation practice that feels approachable, grounding, and easy to return to."
+    }
+
     var lastSessionStartTime: Date? {
         lastSessionStartDate
     }
@@ -930,6 +1065,155 @@ extension MeditationManager {
         updated.reflectionDate = Date()
         memories[index] = updated
         recentSessionMemories = memories
+        attachReflectionToJourneyStep(trimmed, sessionID: sessionID)
+    }
+
+    func attachJourneyCheckIn(tags: [String], reflection: String?, to sessionID: UUID) {
+        var seenTags = Set<String>()
+        let normalizedTags = tags.compactMap { rawTag -> String? in
+            let tag = rawTag.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !tag.isEmpty, !seenTags.contains(tag) else { return nil }
+            seenTags.insert(tag)
+            return tag
+        }
+        let trimmedReflection = normalizedMemoryText(reflection)
+
+        if let trimmedReflection {
+            attachReflection(trimmedReflection, to: sessionID)
+        }
+
+        guard !normalizedTags.isEmpty else { return }
+        attachCheckInTagsToJourneyStep(normalizedTags, sessionID: sessionID)
+    }
+
+    func savePracticeJourneyPlan(_ plan: PracticeJourneyPlan) {
+        activePracticeJourneyPlan = plan
+    }
+
+    func savePracticeJourneyPreferences(
+        goal: String,
+        obstacle: String?,
+        preferredStyle: String?,
+        preferredDurationMinutes: Int
+    ) {
+        practiceJourneyPrimaryGoal = normalizedMemoryText(goal) ?? ""
+        practiceJourneyMainObstacle = normalizedMemoryText(obstacle) ?? ""
+        practiceJourneyPreferredStyle = normalizedMemoryText(preferredStyle) ?? ""
+        durationMinutes = preferredDurationMinutes.clamped(to: 1...180)
+    }
+
+    var practiceJourneyPreferredOnboardingDuration: Int {
+        let preferred = durationMinutes == 0 ? 10 : durationMinutes
+        let clamped = preferred.clamped(to: 1...KaiBrainService.maxAIGenerationDurationMinutes)
+        let available = allDurations
+            .filter { $0 > 0 && $0 <= KaiBrainService.maxAIGenerationDurationMinutes }
+            .sorted()
+
+        guard !available.isEmpty else { return clamped }
+        return available.contains(clamped) ? clamped : (available.first(where: { $0 >= clamped }) ?? available.last ?? clamped)
+    }
+
+    func clearPracticeJourneyPlan() {
+        activePracticeJourneyPlan = nil
+    }
+
+    func practiceJourneyHistoryContext(limit: Int = 2) -> String? {
+        let plans = completedPracticeJourneyPlans.prefix(limit)
+        guard !plans.isEmpty else { return nil }
+
+        let entries = plans.map { plan in
+            let completedTitles = plan.steps
+                .filter { $0.isCompleted }
+                .map { "Day \($0.dayNumber): \($0.title)" }
+                .joined(separator: ", ")
+            return "Cycle \(plan.cycleNumber) goal: \(plan.goalSummary). Completed: \(completedTitles)"
+        }
+
+        return entries.joined(separator: " || ")
+    }
+
+    func startTodayPracticeJourneyStep() async throws {
+        isGeneratingGuidedSession = true
+        defer { isGeneratingGuidedSession = false }
+
+        let personality = selectedKaiPersonality
+        let stillnessRatio = preferredStillnessRatio
+        let plan = try await ensurePracticeJourneyPlanForHome(
+            personality: personality,
+            stillnessRatio: stillnessRatio
+        )
+
+        guard let step = plan.nextStep else {
+            throw KaiBrainService.BrainError.invalidResponse
+        }
+
+        let journeyPrompt = buildJourneyMeditationPrompt(plan: plan, step: step)
+
+        var script = try await KaiBrainService.shared.generateScript(
+            mood: journeyPrompt,
+            durationMinutes: step.suggestedDurationMinutes,
+            personality: personality,
+            stillnessRatio: stillnessRatio
+        )
+
+        script.kaiPersonalityID = personality.id
+        script.kaiPersonalityName = personality.localizedName
+        script.practiceJourneyPlanID = plan.id
+        script.practiceJourneyStepID = step.id
+        script.practiceJourneyDayNumber = step.dayNumber
+        script.practiceJourneyCycleNumber = plan.cycleNumber
+        script.practiceJourneyTitle = plan.title
+        if script.tags.contains(where: { $0.caseInsensitiveCompare("Daily Path") == .orderedSame }) == false {
+            script.tags.append("Daily Path")
+        }
+        if script.tags.contains(where: { $0.caseInsensitiveCompare("Day \(step.dayNumber)") == .orderedSame }) == false {
+            script.tags.append("Day \(step.dayNumber)")
+        }
+
+        GuruManager.shared.play(script: script)
+        currentScript = script
+        durationMinutes = step.suggestedDurationMinutes
+        isGuruEnabled = true
+        pendingKaiMoodSummary = step.focus
+        pendingKaiIntention = "Day \(step.dayNumber): \(step.title)"
+        start(durationMinutes: step.suggestedDurationMinutes)
+    }
+
+    func startQuickMoodSessionFromHome(moodText: String) async throws {
+        isGeneratingGuidedSession = true
+        defer { isGeneratingGuidedSession = false }
+
+        let trimmedMood = moodText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let personality = selectedKaiPersonality
+        let resolvedDuration = practiceJourneyPreferredOnboardingDuration
+
+        var prompt = trimmedMood.isEmpty ? "Calm" : trimmedMood
+        if let memoryContext = practiceJourneyMemoryContextString() {
+            if trimmedMood.isEmpty {
+                prompt = "Memory context: \(memoryContext)"
+            } else {
+                prompt += " Recent memory: \(memoryContext)"
+            }
+        }
+
+        var script = try await KaiBrainService.shared.generateScript(
+            mood: prompt,
+            durationMinutes: resolvedDuration,
+            personality: personality,
+            stillnessRatio: preferredStillnessRatio
+        )
+
+        script.kaiPersonalityID = personality.id
+        script.kaiPersonalityName = personality.localizedName
+
+        pendingKaiMoodSummary = trimmedMood.isEmpty ? nil : trimmedMood
+        pendingKaiIntention = nil
+
+        GuruManager.shared.play(script: script)
+        currentScript = script
+        durationMinutes = resolvedDuration
+        isGuruEnabled = true
+        start(durationMinutes: resolvedDuration)
     }
 
     func defaultNextSessionReminderTime() -> Date {
@@ -943,6 +1227,177 @@ extension MeditationManager {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
         return trimmed.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+    }
+
+    private var preferredPracticeJourneyDurationMinutes: Int {
+        let base = durationMinutes == 0 ? 10 : durationMinutes
+        return min(max(3, base), KaiBrainService.maxAIGenerationDurationMinutes)
+    }
+
+    private func ensurePracticeJourneyPlanForHome(
+        personality: KaiPersonality,
+        stillnessRatio: Double
+    ) async throws -> PracticeJourneyPlan {
+        if let activePlan = activePracticeJourneyPlan,
+           activePlan.nextStep != nil {
+            return activePlan
+        }
+
+        let cycleNumber = (completedPracticeJourneyPlans.first?.cycleNumber ?? 0) + 1
+        let plan = try await KaiBrainService.shared.generatePracticeJourneyPlan(
+            goalSummary: practiceJourneyGoalSeed,
+            preferredDurationMinutes: preferredPracticeJourneyDurationMinutes,
+            personality: personality,
+            stillnessRatio: stillnessRatio,
+            memoryContext: practiceJourneyMemoryContextString(),
+            historyContext: practiceJourneyHistoryContext(),
+            cycleNumber: cycleNumber
+        )
+        savePracticeJourneyPlan(plan)
+        return plan
+    }
+
+    private func practiceJourneyMemoryContextString() -> String? {
+        let memories = Array(recentSessionMemories.prefix(3))
+        guard !memories.isEmpty else { return nil }
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+
+        let entries: [String] = memories.map { memory in
+            var parts: [String] = []
+            parts.append(formatter.string(from: memory.startedAt))
+            parts.append("\(max(1, memory.durationMinutesRounded))m")
+            if let intention = memory.intention { parts.append("Intention: \(intention)") }
+            if let mood = memory.moodSummary { parts.append("Mood: \(mood)") }
+            if let reflection = memory.reflection { parts.append("Reflection: \(reflection)") }
+            return parts.joined(separator: " | ")
+        }
+
+        return entries.joined(separator: " || ")
+    }
+
+    private func buildJourneyMeditationPrompt(plan: PracticeJourneyPlan, step: PracticeJourneyStep) -> String {
+        var parts: [String] = []
+        parts.append("Practice journey: \(plan.title).")
+        parts.append("Cycle \(plan.cycleNumber), day \(step.dayNumber) of 7.")
+        parts.append("Goal summary: \(plan.goalSummary).")
+        parts.append("Today's focus: \(step.focus).")
+        parts.append("Why it matters: \(step.purpose).")
+        parts.append("Meditation direction: \(step.meditationPrompt).")
+        parts.append("Adaptation tip if the user feels resistance, low energy, or overwhelm: \(step.adaptationTip).")
+        if let previousStep = previousCompletedStep(before: step, in: plan),
+           let completion = previousStep.completion {
+            var checkInParts: [String] = []
+            if let tags = completion.checkInTags, !tags.isEmpty {
+                checkInParts.append("selected check-in: \(tags.joined(separator: ", "))")
+            }
+            if let reflection = normalizedMemoryText(completion.reflection) {
+                checkInParts.append("reflection: \(reflection)")
+            }
+            if !checkInParts.isEmpty {
+                parts.append("Yesterday's response from day \(previousStep.dayNumber): \(checkInParts.joined(separator: "; ")). Adapt today's session so it clearly responds to this without over-explaining.")
+            }
+        }
+
+        return parts.joined(separator: " ")
+    }
+
+    private func previousCompletedStep(before step: PracticeJourneyStep, in plan: PracticeJourneyPlan) -> PracticeJourneyStep? {
+        plan.steps
+            .filter { $0.dayNumber < step.dayNumber && $0.isCompleted }
+            .sorted { $0.dayNumber > $1.dayNumber }
+            .first
+    }
+
+    private func completeJourneyStepIfNeeded(for script: MeditationScript, sessionMemoryID: UUID?) {
+        guard let planID = script.practiceJourneyPlanID,
+              let stepID = script.practiceJourneyStepID,
+              var plan = activePracticeJourneyPlan,
+              plan.id == planID,
+              let index = plan.steps.firstIndex(where: { $0.id == stepID }) else {
+            return
+        }
+
+        if plan.steps[index].completion == nil {
+            plan.steps[index].completion = PracticeJourneyStepCompletion(
+                completedAt: Date(),
+                sessionMemoryID: sessionMemoryID
+            )
+        }
+
+        if plan.isCompleted {
+            plan.completedAt = Date()
+            completedPracticeJourneyPlans = Array(([plan] + completedPracticeJourneyPlans).prefix(8))
+            activePracticeJourneyPlan = nil
+        } else {
+            activePracticeJourneyPlan = plan
+        }
+    }
+
+    private func attachReflectionToJourneyStep(_ reflection: String, sessionID: UUID) {
+        guard var activePlan = activePracticeJourneyPlan else {
+            attachReflectionToCompletedJourney(reflection, sessionID: sessionID)
+            return
+        }
+
+        if let stepIndex = activePlan.steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) {
+            activePlan.steps[stepIndex].completion?.reflection = reflection
+            activePracticeJourneyPlan = activePlan
+            return
+        }
+
+        attachReflectionToCompletedJourney(reflection, sessionID: sessionID)
+    }
+
+    private func attachReflectionToCompletedJourney(_ reflection: String, sessionID: UUID) {
+        guard let planIndex = completedPracticeJourneyPlans.firstIndex(where: { plan in
+            plan.steps.contains(where: { $0.completion?.sessionMemoryID == sessionID })
+        }) else {
+            return
+        }
+
+        var plans = completedPracticeJourneyPlans
+        guard let stepIndex = plans[planIndex].steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) else {
+            return
+        }
+
+        plans[planIndex].steps[stepIndex].completion?.reflection = reflection
+        completedPracticeJourneyPlans = plans
+    }
+
+    private func attachCheckInTagsToJourneyStep(_ tags: [String], sessionID: UUID) {
+        guard var activePlan = activePracticeJourneyPlan else {
+            attachCheckInTagsToCompletedJourney(tags, sessionID: sessionID)
+            return
+        }
+
+        if let stepIndex = activePlan.steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) {
+            activePlan.steps[stepIndex].completion?.checkInTags = tags
+            activePlan.steps[stepIndex].completion?.checkInSavedAt = Date()
+            activePracticeJourneyPlan = activePlan
+            return
+        }
+
+        attachCheckInTagsToCompletedJourney(tags, sessionID: sessionID)
+    }
+
+    private func attachCheckInTagsToCompletedJourney(_ tags: [String], sessionID: UUID) {
+        guard let planIndex = completedPracticeJourneyPlans.firstIndex(where: { plan in
+            plan.steps.contains(where: { $0.completion?.sessionMemoryID == sessionID })
+        }) else {
+            return
+        }
+
+        var plans = completedPracticeJourneyPlans
+        guard let stepIndex = plans[planIndex].steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) else {
+            return
+        }
+
+        plans[planIndex].steps[stepIndex].completion?.checkInTags = tags
+        plans[planIndex].steps[stepIndex].completion?.checkInSavedAt = Date()
+        completedPracticeJourneyPlans = plans
     }
 }
 

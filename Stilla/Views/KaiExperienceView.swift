@@ -44,6 +44,18 @@ struct KaiExperienceView: View {
     private var availableAIDurations: [Int] {
         manager.allDurations.filter { $0 > 0 && $0 <= KaiBrainService.maxAIGenerationDurationMinutes }
     }
+
+    private var combinedMoodInput: String {
+        var combinedMood = ""
+        if let intentionKey = selectedIntention {
+            let intentionText = localizedIntention(intentionKey)
+            combinedMood += "Intention: \(intentionText). "
+        }
+        if !moodText.isEmpty {
+            combinedMood += "Mood/Details: \(moodText)"
+        }
+        return combinedMood.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
     
     var body: some View {
         NavigationStack {
@@ -306,21 +318,22 @@ struct KaiExperienceView: View {
                 }
                 .padding(.top, 8)
                 
-                // Generate Button
-                Button {
-                    generateMeditation()
-                } label: {
-                    Text(String(localized: "kai.create_meditation"))
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(.black)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 20)
-                        .background(Capsule().fill(.white))
-                        .padding(.horizontal, 24)
-                        .shadow(color: .white.opacity(0.1), radius: 20, x: 0, y: 10)
+                VStack(spacing: 14) {
+                    Button {
+                        generateMeditation()
+                    } label: {
+                        Text(String(localized: "kai.create_meditation"))
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.black)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background(Capsule().fill(.white))
+                            .padding(.horizontal, 24)
+                            .shadow(color: .white.opacity(0.1), radius: 20, x: 0, y: 10)
+                    }
+                    .disabled(moodText.isEmpty && selectedIntention == nil)
+                    .opacity((moodText.isEmpty && selectedIntention == nil) ? 0.3 : 1.0)
                 }
-                .disabled(moodText.isEmpty && selectedIntention == nil)
-                .opacity((moodText.isEmpty && selectedIntention == nil) ? 0.3 : 1.0)
                 .padding(.top, 20)
                 .padding(.bottom, 60)
             }
@@ -368,14 +381,7 @@ struct KaiExperienceView: View {
             }
             
             do {
-                var combinedMood = ""
-                if let intentionKey = selectedIntention {
-                    let intentionText = localizedIntention(intentionKey)
-                    combinedMood += "Intention: \(intentionText). "
-                }
-                if !moodText.isEmpty {
-                    combinedMood += "Mood/Details: \(moodText)"
-                }
+                var combinedMood = combinedMoodInput
 
                 manager.pendingKaiMoodSummary = moodText.isEmpty ? nil : moodText
                 manager.pendingKaiIntention = selectedIntention.map(localizedIntention)

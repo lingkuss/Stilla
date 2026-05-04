@@ -61,3 +61,115 @@ struct SessionMemory: Identifiable, Codable, Hashable {
         reflectionDate = try container.decodeIfPresent(Date.self, forKey: .reflectionDate)
     }
 }
+
+struct PracticeJourneyStepCompletion: Codable, Hashable {
+    let completedAt: Date
+    let sessionMemoryID: UUID?
+    var reflection: String?
+    var checkInTags: [String]?
+    var checkInSavedAt: Date?
+
+    init(
+        completedAt: Date = Date(),
+        sessionMemoryID: UUID? = nil,
+        reflection: String? = nil,
+        checkInTags: [String]? = nil,
+        checkInSavedAt: Date? = nil
+    ) {
+        self.completedAt = completedAt
+        self.sessionMemoryID = sessionMemoryID
+        self.reflection = reflection
+        self.checkInTags = checkInTags
+        self.checkInSavedAt = checkInSavedAt
+    }
+}
+
+struct PracticeJourneyStep: Identifiable, Codable, Hashable {
+    var id: UUID
+    var dayNumber: Int
+    var title: String
+    var focus: String
+    var purpose: String
+    var meditationPrompt: String
+    var adaptationTip: String
+    var suggestedDurationMinutes: Int
+    var completion: PracticeJourneyStepCompletion?
+
+    init(
+        id: UUID = UUID(),
+        dayNumber: Int,
+        title: String,
+        focus: String,
+        purpose: String,
+        meditationPrompt: String,
+        adaptationTip: String,
+        suggestedDurationMinutes: Int,
+        completion: PracticeJourneyStepCompletion? = nil
+    ) {
+        self.id = id
+        self.dayNumber = dayNumber
+        self.title = title
+        self.focus = focus
+        self.purpose = purpose
+        self.meditationPrompt = meditationPrompt
+        self.adaptationTip = adaptationTip
+        self.suggestedDurationMinutes = suggestedDurationMinutes
+        self.completion = completion
+    }
+
+    var isCompleted: Bool {
+        completion != nil
+    }
+}
+
+struct PracticeJourneyPlan: Identifiable, Codable, Hashable {
+    var id: UUID
+    var title: String
+    var summary: String
+    var goalSummary: String
+    var cycleNumber: Int
+    var personaID: String?
+    var personaName: String?
+    var stillnessRatio: Double
+    var createdAt: Date
+    var completedAt: Date?
+    var steps: [PracticeJourneyStep]
+
+    init(
+        id: UUID = UUID(),
+        title: String,
+        summary: String,
+        goalSummary: String,
+        cycleNumber: Int = 1,
+        personaID: String? = nil,
+        personaName: String? = nil,
+        stillnessRatio: Double = 0.5,
+        createdAt: Date = Date(),
+        completedAt: Date? = nil,
+        steps: [PracticeJourneyStep]
+    ) {
+        self.id = id
+        self.title = title
+        self.summary = summary
+        self.goalSummary = goalSummary
+        self.cycleNumber = cycleNumber
+        self.personaID = personaID
+        self.personaName = personaName
+        self.stillnessRatio = stillnessRatio
+        self.createdAt = createdAt
+        self.completedAt = completedAt
+        self.steps = steps.sorted { $0.dayNumber < $1.dayNumber }
+    }
+
+    var nextStep: PracticeJourneyStep? {
+        steps.sorted { $0.dayNumber < $1.dayNumber }.first(where: { !$0.isCompleted })
+    }
+
+    var completedStepCount: Int {
+        steps.filter { $0.isCompleted }.count
+    }
+
+    var isCompleted: Bool {
+        completedStepCount >= steps.count && !steps.isEmpty
+    }
+}

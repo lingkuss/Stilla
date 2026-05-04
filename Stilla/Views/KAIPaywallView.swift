@@ -121,7 +121,7 @@ struct KAIPaywallView: View {
     }
 
     private var kaiPriceText: String {
-        store.products.first(where: { $0.id == StoreKitManager.vindlaProID }).map { "\($0.displayPrice)" } ?? "$4.99"
+        store.products.first(where: { $0.id == StoreKitManager.vindlaProID }).map { "\($0.displayPrice)" } ?? "$3.99"
     }
 
     private func present(_ outcome: StoreKitManager.PurchaseOutcome) {

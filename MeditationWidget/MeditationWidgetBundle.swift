@@ -12,7 +12,9 @@ import SwiftUI
 struct MeditationWidgetBundle: WidgetBundle {
     var body: some Widget {
         MeditationWidget()
-        MeditationWidgetControl()
+        if #available(iOS 18.0, *) {
+            MeditationWidgetControl()
+        }
         MeditationWidgetLiveActivity()
     }
 }
