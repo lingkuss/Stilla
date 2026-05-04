@@ -8,6 +8,7 @@ struct ReflectionPromptView: View {
     let sessionID: UUID
 
     @State private var reflectionText: String = ""
+    @State private var selectedCheckInTags: Set<String> = []
     @State private var wantsReminder: Bool = true
     @State private var reminderTime: Date
     @State private var isListeningPulse = false
@@ -78,6 +79,7 @@ struct ReflectionPromptView: View {
     private var reflectionPhase: some View {
         Group {
             headerSection
+            checkInSection
             reflectionInputSection
             reminderSection
             Spacer()
@@ -168,6 +170,64 @@ struct ReflectionPromptView: View {
             .padding(12)
         }
         .padding(.horizontal, 24)
+    }
+
+    private var checkInSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(String(localized: "reflection.check_in_title"))
+                .font(.system(size: 11, weight: .semibold))
+                .kerning(0.8)
+                .foregroundStyle(.white.opacity(0.52))
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                ForEach(Self.checkInOptions) { option in
+                    checkInChip(option)
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+    }
+
+    private func checkInChip(_ option: ReflectionCheckInOption) -> some View {
+        let isSelected = selectedCheckInTags.contains(option.id)
+
+        return Button {
+            if isSelected {
+                selectedCheckInTags.remove(option.id)
+            } else if option.id == "no_change" {
+                selectedCheckInTags = [option.id]
+            } else {
+                selectedCheckInTags.remove("no_change")
+                selectedCheckInTags.insert(option.id)
+            }
+            UISelectionFeedbackGenerator().selectionChanged()
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: option.icon)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(isSelected ? Color.black.opacity(0.78) : .white.opacity(0.68))
+
+                Text(option.localizedTitle)
+                    .font(.system(size: 12, weight: .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.78)
+
+                Spacer(minLength: 0)
+            }
+            .foregroundStyle(isSelected ? Color.black.opacity(0.82) : .white.opacity(0.82))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 11)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(isSelected ? Color.white.opacity(0.92) : Color.white.opacity(0.06))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(Color.white.opacity(isSelected ? 0.22 : 0.1), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private var reminderSection: some View {
@@ -405,9 +465,13 @@ struct ReflectionPromptView: View {
     }
 
     private func handleSave() {
-        if !reflectionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            manager.attachReflection(reflectionText, to: sessionID)
-        }
+        manager.attachJourneyCheckIn(
+            tags: Self.checkInOptions
+                .map(\.id)
+                .filter { selectedCheckInTags.contains($0) },
+            reflection: reflectionText,
+            to: sessionID
+        )
 
         if wantsReminder {
             Task {
@@ -422,6 +486,15 @@ struct ReflectionPromptView: View {
             }
         }
     }
+
+    private static let checkInOptions: [ReflectionCheckInOption] = [
+        ReflectionCheckInOption(id: "calmer", titleKey: "reflection.check_in.calmer", icon: "leaf.fill"),
+        ReflectionCheckInOption(id: "restless", titleKey: "reflection.check_in.restless", icon: "wind"),
+        ReflectionCheckInOption(id: "sleepy", titleKey: "reflection.check_in.sleepy", icon: "moon.fill"),
+        ReflectionCheckInOption(id: "clearer", titleKey: "reflection.check_in.clearer", icon: "sparkles"),
+        ReflectionCheckInOption(id: "emotional", titleKey: "reflection.check_in.emotional", icon: "heart.fill"),
+        ReflectionCheckInOption(id: "no_change", titleKey: "reflection.check_in.no_change", icon: "circle")
+    ]
 
     private func reminderDate() -> Date {
         let calendar = Calendar.current
@@ -517,6 +590,16 @@ struct ReflectionPromptView: View {
         
         shareItems = items
         showingShareSheet = true
+    }
+}
+
+private struct ReflectionCheckInOption: Identifiable {
+    let id: String
+    let titleKey: String
+    let icon: String
+
+    var localizedTitle: String {
+        Bundle.main.localizedString(forKey: titleKey, value: titleKey, table: nil)
     }
 }
 

@@ -188,6 +188,13 @@
 "reflection.share_upload_error" = "Det uppstod ett problem när din session sparades till servern. Kontrollera internetanslutningen eller Vercel KV-inställningen.";
 "reflection.how_are_you_now" = "Hur mår du nu?";
 "reflection.short_reflection_hint" = "En kort reflektion hjälper Mimir att minnas vad som är viktigt för dig.";
+"reflection.check_in_title" = "VAD FÖRÄNDRADES?";
+"reflection.check_in.calmer" = "Lugnare";
+"reflection.check_in.restless" = "Fortfarande rastlös";
+"reflection.check_in.sleepy" = "Sömnig";
+"reflection.check_in.clearer" = "Klarare";
+"reflection.check_in.emotional" = "Känslosam";
+"reflection.check_in.no_change" = "Ingen förändring";
 "reflection.placeholder" = "En rad räcker...";
 "reflection.voice_input_fallback_error" = "Röstinmatning är inte tillgänglig just nu. Skriv i stället.";
 "reflection.reminder_prompt" = "Ska jag påminna dig i morgon att";
@@ -656,6 +663,7 @@
 "journey.overview.status_done" = "Klar";
 "journey.overview.status_ahead" = "Framöver";
 "journey.overview.duration_recommended_format" = "%d min rekommenderat";
+"journey.overview.check_in_format" = "Incheckning: %@";
 "journey.overview.start_error_title" = "Kunde inte starta dagens steg";
 "journey.overview.start_error_message" = "Försök igen om en stund. Ditt dagliga spår är fortfarande sparat.";
 

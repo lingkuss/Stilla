@@ -66,15 +66,21 @@ struct PracticeJourneyStepCompletion: Codable, Hashable {
     let completedAt: Date
     let sessionMemoryID: UUID?
     var reflection: String?
+    var checkInTags: [String]?
+    var checkInSavedAt: Date?
 
     init(
         completedAt: Date = Date(),
         sessionMemoryID: UUID? = nil,
-        reflection: String? = nil
+        reflection: String? = nil,
+        checkInTags: [String]? = nil,
+        checkInSavedAt: Date? = nil
     ) {
         self.completedAt = completedAt
         self.sessionMemoryID = sessionMemoryID
         self.reflection = reflection
+        self.checkInTags = checkInTags
+        self.checkInSavedAt = checkInSavedAt
     }
 }
 

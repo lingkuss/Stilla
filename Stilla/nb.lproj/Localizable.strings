@@ -188,6 +188,13 @@
 "reflection.share_upload_error" = "Det oppstod et problem med å lagre sesjonen din på serveren. Sjekk internettforbindelsen eller Vercel KV-oppsettet.";
 "reflection.how_are_you_now" = "Hvordan har du det nå?";
 "reflection.short_reflection_hint" = "En kort refleksjon hjelper Mimir å huske hva som er viktig for deg.";
+"reflection.check_in_title" = "HVA ENDRET SEG?";
+"reflection.check_in.calmer" = "Roligere";
+"reflection.check_in.restless" = "Fortsatt urolig";
+"reflection.check_in.sleepy" = "Søvnig";
+"reflection.check_in.clearer" = "Klarere";
+"reflection.check_in.emotional" = "Følelsesladet";
+"reflection.check_in.no_change" = "Ingen endring";
 "reflection.placeholder" = "Én linje er nok...";
 "reflection.voice_input_fallback_error" = "Taleinndata er ikke tilgjengelig akkurat nå. Skriv i stedet.";
 "reflection.reminder_prompt" = "Skal jeg minne deg i morgen om å";
@@ -652,6 +659,7 @@
 "journey.overview.status_done" = "Ferdig";
 "journey.overview.status_ahead" = "Videre";
 "journey.overview.duration_recommended_format" = "%d min anbefalt";
+"journey.overview.check_in_format" = "Innsjekk: %@";
 "journey.overview.start_error_title" = "Kunne ikke starte dagens steg";
 "journey.overview.start_error_message" = "Prøv igjen om litt. Den daglige stien din er fortsatt lagret.";
 

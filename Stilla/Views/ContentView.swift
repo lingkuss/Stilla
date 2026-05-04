@@ -2286,6 +2286,7 @@ struct PracticeJourneyPlanOverviewSheet: View {
         let isCurrent = currentStepID == step.id
         let isCompleted = step.isCompleted
         let reflection = step.completion?.reflection?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let checkInSummary = localizedCheckInSummary(for: step.completion?.checkInTags)
 
         return VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top, spacing: 14) {
@@ -2360,6 +2361,11 @@ struct PracticeJourneyPlanOverviewSheet: View {
                             .disabled(manager.isGeneratingGuidedSession)
                             .opacity(manager.isGeneratingGuidedSession ? 0.6 : 1.0)
                         }
+                    } else if !checkInSummary.isEmpty {
+                        infoLine(icon: "heart.text.square", text: checkInSummary)
+                        if let reflection, !reflection.isEmpty {
+                            infoLine(icon: "quote.bubble", text: reflection)
+                        }
                     } else if let reflection, !reflection.isEmpty {
                         infoLine(icon: "quote.bubble", text: reflection)
                     }
@@ -2395,6 +2401,14 @@ struct PracticeJourneyPlanOverviewSheet: View {
                 .foregroundStyle(.white.opacity(0.62))
                 .lineSpacing(2)
         }
+    }
+
+    private func localizedCheckInSummary(for tags: [String]?) -> String {
+        guard let tags, !tags.isEmpty else { return "" }
+        let labels = tags.map { tag in
+            Bundle.main.localizedString(forKey: "reflection.check_in.\(tag)", value: tag, table: nil)
+        }
+        return String(format: String(localized: "journey.overview.check_in_format"), labels.joined(separator: ", "))
     }
 
     private func stepBadgeBackground(isCurrent: Bool, isCompleted: Bool) -> Color {

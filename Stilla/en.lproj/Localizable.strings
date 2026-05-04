@@ -189,6 +189,13 @@
 "reflection.share_upload_error" = "There was a problem saving your session to the server. Please check your internet connection or Vercel KV setup.";
 "reflection.how_are_you_now" = "How are you now?";
 "reflection.short_reflection_hint" = "A short reflection helps Mimir remember what matters to you.";
+"reflection.check_in_title" = "WHAT SHIFTED?";
+"reflection.check_in.calmer" = "Calmer";
+"reflection.check_in.restless" = "Still restless";
+"reflection.check_in.sleepy" = "Sleepy";
+"reflection.check_in.clearer" = "Clearer";
+"reflection.check_in.emotional" = "Emotional";
+"reflection.check_in.no_change" = "No change";
 "reflection.placeholder" = "One line is enough...";
 "reflection.voice_input_fallback_error" = "Voice input isn't available right now. Please type instead.";
 "reflection.reminder_prompt" = "Should I remind you tomorrow to";
@@ -654,6 +661,7 @@
 "journey.overview.status_done" = "Done";
 "journey.overview.status_ahead" = "Ahead";
 "journey.overview.duration_recommended_format" = "%d min recommended";
+"journey.overview.check_in_format" = "Check-in: %@";
 "journey.overview.start_error_title" = "Couldn’t start today’s step";
 "journey.overview.start_error_message" = "Try again in a moment. Your daily path is still saved.";
 

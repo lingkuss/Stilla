@@ -188,6 +188,13 @@
 "reflection.share_upload_error" = "Un problème est survenu lors de l'enregistrement de votre session sur le serveur. Vérifiez votre connexion internet ou la configuration Vercel KV.";
 "reflection.how_are_you_now" = "Comment vous sentez-vous maintenant ?";
 "reflection.short_reflection_hint" = "Une courte réflexion aide Mimir à se souvenir de ce qui compte pour vous.";
+"reflection.check_in_title" = "QU'EST-CE QUI A CHANGÉ ?";
+"reflection.check_in.calmer" = "Plus calme";
+"reflection.check_in.restless" = "Encore agité";
+"reflection.check_in.sleepy" = "Somnolent";
+"reflection.check_in.clearer" = "Plus clair";
+"reflection.check_in.emotional" = "Émotionnel";
+"reflection.check_in.no_change" = "Aucun changement";
 "reflection.placeholder" = "Une ligne suffit...";
 "reflection.voice_input_fallback_error" = "La saisie vocale n'est pas disponible actuellement. Veuillez saisir du texte à la place.";
 "reflection.reminder_prompt" = "Dois-je vous rappeler demain de";
@@ -599,6 +606,7 @@
 "journey.overview.status_done" = "Fait";
 "journey.overview.status_ahead" = "À venir";
 "journey.overview.duration_recommended_format" = "%d min recommandées";
+"journey.overview.check_in_format" = "Bilan : %@";
 "journey.overview.start_error_title" = "Impossible de démarrer l’étape du jour";
 "journey.overview.start_error_message" = "Réessayez dans un instant. Votre parcours quotidien est toujours enregistré.";
 

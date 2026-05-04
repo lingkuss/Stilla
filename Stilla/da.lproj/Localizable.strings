@@ -188,6 +188,13 @@
 "reflection.share_upload_error" = "Der opstod et problem med at gemme din session på serveren. Tjek din internetforbindelse eller Vercel KV-opsætningen.";
 "reflection.how_are_you_now" = "Hvordan har du det nu?";
 "reflection.short_reflection_hint" = "En kort refleksion hjælper Mimir med at huske, hvad der er vigtigt for dig.";
+"reflection.check_in_title" = "HVAD ÆNDREDE SIG?";
+"reflection.check_in.calmer" = "Roligere";
+"reflection.check_in.restless" = "Stadig urolig";
+"reflection.check_in.sleepy" = "Søvnig";
+"reflection.check_in.clearer" = "Klarere";
+"reflection.check_in.emotional" = "Følelsesladet";
+"reflection.check_in.no_change" = "Ingen ændring";
 "reflection.placeholder" = "Én linje er nok...";
 "reflection.voice_input_fallback_error" = "Stemmeindtastning er ikke tilgængelig lige nu. Skriv i stedet.";
 "reflection.reminder_prompt" = "Skal jeg minde dig i morgen om at";
@@ -652,6 +659,7 @@
 "journey.overview.status_done" = "Færdig";
 "journey.overview.status_ahead" = "Forude";
 "journey.overview.duration_recommended_format" = "%d min anbefalet";
+"journey.overview.check_in_format" = "Indtjekning: %@";
 "journey.overview.start_error_title" = "Kunne ikke starte dagens trin";
 "journey.overview.start_error_message" = "Prøv igen om et øjeblik. Dit daglige forløb er stadig gemt.";
 

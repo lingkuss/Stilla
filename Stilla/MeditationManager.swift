@@ -1068,6 +1068,24 @@ extension MeditationManager {
         attachReflectionToJourneyStep(trimmed, sessionID: sessionID)
     }
 
+    func attachJourneyCheckIn(tags: [String], reflection: String?, to sessionID: UUID) {
+        var seenTags = Set<String>()
+        let normalizedTags = tags.compactMap { rawTag -> String? in
+            let tag = rawTag.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !tag.isEmpty, !seenTags.contains(tag) else { return nil }
+            seenTags.insert(tag)
+            return tag
+        }
+        let trimmedReflection = normalizedMemoryText(reflection)
+
+        if let trimmedReflection {
+            attachReflection(trimmedReflection, to: sessionID)
+        }
+
+        guard !normalizedTags.isEmpty else { return }
+        attachCheckInTagsToJourneyStep(normalizedTags, sessionID: sessionID)
+    }
+
     func savePracticeJourneyPlan(_ plan: PracticeJourneyPlan) {
         activePracticeJourneyPlan = plan
     }
@@ -1269,8 +1287,28 @@ extension MeditationManager {
         parts.append("Why it matters: \(step.purpose).")
         parts.append("Meditation direction: \(step.meditationPrompt).")
         parts.append("Adaptation tip if the user feels resistance, low energy, or overwhelm: \(step.adaptationTip).")
+        if let previousStep = previousCompletedStep(before: step, in: plan),
+           let completion = previousStep.completion {
+            var checkInParts: [String] = []
+            if let tags = completion.checkInTags, !tags.isEmpty {
+                checkInParts.append("selected check-in: \(tags.joined(separator: ", "))")
+            }
+            if let reflection = normalizedMemoryText(completion.reflection) {
+                checkInParts.append("reflection: \(reflection)")
+            }
+            if !checkInParts.isEmpty {
+                parts.append("Yesterday's response from day \(previousStep.dayNumber): \(checkInParts.joined(separator: "; ")). Adapt today's session so it clearly responds to this without over-explaining.")
+            }
+        }
 
         return parts.joined(separator: " ")
+    }
+
+    private func previousCompletedStep(before step: PracticeJourneyStep, in plan: PracticeJourneyPlan) -> PracticeJourneyStep? {
+        plan.steps
+            .filter { $0.dayNumber < step.dayNumber && $0.isCompleted }
+            .sorted { $0.dayNumber > $1.dayNumber }
+            .first
     }
 
     private func completeJourneyStepIfNeeded(for script: MeditationScript, sessionMemoryID: UUID?) {
@@ -1326,6 +1364,39 @@ extension MeditationManager {
         }
 
         plans[planIndex].steps[stepIndex].completion?.reflection = reflection
+        completedPracticeJourneyPlans = plans
+    }
+
+    private func attachCheckInTagsToJourneyStep(_ tags: [String], sessionID: UUID) {
+        guard var activePlan = activePracticeJourneyPlan else {
+            attachCheckInTagsToCompletedJourney(tags, sessionID: sessionID)
+            return
+        }
+
+        if let stepIndex = activePlan.steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) {
+            activePlan.steps[stepIndex].completion?.checkInTags = tags
+            activePlan.steps[stepIndex].completion?.checkInSavedAt = Date()
+            activePracticeJourneyPlan = activePlan
+            return
+        }
+
+        attachCheckInTagsToCompletedJourney(tags, sessionID: sessionID)
+    }
+
+    private func attachCheckInTagsToCompletedJourney(_ tags: [String], sessionID: UUID) {
+        guard let planIndex = completedPracticeJourneyPlans.firstIndex(where: { plan in
+            plan.steps.contains(where: { $0.completion?.sessionMemoryID == sessionID })
+        }) else {
+            return
+        }
+
+        var plans = completedPracticeJourneyPlans
+        guard let stepIndex = plans[planIndex].steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) else {
+            return
+        }
+
+        plans[planIndex].steps[stepIndex].completion?.checkInTags = tags
+        plans[planIndex].steps[stepIndex].completion?.checkInSavedAt = Date()
         completedPracticeJourneyPlans = plans
     }
 }

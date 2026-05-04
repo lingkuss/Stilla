@@ -188,6 +188,13 @@
 "reflection.share_upload_error" = "Hubo un problema al guardar tu sesión en el servidor. Verifica tu conexión a internet o la configuración de Vercel KV.";
 "reflection.how_are_you_now" = "¿Cómo te sientes ahora?";
 "reflection.short_reflection_hint" = "Una breve reflexión ayuda a Mimir a recordar lo que te importa.";
+"reflection.check_in_title" = "¿QUÉ CAMBIÓ?";
+"reflection.check_in.calmer" = "Más calma";
+"reflection.check_in.restless" = "Aún inquieto";
+"reflection.check_in.sleepy" = "Con sueño";
+"reflection.check_in.clearer" = "Más claridad";
+"reflection.check_in.emotional" = "Emocional";
+"reflection.check_in.no_change" = "Sin cambios";
 "reflection.placeholder" = "Una línea es suficiente...";
 "reflection.voice_input_fallback_error" = "La entrada de voz no está disponible ahora mismo. Escribe en su lugar.";
 "reflection.reminder_prompt" = "¿Debo recordarte mañana que";
@@ -652,6 +659,7 @@
 "journey.overview.status_done" = "Hecho";
 "journey.overview.status_ahead" = "Próximamente";
 "journey.overview.duration_recommended_format" = "%d min recomendados";
+"journey.overview.check_in_format" = "Registro: %@";
 "journey.overview.start_error_title" = "No se pudo iniciar el paso de hoy";
 "journey.overview.start_error_message" = "Vuelve a intentarlo en un momento. Tu camino diario sigue guardado.";
 
