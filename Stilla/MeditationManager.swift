@@ -1148,8 +1148,6 @@ extension MeditationManager {
         }
 
         let journeyPrompt = buildJourneyMeditationPrompt(plan: plan, step: step)
-        pendingKaiMoodSummary = step.focus
-        pendingKaiIntention = "Day \(step.dayNumber): \(step.title)"
 
         var script = try await KaiBrainService.shared.generateScript(
             mood: journeyPrompt,
@@ -1176,6 +1174,8 @@ extension MeditationManager {
         currentScript = script
         durationMinutes = step.suggestedDurationMinutes
         isGuruEnabled = true
+        pendingKaiMoodSummary = step.focus
+        pendingKaiIntention = "Day \(step.dayNumber): \(step.title)"
         start(durationMinutes: step.suggestedDurationMinutes)
     }
 
