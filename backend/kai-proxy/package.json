@@ -17,5 +17,8 @@
     "ioredis": "^5.10.1",
     "node-app-attest": "^0.0.8",
     "openai": "^4.103.0"
+  },
+  "overrides": {
+    "ip-address": "10.2.0"
   }
 }
