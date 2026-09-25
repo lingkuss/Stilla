@@ -1,0 +1,300 @@
+{
+  "checked_at_utc": "2026-09-12T09:10:20.876837+00:00",
+  "previous_run_utc": "2026-09-11T04:45:49.009Z",
+  "date_note": "RSS updated is not verified original publication date; Apple HTML date is recorded as supplied. Reddit dates use displayed absolute search dates or page date indexes when available; relative dates are not normalized. No complete review text is included.",
+  "feeds": [
+    {
+      "app_label": "balance",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "balance",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "entries_returned": 50,
+      "latest_updated": "2026-09-10T15:46:25-07:00",
+      "caveat": null
+    },
+    {
+      "app_label": "braindotfm",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "braindotfm",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "breathwrk",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json",
+      "entries_returned": 49,
+      "latest_updated": "2025-03-11T06:48:39-07:00",
+      "caveat": null
+    },
+    {
+      "app_label": "breathwrk",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json",
+      "entries_returned": 50,
+      "latest_updated": "2026-09-02T12:07:41-07:00",
+      "caveat": null
+    },
+    {
+      "app_label": "calm",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "downdog",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1531036966/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "downdog",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1531036966/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "forest",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=866450515/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "forest",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=866450515/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "headspace",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "insighttimer",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "onesec",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1532875441/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "onesec",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1532875441/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "portal",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1436994560/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "portal",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1436994560/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "vindla",
+      "storefront": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    },
+    {
+      "app_label": "vindla",
+      "storefront": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "caveat": "Empty response does not establish absence of reviews or changes."
+    }
+  ],
+  "selected_reviews": [
+    {
+      "ledger_id": "P1",
+      "review_id": "14375904394",
+      "title": "Great content, but why is Facebook here?",
+      "author": "PacRya",
+      "date": "2026-08-01T12:40:00-07:00",
+      "date_field": "updated",
+      "app_label": "balance-us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "B2",
+      "review_id": "12260375534",
+      "title": "Poorly designed",
+      "author": "Sebswe",
+      "date": "2025-02-01T22:58:06-07:00",
+      "date_field": "updated",
+      "app_label": "breathwrk-se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H2",
+      "review_id": "14391631098",
+      "title": "Ok, but missing some key features",
+      "author": "Tiberius Maximus",
+      "date": "2026-08-05T09:42:25-07:00",
+      "date_field": "updated",
+      "app_label": "breathwrk-us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "B1",
+      "review_id": "14306607764",
+      "title": "Not accessibility friendly",
+      "author": "Discerning User",
+      "date": "2026-07-15T08:32:14-07:00",
+      "date_field": "updated",
+      "app_label": "breathwrk-us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H1",
+      "review_id": "14052924986",
+      "title": "Needs watch support",
+      "author": "VanTiki",
+      "date": "2026-05-11T08:05:46-07:00",
+      "date_field": "updated",
+      "app_label": "breathwrk-us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "F1",
+      "review_id": "14359077239",
+      "title": "Most effective screen time app",
+      "date": "2026-07-28T16:39:57.000Z",
+      "date_field": "date in embedded Review object",
+      "author": "jacie728926!:",
+      "app_label": "one sec US",
+      "url": "https://apps.apple.com/us/app/one-sec-screen-time-focus/id1532875441?platform=ipad&see-all=reviews"
+    },
+    {
+      "ledger_id": "F2",
+      "review_id": "14502077983",
+      "title": "Get this app!",
+      "date": "2026-09-02T14:45:36.000Z",
+      "date_field": "date in embedded Review object",
+      "author": "fiftyftwoman",
+      "app_label": "one sec US",
+      "url": "https://apps.apple.com/us/app/one-sec-screen-time-focus/id1532875441?platform=ipad&see-all=reviews"
+    }
+  ],
+  "forum_sources": [
+    {
+      "ledger_id": "F3",
+      "url": "https://www.reddit.com/r/nosurf/comments/14iyq4o/",
+      "date": "2023-06-25",
+      "date_note": "Page date index; original post read"
+    },
+    {
+      "ledger_id": "F4",
+      "url": "https://www.reddit.com/r/nosurf/comments/1myxwqi/do_apps_like_opal_or_onesec_work_for_you/",
+      "date": "2025-08-24",
+      "date_note": "Absolute search result date; original post read"
+    },
+    {
+      "ledger_id": "P2",
+      "url": "https://www.reddit.com/r/Meditation/comments/crdtma/",
+      "date": "2019-08-16",
+      "date_note": "Page date index; original post read"
+    },
+    {
+      "ledger_id": "P3",
+      "url": "https://www.reddit.com/r/Meditation/comments/crdtma/comment/ex4khlz/",
+      "date": null,
+      "date_note": "Thread 2019-08-16; exact comment date unverified; counterevidence"
+    },
+    {
+      "ledger_id": "W1",
+      "url": "https://www.reddit.com/r/wakingUp/comments/1rahp88/walking_meditation/",
+      "date": null,
+      "date_note": "Search 6 months, opened thread 5 months, direct comment 7 months; no exact date verified. Need and successful discovery read in full thread."
+    },
+    {
+      "ledger_id": "W1b",
+      "url": "https://www.reddit.com/r/wakingUp/comments/1rahp88/comment/o6s7nqe/",
+      "date": null,
+      "date_note": "Direct link resolved but full thread supplies text of successful discovery; same source group as W1"
+    },
+    {
+      "ledger_id": "W2",
+      "url": "https://www.reddit.com/r/podcasts/comments/1jcp61d/",
+      "date": "2025-03-16",
+      "date_note": "Page date index; original post read"
+    },
+    {
+      "ledger_id": "W2b",
+      "url": "https://www.reddit.com/r/podcasts/comments/1jcp61d/comment/mi8l2o5/",
+      "date": null,
+      "date_note": "Thread 2025-03-16; exact comment date unverified. Worth-it statement does not explicitly state a purchase."
+    },
+    {
+      "ledger_id": "W3",
+      "url": "https://www.reddit.com/r/Meditation/comments/dmxgy6/",
+      "date": null,
+      "date_note": "Page shows 7 years; search 6.9 years. Exact publication date not verified."
+    },
+    {
+      "ledger_id": "H3",
+      "url": "https://www.reddit.com/r/AppleWatch/comments/16q7b4h/comment/k1v3zot/",
+      "date": "2023-09-23",
+      "date_note": "Absolute search result date for comment, supported by thread date index; account deleted, do not infer author identity."
+    }
+  ],
+  "sampling_summary": {
+    "rss_endpoints_attempted": 19,
+    "rss_posts_returned": 149,
+    "rss_posts_are_not_independent_signals": true,
+    "included_posts_verified_published_since_last_run": 0,
+    "note": "Screened low ratings and payment/problem words, then read included reviews separately. one sec HTML supplied additional reviews after its RSS response was empty. Several previously populated app feeds returned empty lists; current coverage is incomplete."
+  }
+}

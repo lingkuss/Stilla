@@ -4,6 +4,10 @@ struct SleepStoryCompletionView: View {
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
 
+    private let sleepPreviewURL = URL(
+        string: "https://vindla-three.vercel.app/try-mimir?need=sleep&guide=guardian&campaign=website&ref=share"
+    )!
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -45,6 +49,25 @@ struct SleepStoryCompletionView: View {
                                     .padding(.vertical, 16)
                                     .background(Capsule().fill(.white))
                             }
+                        }
+
+                        ShareLink(
+                            item: sleepPreviewURL,
+                            subject: Text("Vindla"),
+                            message: Text(String(localized: "sleep.post_session.share_preview_message"))
+                        ) {
+                            Label(
+                                String(localized: "sleep.post_session.share_preview"),
+                                systemImage: "square.and.arrow.up"
+                            )
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(
+                                Capsule()
+                                    .strokeBorder(Color.white.opacity(0.22), lineWidth: 1)
+                            )
                         }
 
                         Button(String(localized: "ui.done")) {

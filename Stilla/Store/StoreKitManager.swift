@@ -55,12 +55,14 @@ final class StoreKitManager {
 
     func loadProducts() async {
         do {
+            let destinationProducts = DestinationJourneyStore.shared.catalog?.destinations
+                .filter(\.isAvailable).compactMap(\.productID) ?? []
             self.products = try await Product.products(for: [
                 Self.techniqueLibraryID,
                 Self.customTechniqueEditorID,
                 Self.soundBundleID,
                 Self.vindlaProID
-            ])
+            ] + destinationProducts)
         } catch {
             print("Failed to load products: \(error)")
         }

@@ -33,6 +33,8 @@ class SpeechManager {
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private var speechRecognizer: SFSpeechRecognizer?
+    private var recordingID = UUID()
+    private var hasInputTap = false
 
     private var preferredSpeechLocale: Locale {
         Locale(identifier: AppLocalization.currentLocaleIdentifier)
@@ -71,11 +73,17 @@ class SpeechManager {
     }
     
     func startRecording() throws {
+        stopRecording()
         guard speechAuthorized else {
             throw SpeechError.speechPermissionDenied
         }
         speechRecognizer = SFSpeechRecognizer(locale: preferredSpeechLocale)
         guard let speechRecognizer, speechRecognizer.isAvailable else {
+            throw SpeechError.recognizerUnavailable
+        }
+
+        // Local previews must not silently fall back to server recognition.
+        if KaiBrainService.usesLocalScripts && !speechRecognizer.supportsOnDeviceRecognition {
             throw SpeechError.recognizerUnavailable
         }
 
@@ -94,39 +102,57 @@ class SpeechManager {
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { return }
         recognitionRequest.shouldReportPartialResults = true
+        recognitionRequest.requiresOnDeviceRecognition = speechRecognizer.supportsOnDeviceRecognition
         
         transcription = ""
         isRecording = true
+        let currentID = UUID()
+        recordingID = currentID
         
-        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
-            if let result = result {
-                self.transcription = result.bestTranscription.formattedString
-            }
-            
-            if error != nil || (result?.isFinal ?? false) {
-                self.stopRecording()
+        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+            let text = result?.bestTranscription.formattedString
+            let finished = error != nil || (result?.isFinal ?? false)
+            Task { @MainActor in
+                guard let self, self.recordingID == currentID else { return }
+                if let text { self.transcription = text }
+                if finished { self.stopRecording() }
             }
         }
         
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
-            self.recognitionRequest?.append(buffer)
+        guard recordingFormat.sampleRate > 0, recordingFormat.channelCount > 0 else {
+            stopRecording()
+            throw SpeechError.recognizerUnavailable
         }
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+            recognitionRequest.append(buffer)
+        }
+        hasInputTap = true
         
         engine.prepare()
-        try engine.start()
+        do {
+            try engine.start()
+        } catch {
+            stopRecording()
+            throw error
+        }
     }
     
     func stopRecording() {
+        guard audioEngine != nil || recognitionTask != nil else { return }
+        recordingID = UUID()
         audioEngine?.stop()
-        audioEngine?.inputNode.removeTap(onBus: 0)
+        if hasInputTap { audioEngine?.inputNode.removeTap(onBus: 0) }
+        hasInputTap = false
         recognitionRequest?.endAudio()
+        recognitionTask?.cancel()
+        recognitionTask = nil
+        recognitionRequest = nil
+        audioEngine = nil
         isRecording = false
         
         // Reset audio session to playback mode
-        Task {
-            try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .duckOthers])
-            try? AVAudioSession.sharedInstance().setActive(true)
-        }
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .duckOthers])
+        try? AVAudioSession.sharedInstance().setActive(true)
     }
 }

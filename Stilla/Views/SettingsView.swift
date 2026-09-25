@@ -7,13 +7,27 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("app.language.override") private var appLanguageOverride = AppLocalization.LanguageOption.system.rawValue
     @State private var showLanguageRestartAlert = false
+    @State private var showingZenAvatar = false
+    @AppStorage("zenAvatarEnabled") private var zenAvatarEnabled = true
     @State private var routineManager = RoutineManager.shared
+
+    private let appStoreURL = URL(string: "https://apps.apple.com/app/id6761864704")!
+    private let appStoreReviewURL = URL(string: "https://apps.apple.com/app/id6761864704?action=write-review")!
 
     var body: some View {
         @Bindable var manager = manager
 
         NavigationStack {
             List {
+                Section {
+                    Button {
+                        showingZenAvatar = true
+                    } label: {
+                        Label(String(localized: "zen.avatar.meet"), systemImage: "person.crop.circle")
+                    }
+                    .accessibilityIdentifier("zenAvatar.open")
+                    Toggle(String(localized: "zen.avatar.enable"), isOn: $zenAvatarEnabled)
+                }
                 // Sounds
                 Section {
                     NavigationLink {
@@ -133,7 +147,7 @@ struct SettingsView: View {
                     Picker(selection: $manager.breathingCueMode) {
                         ForEach(MeditationManager.BreathingCueMode.allCases, id: \.self) { mode in
                             let needsIAP = (mode == .sound || mode == .both)
-                            let locked = needsIAP && !StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
+                            let locked = needsIAP && !manager.canPlayBreathingSounds
                             if locked {
                                 Label(mode.rawValue, systemImage: "lock.fill").tag(mode)
                             } else {
@@ -146,7 +160,7 @@ struct SettingsView: View {
                 } header: {
                     Label(String(localized: "settings.feedback"), systemImage: "hand.tap.fill")
                 } footer: {
-                    if !StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID) {
+                    if !manager.canPlayBreathingSounds {
                         VStack(alignment: .leading, spacing: 12) {
                             Text(String(localized: "settings.sound_cues_unlock_required"))
                             
@@ -304,22 +318,36 @@ struct SettingsView: View {
                     Label(String(localized: "settings.privacy_data"), systemImage: "hand.raised.fill")
                 }
 
-                // Support / Information
                 Section {
+                    ShareLink(
+                        item: appStoreURL,
+                        subject: Text("Vindla"),
+                        message: Text(String(localized: "settings.share_vindla_message"))
+                    ) {
+                        Label(String(localized: "settings.share_vindla"), systemImage: "square.and.arrow.up")
+                    }
+
+                    Link(destination: appStoreReviewURL) {
+                        Label(String(localized: "settings.rate_vindla"), systemImage: "star.fill")
+                    }
+
                     Button {
                         manager.hasSeenOnboarding = false
                         dismiss()
                     } label: {
                         Label(String(localized: "settings.show_intro_guide"), systemImage: "sparkles")
                     }
-                }
 
-                Section {
-                    Link("Privacy Policy", destination: URL(string: "https://vindla-three.vercel.app/privacy")!)
-                    Link("Terms of Use", destination: URL(string: "https://vindla-three.vercel.app/terms")!)
+                    Link(String(localized: "settings.privacy_policy"), destination: URL(string: "https://vindla-three.vercel.app/privacy")!)
+                    Link(String(localized: "settings.terms_of_use"), destination: URL(string: "https://vindla-three.vercel.app/terms")!)
+                } header: {
+                    Label(String(localized: "settings.share_and_support"), systemImage: "heart.fill")
                 }
             }
             .navigationTitle(String(localized: "nav.settings"))
+            .sheet(isPresented: $showingZenAvatar) {
+                ZenSessionView()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -1092,7 +1120,13 @@ struct SoundSelectionView: View {
         return Button {
             handleToneTap(sound, isLocked: isLocked)
         } label: {
-            cardContent(name: sound.rawValue, description: nil, isSelected: isSelected, isLocked: isLocked)
+            cardContent(
+                name: localizedSoundName(for: sound.rawValue),
+                assetName: sound.rawValue,
+                description: nil,
+                isSelected: isSelected,
+                isLocked: isLocked
+            )
         }
         .buttonStyle(.plain)
     }
@@ -1106,15 +1140,27 @@ struct SoundSelectionView: View {
         return Button {
             handleAmbientTap(ambient, isLocked: isLocked)
         } label: {
-            cardContent(name: ambient.rawValue, description: desc, isSelected: isSelected, isLocked: isLocked)
+            cardContent(
+                name: localizedSoundName(for: ambient.rawValue),
+                assetName: ambient.rawValue,
+                description: desc,
+                isSelected: isSelected,
+                isLocked: isLocked
+            )
         }
         .buttonStyle(.plain)
     }
 
-    private func cardContent(name: String, description: String?, isSelected: Bool, isLocked: Bool) -> some View {
+    private func cardContent(
+        name: String,
+        assetName: String,
+        description: String?,
+        isSelected: Bool,
+        isLocked: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .topTrailing) {
-                if name == "None" {
+                if assetName == SoundEngine.AmbientSound.none.rawValue {
                     Rectangle()
                         .fill(Color.white.opacity(0.05))
                         .aspectRatio(1, contentMode: .fit)
@@ -1124,7 +1170,7 @@ struct SoundSelectionView: View {
                                 .foregroundStyle(.secondary)
                         }
                 } else {
-                    Image(name)
+                    Image(assetName)
                         .resizable()
                         .aspectRatio(1, contentMode: .fill)
                 }
@@ -1167,6 +1213,10 @@ struct SoundSelectionView: View {
             .padding(.horizontal, 4)
             .padding(.top, 8)
         }
+    }
+
+    private func localizedSoundName(for key: String) -> String {
+        Bundle.main.localizedString(forKey: key, value: key, table: nil)
     }
     
     // MARK: - Event Handlers

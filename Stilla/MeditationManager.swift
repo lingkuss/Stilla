@@ -59,6 +59,76 @@ final class MeditationManager {
         durationMinutes == 0
     }
 
+    // The journey owns a per-session audio policy; persisted user settings stay untouched.
+    private(set) var activeDestinationSession: DestinationSession?
+    private(set) var destinationStepAwarded = false
+    private(set) var destinationReachedEnd = false
+
+    private(set) var activeMountainSession: MountainSessionContext?
+    private(set) var mountainReachedEnd = false
+    private var hasJourneyAudioPolicy: Bool { activeDestinationSession != nil || activeMountainSession != nil }
+
+    #if DEBUG
+    @discardableResult
+    func startMountainSession(address: MountainPlaceAddress, minutes: Int,
+                              mode: MountainSessionContext.Mode, intention: String,
+                              ambience: SoundEngine.AmbientSound,personality: KaiPersonality = .zenMinimalist) -> Bool {
+        guard state == .idle, mode.durations.contains(minutes),
+              !MountainJourneyStore.shared.storageUnavailable,
+              MountainJourneyStore.shared.progress.current == address else { return false }
+        soundEngine.stopAll()
+        GuruManager.shared.stop()
+        let seconds = ProcessInfo.processInfo.arguments.contains("--mountain-test-short-session") ? 8 : minutes * 60
+        let session = MountainSessionContext(id: UUID(), address: address, mode: mode,
+            durationSeconds: seconds, startedAtUptime: ProcessInfo.processInfo.systemUptime)
+        currentScript = mode == .guided ? LocalGenerationFixtures.script(input: intention, minutes: minutes,
+            personality: personality, kind: .meditation, stillnessRatio: 0.8) : nil
+        pendingKaiMoodSummary = nil
+        pendingKaiIntention = nil
+        start(durationMinutes: minutes, mountainSession: session)
+        if ambience != .none { soundEngine.startAmbientSound(ambience) }
+        return true
+    }
+    #endif
+
+    func refreshMountainTimer() {
+        guard state == .meditating, let session = activeMountainSession else { return }
+        elapsedSeconds = session.elapsed(at: ProcessInfo.processInfo.systemUptime)
+        remainingSeconds = max(0, session.durationSeconds - elapsedSeconds)
+        if remainingSeconds == 0 { finish(reachedEnd: true) }
+    }
+
+    @discardableResult
+    func startDestinationSession(_ destination: JourneyDestination, minutes: Int,
+                                 mode: DestinationMeditationMode) -> Bool {
+        guard state == .idle, DestinationMeditationContent.durations.contains(minutes),
+              DestinationJourneyStore.shared.canStart(destination) else { return false }
+        soundEngine.stopAll()
+        GuruManager.shared.stop()
+        var seconds = minutes * 60
+        #if DEBUG
+        // Only explicit UI-test launches shorten the clock; never compiled into Release.
+        if ProcessInfo.processInfo.arguments.contains("--journey-test-short-session") { seconds = 8 }
+        #endif
+        let session = DestinationSession(id: UUID(), destinationID: destination.id,
+            mode: mode, durationSeconds: seconds, startedAtUptime: ProcessInfo.processInfo.systemUptime)
+        destinationStepAwarded = false
+        destinationReachedEnd = false
+        currentScript = mode == .guided ? DestinationMeditationContent.script(minutes: minutes, destination: destination) : nil
+        pendingKaiMoodSummary = nil
+        pendingKaiIntention = nil
+        start(durationMinutes: minutes, destinationSession: session)
+        return true
+    }
+
+    /// A silent app can be suspended while locked. Reconcile from a monotonic clock on resume.
+    func refreshDestinationTimer() {
+        guard state == .meditating, let session = activeDestinationSession else { return }
+        elapsedSeconds = session.elapsed(at: ProcessInfo.processInfo.systemUptime)
+        remainingSeconds = max(0, session.durationSeconds - elapsedSeconds)
+        if remainingSeconds == 0 { finish(reachedEnd: true) }
+    }
+
     // MARK: - Settings (Stored & Persisted)
 
     var durationMinutes: Int {
@@ -76,7 +146,7 @@ final class MeditationManager {
     var ambientSound: SoundEngine.AmbientSound {
         didSet {
             UserDefaults.standard.set(ambientSound.rawValue, forKey: "ambientSound")
-            if state == .meditating {
+            if state == .meditating, !hasJourneyAudioPolicy {
                 soundEngine.startAmbientSound(ambientSound)
             }
         }
@@ -613,8 +683,14 @@ final class MeditationManager {
         start(durationMinutes: durationMinutes)
     }
 
-    func start(durationMinutes minutes: Int, isShared: Bool = false) {
+    func start(durationMinutes minutes: Int, isShared: Bool = false,
+               destinationSession: DestinationSession? = nil, mountainSession: MountainSessionContext? = nil) {
         guard state != .meditating else { return }
+        activeDestinationSession = destinationSession
+        activeMountainSession = mountainSession
+        mountainReachedEnd = false
+        destinationStepAwarded = false
+        destinationReachedEnd = false
         let isSleepStorySession = currentScript?.isSleepStory == true
         self.isSharedSession = isShared
         self.durationMinutes = minutes
@@ -628,6 +704,14 @@ final class MeditationManager {
             remainingSeconds = totalSeconds
             elapsedSeconds = 0
         }
+        if let journey = activeDestinationSession {
+            totalSeconds = journey.durationSeconds
+            remainingSeconds = totalSeconds
+        }
+        if let session = activeMountainSession {
+            totalSeconds = session.durationSeconds
+            remainingSeconds = totalSeconds
+        }
         state = .meditating
         sessionStartDate = Date()
         lastSessionStartDate = sessionStartDate
@@ -635,13 +719,13 @@ final class MeditationManager {
         activeSessionIntention = normalizedMemoryText(pendingKaiIntention)
         pendingKaiMoodSummary = nil
         pendingKaiIntention = nil
-        if !isSleepStorySession {
+        if !isSleepStorySession, !hasJourneyAudioPolicy {
             soundEngine.playSound(startSound)
         }
-        if ambientSound != .none {
+        if ambientSound != .none, !hasJourneyAudioPolicy {
             soundEngine.startAmbientSound(ambientSound)
         }
-        if hapticEnabled {
+        if hapticEnabled, !hasJourneyAudioPolicy {
             sessionHapticGenerator.prepare()
             sessionHapticGenerator.impactOccurred()
         }
@@ -649,7 +733,7 @@ final class MeditationManager {
         if let script = currentScript {
             // Start Live Activity before speech begins so updates find an active activity
             startLiveActivity(initialPhrase: script.steps.first?.text ?? String(localized: "session.live_activity.focusing_inward"))
-            if isGuruEnabled {
+            if isGuruEnabled || activeDestinationSession?.mode == .guided || activeMountainSession?.mode == .guided {
                 GuruManager.shared.play(script: script)
             }
         } else {
@@ -827,11 +911,20 @@ final class MeditationManager {
     }
 
     func stop() {
+        refreshMountainTimer()
+        refreshDestinationTimer()
         guard state == .meditating else { return }
         finish()
     }
 
     func reset() {
+        timer?.invalidate()
+        timer = nil
+        activeDestinationSession = nil
+        activeMountainSession = nil
+        mountainReachedEnd = false
+        destinationStepAwarded = false
+        destinationReachedEnd = false
         state = .idle
         remainingSeconds = 0
         elapsedSeconds = 0
@@ -861,8 +954,19 @@ final class MeditationManager {
         return 1.0 - (Double(remainingSeconds) / Double(totalSeconds))
     }
 
+    var canPlayBreathingSounds: Bool {
+        #if DEBUG
+        // Local audio must be testable alongside the bundled meditation scripts.
+        // This does not create purchases or change release entitlements.
+        true
+        #else
+        StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
+        #endif
+    }
+
     func playBreathingCue(phase: String, duration: Double) {
-        let hasSoundAccess = StoreKitManager.shared.isPurchased(StoreKitManager.techniqueLibraryID)
+        guard activeDestinationSession == nil else { return }
+        let hasSoundAccess = canPlayBreathingSounds
         let isBreathTransition = (phase == "Inhale" || phase == "Exhale")
 
         switch breathingCueMode {
@@ -905,17 +1009,35 @@ final class MeditationManager {
             timer?.invalidate()
             return
         }
+        if activeMountainSession != nil {
+            refreshMountainTimer()
+            return
+        }
+        if activeDestinationSession != nil {
+            refreshDestinationTimer()
+            return
+        }
         if isOpenEnded {
             elapsedSeconds += 1
         } else {
             remainingSeconds -= 1
             if remainingSeconds <= 0 {
-                finish()
+                finish(reachedEnd: true)
             }
         }
     }
 
-    private func finish() {
+    private func finish(reachedEnd: Bool = false) {
+        guard state == .meditating else { return }
+        if let session = activeMountainSession {
+            mountainReachedEnd = reachedEnd
+            MountainJourneyStore.shared.complete(session, at: ProcessInfo.processInfo.systemUptime, reachedEnd: reachedEnd)
+        }
+        if let session = activeDestinationSession {
+            destinationReachedEnd = reachedEnd
+            destinationStepAwarded = DestinationJourneyStore.shared.complete(session,
+                elapsedSeconds: session.elapsed(at: ProcessInfo.processInfo.systemUptime), reachedEnd: reachedEnd)
+        }
         let wasSleepStorySession = currentScript?.isSleepStory == true
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
         var completedSessionMemoryID: UUID?
@@ -944,6 +1066,7 @@ final class MeditationManager {
         }
         if sessionSeconds > 0 {
             bestSessionSecondsStored = max(bestSessionSecondsStored, sessionSeconds)
+            ReviewPromptPolicy.recordCompletedSession(durationSeconds: sessionSeconds)
         }
         logMeditationSession(seconds: sessionSeconds)
         timer?.invalidate()
@@ -951,19 +1074,21 @@ final class MeditationManager {
         state = .complete
         if !isOpenEnded { remainingSeconds = 0 }
         soundEngine.stopAmbientSoundWithFadeOut()
-        if !wasSleepStorySession {
+        if !wasSleepStorySession, !hasJourneyAudioPolicy {
             soundEngine.playSound(endSound)
         }
         GuruManager.shared.stop()
         endLiveActivity()
-        if hapticEnabled {
+        if hapticEnabled, !hasJourneyAudioPolicy {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
         
         // Finalize HealthKit session record
         if let startDate = sessionStartDate, sessionSeconds > 0 {
-            let endDate = Date()
-            HealthManager.shared.saveMindfulMinute(startDate: startDate, endDate: endDate)
+            let endDate = !hasJourneyAudioPolicy ? Date()
+                : startDate.addingTimeInterval(TimeInterval(sessionSeconds))
+            HealthManager.shared.saveMindfulMinute(startDate: startDate, endDate: endDate,
+                requestPermission: !hasJourneyAudioPolicy)
         }
         activeSessionMoodSummary = nil
         activeSessionIntention = nil
@@ -1554,7 +1679,7 @@ final class RoutineManager {
         if (routine.sessionType == .guidedByMood ||
             routine.sessionType == .guidedByIntention ||
             routine.sessionType == .savedScript),
-           !StoreKitManager.shared.isVindlaProSubscribed {
+           !KaiBrainService.usesLocalScripts && !StoreKitManager.shared.isVindlaProSubscribed {
             return
         }
 
@@ -1593,7 +1718,7 @@ final class RoutineManager {
 
     private func runGeneratedRoutine(_ routine: MeditationRoutine, manager: MeditationManager) async {
         await StoreKitManager.shared.updateCustomerProductStatus()
-        guard StoreKitManager.shared.isVindlaProSubscribed else {
+        guard KaiBrainService.usesLocalScripts || StoreKitManager.shared.isVindlaProSubscribed else {
             return
         }
 
@@ -1824,12 +1949,16 @@ class HealthManager {
         }
     }
     
-    func saveMindfulMinute(startDate: Date, endDate: Date) {
-        guard HKHealthStore.isHealthDataAvailable() else { return }
-        
+    func saveMindfulMinute(startDate: Date, endDate: Date, requestPermission: Bool = true) {
+        guard HKHealthStore.isHealthDataAvailable(),
+              let mindfulType = HKObjectType.categoryType(forIdentifier: .mindfulSession) else { return }
+        // Journey completion stays quiet and uses Health only when access was already granted.
+        if !requestPermission, healthStore.authorizationStatus(for: mindfulType) != .sharingAuthorized { return }
         Task {
-            let authorized = await requestAuthorization()
-            guard authorized else { return }
+            if requestPermission {
+                let authorized = await requestAuthorization()
+                guard authorized else { return }
+            }
             
             guard let mindfulType = HKObjectType.categoryType(forIdentifier: .mindfulSession) else { return }
             

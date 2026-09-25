@@ -1,0 +1,468 @@
+{
+  "checked_at_utc": "2026-09-15T06:04:46.524736+00:00",
+  "rss_fetched_at_utc": "2026-09-15T05:55:24.079296+00:00",
+  "previous_run_start_utc": "2026-09-14T04:46:02.492Z",
+  "included_signals_verified_published_after_previous_run": 0,
+  "included_signal_count": 13,
+  "conservative_source_group_count": 6,
+  "group_rule": "Same App Store app across regions/views counts as one; same Reddit thread as one; follow-up from same person stays one signal. Rows overlap.",
+  "feed_count": 28,
+  "returned_review_count": 56,
+  "nonempty_feed_count": 3,
+  "empty_feed_count": 25,
+  "retrieval_limitations": [
+    "Empty feeds do not establish absence of reviews.",
+    "Complementary Apple HTML batch encountered HTTP 429; cached Breathe+ HTML and separately opened web primary-source views used.",
+    "Web open of Brain.fm RSS failed URL safety parsing; direct HTTP fetch had succeeded and selected full review bodies were read.",
+    "No included signal has verified original publication after the prior run; old evidence is labelled."
+  ],
+  "feeds": [
+    {
+      "app": "vindla",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "884162528d66eeafe25136a694c1e4d4f634509474c14937bd83aea9661047d8",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "vindla",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "94cfd936cf6abebca6785ec9e4cd71f9044568de112536faaf87335334683daf",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "headspace",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "561545f50b036e60bfc7be6b3c43f55a3622fdae2379cc8d03f0a208f466faf6",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "headspace",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "d229fb52ee8d5eddd9ca2910d53b50ed06bef4fafd56eb830eae6aa875fd966d",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "calm",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "2c2405dc97bc1c19af25e17ac7213e123df6ef3f346c04acb470bc8dec6f6e51",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "calm",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "acb8f5c92fa1bea86d4b7216ee788b70192bb41d0fc6bc7b3f681cf2afabc7df",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "mindfully",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "03db182c17a9cca02fdd86110d389037ed62e28ca2dc77c5b66d9f3831b7001c",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "mindfully",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "count": 1,
+      "sha256": "020fce303c05aef71a5cd96f2ae9374e71e0b907382699be3df8e6c4d5aba60b",
+      "latest_returned_updated": "2026-04-01T15:26:35-07:00"
+    },
+    {
+      "app": "insighttimer",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "8df3118cc0bdc73ca9126e4b338ab6845703d438ba9acee998098bb030b9a80d",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "insighttimer",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "12eb873a5687d4e79e76940aeea1d31d128d2f2951989a94db9cdf1cee8d8f12",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "mindfulness",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "532874662ff37b905339ad8c0a8e44f455a1a9552098f40f20c98d677f26273c",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "mindfulness",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "845366b7a394ba3dcd6e793ac59ec4083cbacfe222b2820aca23ee0a921ad31a",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "breathingapp",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1285982210/sortby=mostrecent/json",
+      "count": 5,
+      "sha256": "ae048da13dc04f156f6fb84473f0abe205760b8c4438826c4755cdb0efff44b1",
+      "latest_returned_updated": "2022-02-21T09:09:03-07:00"
+    },
+    {
+      "app": "breathingapp",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1285982210/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "f05c3bac23c8b5c29877da57011543ad3d6174cf9fdcd73525fea0500c52fc4d",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "brainfm",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "240e91be2af1877d792e04d9d35492fc9a27c3c14e8d68efe640c3cb858be8a2",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "brainfm",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json",
+      "count": 50,
+      "sha256": "868f07a49e592a20d6d5c1140fd6bdb7a0d187cc1183837ef0dc0d128e63dee8",
+      "latest_returned_updated": "2026-09-12T17:55:02-07:00"
+    },
+    {
+      "app": "bettersleep",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=314498713/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "3ad27531305a18fd35030a6920c21b2e23f9cc3194a763b8d11c588502ae8f87",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "bettersleep",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=314498713/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "27b622f2cf88a9a842dd44c751226d8382ce6f3fe89e92f724123b54ade20b3b",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "portal",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1436994560/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "1519b3440fdc7f02574a87916b98ea422dbda93b0bf93690a538479a5c028214",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "portal",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1436994560/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "945dddb18e8c8aa589d4bd5a1c01ffc0a22b3d46e8824edc55de041e9e9745a5",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "breethe",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=920161006/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "31e0f2b71d4c434f844375c73a3e815d59180fd3a7a558d0bf5341d3615c3eb0",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "breethe",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=920161006/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "7435d9687a9af005558a7f157bc37b46769b7afd09cbb3c92dbd5971912db626",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "happier",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=992210239/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "45844b1496b97513af5a2341ae05c1fae3ba7fa95c9a29ad42329af2a4e81b82",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "happier",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=992210239/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "00d2aadcbe87e57d5e4c9146aaa2fc6cd80b74b792a085c9a48c6705fa9d8d25",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "balance",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "58bc870dd3b9564f60a32cdeeb2804d246a1bbfd3b72f766159f4e792663f14c",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "balance",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "81ea72d2e1f19e8d1b90bff66590308804e020be269b3ea8ad8497ffee4009a7",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "breathwrk",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "32ca8b2b633b43657af37d77c37ffa46591eaa1fe6aae330b80b92de97970e2a",
+      "latest_returned_updated": null
+    },
+    {
+      "app": "breathwrk",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "7dd4c546773918b9dbdb0c54e09998cf7e8748e28432a33e77740e5da65bbb07",
+      "latest_returned_updated": null
+    }
+  ],
+  "selected_signals": [
+    {
+      "signal_id": "R1",
+      "urls": [
+        "https://apps.apple.com/us/app/breathing-exercises-breathe/id1106998959?see-all=reviews"
+      ],
+      "source_description": "[Breathe+ US](https://apps.apple.com/us/app/breathing-exercises-breathe/id1106998959?see-all=reviews), **MariamTY**, 2023-06-30, ID **10088605500**",
+      "paraphrase_sv": "Återställer andningstider manuellt; söker alternativ efter upprepade önskemål om sparade mönster.",
+      "payment_classification_sv": "N. Konkret alternativsökande, men inget genomfört byte/köp. Gammalt belägg.",
+      "verified_original_publication_date": null,
+      "review_id": "10088605500",
+      "date": "2023-06-30T13:05:11.000Z",
+      "date_type": "Apple Review.date/HTML datetime; may be an updated review",
+      "author": "MariamTY",
+      "title": "Very good but lacks improvement",
+      "full_review_read": true
+    },
+    {
+      "signal_id": "R2",
+      "urls": [
+        "https://apps.apple.com/us/app/open-breathwork-meditation/id1482725254?see-all=reviews"
+      ],
+      "source_description": "[Open US](https://apps.apple.com/us/app/open-breathwork-meditation/id1482725254?see-all=reviews), **Hociemocie**, 2025-07-20, rubrik **This**",
+      "paraphrase_sv": "Favoritmarkerar eftersom namn försvårar återfinnande; support hanterade årsköpet.",
+      "payment_classification_sv": "**E-B.** Appnivåköp med flera motiv; inte köp av en favoritfunktion. Positiv supportupplevelse begränsar generalisering.",
+      "verified_original_publication_date": null,
+      "date": "2025-07-20",
+      "date_type": "Apple visible review date; original publication uncertain",
+      "author": "Hociemocie",
+      "full_selected_user_text_read": true
+    },
+    {
+      "signal_id": "R3",
+      "urls": [
+        "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json"
+      ],
+      "source_description": "[Brain.fm US RSS](https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json), **Yaz700**, `updated` 2026-07-08, ID **14279838175**",
+      "paraphrase_sv": "Saknar borttaget träningsläge; Spotify ersätter inte användningsfallet.",
+      "payment_classification_sv": "**P.** Långvarig abonnent enligt texten, men inget uttryckligt genomfört köp. Angränsande träningsmusik, inte bevis för Vindlas återspelning.",
+      "verified_original_publication_date": null,
+      "review_id": "14279838175",
+      "date": "2026-07-08T16:26:36-07:00",
+      "date_type": "Apple RSS updated; not verified original publication",
+      "author": "Yaz700",
+      "title": "Bring back workout mode!!! Please!!!",
+      "rating": "3",
+      "review_body_sha256": "73039153f62503ec133a9e3d542e557ec6cdd16f537f03767a98862d6d95013e",
+      "full_review_read": true
+    },
+    {
+      "signal_id": "V1",
+      "urls": [
+        "https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/anyone_else_dislike_the_new_breathing_exercise/"
+      ],
+      "source_description": "[Finch-trådstart](https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/anyone_else_dislike_the_new_breathing_exercise/), **Awkward_Part_965**, exakt datum okänt",
+      "paraphrase_sv": "Daglig andningsanvändare störs av den nya figuren och föredrog cirklarna.",
+      "payment_classification_sv": "**N.** Inget köp uppges. Endast upplevelsen av animationen används.",
+      "verified_original_publication_date": null,
+      "date": null,
+      "date_type": "Only relative age visible; not converted",
+      "author": "Awkward_Part_965",
+      "full_selected_user_text_read": true
+    },
+    {
+      "signal_id": "V2",
+      "urls": [
+        "https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/comment/ow5ual0/",
+        "https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/comment/ow6nnhb/"
+      ],
+      "source_description": "[Finch, sökande](https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/comment/ow5ual0/) och [uppföljning](https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/comment/ow6nnhb/), **OOTF37**, exakt datum okänt",
+      "paraphrase_sv": "Sökte annan boxandningsapp; planerar återvända till redan använda Unstuck.",
+      "payment_classification_sv": "N. Två kommentarer från samma person = en utsaga. Planerat byte, inget verifierat genomfört byte/köp.",
+      "verified_original_publication_date": null,
+      "date": null,
+      "date_type": "Only relative ages visible; two comments same author",
+      "author": "OOTF37",
+      "full_selected_user_text_read": true
+    },
+    {
+      "signal_id": "V3",
+      "urls": [
+        "https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/comment/ovnzct8/"
+      ],
+      "source_description": "[Finch-kommentar](https://www.reddit.com/r/FinchUnofficial/comments/1unrppp/comment/ovnzct8/), **TheBearThatIsFred**, exakt datum okänt",
+      "paraphrase_sv": "Föredrar den nya figuren men vill att utseendet ska vara valbart.",
+      "payment_classification_sv": "**N.** Motsäger ett generellt borttagande av figurer/animationer. Samma källgrupp som V1/V2.",
+      "verified_original_publication_date": null,
+      "date": null,
+      "date_type": "Only relative age visible; not converted",
+      "author": "TheBearThatIsFred",
+      "full_selected_user_text_read": true
+    },
+    {
+      "signal_id": "V4",
+      "urls": [
+        "https://apps.apple.com/us/app/the-breathing-app-calm-daily/id1285982210?see-all=reviews"
+      ],
+      "source_description": "[The Breathing App US](https://apps.apple.com/us/app/the-breathing-app-calm-daily/id1285982210?see-all=reviews), **Moonatic**, 2020-12-03, rubrik **Amazing!**",
+      "paraphrase_sv": "Tål inte den rörliga bollen; använder ljudalternativet.",
+      "payment_classification_sv": "**N.** Uttryckligen gratis användning. Mycket gammalt; inga slutsatser om diagnoser eller behandling.",
+      "verified_original_publication_date": null,
+      "date": "2020-12-03",
+      "date_type": "Apple visible review date; original publication uncertain",
+      "author": "Moonatic",
+      "full_selected_user_text_read": true
+    },
+    {
+      "signal_id": "V5",
+      "urls": [
+        "https://apps.apple.com/us/app/breathing-exercises-breathe/id1106998959?see-all=reviews"
+      ],
+      "source_description": "[Breathe+ US](https://apps.apple.com/us/app/breathing-exercises-breathe/id1106998959?see-all=reviews), **Currycat**, 2022-11-07, ID **9263013479**",
+      "paraphrase_sv": "Köpte teman, ljud och reklamfrihet; tidigare åtkomstproblem uppges lösta.",
+      "payment_classification_sv": "**E-B.** Paketerat köp, inte isolerad betalvilja för mindre rörelse. Kvarvarande önskemål gäller tydligare ikoner. Får inte återges som pågående åtkomstfel.",
+      "verified_original_publication_date": null,
+      "review_id": "9263013479",
+      "date": "2022-11-07T00:28:46.000Z",
+      "date_type": "Apple Review.date/HTML datetime; may be an updated review",
+      "author": "Currycat",
+      "title": "Product appears buggy",
+      "full_review_read": true
+    },
+    {
+      "signal_id": "H1",
+      "urls": [
+        "https://www.reddit.com/r/Headspace/comments/1qfl08s/app_issues/"
+      ],
+      "source_description": "[Headspace, App Issues](https://www.reddit.com/r/Headspace/comments/1qfl08s/app_issues/), **2026-01-17** enligt sökresultatets absoluta datum",
+      "paraphrase_sv": "Några sekunders start registreras som fulla pass; uppger avslutad förnyelse.",
+      "payment_classification_sv": "**P.** Ingen uttrycklig transaktion eller summa. Även missnöje med botsupport; en enskild köporsak kan inte isoleras.",
+      "verified_original_publication_date": null,
+      "date": "2026-01-17",
+      "date_type": "Absolute date in web search; primary page text separately opened",
+      "author": null,
+      "full_selected_user_text_read": true
+    },
+    {
+      "signal_id": "B1",
+      "urls": [
+        "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json"
+      ],
+      "source_description": "[Brain.fm US RSS](https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json), **Belidas**, `updated` 2026-06-04, ID **14142397107**",
+      "paraphrase_sv": "Köpte dollarmånad; uppger oväntad årsförnyelse och obesvarad support.",
+      "payment_classification_sv": "**E-B** endast för månaden, **P** för årsavgiften.",
+      "verified_original_publication_date": null,
+      "review_id": "14142397107",
+      "date": "2026-06-04T03:26:03-07:00",
+      "date_type": "Apple RSS updated; not verified original publication",
+      "author": "Belidas",
+      "title": "Forced to pay a year",
+      "rating": "2",
+      "review_body_sha256": "d0e611d5882abdd7bb4b196f2b34c4c041fce40d66f646286365277721d6d4b3",
+      "full_review_read": true
+    },
+    {
+      "signal_id": "B2",
+      "urls": [
+        "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json"
+      ],
+      "source_description": "[Brain.fm US RSS](https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json), **Not so tired anymore**, `updated` 2026-09-11, ID **14539074232**",
+      "paraphrase_sv": "Uppger ny debitering på 99,99 dollar efter tidigare återbetalning.",
+      "payment_classification_sv": "**P.** Oavsiktlig provförnyelse, inte positiv betalvilja. Orsak/villkor okända.",
+      "verified_original_publication_date": null,
+      "review_id": "14539074232",
+      "date": "2026-09-11T18:06:38-07:00",
+      "date_type": "Apple RSS updated; not verified original publication",
+      "author": "Not so tired anymore",
+      "title": "Fantastic",
+      "rating": "1",
+      "review_body_sha256": "82d1ef7b72c233764d244e5dc36c6e93362875a036c37f026c6cb2b625cedc5a",
+      "full_review_read": true
+    },
+    {
+      "signal_id": "F1",
+      "urls": [
+        "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json"
+      ],
+      "source_description": "[Brain.fm US RSS](https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json), **Abelhawk**, `updated` 2026-08-28, ID **14483898318**",
+      "paraphrase_sv": "Hör ingen särskild skillnad mot Spotify/YouTube-ljud.",
+      "payment_classification_sv": "**N.** Varken genomfört köp eller konkret byteshandling uppges.",
+      "verified_original_publication_date": null,
+      "review_id": "14483898318",
+      "date": "2026-08-28T16:45:47-07:00",
+      "date_type": "Apple RSS updated; not verified original publication",
+      "author": "Abelhawk",
+      "title": "It’s just music.",
+      "rating": "3",
+      "review_body_sha256": "e7ffd9c44e39ef871c1e68c3202e77728ba71403708c4a12309a9755b7037e17",
+      "full_review_read": true
+    },
+    {
+      "signal_id": "F2",
+      "urls": [
+        "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json"
+      ],
+      "source_description": "[Brain.fm US RSS](https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json), **ilmateo**, `updated` 2026-07-21, ID **14332303325**",
+      "paraphrase_sv": "Skulle betala ett mindre belopp, avvisar 100-dollarpriset.",
+      "payment_classification_sv": "**E-A.** Vagt belopp; varken genomfört köp eller Vindla-pris.",
+      "verified_original_publication_date": null,
+      "review_id": "14332303325",
+      "date": "2026-07-21T17:12:29-07:00",
+      "date_type": "Apple RSS updated; not verified original publication",
+      "author": "ilmateo",
+      "title": "Crazy expensive",
+      "rating": "2",
+      "review_body_sha256": "979f1989ea23b692a49f6e67f361a2e0cb442836eba8bfe8294bf813d469dca0",
+      "full_review_read": true
+    }
+  ],
+  "product_review": {
+    "mode": "static working-copy review",
+    "runtime_tests_performed": false,
+    "product_code_modified": false,
+    "people_contacted": false,
+    "experiments_performed": false,
+    "notable_findings": [
+      "Saved scripts contain content/personality metadata but no per-script system voice, ambience, volumes or breathing technique.",
+      "Playback uses global voice and sound settings; test expectations before changing.",
+      "Breathing haptic/audio options exist; phase callbacks run from the breathing-circle animation.",
+      "Local history uses timer ticks; HealthKit sample uses start/end dates. No equivalent overlogging bug reproduced.",
+      "Saved playback and quick Mimir start require Pro."
+    ]
+  }
+}

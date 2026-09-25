@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-Minute Breathing Exercise — Free Guided Reset | Vindla</title>
+    <meta name="description" content="Take a free one-minute guided breathing reset: inhale for 4 seconds, hold for 2, and exhale for 6. No account, audio, or app required.">
+    <link rel="canonical" href="https://vindla-three.vercel.app/breathe">
+    <meta name="apple-itunes-app" content="app-id=6761864704">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vindla-three.vercel.app/breathe">
+    <meta property="og:title" content="Take one calmer minute — Vindla">
+    <meta property="og:description" content="A free guided 4–2–6 breathing exercise you can do right now.">
+    <meta property="og:image" content="https://vindla-three.vercel.app/og-breathe.png">
+    <meta property="og:image:width" content="1731">
+    <meta property="og:image:height" content="909">
+    <meta property="og:image:alt" content="Take one calmer minute — a free 4–2–6 breathing reset from Vindla">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Take one calmer minute — Vindla">
+    <meta name="twitter:description" content="A free guided 4–2–6 breathing exercise you can do right now.">
+    <meta name="twitter:image" content="https://vindla-three.vercel.app/og-breathe.png">
+    <meta name="twitter:image:alt" content="Take one calmer minute — a free 4–2–6 breathing reset from Vindla">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "One-minute 4–2–6 breathing exercise",
+      "description": "A guided one-minute breathing reset using a four-second inhale, two-second hold, and six-second exhale.",
+      "totalTime": "PT1M",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Inhale",
+          "text": "Breathe in gently through your nose for four seconds."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Hold",
+          "text": "Pause softly for two seconds without straining."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Exhale",
+          "text": "Breathe out slowly for six seconds, then repeat the cycle five times."
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="breathing-page">
+    <div class="page-shell breathing-shell">
+        <header class="site-header breathing-header">
+            <a class="brand" href="/" aria-label="Vindla Home">Vindla</a>
+            <nav class="top-nav" aria-label="Main Navigation">
+                <a href="/">About Vindla</a>
+                <a class="nav-button" href="/download?source=breathing_nav" aria-label="Download Vindla on the App Store">Get the app</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="breathing-intro" aria-labelledby="breathing-title">
+                <span class="eyebrow">A free guided reset</span>
+                <h1 id="breathing-title">Take one calmer minute.</h1>
+                <p>Follow the circle through five gentle breath cycles. There is nothing to download, sign up for, or get perfect.</p>
+            </section>
+
+            <section class="breathing-tool" aria-label="One-minute guided breathing exercise">
+                <div class="breath-visual" aria-hidden="true">
+                    <div class="breath-orb" id="breath-orb">
+                        <span class="breath-phase-display" id="breath-phase-display">Ready</span>
+                    </div>
+                </div>
+
+                <div class="breath-guidance" aria-live="polite" aria-atomic="true">
+                    <p class="breath-cue" id="breath-cue">Inhale 4 · hold 2 · exhale 6</p>
+                    <p class="breath-time" id="breath-time">1:00</p>
+                </div>
+
+                <progress class="breath-progress" id="breath-progress" aria-label="Exercise progress" max="60" value="0">0%</progress>
+
+                <button class="primary-button breath-button" id="breath-button" type="button">Start breathing</button>
+                <p class="breath-note">Sit comfortably and breathe gently. Stop if you feel light-headed or uncomfortable.</p>
+
+                <div class="breath-complete" id="breath-complete" hidden>
+                    <span class="eyebrow">Minute complete</span>
+                    <h2>Want a practice shaped around your day?</h2>
+                    <p>Tell Mimir what is on your mind and get a guided meditation for this moment.</p>
+                    <div class="breath-complete-actions">
+                        <a class="primary-button" href="/download?source=breathing_complete" aria-label="Get Vindla free on the App Store">Continue in Vindla</a>
+                        <a class="secondary-button" href="/try-mimir?campaign=breathing_tool&amp;source=breathing_complete">Try Mimir first</a>
+                        <button class="secondary-button breath-share-button" id="breath-share-button" type="button">Share this minute</button>
+                    </div>
+                    <p class="breath-share-status" id="breath-share-status" role="status" aria-live="polite"></p>
+                </div>
+            </section>
+
+            <section class="breathing-why" aria-labelledby="why-title">
+                <div>
+                    <span class="eyebrow">The pattern</span>
+                    <h2 id="why-title">A longer, unhurried exhale.</h2>
+                </div>
+                <p>This simple rhythm gives you a concrete place to put your attention for one minute. Keep the breath easy rather than deep or forced.</p>
+            </section>
+        </main>
+
+        <footer class="site-footer breathing-footer">
+            <div>
+                <a class="brand footer-brand" href="/" aria-label="Vindla Home">Vindla</a>
+                <p>Breathwork, sound, and personalized meditation in one focused iPhone experience.</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer Links">
+                <a href="/download?source=breathing_footer">Download</a>
+                <a href="/press">Press</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+            </nav>
+        </footer>
+    </div>
+
+    <a class="mobile-install" href="/download?source=breathing_mobile_sticky" aria-label="Get Vindla free on the App Store">Get Vindla free</a>
+
+    <script>
+        (() => {
+            const totalSeconds = 60;
+            const cycleSeconds = 12;
+            const phases = [
+                { name: 'Inhale', cue: 'Breathe in gently', end: 4, className: 'is-inhaling' },
+                { name: 'Hold', cue: 'Pause softly', end: 6, className: 'is-holding' },
+                { name: 'Exhale', cue: 'Let the breath out slowly', end: 12, className: 'is-exhaling' }
+            ];
+
+            const orb = document.getElementById('breath-orb');
+            const phaseDisplay = document.getElementById('breath-phase-display');
+            const cue = document.getElementById('breath-cue');
+            const time = document.getElementById('breath-time');
+            const progress = document.getElementById('breath-progress');
+            const button = document.getElementById('breath-button');
+            const complete = document.getElementById('breath-complete');
+            const shareButton = document.getElementById('breath-share-button');
+            const shareStatus = document.getElementById('breath-share-status');
+            const shareURL = 'https://vindla-three.vercel.app/breathe?ref=share';
+
+            let startedAt = 0;
+            let animationFrame = 0;
+            let running = false;
+            let activePhase = '';
+
+            const formatTime = (seconds) => {
+                const rounded = Math.max(0, Math.ceil(seconds));
+                return `${Math.floor(rounded / 60)}:${String(rounded % 60).padStart(2, '0')}`;
+            };
+
+            const setPhase = (phase) => {
+                if (activePhase === phase.name) return;
+                activePhase = phase.name;
+                orb.className = `breath-orb ${phase.className}`;
+                phaseDisplay.textContent = phase.name;
+                cue.textContent = phase.cue;
+            };
+
+            const reset = () => {
+                cancelAnimationFrame(animationFrame);
+                running = false;
+                activePhase = '';
+                orb.className = 'breath-orb';
+                phaseDisplay.textContent = 'Ready';
+                cue.textContent = 'Inhale 4 · hold 2 · exhale 6';
+                time.textContent = '1:00';
+                progress.value = 0;
+                progress.textContent = '0%';
+                button.textContent = 'Start breathing';
+                complete.hidden = true;
+                shareStatus.textContent = '';
+            };
+
+            const finish = () => {
+                running = false;
+                activePhase = '';
+                orb.className = 'breath-orb is-complete';
+                phaseDisplay.textContent = 'Complete';
+                cue.textContent = 'Notice how you feel';
+                time.textContent = '0:00';
+                progress.value = 60;
+                progress.textContent = '100%';
+                button.textContent = 'Breathe again';
+                complete.hidden = false;
+                complete.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+            };
+
+            const tick = (now) => {
+                if (!running) return;
+
+                const elapsed = Math.min(totalSeconds, (now - startedAt) / 1000);
+                if (elapsed >= totalSeconds) {
+                    finish();
+                    return;
+                }
+
+                const cycleElapsed = elapsed % cycleSeconds;
+                const phase = phases.find((item) => cycleElapsed < item.end) || phases[phases.length - 1];
+                setPhase(phase);
+
+                time.textContent = formatTime(totalSeconds - elapsed);
+                progress.value = elapsed;
+                progress.textContent = `${Math.floor((elapsed / totalSeconds) * 100)}%`;
+                animationFrame = requestAnimationFrame(tick);
+            };
+
+            const start = () => {
+                complete.hidden = true;
+                running = true;
+                startedAt = performance.now();
+                button.textContent = 'Reset exercise';
+                animationFrame = requestAnimationFrame(tick);
+            };
+
+            button.addEventListener('click', () => {
+                if (running) {
+                    reset();
+                } else {
+                    start();
+                }
+            });
+
+            const copyShareLink = async () => {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(shareURL);
+                    return;
+                }
+
+                const temporaryInput = document.createElement('textarea');
+                temporaryInput.value = shareURL;
+                temporaryInput.setAttribute('readonly', '');
+                temporaryInput.style.position = 'fixed';
+                temporaryInput.style.opacity = '0';
+                document.body.appendChild(temporaryInput);
+                temporaryInput.select();
+                document.execCommand('copy');
+                temporaryInput.remove();
+            };
+
+            shareButton.addEventListener('click', async () => {
+                const shareData = {
+                    title: 'Take one calmer minute — Vindla',
+                    text: 'A free one-minute 4–2–6 breathing reset you can do right now.',
+                    url: shareURL
+                };
+
+                shareStatus.textContent = '';
+
+                try {
+                    if (navigator.share) {
+                        await navigator.share(shareData);
+                        shareStatus.textContent = 'Shared.';
+                    } else {
+                        await copyShareLink();
+                        shareStatus.textContent = 'Link copied.';
+                    }
+                } catch (error) {
+                    if (error && error.name === 'AbortError') return;
+
+                    try {
+                        await copyShareLink();
+                        shareStatus.textContent = 'Link copied.';
+                    } catch {
+                        shareStatus.textContent = 'Copy this link: vindla-three.vercel.app/breathe';
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

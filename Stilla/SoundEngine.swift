@@ -567,6 +567,17 @@ final class SoundEngine {
         }
 
         playBuffer(buffer, format: format, on: breathNode)
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--zen-avatar-breath-diagnostics") {
+            let peak = (0..<frameCount).reduce(Float(0)) { max($0, abs(data[$1])) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                guard let self else { return }
+                let renderedFrames = self.breathNode.lastRenderTime
+                    .flatMap { self.breathNode.playerTime(forNodeTime: $0)?.sampleTime } ?? 0
+                print("Zen breath audio: \(isInhale ? "Inhale" : "Exhale"), peak=\(peak), playing=\(self.breathNode.isPlaying), renderedFrames=\(renderedFrames), outputVolume=\(AVAudioSession.sharedInstance().outputVolume)")
+            }
+        }
+        #endif
     }
 
     // MARK: - Playback Helpers

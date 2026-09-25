@@ -53,6 +53,8 @@ struct VindlaApp: App {
                 }
                 .onChange(of: scenePhase) { _, newPhase in
                     guard newPhase == .active else { return }
+                    manager.refreshDestinationTimer()
+                    manager.refreshMountainTimer()
                     Task {
                         await StoreKitManager.shared.updateCustomerProductStatus()
                     }

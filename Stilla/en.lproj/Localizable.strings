@@ -204,7 +204,7 @@
 "reflection.save_sleep_story" = "Save Sleep Story to Library";
 "reflection.save" = "Save Reflection";
 "reflection.share_title" = "Share your journey";
-"reflection.share_subtitle" = "Let others discover their own path with Mimir.";
+"reflection.share_subtitle" = "Send this meditation to someone who might need a moment like this.";
 "reflection.preparing" = "Preparing...";
 "reflection.share_action" = "Share";
 "reflection.not_now" = "Not now";
@@ -259,6 +259,12 @@
 "settings.privacy_sensitive_info" = "Avoid sharing medical details or highly sensitive personal information in Mimir prompts.";
 "settings.privacy_data" = "Privacy & Data";
 "settings.show_intro_guide" = "Show Intro Guide";
+"settings.share_and_support" = "Share & Support";
+"settings.share_vindla" = "Share Vindla";
+"settings.share_vindla_message" = "A meditation made for how you feel right now. Try Vindla on iPhone.";
+"settings.rate_vindla" = "Rate Vindla";
+"settings.privacy_policy" = "Privacy Policy";
+"settings.terms_of_use" = "Terms of Use";
 "settings.chimes_help" = "These gentle tones mark the beginning and end of your meditation.";
 "settings.binaural_beats" = "Binaural Beats";
 "settings.binaural_beats_help" = "Binaural beats use two slightly different frequencies to guide your brainwaves into specific mental states.";
@@ -573,6 +579,8 @@
 
 "sleep.post_session.title" = "Sleep Story Finished";
 "sleep.post_session.body" = "If you liked this one, save it to your library and replay it anytime.";
+"sleep.post_session.share_preview" = "Share a free preview";
+"sleep.post_session.share_preview_message" = "Choose a sleep moment and guide style in this free Mimir preview—no account or install needed.";
 "sleep.header.astronomers-attic.title" = "The Astronomer's Attic";
 "sleep.header.astronomers-attic.subtitle" = "Dusty maps, brass lenses, and starlight on wood";
 "sleep.header.midnight-tram.title" = "Last Tram Through the Rain";
@@ -727,3 +735,227 @@
 "content.hold_out" = "Hold (Out)";
 "content.custom_technique_default_name" = "Custom";
 "content.custom_technique_default_description" = "Custom user technique.";
+
+/* Daily practice */
+"content.daily_practice.eyebrow" = "DAILY PRACTICE";
+"content.daily_practice.title" = "Your weekly path";
+"content.daily_practice.detail" = "One clear step each day. Built to feel steady and easy to return to.";
+
+/* Zen Minimalist avatar */
+"zen.avatar.meet" = "Meet Zen Minimalist";
+"zen.avatar.title" = "A moment of stillness.";
+"zen.avatar.sample" = "Take a slow breath in. Let your shoulders soften. There is nothing to solve right now. Just this breath.";
+"zen.avatar.listen" = "Listen to your guide";
+"zen.avatar.stop" = "Stop listening";
+"zen.avatar.enable" = "Show avatar during meditation";
+"zen.avatar.offline" = "Available offline. Uses the voice selected in Vindla.";
+"zen.avatar.session_active" = "Finish your session to listen to this sample.";
+"zen.avatar.speaking" = "Speaking";
+"zen.avatar.resting" = "Resting";
+
+/* Zen session conversation */
+"zen.session.subtitle" = "A moment with your guide";
+"zen.voice.local" = "Locally generated AI voice · Zen Minimalist";
+"zen.session.story" = "Sleep story";
+"zen.session.meditation" = "Guided meditation";
+"zen.session.ready" = "Your session is ready. We can take it at your pace.";
+"zen.session.suggestion" = "Shall we start with ten quiet minutes, just for you?";
+"zen.session.duration_limit" = "Choose a session of 1–30 minutes. The duration has been adjusted.";
+"zen.session.preparing" = "Preparing…";
+"zen.session.start" = "Begin session";
+"zen.session.input_title" = "Or tell me what you need";
+"zen.session.placeholder" = "How are you? What would you like?";
+"zen.session.stop_recording" = "Stop recording";
+"zen.session.record" = "Use your voice";
+"zen.session.create" = "Create my suggestion";
+"zen.session.listening" = "I’m listening…";
+"zen.session.examples" = "Try “I want to sleep” or “Meditate for twenty minutes”.";
+"zen.session.local" = "Local preview · example scripts · no AI requests";
+"zen.session.error" = "Could not prepare the session. Please try again.";
+"zen.session.microphone_error" = "Voice input is unavailable. Check microphone and speech permissions in Settings, or type your request. Local testing requires on-device recognition.";
+"zen.session.entry" = "A simple conversation before your next session";
+"zen.mock.meditation.title" = "A moment of stillness";
+"zen.mock.meditation.opening" = "Welcome. Find a position where your body can rest. There is nothing you need to achieve here.";
+"zen.mock.meditation.1" = "Notice the support beneath you. Let your shoulders soften. Allow the breath to come and go in its own way.";
+"zen.mock.meditation.2" = "Feel the air at your nose. There is no need to change its rhythm. Simply notice it.";
+"zen.mock.meditation.3" = "When a thought arrives, you can let it be there. Then gently return your attention to your body.";
+"zen.mock.meditation.4" = "Rest for a while with what is already here. One breath. The weight of your body. The sounds around you.";
+"zen.mock.meditation.closing" = "Feel the support beneath you again. Move your fingers whenever you are ready. Carry a little of this stillness into your next moment.";
+"zen.mock.focus.rest" = "For now, let the tasks of the day wait. Notice where your body might soften just a little.";
+"zen.mock.focus.stress" = "If things feel busy, you do not need to solve everything. Find a steady sensation in your body and rest your attention there.";
+"zen.mock.focus.focus" = "We are practising returning to one thing at a time. Choose the breath as a gentle place for your attention.";
+"zen.mock.focus.sleep" = "There is nothing else to finish now. You can rest and let the story drift past.";
+"zen.mock.story.title" = "The garden at dusk";
+"zen.mock.story.opening" = "At the end of a quiet path is a small garden. The day is slowly settling down. Behind a low wall stands a cherry tree, with a single paper lantern hanging from its branches. The light is warm and soft. You do not need to follow every word. It is all right simply to rest.";
+"zen.mock.story.1" = "The gate is slightly open. Beyond it, a path of smooth stones winds through the moss. The stones still hold a little warmth from the day. Someone swept the path earlier this evening. Here and there a small leaf has landed since then, and no one has needed to move it. Everything can stay just as it is.";
+"zen.mock.story.2" = "Further into the garden stands a bench of pale wood. Beside it is a cup that still carries the faint scent of tea. One last raindrop falls from the little house into a clay pot. Then it is quiet again. Only the leaves move, so slowly that the movement is almost invisible.";
+"zen.mock.story.3" = "The lantern makes a soft circle on the gravel. At the edge of its light, a pair of sandals rests beside the steps. Nothing is waiting to be finished. Through an open window there is a folded blanket and a book set aside for the evening. The breeze passes gently through the room and out into the garden.";
+"zen.mock.story.4" = "Above the wall, the sky fades from blue to silver. The little tree is completely still for a moment. Then one branch sways slowly back and forth. The scent of damp earth lingers in the air. There is no need to hurry the night along. It arrives in its own time, gentle and quiet.";
+"zen.mock.story.closing" = "The light of the lantern grows softer. The path, the tree and the little bench rest in the dusk. There is nowhere to go and nothing to hold on to. The garden is still. Evening slowly becomes night.";
+
+// Destination journeys — Borobudur
+"journey.entry.eyebrow" = "YOUR QUIET JOURNEY";
+"journey.entry.start" = "Take your first step";
+"journey.entry.continue" = "Continue at your own pace";
+"journey.location.borobudur" = "JAVA, INDONESIA";
+"journey.location.bhutan" = "PARO, BHUTAN";
+"journey.location.japan" = "JAPAN";
+"journey.location.tanzania" = "TANZANIA";
+"journey.location.everest" = "NEPAL / CHINA";
+"journey.milestone.arrival" = "At the foot of the temple";
+"journey.milestone.terraces" = "The first terraces";
+"journey.milestone.stillness" = "Closer to stillness";
+"journey.milestone.summit" = "Beneath the open sky";
+"journey.invitation" = "A moment for yourself. A step on your journey.";
+"journey.duration" = "How long would you like to stay?";
+"journey.mode.guided" = "Guided";
+"journey.mode.silent" = "Fully silent";
+"journey.mode.guided.detail" = "Gentle guidance, with plenty of silence.";
+"journey.mode.silent.detail" = "No voices, sounds or cues. Just stillness.";
+"journey.begin" = "Begin your moment";
+"journey.present" = "Just this moment.";
+"journey.practice.guided" = "Let your guide keep you company.";
+"journey.stop" = "End this moment";
+"journey.stop.title" = "Would you like to finish here?";
+"journey.stop.detail" = "Your meditation time is saved. A new step is earned when the full chosen time is complete.";
+"journey.stop.confirm" = "Finish now";
+"journey.stop.continue" = "Stay a little longer";
+"journey.close" = "Close journey";
+"journey.your_journey" = "Your journey";
+"journey.steps" = "%d of %d steps";
+"journey.complete.title" = "One step closer.";
+"journey.complete.detail" = "You made time to pause. Your next step will be here when you are ready.";
+"journey.complete.summit" = "You have reached the summit.";
+"journey.complete.summit.detail" = "%d moments of presence. %@ is now unlocked and will await you when the next environment becomes available.";
+"journey.stopped.title" = "Thank you for this moment.";
+"journey.stopped.detail" = "Your time is saved. Your step stays where it was. Return whenever you wish.";
+"journey.next" = "Continue the journey";
+"journey.rest_again" = "Rest here again";
+"journey.catalog.intro" = "One place at a time.\nAt your own pace.";
+"journey.catalog.soon" = "Environment coming soon";
+"journey.catalog.unlocked_soon" = "Unlocked · environment coming soon";
+"journey.catalog.detail" = "Every completed meditation earns a step. Your progress stays with you, even after a break. New places open along the way.";
+"journey.environment.accessibility" = "Zen sits before %@ in the quiet light of dawn. An artistic interpretation of the place.";
+"journey.unavailable" = "The journey could not be opened";
+"journey.unavailable.detail" = "Your saved progress has not been changed. Close and reopen the app to try again.";
+"journey.meditation_title" = "A moment at %@";
+"journey.guidance.1" = "Welcome. Let your body find a comfortable position. You can close your eyes or let your gaze rest softly. Right now, there is nowhere you need to go.";
+"journey.guidance.2" = "Notice the ground supporting you. Let your shoulders soften. Follow one breath, just as it is. There is no need to change it.";
+"journey.guidance.3" = "Perhaps your thoughts have wandered. That is natural. When you notice, gently return to your next breath.";
+"journey.guidance.4" = "We will stay here in silence for a while. Feel your body resting, and let each breath come and go at its own pace.";
+"journey.guidance.5" = "Take this stillness with you. Notice your hands and feet. When you are ready, gently let your gaze return. Thank you for this moment.";
+"journey.complete.next_available" = "%d moments of presence. %@ is now unlocked. Your next step awaits whenever you are ready.";
+"journey.complete.all" = "You have reached the last place on this journey. The stillness will be here whenever you return.";
+"journey.catalog.choose" = "Stay here";
+"journey.purchase.pending" = "The purchase is awaiting approval.";
+"journey.purchase.failed" = "This place could not be unlocked. Please try again later.";
+"journey.purchase.unlock" = "Unlock · %@";
+
+/* Procedural mountain exploration */
+"mountain.title" = "Above the clouds";
+"mountain.entry.subtitle" = "Explore a quieter path";
+"mountain.eyebrow" = "AN UNHURRIED JOURNEY";
+"mountain.place.terrace" = "The stone terrace";
+"mountain.place.pines" = "Among the pines";
+"mountain.place.temple" = "The cloud temple";
+"mountain.walking" = "A little further. A little quieter.";
+"mountain.invitation" = "There is nowhere you need to be.";
+"mountain.rest" = "Stay here";
+"mountain.continue" = "Walk on";
+"mountain.preview.note" = "A landscape to explore, at your own pace.";
+"mountain.return" = "Back to the path";
+"mountain.close" = "Close";
+"mountain.loading" = "Preparing your path";
+"mountain.load.error" = "The landscape could not open.";
+"mountain.retry" = "Try again";
+
+/* Procedural environment families */
+"mountain.biome.pine" = "The pine clearing";
+"mountain.biome.moss" = "The moss garden";
+"mountain.biome.golden" = "The golden grove";
+"mountain.biome.ridge" = "The open ridge";
+"mountain.biome.waterfall" = "Beside the waterfall";
+"mountain.biome.temple" = "The temple garden";
+
+// Mountain region prototype
+"mountain.region.title" = "Valley of Mists";
+"mountain.region.number" = "Region %d";
+"mountain.region.next" = "Toward another valley";
+"mountain.revisit" = "Revisit a place";
+"mountain.place.mossGate" = "Moss Gate";
+"mountain.place.pineGlade" = "Pine Glade";
+"mountain.place.brookRavine" = "Brook Ravine";
+"mountain.place.lakeTerrace" = "Lake Terrace";
+"mountain.place.mountainRidge" = "Mountain Ridge";
+"mountain.place.templeGrove" = "Temple Grove";
+"mountain.place.cloudTemple" = "Cloud Temple";
+"mountain.place.mossGate.description" = "A quiet beginning among moss and stone.";
+"mountain.place.pineGlade.description" = "Follow the path beneath the soft pine canopy.";
+"mountain.place.brookRavine.description" = "Rest beside the water as the ravine opens.";
+"mountain.place.lakeTerrace.description" = "The paths meet beside a reflection of the sky.";
+"mountain.place.mountainRidge.description" = "An open trail overlooking the valley.";
+"mountain.place.templeGrove.description" = "Walk between the trees toward the old gate.";
+"mountain.place.cloudTemple.description" = "A place for stillness above the clouds.";
+"mountain.session.guided" = "Guided";
+"mountain.session.silent" = "Silent";
+"mountain.session.mode" = "Meditation";
+"mountain.session.duration" = "Duration";
+"mountain.session.remaining" = "Time remaining";
+"mountain.session.stop" = "End meditation";
+"mountain.session.complete" = "Your practice is complete. The next path is open.";
+"mountain.session.stopped" = "Thank you for this moment. Stay as long as you like.";
+"mountain.session.return" = "Return to this place";
+"mountain.session.unlock" = "A completed meditation opens the next path.";
+"mountain.session.intention" = "What would you like to make space for? (optional)";
+"mountain.session.mock" = "A local example to try the experience. No AI service is used.";
+"mountain.session.ambience" = "Ambient sound";
+"mountain.session.begin" = "Begin meditation";
+"mountain.session.start.error" = "Another session is in progress. Finish it first.";
+"mountain.sound.none" = "Off";
+"mountain.sound.rain" = "Rain";
+"mountain.sound.brown" = "Soft noise";
+"mountain.storage.error" = "Your saved journey could not be read. Previous progress has been preserved.";
+
+// DNA landscapes
+"mountain.wild.name.0" = "Emerald Valley";
+"mountain.wild.name.1" = "Where Mountains Breathe";
+"mountain.wild.name.2" = "A Thousand Waterfalls";
+"mountain.wild.name.3" = "Mountain of Light";
+"mountain.wild.name.4" = "The Hidden Lake";
+"mountain.wild.name.5" = "Garden of Clouds";
+"mountain.wild.name.6" = "Mirror of the Sky";
+"mountain.wild.name.7" = "Ridge of Dawn";
+"mountain.wild.description.0" = "A new horizon to discover.";
+"mountain.wild.description.1" = "Water, light and endless mountains.";
+"mountain.wild.description.2" = "A quiet place between earth and sky.";
+"mountain.wild.description.3" = "Follow the path into the unknown.";
+"mountain.wild.eyebrow" = "A NEW HORIZON";
+"mountain.preview.next" = "Next world";
+"mountain.preview.next.hint" = "Explore the next environment without meditating in this test version.";
+
+"mountain.clock.live" = "Follow local time";
+"mountain.clock.dawn" = "Dawn · 06:00";
+"mountain.clock.noon" = "Noon · 12:00";
+"mountain.clock.dusk" = "Dusk · 19:00";
+"mountain.clock.night" = "Night · 00:00";
+"mountain.clock.live.short" = "Live";
+"mountain.clock.preview" = "Preview";
+"mountain.clock.label" = "Lighting and time of day";
+
+/* Quick meditation choices */
+"mountain.choice.guided" = "Guided meditation";
+"mountain.choice.silent" = "Silent meditation";
+"mountain.conversation.title" = "Talk to your guide";
+"mountain.conversation.soon" = "You will be able to have a conversation with your guide here. We are shaping this experience next.";
+"mountain.choice.start.hint" = "Start immediately with your saved preferences.";
+"mountain.choice.more" = "More options";
+"mountain.choice.saved" = "Your preferences are saved automatically for next time.";
+"mountain.choice.guided.duration" = "Guided meditation duration";
+"mountain.choice.silent.duration" = "Silent meditation duration";
+"mountain.dock.meditate" = "Meditate";
+"mountain.dock.sleep" = "Sleep";
+"mountain.dock.talk" = "Talk";
+
+"mountain.guide.change" = "Change guide";
+
+"mountain.guide.select" = "Choose guide";

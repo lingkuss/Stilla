@@ -6,8 +6,10 @@ struct BreathingCircleView: View {
     let progress: Double
     let technique: BreathingTechnique
     var imageName: String? = nil
+    var showsZenAvatar = false
     var onPhaseChange: ((_ phase: String, _ duration: Double) -> Void)? = nil
 
+    @AppStorage("zenAvatarEnabled") private var avatarEnabled = true
     @State private var scale: CGFloat = 0.85
     @State private var status: String = ""
     @State private var animationTask: Task<Void, Never>?
@@ -68,7 +70,11 @@ struct BreathingCircleView: View {
 
             // Inner circle / Persona Image
             Group {
-                if let imageName = imageName {
+                if showsZenAvatar && avatarEnabled {
+                    ZenAvatarView(speech: GuruManager.shared.avatarSpeech)
+                        .frame(width: 160, height: 160)
+                        .clipShape(Circle())
+                } else if let imageName = imageName {
                     Image(imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -99,7 +105,7 @@ struct BreathingCircleView: View {
             .animation(.spring(response: 0.5, dampingFraction: 0.8), value: imageName)
 
             // Center dot (only if not showing persona)
-            if imageName == nil {
+            if imageName == nil && !(showsZenAvatar && avatarEnabled) {
                 Circle()
                     .fill(Color(hue: 0.55, saturation: 0.5, brightness: 0.95))
                     .frame(width: 8, height: 8)
@@ -107,6 +113,7 @@ struct BreathingCircleView: View {
                     .opacity(isActive ? 1.0 : 0.4)
             }
         }
+        .onDisappear { stopAnimation() }
         .onChange(of: isActive, initial: true) { _, active in
             if active {
                 startAnimation()
@@ -165,4 +172,3 @@ struct BreathingCircleView: View {
         }
     }
 }
-

@@ -1,10 +1,15 @@
 import SwiftUI
 import UIKit
+import StoreKit
 
 struct ContentView: View {
     @Environment(MeditationManager.self) private var manager
+    @Environment(\.requestReview) private var requestReview
 
     @State private var showSettings = false
+    @State private var showZenSession = false
+    @State private var showDestinationJourney = false
+    @State private var showMountainJourney = false
     @State private var showSoundLibrary = false
     @State private var showStats = false
     @State private var showTechniques = false
@@ -30,6 +35,7 @@ struct ContentView: View {
     @State private var showQuickMoodSettingsPrompt = false
     @State private var isTodayStepExpanded = false
     @State private var storeManager = StoreKitManager.shared
+    @AppStorage("zenAvatarEnabled") private var zenAvatarEnabled = true
     @AppStorage("homeViewMode") private var homeViewMode = HomeViewMode.hero
     private let speechManager = SpeechManager.shared
 
@@ -46,7 +52,7 @@ struct ContentView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Header
+                // Keep session controls accessible while the avatar is active.
                 HStack(spacing: 0) {
                     // Left: Mode Toggle & Stats
                     HStack(spacing: 4) {
@@ -112,7 +118,9 @@ struct ContentView: View {
                 .padding(.top, 4)
                 .layoutPriority(1)
 
-                if manager.state == .idle, homeViewMode == .hero {
+                if manager.activeDestinationSession != nil || manager.activeMountainSession != nil {
+                    Color.clear
+                } else if manager.state == .idle, homeViewMode == .hero {
                     heroHomeScrollView
                         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .leading).combined(with: .opacity)))
                 } else {
@@ -155,6 +163,26 @@ struct ContentView: View {
                     .transition(.opacity)
                     .zIndex(10)
             }
+        }
+        .fullScreenCover(isPresented: $showDestinationJourney) {
+            DestinationJourneyView().environment(manager)
+        }
+        .fullScreenCover(isPresented: $showMountainJourney) {
+            #if DEBUG
+            MountainJourneyView().environment(manager)
+            #endif
+        }
+        .onAppear {
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("--mountain-preview") {
+                showMountainJourney = true
+            } else if ProcessInfo.processInfo.arguments.contains("--journey-preview") {
+                showDestinationJourney = true
+            }
+            #endif
+        }
+        .sheet(isPresented: $showZenSession) {
+            ZenSessionView().environment(manager)
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
@@ -232,6 +260,7 @@ struct ContentView: View {
         .sheet(item: $reflectionSheetContext, onDismiss: { 
             reflectionSheetContext = nil 
             manager.reset()
+            requestReviewIfAppropriate()
         }) { context in
             ReflectionPromptView(
                 sessionID: context.sessionID,
@@ -241,6 +270,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showSleepStoryCompletion, onDismiss: {
             manager.reset()
+            requestReviewIfAppropriate()
         }) {
             SleepStoryCompletionView()
                 .environment(manager)
@@ -268,7 +298,8 @@ struct ContentView: View {
         }
         .animation(.easeInOut(duration: 0.6), value: manager.state)
         .onChange(of: manager.state) { _, newValue in
-            guard newValue == .complete else { return }
+            guard newValue == .complete, manager.activeDestinationSession == nil,
+                  manager.activeMountainSession == nil else { return }
             if manager.currentScript?.isSleepStory == true {
                 showSleepStoryCompletion = true
                 return
@@ -282,6 +313,8 @@ struct ContentView: View {
         .onChange(of: manager.shouldDismissSheets) { _, newValue in
             if newValue {
                 showSettings = false
+                showZenSession = false
+                showDestinationJourney = false
                 showSoundLibrary = false
                 showStats = false
                 showTechniques = false
@@ -370,6 +403,33 @@ struct ContentView: View {
     private var heroHomeScrollView: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 0) {
+                DestinationJourneyEntry { showDestinationJourney = true }
+                    .padding(.horizontal, 20).padding(.top, 12)
+
+                #if DEBUG
+                MountainJourneyEntry { showMountainJourney = true }
+                    .padding(.horizontal, 20).padding(.top, 12)
+                #endif
+
+                Button { showZenSession = true } label: {
+                    HStack(spacing: 12) {
+                        Image(KaiPersonality.zenMinimalist.imageName)
+                            .resizable().scaledToFill().frame(width: 42, height: 42)
+                            .clipShape(Circle())
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("zen.avatar.meet").font(.subheadline.weight(.medium))
+                            Text("zen.session.entry").font(.caption).foregroundStyle(.white.opacity(0.6))
+                        }
+                        Spacer()
+                        Image(systemName: "arrow.up.right").font(.subheadline)
+                    }
+                    .foregroundStyle(.white.opacity(0.9)).padding(14)
+                    .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 22))
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("zenSession.open")
+                .padding(.horizontal, 20).padding(.top, 12)
+
                 dailyPracticeSection
                     .padding(.horizontal, 20)
                     .padding(.top, 12)
@@ -393,9 +453,9 @@ struct ContentView: View {
     private var dailyPracticeSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionHeader(
-                eyebrow: "DAILY PRACTICE",
-                title: "Your weekly path",
-                detail: "One clear step each day. Built to feel steady and easy to return to."
+                eyebrow: String(localized: "content.daily_practice.eyebrow"),
+                title: String(localized: "content.daily_practice.title"),
+                detail: String(localized: "content.daily_practice.detail")
             )
 
             practiceJourneyHomeCard
@@ -1087,7 +1147,41 @@ struct ContentView: View {
         }
     }
 
+    private var showsActiveZenAvatar: Bool {
+        zenAvatarEnabled && manager.state != .idle && manager.isGuruEnabled
+            && manager.currentScript != nil
+            && (manager.currentScript?.generatedPersonality ?? manager.selectedKaiPersonality).id == KaiPersonality.zenMinimalist.id
+    }
+
+    @ViewBuilder
     private var timerView: some View {
+        if showsActiveZenAvatar {
+            VStack(spacing: 8) {
+                Spacer(minLength: 12)
+                ZenAvatarView(
+                    speech: GuruManager.shared.avatarSpeech,
+                    technique: manager.state == .meditating && manager.currentScript?.isSleepStory != true ? manager.selectedTechnique : nil,
+                    onPhaseChange: { phase, duration in
+                        currentPhase = phase
+                        manager.playBreathingCue(phase: phase, duration: duration)
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .accessibilityIdentifier("zenSession.activeAvatar")
+                Text(timerText)
+                    .font(.system(.title3, design: .rounded).weight(.light))
+                    .monospacedDigit()
+                    .foregroundStyle(.white.opacity(0.65))
+                    .contentTransition(.numericText())
+                    .accessibilityIdentifier("zenSession.timer")
+                    .padding(.bottom, 28)
+            }
+        } else {
+            classicTimerView
+        }
+    }
+
+    private var classicTimerView: some View {
         VStack(spacing: 0) {
             Spacer()
             
@@ -1102,6 +1196,11 @@ struct ContentView: View {
                 progress: manager.progress,
                 technique: manager.selectedTechnique,
                 imageName: manager.activeKaiPersonaImageName,
+                showsZenAvatar: manager.state != .idle
+                    && manager.isGuruEnabled
+                    && manager.currentScript != nil
+                    && manager.currentScript?.isSleepStory != true
+                    && (manager.currentScript?.generatedPersonality ?? manager.selectedKaiPersonality).id == KaiPersonality.zenMinimalist.id,
                 onPhaseChange: { phase, duration in
                     currentPhase = phase
                     manager.playBreathingCue(phase: phase, duration: duration)
@@ -1412,7 +1511,14 @@ struct ContentView: View {
             manager.stop()
         case .complete:
             manager.reset()
+            requestReviewIfAppropriate()
         }
+    }
+
+    private func requestReviewIfAppropriate() {
+        guard ReviewPromptPolicy.shouldRequestReview else { return }
+        ReviewPromptPolicy.recordReviewRequest()
+        requestReview()
     }
 
     private func startPracticeJourneyFromHome() {
@@ -1421,7 +1527,7 @@ struct ContentView: View {
         Task {
             await StoreKitManager.shared.updateCustomerProductStatus()
 
-            if !StoreKitManager.shared.isVindlaProSubscribed {
+            if !KaiBrainService.usesLocalScripts && !StoreKitManager.shared.isVindlaProSubscribed {
                 showJourneyPaywall = true
                 return
             }
@@ -1463,7 +1569,7 @@ struct ContentView: View {
 
         Task {
             await StoreKitManager.shared.updateCustomerProductStatus()
-            guard StoreKitManager.shared.isVindlaProSubscribed else {
+            guard KaiBrainService.usesLocalScripts || StoreKitManager.shared.isVindlaProSubscribed else {
                 showJourneyPaywall = true
                 return
             }
@@ -1502,7 +1608,7 @@ struct ContentView: View {
 
         Task {
             await StoreKitManager.shared.updateCustomerProductStatus()
-            guard StoreKitManager.shared.isVindlaProSubscribed else {
+            guard KaiBrainService.usesLocalScripts || StoreKitManager.shared.isVindlaProSubscribed else {
                 showJourneyPaywall = true
                 return
             }
@@ -3035,19 +3141,9 @@ struct CustomTechniqueEditor: View {
 struct OnboardingView: View {
     @Environment(MeditationManager.self) private var manager
     @State private var currentPage = 0
-    @State private var selectedOnboardingPersonalityID: String? = nil
+    @State private var selectedOnboardingPersonalityID: String? = KaiPersonality.default.id
     
     let pages = [
-        OnboardingPage(
-            titleKey: "onboarding.page1.title",
-            descriptionKey: "onboarding.page1.description",
-            systemImage: "circle.dotted"
-        ),
-        OnboardingPage(
-            titleKey: "onboarding.page2.title",
-            descriptionKey: "onboarding.page2.description",
-            systemImage: "wind"
-        ),
         OnboardingPage(
             titleKey: "onboarding.page3.title",
             descriptionKey: "onboarding.page3.description",
@@ -3060,14 +3156,9 @@ struct OnboardingView: View {
             style: .personalitySelection
         ),
         OnboardingPage(
-            titleKey: "onboarding.page5.title",
-            descriptionKey: "onboarding.page5.description",
-            systemImage: "speaker.wave.3.fill"
-        ),
-        OnboardingPage(
-            titleKey: "onboarding.page6.title",
-            descriptionKey: "onboarding.page6.description",
-            systemImage: "mic.fill"
+            titleKey: "onboarding.page1.title",
+            descriptionKey: "onboarding.page1.description",
+            systemImage: "circle.dotted"
         )
     ]
     
@@ -3224,6 +3315,47 @@ struct OnboardingView: View {
                 }
             }
         }
+    }
+}
+
+enum ReviewPromptPolicy {
+    private static let completedSessionCountKey = "review.completed_session_count"
+    private static let lastRequestedVersionKey = "review.last_requested_version"
+    private static let lastRequestedDateKey = "review.last_requested_date"
+    private static let minimumSessionSeconds = 60
+    private static let minimumCompletedSessions = 3
+    private static let minimumDaysBetweenRequests = 180.0
+
+    static func recordCompletedSession(durationSeconds: Int) {
+        guard durationSeconds >= minimumSessionSeconds else { return }
+        let defaults = UserDefaults.standard
+        defaults.set(defaults.integer(forKey: completedSessionCountKey) + 1, forKey: completedSessionCountKey)
+    }
+
+    static var shouldRequestReview: Bool {
+        let defaults = UserDefaults.standard
+        guard defaults.integer(forKey: completedSessionCountKey) >= minimumCompletedSessions else {
+            return false
+        }
+
+        let currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+        let lastVersion = defaults.string(forKey: lastRequestedVersionKey)
+        guard lastVersion != currentVersion else { return false }
+
+        let lastRequestedAt = defaults.object(forKey: lastRequestedDateKey) as? Date
+        if let lastRequestedAt,
+           Date().timeIntervalSince(lastRequestedAt) < minimumDaysBetweenRequests * 24 * 60 * 60 {
+            return false
+        }
+
+        return true
+    }
+
+    static func recordReviewRequest() {
+        let defaults = UserDefaults.standard
+        let currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+        defaults.set(currentVersion, forKey: lastRequestedVersionKey)
+        defaults.set(Date(), forKey: lastRequestedDateKey)
     }
 }
 

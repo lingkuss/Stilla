@@ -23,6 +23,7 @@ struct KaiExperienceView: View {
     @State private var suggestionWasPicked = false
     @State private var stillnessRatio: Double = 0.5
     @State private var showingStillnessInfo = false
+    @State private var showingZenAvatar = false
     
     private let speechManager = SpeechManager.shared
     
@@ -103,6 +104,9 @@ struct KaiExperienceView: View {
             }
             .sheet(isPresented: $showingPaywall) {
                 KAIPaywallView()
+            }
+            .sheet(isPresented: $showingZenAvatar) {
+                ZenSessionView()
             }
         }
     }
@@ -374,7 +378,7 @@ struct KaiExperienceView: View {
             
             let isSubscribed = StoreKitManager.shared.isVindlaProSubscribed
             
-            if !isSubscribed {
+            if !KaiBrainService.usesLocalScripts && !isSubscribed {
                 isGenerating = false
                 showingPaywall = true
                 return
@@ -497,6 +501,18 @@ struct KaiExperienceView: View {
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 24)
+
+            if activePersonality.id == KaiPersonality.zenMinimalist.id {
+                Button {
+                    showingZenAvatar = true
+                } label: {
+                    Label(String(localized: "zen.avatar.meet"), systemImage: "person.crop.circle")
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+                .accessibilityIdentifier("zenAvatar.open")
+                .padding(.horizontal, 28)
+            }
 
             if isPersonalityPickerExpanded {
                 ScrollViewReader { proxy in

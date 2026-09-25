@@ -3,6 +3,16 @@ import Foundation
 final class KaiBrainService {
     static let shared = KaiBrainService()
     static let maxAIGenerationDurationMinutes = 30
+
+    /// Debug is always local, including on a physical phone. No launch argument
+    /// or stored preference can accidentally enable billable generation.
+    static var usesLocalScripts: Bool {
+        #if DEBUG
+        true
+        #else
+        false
+        #endif
+    }
     
     private let maxFreeCredits = 3
     private let freeGenMonthKey = "kai.free_gen_month"
@@ -45,6 +55,9 @@ final class KaiBrainService {
     /// Remaining free credits this month (0…3).
     /// Reads from iCloud KVS if available, otherwise UserDefaults.
     var freeCreditsRemaining: Int {
+        #if DEBUG
+        return maxFreeCredits
+        #else
         let currentMonth = currentMonthTag
         let storedMonth = readString(forKey: freeGenMonthKey) ?? ""
         if storedMonth != currentMonth {
@@ -52,6 +65,7 @@ final class KaiBrainService {
         }
         let used = Int(readInt64(forKey: freeGenCountKey))
         return max(0, maxFreeCredits - used)
+        #endif
     }
 
     var isFreeGenerationAvailable: Bool {
@@ -59,6 +73,9 @@ final class KaiBrainService {
     }
 
     func recordFreeGeneration() {
+        #if DEBUG
+        return
+        #else
         let currentMonth = currentMonthTag
         let storedMonth = readString(forKey: freeGenMonthKey) ?? ""
 
@@ -72,6 +89,7 @@ final class KaiBrainService {
         // Always write to both stores for consistency
         write(currentMonth, forKey: freeGenMonthKey)
         write(newCount, forKey: freeGenCountKey)
+        #endif
     }
 
     // MARK: - Private Read/Write Helpers
@@ -166,6 +184,13 @@ final class KaiBrainService {
         durationMinutes: Int,
         excluding recentTitles: [String]
     ) async throws -> SleepStoryGenerationResult {
+        #if DEBUG
+        try Task.checkCancellation()
+        let script = LocalGenerationFixtures.script(
+            input: [themeTitle, themeSubtitle].compactMap { $0 }.joined(separator: ". "),
+            minutes: durationMinutes, personality: .zenMinimalist, kind: .sleepStory)
+        return SleepStoryGenerationResult(script: script, nextHeaders: fallbackSleepStoryHeaders(excluding: recentTitles))
+        #else
         let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let request = SleepStoryGenerationRequest(
@@ -218,6 +243,7 @@ final class KaiBrainService {
             : headersFromResponse
 
         return SleepStoryGenerationResult(script: normalizedScript, nextHeaders: nextHeaders)
+        #endif
     }
 
     func fallbackSleepStoryHeaders(excluding recentTitles: [String], count: Int = 6) -> [SleepStoryHeader] {
@@ -239,6 +265,11 @@ final class KaiBrainService {
         historyContext: String?,
         cycleNumber: Int
     ) async throws -> PracticeJourneyPlan {
+        #if DEBUG
+        try Task.checkCancellation()
+        return LocalGenerationFixtures.journey(goal: goalSummary, minutes: preferredDurationMinutes,
+            personality: personality, stillnessRatio: stillnessRatio, cycle: cycleNumber)
+        #else
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let request = PracticeJourneyGenerationRequest(
             goalSummary: goalSummary,
@@ -303,6 +334,7 @@ final class KaiBrainService {
             print("❌ JOURNEY Decoding Error: \(error)")
             throw BrainError.invalidResponse
         }
+        #endif
     }
 }
 
@@ -313,6 +345,11 @@ struct SleepStoryGenerationResult {
 
 extension KaiBrainService {
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
+        #if DEBUG
+        try Task.checkCancellation()
+        return LocalGenerationFixtures.script(input: mood, minutes: durationMinutes,
+            personality: personality, kind: .meditation, stillnessRatio: stillnessRatio)
+        #else
         let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let languageInstruction = """
@@ -380,6 +417,7 @@ extension KaiBrainService {
             print("❌ MIMIR Decoding Error: \(error)")
             throw BrainError.invalidResponse
         }
+        #endif
     }
 
     func normalizeScriptDuration(_ script: MeditationScript) -> MeditationScript {

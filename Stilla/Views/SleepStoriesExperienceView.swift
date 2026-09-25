@@ -227,7 +227,7 @@ struct SleepStoriesExperienceView: View {
 
         Task {
             await StoreKitManager.shared.updateCustomerProductStatus()
-            guard StoreKitManager.shared.isVindlaProSubscribed else {
+            guard KaiBrainService.usesLocalScripts || StoreKitManager.shared.isVindlaProSubscribed else {
                 isGenerating = false
                 showingPaywall = true
                 return

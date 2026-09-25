@@ -7,22 +7,23 @@
     <title>A Mimir Meditation — Vindla</title>
     <meta name="description"
         content="Someone shared a personalized Mimir meditation with you. Open it in Vindla or download the app to experience it.">
+    <meta name="apple-itunes-app" content="app-id=6761864704">
 
     <!-- Static OG tags (crawlers don't run JS, so these are generic) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="A Mimir Meditation — Vindla">
     <meta property="og:description"
         content="Someone shared a personalized AI meditation with you. Tap to experience it in Vindla.">
-    <meta property="og:image" content="https://vindla.app/kai_avatar.png">
+    <meta property="og:image" content="https://vindla-three.vercel.app/kai_avatar.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="A Mimir Meditation — Vindla">
     <meta property="twitter:description" content="Someone shared a personalized AI meditation with you.">
-    <meta property="twitter:image" content="https://vindla.app/kai_avatar.png">
+    <meta property="twitter:image" content="https://vindla-three.vercel.app/kai_avatar.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -164,7 +165,8 @@
             <h1>This link has expired</h1>
             <p>The shared meditation is no longer available, but you can create your own with Mimir.</p>
             <div class="share-actions">
-                <a class="primary-button" href="index.html">Explore Vindla</a>
+                <a class="primary-button" href="/download?source=expired_share">Create your own meditation</a>
+                <a class="secondary-button" href="/">Explore Vindla</a>
             </div>
         </div>
 
@@ -184,8 +186,9 @@
             </div>
 
             <div class="share-actions">
-                <a id="app-store-link" class="primary-button" href="https://apps.apple.com/us/app/vindla/id6761864704">Download Vindla</a>
-                <a class="secondary-button" href="index.html">Learn More</a>
+                <a id="open-app-link" class="primary-button" href="#">Open this meditation in Vindla</a>
+                <a class="secondary-button" href="/download?source=shared_session">Get Vindla free</a>
+                <a class="secondary-button" href="/">Learn more</a>
             </div>
         </div>
     </div>
@@ -214,7 +217,7 @@
 
             try {
                 // Fetch from backend
-                const response = await fetch(`/kai/share?id=${id}`);
+                const response = await fetch(`/kai/share?id=${encodeURIComponent(id)}`);
                 if (!response.ok) throw new Error('Session not found');
                 const payload = await response.json();
                 const scriptData = payload.s || payload.script || payload;
@@ -255,7 +258,7 @@
                 }
 
                 // Update the "Open in Vindla" button to use the custom URL scheme
-                const appLink = document.getElementById('app-store-link');
+                const appLink = document.getElementById('open-app-link');
                 if (appLink && id) {
                     appLink.href = 'vindla://share?id=' + id;
                     appLink.textContent = 'Open in Vindla';

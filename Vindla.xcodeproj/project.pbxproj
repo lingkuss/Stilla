@@ -7,6 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A40008 /* MountainWorldDNA.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40008; };
+		A40007 /* MountainJourneyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40007; };
+		A40006 /* MountainRegionRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40006; };
+		A40005 /* MountainLandscapeMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40005 /* MountainLandscapeMesh.swift */; };
+		A40004 /* MountainAtmosphere.metal in Sources */ = {isa = PBXBuildFile; fileRef = B40004 /* MountainAtmosphere.metal */; };
+		A40003 /* MountainJourneyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40003 /* MountainJourneyScene.swift */; };
+		A40002 /* MountainJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40002 /* MountainJourneyView.swift */; };
+		A40001 /* MountainJourneyRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40001 /* MountainJourneyRecipe.swift */; };
+		A30005 /* Journeys in Resources */ = {isa = PBXBuildFile; fileRef = B30005 /* Journeys */; };
+		A30004 /* DestinationJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30004 /* DestinationJourneyView.swift */; };
+		A30003 /* DestinationMeditationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30003 /* DestinationMeditationContent.swift */; };
+		A30002 /* DestinationJourneyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30002 /* DestinationJourneyStore.swift */; };
+		A30001 /* DestinationJourney.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30001 /* DestinationJourney.swift */; };
+		A2000B /* ZenVoice in Resources */ = {isa = PBXBuildFile; fileRef = B2000B /* ZenVoice */; };
+		A2000A /* ZenRecordedVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000A /* ZenRecordedVoice.swift */; };
+		A20009 /* ZenVoiceLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20009 /* ZenVoiceLibrary.swift */; };
+		A20008 /* ZenEyelids.png in Resources */ = {isa = PBXBuildFile; fileRef = B20008 /* ZenEyelids.png */; };
+		A20007 /* ZenAvatar.metal in Sources */ = {isa = PBXBuildFile; fileRef = B20007 /* ZenAvatar.metal */; };
+		A20005 /* ZenSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20005 /* ZenSessionView.swift */; };
+		A20004 /* LocalGenerationFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20004 /* LocalGenerationFixtures.swift */; };
+		A20003 /* ZenSessionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003 /* ZenSessionRequest.swift */; };
+		A20006 /* ZenAvatarMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20006 /* ZenAvatarMotion.swift */; };
+		A20001 /* ZenAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20001 /* ZenAvatarView.swift */; };
+		A20002 /* ZenMinimalist.usdz in Resources */ = {isa = PBXBuildFile; fileRef = B20002 /* ZenMinimalist.usdz */; };
 		6414BCA72F82E4D8009BF848 /* KaiScriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6414BCA62F82E4D8009BF848 /* KaiScriptView.swift */; };
 		6414BCF72F883CF6009BF848 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6414BCF62F883CF6009BF848 /* AppLocalization.swift */; };
 		6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6414BCFA2F883D4C009BF848 /* Localizable.strings */; };
@@ -77,6 +101,30 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B40008 /* MountainWorldDNA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainWorldDNA.swift; sourceTree = "<group>"; };
+		B40007 /* MountainJourneyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/MountainJourneyStore.swift; sourceTree = "<group>"; };
+		B40006 /* MountainRegionRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainRegionRecipe.swift; sourceTree = "<group>"; };
+		B40005 /* MountainLandscapeMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainLandscapeMesh.swift; sourceTree = "<group>"; };
+		B40004 /* MountainAtmosphere.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders/MountainAtmosphere.metal; sourceTree = "<group>"; };
+		B40003 /* MountainJourneyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/MountainJourneyScene.swift; sourceTree = "<group>"; };
+		B40002 /* MountainJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/MountainJourneyView.swift; sourceTree = "<group>"; };
+		B40001 /* MountainJourneyRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainJourneyRecipe.swift; sourceTree = "<group>"; };
+		B30005 /* Journeys */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/Journeys; sourceTree = "<group>"; };
+		B30004 /* DestinationJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/DestinationJourneyView.swift; sourceTree = "<group>"; };
+		B30003 /* DestinationMeditationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/DestinationMeditationContent.swift; sourceTree = "<group>"; };
+		B30002 /* DestinationJourneyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/DestinationJourneyStore.swift; sourceTree = "<group>"; };
+		B30001 /* DestinationJourney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/DestinationJourney.swift; sourceTree = "<group>"; };
+		B2000B /* ZenVoice */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/ZenVoice; sourceTree = "<group>"; };
+		B2000A /* ZenRecordedVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenRecordedVoice.swift; sourceTree = "<group>"; };
+		B20009 /* ZenVoiceLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenVoiceLibrary.swift; sourceTree = "<group>"; };
+		B20008 /* ZenEyelids.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/ZenEyelids.png; sourceTree = "<group>"; };
+		B20007 /* ZenAvatar.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders/ZenAvatar.metal; sourceTree = "<group>"; };
+		B20005 /* ZenSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenSessionView.swift; sourceTree = "<group>"; };
+		B20004 /* LocalGenerationFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGenerationFixtures.swift; sourceTree = "<group>"; };
+		B20003 /* ZenSessionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenSessionRequest.swift; sourceTree = "<group>"; };
+		B20006 /* ZenAvatarMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenAvatarMotion.swift; sourceTree = "<group>"; };
+		B20001 /* ZenAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenAvatarView.swift; sourceTree = "<group>"; };
+		B20002 /* ZenMinimalist.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = Resources/ZenMinimalist.usdz; sourceTree = "<group>"; };
 		640598A62F76CAF500B0F381 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		6414BCA62F82E4D8009BF848 /* KaiScriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaiScriptView.swift; sourceTree = "<group>"; };
 		6414BCF62F883CF6009BF848 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
@@ -236,6 +284,19 @@
 		D10002 /* Stilla */ = {
 			isa = PBXGroup;
 			children = (
+                B30005 /* Journeys */,
+                B40006 /* MountainRegionRecipe.swift */,
+                B40007 /* MountainJourneyStore.swift */,
+                B40008 /* MountainWorldDNA.swift */,
+                B40005 /* MountainLandscapeMesh.swift */,
+                B40001 /* MountainJourneyRecipe.swift */,
+                B40002 /* MountainJourneyView.swift */,
+                B40003 /* MountainJourneyScene.swift */,
+                B40004 /* MountainAtmosphere.metal */,
+                B30004 /* DestinationJourneyView.swift */,
+                B30003 /* DestinationMeditationContent.swift */,
+                B30002 /* DestinationJourneyStore.swift */,
+                B30001 /* DestinationJourney.swift */,
 				64F9FE232F7BE17400BBB344 /* Vindla.entitlements */,
 				B10001 /* VindlaApp.swift */,
 				B10002 /* MeditationManager.swift */,
@@ -245,6 +306,10 @@
 				D10006 /* Models */,
 				D10007 /* Store */,
 				B10010 /* Assets.xcassets */,
+				B20002 /* ZenMinimalist.usdz */,
+				B2000B /* ZenVoice */,
+				B20008 /* ZenEyelids.png */,
+				B20007 /* ZenAvatar.metal */,
 				B10011 /* Info.plist */,
 				B10018 /* GuruManager.swift */,
 				F1000B /* Secrets.swift */,
@@ -267,6 +332,8 @@
 				B10004 /* ContentView.swift */,
 				B10005 /* SettingsView.swift */,
 				B10006 /* BreathingCircleView.swift */,
+				B20001 /* ZenAvatarView.swift */,
+				B20005 /* ZenSessionView.swift */,
 				B10019 /* VoiceSelectionView.swift */,
 				B10022 /* KaiExperienceView.swift */,
 				F1000C /* SavedMeditationsLibraryView.swift */,
@@ -305,6 +372,8 @@
 				64F9FE422F7BEC2300BBB344 /* LiveTimerAttributes.swift */,
 				B10013 /* BreathingTechnique.swift */,
 				B10017 /* MeditationScript.swift */,
+				B20003 /* ZenSessionRequest.swift */,
+				B20006 /* ZenAvatarMotion.swift */,
 				64F9FE6D2F7FC73C00BBB344 /* SessionMemory.swift */,
 				64F9FE712F8082E300BBB344 /* ShareSessionPayload.swift */,
 			);
@@ -324,6 +393,9 @@
 			children = (
 				B10020 /* SpeechManager.swift */,
 				B10021 /* KaiBrainService.swift */,
+				B20004 /* LocalGenerationFixtures.swift */,
+				B2000A /* ZenRecordedVoice.swift */,
+				B20009 /* ZenVoiceLibrary.swift */,
 				64B0B29F2F900B4B003951DC /* AppAttestAuthManager.swift */,
 				6414BCF62F883CF6009BF848 /* AppLocalization.swift */,
 			);
@@ -441,6 +513,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10010 /* Assets.xcassets in Resources */,
+				A20002 /* ZenMinimalist.usdz in Resources */,
+                A30005 /* Journeys in Resources */,
+				A2000B /* ZenVoice in Resources */,
+				A20008 /* ZenEyelids.png in Resources */,
 				6414BCFF2F883D4C009BF848 /* Localizable.strings in Resources */,
 				6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */,
 				6414BD022F883D4C009BF848 /* Localizable.strings in Resources */,
@@ -475,6 +551,26 @@
 				A10005 /* SettingsView.swift in Sources */,
 				64F9FE722F8082E300BBB344 /* ShareSessionPayload.swift in Sources */,
 				A10006 /* BreathingCircleView.swift in Sources */,
+				A20001 /* ZenAvatarView.swift in Sources */,
+                A40006 /* MountainRegionRecipe.swift in Sources */,
+                A40007 /* MountainJourneyStore.swift in Sources */,
+                A40008 /* MountainWorldDNA.swift in Sources */,
+                A40005 /* MountainLandscapeMesh.swift in Sources */,
+                A40001 /* MountainJourneyRecipe.swift in Sources */,
+                A40002 /* MountainJourneyView.swift in Sources */,
+                A40003 /* MountainJourneyScene.swift in Sources */,
+                A40004 /* MountainAtmosphere.metal in Sources */,
+                A30004 /* DestinationJourneyView.swift in Sources */,
+                A30003 /* DestinationMeditationContent.swift in Sources */,
+                A30002 /* DestinationJourneyStore.swift in Sources */,
+                A30001 /* DestinationJourney.swift in Sources */,
+				A20005 /* ZenSessionView.swift in Sources */,
+				A20004 /* LocalGenerationFixtures.swift in Sources */,
+				A2000A /* ZenRecordedVoice.swift in Sources */,
+				A20009 /* ZenVoiceLibrary.swift in Sources */,
+				A20003 /* ZenSessionRequest.swift in Sources */,
+				A20006 /* ZenAvatarMotion.swift in Sources */,
+				A20007 /* ZenAvatar.metal in Sources */,
 				64A6BDB42F8F8D67003951DC /* SleepStoriesExperienceView.swift in Sources */,
 				A10007 /* StartMeditationIntent.swift in Sources */,
 				64F9FE6E2F7FC73C00BBB344 /* SessionMemory.swift in Sources */,
@@ -568,7 +664,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MeditationWidget/Info.plist;
@@ -581,7 +677,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.vindla.VindlaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -600,7 +696,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MeditationWidget/Info.plist;
@@ -613,7 +709,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.vindla.VindlaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -754,7 +850,7 @@
 				CODE_SIGN_ENTITLEMENTS = Stilla/Vindla.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Stilla/Info.plist;
@@ -768,7 +864,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.vindla;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -788,7 +884,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stilla/Vindla.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = ZVH6AMJF8F;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Stilla/Info.plist;
@@ -802,7 +898,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingkuss.vindla;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

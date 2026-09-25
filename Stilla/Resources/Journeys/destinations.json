@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "destinations": [
+    {
+      "id": "borobudur",
+      "name": "Borobudur",
+      "locationKey": "journey.location.borobudur",
+      "totalSteps": 7,
+      "backgroundAsset": "JourneyBorobudur",
+      "isAvailable": true,
+      "milestones": [
+        {
+          "step": 0,
+          "titleKey": "journey.milestone.arrival",
+          "sceneScale": 1.0
+        },
+        {
+          "step": 2,
+          "titleKey": "journey.milestone.terraces",
+          "sceneScale": 1.04
+        },
+        {
+          "step": 4,
+          "titleKey": "journey.milestone.stillness",
+          "sceneScale": 1.08
+        },
+        {
+          "step": 7,
+          "titleKey": "journey.milestone.summit",
+          "sceneScale": 1.12
+        }
+      ],
+      "elevationMeters": 265
+    },
+    {
+      "id": "tigers-nest",
+      "name": "Tiger’s Nest",
+      "locationKey": "journey.location.bhutan",
+      "totalSteps": 20,
+      "prerequisiteID": "borobudur",
+      "isAvailable": false,
+      "milestones": [
+        {
+          "step": 0,
+          "titleKey": "journey.milestone.arrival",
+          "sceneScale": 1.0
+        }
+      ],
+      "elevationMeters": 3120
+    },
+    {
+      "id": "fuji",
+      "name": "Fuji",
+      "locationKey": "journey.location.japan",
+      "totalSteps": 40,
+      "prerequisiteID": "tigers-nest",
+      "isAvailable": false,
+      "milestones": [
+        {
+          "step": 0,
+          "titleKey": "journey.milestone.arrival",
+          "sceneScale": 1.0
+        }
+      ],
+      "elevationMeters": 3776
+    },
+    {
+      "id": "kilimanjaro",
+      "name": "Kilimanjaro",
+      "locationKey": "journey.location.tanzania",
+      "totalSteps": 70,
+      "prerequisiteID": "fuji",
+      "isAvailable": false,
+      "milestones": [
+        {
+          "step": 0,
+          "titleKey": "journey.milestone.arrival",
+          "sceneScale": 1.0
+        }
+      ],
+      "elevationMeters": 5895
+    },
+    {
+      "id": "everest",
+      "name": "Everest",
+      "locationKey": "journey.location.everest",
+      "totalSteps": 100,
+      "prerequisiteID": "kilimanjaro",
+      "isAvailable": false,
+      "milestones": [
+        {
+          "step": 0,
+          "titleKey": "journey.milestone.arrival",
+          "sceneScale": 1.0
+        }
+      ],
+      "elevationMeters": 8848.86
+    }
+  ]
+}
