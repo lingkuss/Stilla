@@ -87,3 +87,6 @@ node_modules/
 *.so
 *.pyc
 *.pyo
+
+# Local build artifacts and generation logs
+output/
