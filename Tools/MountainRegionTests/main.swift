@@ -87,8 +87,8 @@ MainActor.assumeIsolated {
     let defaults = UserDefaults(suiteName: suite)!
     defer { defaults.removePersistentDomain(forName: suite) }
     defaults.set(37,forKey: "mountainJourney.preview.stage.v2")
-    let legacy = Data("old destination progress".utf8)
-    defaults.set(legacy,forKey: "destinationJourney.progress.v1")
+    let garden = Data("existing collection ledger".utf8)
+    defaults.set(garden,forKey: "vindla.stillnessGarden.v1")
     let store = MountainJourneyStore(defaults: defaults)
     let session = context(.start)
     expect(store.complete(session,at: 400,reachedEnd: true),"Store did not credit")
@@ -97,7 +97,7 @@ MainActor.assumeIsolated {
     let reloaded = MountainJourneyStore(defaults: defaults)
     expect(reloaded.progress == store.progress,"Stored arrival/completion lost")
     expect(defaults.integer(forKey: "mountainJourney.preview.stage.v2") == 37,"Legacy prototype changed")
-    expect(defaults.data(forKey: "destinationJourney.progress.v1") == legacy,"Destination progress changed")
+    expect(defaults.data(forKey: "vindla.stillnessGarden.v1") == garden,"Collection ledger changed")
     let bad = Data("unreadable".utf8)
     defaults.set(bad,forKey: "mountainJourney.region.preview.v1")
     let corrupt = MountainJourneyStore(defaults: defaults)
@@ -105,7 +105,7 @@ MainActor.assumeIsolated {
     expect(!corrupt.complete(context(.start),at: 500,reachedEnd: true),"Corrupt store credited")
     expect(defaults.data(forKey: "mountainJourney.region.preview.v1") == bad,"Corrupt data overwritten")
 }
-print("PASS: store round-trip, duplicate protection, corruption preservation, independent legacy progress")
+print("PASS: store round-trip, duplicate protection, corruption preservation, independent collection progress")
 
 #if DEBUG
 MainActor.assumeIsolated {
@@ -136,6 +136,18 @@ preferences[.silent] = .init(minutes: 120,intention: "",ambience: "None")
 let encodedPreferences = try! JSONEncoder().encode(preferences)
 expect(MountainMeditationPreferences.restore(encodedPreferences) == preferences, "Preferences not restored")
 expect(MountainMeditationPreferences.restore(Data()) == MountainMeditationPreferences(), "First launch defaults")
+let legacyAudio = Data(#"{"guided":{"minutes":25,"intention":"Rest","ambience":"Rain Ambience"},"silent":{"minutes":90,"intention":"","ambience":"None"}}"#.utf8)
+let migratedAudio = MountainMeditationPreferences.restore(legacyAudio)
+expect(migratedAudio.guided.minutes == 25 && migratedAudio.guided.ambience == "Rain Ambience", "Legacy audio migration lost preferences")
+expect(migratedAudio.guided.startSound == "None" && migratedAudio.silent.endSound == "None" && !migratedAudio.silent.breathingCues, "Migration enabled unwanted audio")
+var audioPreferences = MountainMeditationPreferences()
+audioPreferences[.guided] = .init(minutes: 15, ambience: "Green Canopy", startSound: "Temple Bell",
+    endSound: "Bamboo Chime", breathingCues: true, ambienceVolume: 0.3, cueVolume: 0.7)
+expect(MountainMeditationPreferences.restore(try! JSONEncoder().encode(audioPreferences)) == audioPreferences, "Audio choices did not persist")
+expect(audioPreferences.silent.startSound == "None" && audioPreferences.silent.ambience == "None" && !audioPreferences.silent.breathingCues, "Guided sound preferences leaked into silent mode")
+audioPreferences[.guided].cueVolume = 9
+audioPreferences[.silent].ambienceVolume = -1
+expect(audioPreferences.guided.cueVolume == 1 && audioPreferences.silent.ambienceVolume == 0, "Volume out of bounds")
 preferences[.guided].minutes = 120
 expect(preferences[.guided].minutes == 10 && preferences[.silent].minutes == 120, "Mode ranges leaked")
 let longSession = MountainSessionContext(id: UUID(),address: .start,mode: .silent,durationSeconds: 7200,startedAtUptime: 100)

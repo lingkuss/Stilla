@@ -8,11 +8,13 @@ Committed files:
 
 How it works:
 - Xcode target `Vindla` uses `Debug.xcconfig` for Debug builds and `Release.xcconfig` for Release builds.
+- Debug derives its API and App Attest endpoints from `KAI_DEBUG_BACKEND_BASE_URL`. Change that one setting when switching deployments so authentication and API calls stay on the same backend. Local/CI Debug overrides can also set this base URL.
 - `Info.plist` reads:
   - `KAIBackendURL` from `$(KAI_BACKEND_URL)`
   - `KAIShareBackendURL` from `$(KAI_SHARE_BACKEND_URL)`
   - `KAIShareWebBaseURL` from `$(KAI_SHARE_WEB_BASE_URL)`
   - `KAIAttestBaseURL` from `$(KAI_ATTEST_BASE_URL)`
+  - `KAIGuideImageBackendURL` from `$(KAI_GUIDE_IMAGE_BACKEND_URL)`; when empty, uses `/kai/guide/image` on the normal backend host.
 
 Local overrides (ignored by git):
 - `Config/Debug.local.xcconfig`

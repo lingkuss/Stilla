@@ -75,7 +75,7 @@ struct BreathingCircleView: View {
                         .frame(width: 160, height: 160)
                         .clipShape(Circle())
                 } else if let imageName = imageName {
-                    Image(imageName)
+                    GuideArtwork.image(named: imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 140, height: 140)

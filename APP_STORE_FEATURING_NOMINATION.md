@@ -36,7 +36,7 @@ Vindla creates a guided meditation for the moment someone is actually in. The pe
 
 Version 1.0.2 removes friction at both ends. A new three-step welcome replaces the longer first run and preselects a guide so someone can reach a useful session sooner. Completed Mimir journeys now share through a reliable, redesigned web handoff, making a personal practice easy to pass to someone who may need a similar moment. Vindla also adds low-pressure share and rating actions in Settings, while its native rating request appears only after several completed sessions.
 
-The update builds on Vindla’s privacy-minded, no-account experience, on-device history, Siri shortcuts, Live Activities, breathwork, sleep stories, soundscapes, saved journeys, and seven-day paths.
+The update builds on Vindla’s privacy-minded, no-account experience, on-device history, Siri shortcuts, Live Activities, breathwork, sleep stories, soundscapes, saved journeys.
 ```
 
 Publish date:

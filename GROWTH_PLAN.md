@@ -42,7 +42,7 @@ Reasons to believe:
 - Mimir shapes a session around the user's mood, available time, and preferred guide.
 - Eight distinct guide personalities make the experience feel less generic.
 - Three personalized sessions are free each month and no account is required.
-- Breathwork, sleep stories, soundscapes, reminders, Siri, and seven-day paths support repeat practice.
+- Breathwork, sleep stories, soundscapes, reminders, and Siri support repeat practice.
 - Practice history stays on-device.
 
 Avoid leading with a long feature list or the phrase “premium meditation.” Lead with the moment of use and the personalized outcome.
@@ -152,7 +152,7 @@ Decision rules:
 - Reach problem: fewer than 500 qualified impressions/week → increase distribution and creator outreach.
 - Store problem: at least 100 page views but less than 15% conversion → test first screenshot, subtitle, and proof.
 - Activation problem: repeated feedback says users do not reach a first session → simplify home CTA before adding features.
-- Retention problem: users enjoy one session but do not return → improve the seven-day path and reminder timing.
+- Retention problem: users enjoy one session but do not return → improve the return-to-meditation flow and reminder timing.
 - Referral problem: users share but recipients do not install → improve the shared-session preview and install handoff.
 
 ## Launch copy
@@ -165,7 +165,7 @@ Tagline:
 
 Short description:
 
-> Vindla is an iPhone meditation app for people who find generic recordings hard to return to. Tell Mimir how you feel, choose your time and guide, and get a session shaped around this moment. It also includes breathwork, sleep stories, soundscapes, Siri shortcuts, and seven-day practice paths. No account required; free to start.
+> Vindla is an iPhone meditation app for people who find generic recordings hard to return to. Tell Mimir how you feel, choose your time and guide, and get a session shaped around this moment. It also includes breathwork, sleep stories, soundscapes, Siri shortcuts, and reminders. No account required; free to start.
 
 ### Community post opener
 

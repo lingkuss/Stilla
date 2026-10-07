@@ -3,6 +3,7 @@ import AVFoundation
 import UIKit
 
 struct SettingsView: View {
+    var showsMeditationAudio = true
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
     @AppStorage("app.language.override") private var appLanguageOverride = AppLocalization.LanguageOption.system.rawValue
@@ -28,161 +29,170 @@ struct SettingsView: View {
                     .accessibilityIdentifier("zenAvatar.open")
                     Toggle(String(localized: "zen.avatar.enable"), isOn: $zenAvatarEnabled)
                 }
-                // Sounds
-                Section {
-                    NavigationLink {
-                        SoundSelectionView(mode: .start)
-                    } label: {
-                        HStack {
-                            Text(String(localized: "settings.start_sound"))
-                            Spacer()
-                            Text(manager.startSound.rawValue)
-                                .foregroundStyle(.secondary)
+                if showsMeditationAudio {
+                    // Sounds
+                    Section {
+                        NavigationLink {
+                            SoundSelectionView(mode: .start)
+                        } label: {
+                            HStack {
+                                Text(String(localized: "settings.start_sound"))
+                                Spacer()
+                                Text(manager.startSound.rawValue)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
-                    }
                     
-                    NavigationLink {
-                        SoundSelectionView(mode: .end)
-                    } label: {
-                        HStack {
-                            Text(String(localized: "settings.end_sound"))
-                            Spacer()
-                            Text(manager.endSound.rawValue)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                } header: {
-                    Label(String(localized: "settings.chimes"), systemImage: "bell.fill")
-                }
-
-                // Ambient
-                Section {
-                    NavigationLink {
-                        SoundSelectionView(mode: .ambience)
-                    } label: {
-                        HStack {
-                            Text(String(localized: "settings.ambience"))
-                            Spacer()
-                            Text(manager.ambientSound.rawValue)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                } header: {
-                    Label(String(localized: "settings.during_meditation"), systemImage: "waveform")
-                } footer: {
-                    Text(String(localized: "settings.ambience_help"))
-                }
-
-                // Volume Mix
-                Section {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(String(localized: "settings.chimes_and_cues"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        HStack(spacing: 12) {
-                            Image(systemName: "speaker.wave.1")
-                                .foregroundStyle(.secondary)
-                                .font(.footnote)
-                            
-                            Slider(value: Bindable(manager).toneVolume, in: 0...1) { editing in
-                                if !editing { manager.soundEngine.playSound(manager.startSound) }
-                            }
-                            
-                            Image(systemName: "speaker.wave.3")
-                                .foregroundStyle(.secondary)
-                                .font(.footnote)
-                        }
-                    }
-                    .padding(.vertical, 4)
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(String(localized: "settings.ambience"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        HStack(spacing: 12) {
-                            Image(systemName: "speaker.wave.1")
-                                .foregroundStyle(.secondary)
-                                .font(.footnote)
-                            
-                            Slider(value: Bindable(manager).ambientVolume, in: 0...1) { editing in
-                                if !editing { manager.soundEngine.startAmbientSound(manager.ambientSound) }
-                            }
-                            
-                            Image(systemName: "speaker.wave.3")
-                                .foregroundStyle(.secondary)
-                                .font(.footnote)
-                        }
-                    }
-                    .padding(.vertical, 4)
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(String(localized: "settings.mimir_voice"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        HStack(spacing: 12) {
-                            Image(systemName: "speaker.wave.1")
-                                .foregroundStyle(.secondary)
-                                .font(.footnote)
-
-                            Slider(value: Bindable(manager).mimirVoiceVolume, in: 0...1)
-
-                            Image(systemName: "speaker.wave.3")
-                                .foregroundStyle(.secondary)
-                                .font(.footnote)
-                        }
-                    }
-                    .padding(.vertical, 4)
-                } header: {
-                    Label(String(localized: "settings.volume_mix"), systemImage: "slider.horizontal.3")
-                } footer: {
-                    Text(String(localized: "settings.volume_mix_help"))
-                }
-
-                // Haptics
-                Section {
-                    Toggle(isOn: $manager.hapticEnabled) {
-                        Label(String(localized: "settings.haptic_feedback"), systemImage: "iphone.radiowaves.left.and.right")
-                    }
-
-                    Picker(selection: $manager.breathingCueMode) {
-                        ForEach(MeditationManager.BreathingCueMode.allCases, id: \.self) { mode in
-                            let needsIAP = (mode == .sound || mode == .both)
-                            let locked = needsIAP && !manager.canPlayBreathingSounds
-                            if locked {
-                                Label(mode.rawValue, systemImage: "lock.fill").tag(mode)
-                            } else {
-                                Text(mode.rawValue).tag(mode)
+                        NavigationLink {
+                            SoundSelectionView(mode: .end)
+                        } label: {
+                            HStack {
+                                Text(String(localized: "settings.end_sound"))
+                                Spacer()
+                                Text(manager.endSound.rawValue)
+                                    .foregroundStyle(.secondary)
                             }
                         }
-                    } label: {
-                        Label(String(localized: "settings.breathing_cues"), systemImage: "metronome.fill")
+                    } header: {
+                        Label(String(localized: "settings.chimes"), systemImage: "bell.fill")
                     }
-                } header: {
-                    Label(String(localized: "settings.feedback"), systemImage: "hand.tap.fill")
-                } footer: {
-                    if !manager.canPlayBreathingSounds {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text(String(localized: "settings.sound_cues_unlock_required"))
+
+                    // Ambient
+                    Section {
+                        NavigationLink {
+                            SoundSelectionView(mode: .ambience)
+                        } label: {
+                            HStack {
+                                Text(String(localized: "settings.ambience"))
+                                Spacer()
+                                Text(manager.ambientSound.rawValue)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    } header: {
+                        Label(String(localized: "settings.during_meditation"), systemImage: "waveform")
+                    } footer: {
+                        Text(String(localized: "settings.ambience_help"))
+                    }
+
+                    // Volume Mix
+                    Section {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(String(localized: "settings.chimes_and_cues"))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            HStack(spacing: 12) {
+                                Image(systemName: "speaker.wave.1")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
                             
-                            Button {
-                                Task {
-                                    await StoreKitManager.shared.purchase(StoreKitManager.techniqueLibraryID)
+                                Slider(value: Bindable(manager).toneVolume, in: 0...1) { editing in
+                                    if !editing { manager.soundEngine.playSound(manager.startSound) }
                                 }
-                            } label: {
-                                Text(String(format: String(localized: "settings.unlock_for_format"), StoreKitManager.shared.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99")))
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 8)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color(hue: 0.55, saturation: 0.6, brightness: 0.7))
-                                    )
+                            
+                                Image(systemName: "speaker.wave.3")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
                             }
-                            .buttonStyle(.plain)
                         }
-                    } else {
-                        Text(String(localized: "settings.breathing_cues_help"))
+                        .padding(.vertical, 4)
+                    
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(String(localized: "settings.ambience"))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            HStack(spacing: 12) {
+                                Image(systemName: "speaker.wave.1")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+                            
+                                Slider(value: Bindable(manager).ambientVolume, in: 0...1) { editing in
+                                    if !editing { manager.soundEngine.startAmbientSound(manager.ambientSound) }
+                                }
+                            
+                                Image(systemName: "speaker.wave.3")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+                            }
+                        }
+                        .padding(.vertical, 4)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(String(localized: "settings.mimir_voice"))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            HStack(spacing: 12) {
+                                Image(systemName: "speaker.wave.1")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+
+                                Slider(value: Bindable(manager).mimirVoiceVolume, in: 0...1)
+
+                                Image(systemName: "speaker.wave.3")
+                                    .foregroundStyle(.secondary)
+                                    .font(.footnote)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    } header: {
+                        Label(String(localized: "settings.volume_mix"), systemImage: "slider.horizontal.3")
+                    } footer: {
+                        Text(String(localized: "settings.volume_mix_help"))
+                    }
+
+                    // Haptics
+                    Section {
+                        Toggle(isOn: $manager.hapticEnabled) {
+                            Label(String(localized: "settings.haptic_feedback"), systemImage: "iphone.radiowaves.left.and.right")
+                        }
+
+                        Picker(selection: $manager.breathingCueMode) {
+                            ForEach(MeditationManager.BreathingCueMode.allCases, id: \.self) { mode in
+                                let needsIAP = (mode == .sound || mode == .both)
+                                let locked = needsIAP && !manager.canPlayBreathingSounds
+                                if locked {
+                                    Label(mode.rawValue, systemImage: "lock.fill").tag(mode)
+                                } else {
+                                    Text(mode.rawValue).tag(mode)
+                                }
+                            }
+                        } label: {
+                            Label(String(localized: "settings.breathing_cues"), systemImage: "metronome.fill")
+                        }
+                    } header: {
+                        Label(String(localized: "settings.feedback"), systemImage: "hand.tap.fill")
+                    } footer: {
+                        if !manager.canPlayBreathingSounds {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text(String(localized: "settings.sound_cues_unlock_required"))
+                            
+                                Button {
+                                    Task {
+                                        await StoreKitManager.shared.purchase(StoreKitManager.techniqueLibraryID)
+                                    }
+                                } label: {
+                                    Text(String(format: String(localized: "settings.unlock_for_format"), StoreKitManager.shared.displayPrice(for: StoreKitManager.techniqueLibraryID, fallback: "$1.99")))
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 8)
+                                        .background(
+                                            Capsule()
+                                                .fill(Color(hue: 0.55, saturation: 0.6, brightness: 0.7))
+                                        )
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        } else {
+                            Text(String(localized: "settings.breathing_cues_help"))
+                        }
+                    }
+
+                } else {
+                    Section {
+                        Toggle(isOn: $manager.hapticEnabled) {
+                            Label(String(localized: "settings.haptic_feedback"), systemImage: "iphone.radiowaves.left.and.right")
+                        }
                     }
                 }
 
@@ -998,14 +1008,25 @@ enum SoundSelectionMode {
     case ambience
 }
 
+/// A feature can reuse the image library while keeping its own saved audio mix.
+struct SoundSelectionConfiguration {
+    var selection: Binding<String>
+    var toneVolume: Float
+    var ambientVolume: Float
+    var allowsPreviewSelection = false
+}
+
 struct SoundSelectionView: View {
     let mode: SoundSelectionMode
+    var configuration: SoundSelectionConfiguration? = nil
     
     @Environment(MeditationManager.self) private var manager
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     
     @State private var storeManager = StoreKitManager.shared
     @State private var previewTimer: Timer?
+    @State private var auditionEngine: SoundEngine?
     @State private var showingPurchaseSheet = false
     @State private var selectedLockedSoundName: String = ""
     @State private var purchaseStatusMessage = ""
@@ -1030,9 +1051,22 @@ struct SoundSelectionView: View {
     ]
     
     private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
+
+    private var selectedSoundName: String {
+        if let configuration { return configuration.selection.wrappedValue }
+        switch mode {
+        case .start: return manager.startSound.rawValue
+        case .end: return manager.endSound.rawValue
+        case .ambience: return manager.ambientSound.rawValue
+        }
+    }
     
     var body: some View {
         ScrollView {
+            Text("sound.tap_preview")
+                .font(.subheadline).foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal).padding(.top)
             if mode == .start || mode == .end {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(String(localized: "settings.chimes_help"))
@@ -1067,8 +1101,13 @@ struct SoundSelectionView: View {
         .background(Color(hue: 0.72, saturation: 0.4, brightness: 0.10).ignoresSafeArea())
         .navigationTitle(titleForMode())
         .navigationBarTitleDisplayMode(.inline)
+        .preferredColorScheme(.dark)
+        .tint(.blue)
         .onDisappear {
             stopPreview()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if configuration != nil && phase != .active { stopPreview() }
         }
         .sheet(isPresented: $showingPurchaseSheet) {
             premiumPurchaseModal
@@ -1113,9 +1152,9 @@ struct SoundSelectionView: View {
     }
 
     private func toneCard(_ sound: SoundEngine.Sound) -> some View {
-        let isSelected = (mode == .start && manager.startSound == sound) || (mode == .end && manager.endSound == sound)
+        let isSelected = selectedSoundName == sound.rawValue
         let isPremium = premiumTones.contains(sound)
-        let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
+        let isLocked = isPremium && configuration?.allowsPreviewSelection != true && !storeManager.isPurchased(StoreKitManager.soundBundleID)
         
         return Button {
             handleToneTap(sound, isLocked: isLocked)
@@ -1129,12 +1168,15 @@ struct SoundSelectionView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(localizedSoundName(for: sound.rawValue))
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("soundSelection.\(mode == .start ? "start" : "end").\(sound.rawValue)")
     }
     
     private func ambientCard(_ ambient: SoundEngine.AmbientSound) -> some View {
-        let isSelected = manager.ambientSound == ambient
+        let isSelected = selectedSoundName == ambient.rawValue
         let isPremium = SoundEngine.AmbientSound.premiumForSoundBundle.contains(ambient)
-        let isLocked = isPremium && !storeManager.isPurchased(StoreKitManager.soundBundleID)
+        let isLocked = isPremium && configuration?.allowsPreviewSelection != true && !storeManager.isPurchased(StoreKitManager.soundBundleID)
         let desc = ambientDescriptions[ambient] ?? " "
         
         return Button {
@@ -1149,6 +1191,9 @@ struct SoundSelectionView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(localizedSoundName(for: ambient.rawValue))
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("soundSelection.ambience.\(ambient.rawValue)")
     }
 
     private func cardContent(
@@ -1222,15 +1267,17 @@ struct SoundSelectionView: View {
     // MARK: - Event Handlers
     
     private func handleToneTap(_ sound: SoundEngine.Sound, isLocked: Bool) {
-        // Always preview
-        startPreviewTimer(isLocked: isLocked)
-        manager.soundEngine.playSound(sound)
+        let engine = preparePreviewEngine()
+        engine.playSound(sound)
+        startPreviewTimer(isLocked: isLocked, engine: engine)
         
         if isLocked {
             selectedLockedSoundName = sound.rawValue
             showingPurchaseSheet = true
         } else {
-            if mode == .start {
+            if let configuration {
+                configuration.selection.wrappedValue = sound.rawValue
+            } else if mode == .start {
                 manager.startSound = sound
             } else {
                 manager.endSound = sound
@@ -1240,23 +1287,45 @@ struct SoundSelectionView: View {
     }
     
     private func handleAmbientTap(_ ambient: SoundEngine.AmbientSound, isLocked: Bool) {
-        // Always preview
-        startPreviewTimer(isLocked: isLocked)
-        manager.soundEngine.startAmbientSound(ambient)
+        let engine = preparePreviewEngine()
+        engine.startAmbientSound(ambient)
+        startPreviewTimer(isLocked: isLocked, engine: engine)
         
         if isLocked {
             selectedLockedSoundName = ambient.rawValue
             showingPurchaseSheet = true
         } else {
-            manager.ambientSound = ambient
+            if let configuration {
+                configuration.selection.wrappedValue = ambient.rawValue
+            } else {
+                manager.ambientSound = ambient
+            }
             UISelectionFeedbackGenerator().selectionChanged()
         }
     }
     
     // MARK: - Playback
     
-    private func startPreviewTimer(isLocked: Bool) {
+    private func preparePreviewEngine() -> SoundEngine {
+        guard let configuration else { return manager.soundEngine }
+        // Browsing the library must not stop or reconfigure a meditation's audio.
+        let engine = auditionEngine ?? SoundEngine()
+        auditionEngine = engine
+        engine.stopAll()
+        engine.prepareMeditationAudio(toneVolume: configuration.toneVolume, ambientVolume: configuration.ambientVolume)
+        return engine
+    }
+
+    private func startPreviewTimer(isLocked: Bool, engine: SoundEngine) {
         previewTimer?.invalidate()
+        if configuration != nil {
+            let timer = Timer(timeInterval: 5, repeats: false) { [weak engine] _ in
+                engine?.stopAll()
+            }
+            previewTimer = timer
+            RunLoop.main.add(timer, forMode: .common)
+            return
+        }
         
         // Always stop locked sounds after 5 seconds.
         // For unlocked sounds, only auto-stop if NOT in an active session.
@@ -1283,6 +1352,12 @@ struct SoundSelectionView: View {
     
     private func stopPreview() {
         previewTimer?.invalidate()
+        previewTimer = nil
+        if configuration != nil {
+            auditionEngine?.stopAll()
+            auditionEngine = nil
+            return
+        }
         // Recovery logic: if we are mid-session, ensure the valid ambient is playing
         if manager.state == .meditating {
             manager.soundEngine.startAmbientSound(manager.ambientSound)

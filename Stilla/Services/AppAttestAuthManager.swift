@@ -69,6 +69,7 @@ actor AppAttestAuthManager {
 
     private var cachedToken: String?
     private var cachedTokenExpiry: Date?
+    private var tokenRefreshTask: Task<String, Error>?
 
     init() {
         cachedToken = UserDefaults.standard.string(forKey: tokenStorageKey)
@@ -92,6 +93,13 @@ actor AppAttestAuthManager {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     }
 
+    func invalidateCachedToken() {
+        cachedToken = nil
+        cachedTokenExpiry = nil
+        UserDefaults.standard.removeObject(forKey: tokenStorageKey)
+        UserDefaults.standard.removeObject(forKey: tokenExpiryStorageKey)
+    }
+
     private func ensureValidToken() async throws -> String {
         if let token = cachedToken,
            let expiry = cachedTokenExpiry,
@@ -101,6 +109,16 @@ actor AppAttestAuthManager {
             #endif
             return token
         }
+
+        // Image and audio requests share one registration/refresh on a cold start.
+        if let tokenRefreshTask { return try await tokenRefreshTask.value }
+        let task = Task { try await refreshToken() }
+        tokenRefreshTask = task
+        defer { tokenRefreshTask = nil }
+        return try await task.value
+    }
+
+    private func refreshToken() async throws -> String {
 
         #if DEBUG
         if let expiry = cachedTokenExpiry {

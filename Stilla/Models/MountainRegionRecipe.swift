@@ -150,14 +150,51 @@ struct MountainMeditationPreferences: Codable, Equatable {
         var minutes = 10
         var intention = ""
         var ambience = "None"
+        var startSound = "Singing Bowl"
+        var endSound = "Gentle Chime"
+        var breathingCues = false
+        var ambienceVolume: Float = 0.5
+        var cueVolume: Float = 0.5
+
+        enum CodingKeys: String, CodingKey {
+            case minutes, intention, ambience, startSound, endSound, breathingCues, ambienceVolume, cueVolume
+        }
+
+        init(minutes: Int = 10, intention: String = "", ambience: String = "None",
+             startSound: String = "Singing Bowl", endSound: String = "Gentle Chime",
+             breathingCues: Bool = false, ambienceVolume: Float = 0.5, cueVolume: Float = 0.5) {
+            self.minutes = minutes
+            self.intention = intention
+            self.ambience = ambience
+            self.startSound = startSound
+            self.endSound = endSound
+            self.breathingCues = breathingCues
+            self.ambienceVolume = ambienceVolume
+            self.cueVolume = cueVolume
+        }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            minutes = try c.decodeIfPresent(Int.self, forKey: .minutes) ?? 10
+            intention = try c.decodeIfPresent(String.self, forKey: .intention) ?? ""
+            ambience = try c.decodeIfPresent(String.self, forKey: .ambience) ?? "None"
+            // Existing saved sessions retain their previously quiet chimes.
+            startSound = try c.decodeIfPresent(String.self, forKey: .startSound) ?? "None"
+            endSound = try c.decodeIfPresent(String.self, forKey: .endSound) ?? "None"
+            breathingCues = try c.decodeIfPresent(Bool.self, forKey: .breathingCues) ?? false
+            ambienceVolume = try c.decodeIfPresent(Float.self, forKey: .ambienceVolume) ?? 0.5
+            cueVolume = try c.decodeIfPresent(Float.self, forKey: .cueVolume) ?? 0.5
+        }
     }
     var guided = Settings()
-    var silent = Settings()
+    var silent = Settings(startSound: "None", endSound: "None")
     subscript(mode: MountainSessionContext.Mode) -> Settings {
         get { mode == .guided ? guided : silent }
         set {
             var value = newValue
             if !mode.durations.contains(value.minutes) { value.minutes = 10 }
+            value.ambienceVolume = value.ambienceVolume.isFinite ? min(1, max(0, value.ambienceVolume)) : 0.5
+            value.cueVolume = value.cueVolume.isFinite ? min(1, max(0, value.cueVolume)) : 0.5
             if mode == .guided { guided = value } else { silent = value }
         }
     }

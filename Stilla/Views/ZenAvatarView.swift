@@ -4,6 +4,29 @@ import Combine
 import AVFoundation
 import Metal
 
+/// Asset-catalog portraits and locally created guide artwork share one lookup.
+enum GuideArtwork {
+    private static let cache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.totalCostLimit = 24 * 1024 * 1024
+        return cache
+    }()
+
+    static func uiImage(named name: String) -> UIImage? {
+        guard let url = CustomGuideCatalog.shared.imageURL(for: name) else { return UIImage(named: name) }
+        if let image = cache.object(forKey: name as NSString) { return image }
+        guard let image = UIImage(contentsOfFile: url.path) else { return nil }
+        let cost = (image.cgImage?.bytesPerRow ?? 0) * (image.cgImage?.height ?? 0)
+        cache.setObject(image, forKey: name as NSString, cost: cost)
+        return image
+    }
+
+    static func image(named name: String) -> Image {
+        if let image = uiImage(named: name) { return Image(uiImage: image) }
+        return Image(systemName: "person.crop.circle")
+    }
+}
+
 /// Bundled offline model, animated from native speech playback and breathing phases.
 struct ZenAvatarView: View {
     var speech = ZenSpeechMotion()
@@ -43,6 +66,7 @@ struct ZenAvatarView: View {
 
 private struct ZenAvatarScene: UIViewRepresentable {
     typealias Coordinator = ZenAvatarController
+    var asset: GuideAvatarAsset = .zen
     var speech: ZenSpeechMotion
     var technique: BreathingTechnique?
     var onPhaseChange: ((String, Double) -> Void)?
@@ -51,7 +75,7 @@ private struct ZenAvatarScene: UIViewRepresentable {
     @Binding var didLoad: Bool
     @Binding var loadFailed: Bool
 
-    func makeCoordinator() -> Coordinator { Coordinator() }
+    func makeCoordinator() -> Coordinator { Coordinator(asset: asset) }
 
     func makeUIView(context: Context) -> ARView {
         let view = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
@@ -81,8 +105,112 @@ private struct ZenAvatarScene: UIViewRepresentable {
 
 }
 
+#if DEBUG
+/// A close-up using the production renderer and actual bundled speech, so face
+/// review does not depend on an attractive but static authoring-tool render.
+struct GuideFaceReviewView: View {
+    private var reviewLanguage: String? {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "--guide-face-review-language"), args.indices.contains(index + 1) else { return nil }
+        return args[index + 1]
+    }
+    @State private var asset: GuideAvatarAsset = {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "--guide-face-review"), args.indices.contains(index + 1) else { return .zen }
+        return GuideAvatarAsset.asset(for: args[index + 1]) ?? .zen
+    }()
+    @State private var voice = GuideIntroductionPlayer()
+    @State private var didLoad = false
+    @State private var failed = false
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var body: some View {
+        VStack {
+            ZenAvatarScene(asset: asset, speech: voice.speech, isActive: scenePhase == .active,
+                           reduceMotion: reduceMotion, didLoad: $didLoad, loadFailed: $failed)
+                .id(asset.personalityID)
+            HStack {
+                ForEach(GuideAvatarAsset.all, id: \.personalityID) { item in
+                    Button(item.resourceName) { voice.stop(); asset = item }
+                }
+            }
+            Button(voice.isPlaying ? "Stop voice" : "Play voice") {
+                if voice.isPlaying { voice.stop() } else { voice.play(guideID: asset.personalityID, language: reviewLanguage) }
+            }.padding()
+        }.background(Color(white: 0.16)).foregroundStyle(.white)
+            .onChange(of: scenePhase) { _, phase in if phase != .active { voice.stop() } }
+            .onDisappear { voice.stop() }
+    }
+}
+#endif
+
+/// Every seated guide uses the same scale, front direction and animation anchors.
+/// New models opt in here; portraits remain the fallback for unregistered guides.
+struct GuideAvatarAsset: Equatable {
+    let personalityID: String
+    let resourceName: String
+    let torsoNode: String
+    let eyelidTexture: String?
+    var faceShader = "zenEyelids"
+    static let zen = Self(personalityID: "zen_minimalist",resourceName: "ZenMinimalist",
+                          torsoNode: "Layered_linen_robe",eyelidTexture: "ZenEyelids.png")
+    static let shadow = Self(personalityID: "shadow_guide",resourceName: "ShadowGuide",
+                             torsoNode: "Robe",eyelidTexture: nil,faceShader: "shadowFace")
+    static let serene = Self(personalityID: "serene_guide",resourceName: "SereneGuide",
+                             torsoNode: "Robe",eyelidTexture: nil,faceShader: "sereneFace")
+    static let all: [Self] = [.zen,.shadow,.serene]
+    static func asset(for personalityID: String) -> Self? { all.first { $0.personalityID == personalityID } }
+}
+
+/// Transparent artwork presented in the same scene as the modeled guides.
+/// The original personality portrait remains available in other app screens.
+struct GuideCutoutAsset {
+    let personalityID: String
+    let imageName: String
+    static var all: [Self] {
+        [Self(personalityID: "ra", imageName: "kai_ra_cutout")]
+            + CustomGuideCatalog.shared.personalities.map { Self(personalityID: $0.id, imageName: $0.imageName) }
+    }
+    static func asset(for id: String) -> Self? { all.first { $0.personalityID == id } }
+}
+
+// Existing Zen screens keep their default model while using the shared controller.
+typealias ZenAvatarController = GuideAvatarController
+
+/// Cache authored, unanimated templates; each scene receives its own hierarchy
+/// while textures and meshes are shared. No renderer is retained by this cache.
+@MainActor final class GuideAvatarModelCache {
+    static let shared=GuideAvatarModelCache()
+    private var models: [String: Entity]=[:]
+    private var pending: [String: AnyPublisher<Entity,Error>]=[:]
+    func publisher(for asset: GuideAvatarAsset) -> AnyPublisher<Entity,Error> {
+        if let model=models[asset.resourceName] {
+            return Just(model.clone(recursive: true)).setFailureType(to: Error.self).eraseToAnyPublisher()
+        }
+        let publisher: AnyPublisher<Entity,Error>
+        if let existing=pending[asset.resourceName] { publisher=existing }
+        else {
+            publisher=Entity.loadAsync(named: asset.resourceName,in: .main)
+                .receive(on: DispatchQueue.main)
+                .handleEvents(receiveOutput: { [weak self] model in self?.models[asset.resourceName]=model },
+                              receiveCompletion: { [weak self] _ in self?.pending[asset.resourceName]=nil },
+                              receiveCancel: { [weak self] in self?.pending[asset.resourceName]=nil })
+                .share().eraseToAnyPublisher()
+            pending[asset.resourceName]=publisher
+        }
+        return publisher.map { $0.clone(recursive: true) }.eraseToAnyPublisher()
+    }
+    func prewarm(_ asset: GuideAvatarAsset) async {
+        do { for try await _ in publisher(for: asset).values { break } } catch { }
+    }
+}
+
 @MainActor
-final class ZenAvatarController {
+final class GuideAvatarController {
+        let asset: GuideAvatarAsset
+        init(asset: GuideAvatarAsset = .zen) { self.asset=asset }
+        private var loadedModel: Entity?
+        private var loadTicket=UUID()
         var maxUpdatesPerSecond: Float = 30
         private var pendingDelta: Float = 0
         var speech = ZenSpeechMotion()
@@ -101,6 +229,10 @@ final class ZenAvatarController {
             var materials: [CustomMaterial]
         }
         private var deformedParts: [DeformedPart] = []
+        private var eyeSurfaces: [DeformedPart] = []
+        private var gaze = SIMD2<Float>.zero
+        private var gazeTarget = SIMD2<Float>.zero
+        private var nextGaze: Float = 2.5
         private var clothAmount: Float = 0
         #if DEBUG
         // Deterministic render checks in the separate QA simulator; no speech or AI.
@@ -110,10 +242,13 @@ final class ZenAvatarController {
         private let diagnosesBreathing = ProcessInfo.processInfo.arguments.contains("--zen-avatar-breath-diagnostics")
         #endif
         private var eyeAmount: Float = 0
+        private var lastVoicedAt: TimeInterval = -.infinity
+        private var wasAttending = false
         private var nextBlink: Float = 3.4
         private var blinkStarted: Float = -.infinity
         private var camera: PerspectiveCamera?
         private var head: Entity?
+        private var eyes: [Entity] = []
         private var headPose = Transform()
         private var elapsed: Float = 0
         private var mouthPose = ZenMouthPose()
@@ -154,17 +289,25 @@ final class ZenAvatarController {
         func load(in stage: Entity, view: ARView, didLoad: @escaping () -> Void,
                   loadFailed: @escaping () -> Void) {
             self.view = view
-            loader = Entity.loadAsync(named: "ZenMinimalist", in: .main)
+            loader?.cancel()
+            loadTicket=UUID()
+            let ticket=loadTicket
+            loader = GuideAvatarModelCache.shared.publisher(for: asset)
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
                     if case .failure(let error) = completion {
                         loadFailed()
-                        print("Zen avatar could not load: \(error.localizedDescription)")
+                        print("Guide avatar could not load: \(error.localizedDescription)")
                     }
                 } receiveValue: { [weak self] model in
-                    guard let self, self.view != nil else { return }
+                    guard let self, self.view != nil, self.loadTicket == ticket else { return }
+                    self.loadedModel?.removeFromParent()
+                    self.loadedModel=model
+                    self.deformedParts.removeAll()
                     stage.addChild(model)
                     self.head = model.findEntity(named: "HeadPivot")
+                    self.eyes = ["EyeLeftPivot", "EyeRightPivot"].compactMap { model.findEntity(named: $0) }
+                    self.eyes.forEach { $0.isEnabled = false }
                     self.configureDeformation(in: model)
                     self.headPose = self.head?.transform ?? Transform()
                     didLoad()
@@ -174,35 +317,40 @@ final class ZenAvatarController {
 
         private func configureDeformation(in model: Entity) {
             guard let device = MTLCreateSystemDefaultDevice(), let library = device.makeDefaultLibrary() else { return }
-            let eyelids = try? TextureResource.load(named: "ZenEyelids.png", options: .init(semantic: .raw))
+            let eyelids = asset.eyelidTexture.flatMap {
+                try? TextureResource.load(named: $0, options: .init(semantic: .raw))
+            }
             func visit(_ entity: Entity, shader: String? = nil, eyeSide: Float = 0) {
                 let eyeSide: Float = entity.name == "EyeLeftPivot" ? -1 : entity.name == "EyeRightPivot" ? 1 : eyeSide
-                let shader = entity.name == "Layered_linen_robe" || entity.name == "Layered linen robe" ? "zenTorso"
-                    : entity.name == "AnatomicalHead" ? "zenEyelids" : shader
+                let shader = entity.name.replacingOccurrences(of: " ",with: "_") == asset.torsoNode ? "zenTorso"
+                    : asset == .shadow && entity.name == "Beard" ? "shadowBeard"
+                    : entity.name == "AnatomicalHead" ? asset.faceShader : shader
                 if eyeSide != 0, let mesh = entity as? ModelEntity, let component = mesh.model {
                     do {
-                        let surface = CustomMaterial.SurfaceShader(named: "zenEyeSurface", in: library)
-                        mesh.model?.materials = try component.materials.map { original in
+                        let surface = CustomMaterial.SurfaceShader(named: asset == .zen ? "zenEyeSurface" : "guideEyeSurface", in: library)
+                        let materials = try component.materials.map { original in
                             var material = try CustomMaterial(from: original, surfaceShader: surface)
-                            material.custom.value = [eyeSide, 0, 0, 0]
+                            material.custom.value = asset == .zen ? [eyeSide, 0, 0, 0] : [asset == .serene ? 1 : 2, 0, 0, 0]
                             return material
                         }
+                        mesh.model?.materials = materials
+                        if asset != .zen { eyeSurfaces.append(DeformedPart(entity: mesh, isFace: false, materials: materials)) }
                     } catch {
                         print("Zen eye shading unavailable: \(error.localizedDescription)")
                     }
                 }
-                if let shader, (shader != "zenEyelids" || eyelids != nil),
+                if let shader, (shader != asset.faceShader || asset.eyelidTexture == nil || eyelids != nil),
                    let mesh = entity as? ModelEntity, let component = mesh.model {
                     do {
                         let modifier = CustomMaterial.GeometryModifier(named: shader, in: library)
                         let materials = try component.materials.map { original -> CustomMaterial in
                             var material = try CustomMaterial(from: original, geometryModifier: modifier)
-                            if shader == "zenEyelids", let eyelids { material.custom.texture = .init(eyelids) }
+                            if shader == asset.faceShader, let eyelids { material.custom.texture = .init(eyelids) }
                             return material
                         }
                         mesh.model?.materials = materials
                         mesh.model?.boundsMargin = 0.06
-                        deformedParts.append(DeformedPart(entity: mesh, isFace: shader == "zenEyelids", materials: materials))
+                        deformedParts.append(DeformedPart(entity: mesh, isFace: shader == asset.faceShader || shader == "shadowBeard", materials: materials))
                         #if DEBUG
                         if diagnosesBreathing { print("Zen motion: \(mesh.name), shader=\(shader), bounds=\(component.mesh.bounds)") }
                         #endif
@@ -217,10 +365,19 @@ final class ZenAvatarController {
         }
 
         private func updateDeformation(breath: Float, eyes: Float, cloth: Float) {
+            // Closed portrait lids have a subpixel seam. Do not let bright
+            // sclera leak through it at rest or at the bottom of a blink.
+            for eye in self.eyes { eye.isEnabled = eyes > 0.04 }
+            for index in eyeSurfaces.indices {
+                for material in eyeSurfaces[index].materials.indices {
+                    eyeSurfaces[index].materials[material].custom.value = [asset == .serene ? 1 : 2, eyes, gaze.x, gaze.y]
+                }
+                eyeSurfaces[index].entity.model?.materials = eyeSurfaces[index].materials
+            }
             for index in deformedParts.indices {
                 for material in deformedParts[index].materials.indices {
                     deformedParts[index].materials[material].custom.value = deformedParts[index].isFace
-                        ? [breath, eyes, mouthPose.rounding, mouthPose.opening]
+                        ? [mouthPose.lipShape, eyes, mouthPose.rounding, mouthPose.opening]
                         : [breath, eyes, cloth, 0]
                 }
                 deformedParts[index].entity.model?.materials = deformedParts[index].materials
@@ -282,19 +439,38 @@ final class ZenAvatarController {
                 let turn = simd_quatf(angle: 0.005 * sin(elapsed * 0.31), axis: [0, 0, 1])
                 headTransform.rotation = headPose.rotation * nod * turn
             }
-            headTransform.translation.z += 0.006 * expansion
+            // Follow the stronger upper-body breath without scaling the avatar.
+            headTransform.translation.z += 0.0108 * expansion
             head?.transform = headTransform
 
             let voicing = speech.isVoicing(at: now)
-            if voicing && elapsed >= nextBlink {
+            if voicing { lastVoicedAt = now }
+            // Keep eye contact through word gaps; close softly for longer
+            // meditative silence. Jaw motion still follows every audio pause.
+            let attending = speech.isSpeaking && (voicing || now - lastVoicedAt < 1.8)
+            if attending && !wasAttending {
+                nextBlink = elapsed + Float.random(in: 2.4...4.8)
+                nextGaze = elapsed + 1.8
+            }
+            wasAttending = attending
+            if attending && elapsed >= nextBlink {
                 blinkStarted = elapsed
                 nextBlink = elapsed + Float.random(in: 3.0...6.2)
             }
             let blinkAge = elapsed - blinkStarted
-            let blink: Float = blinkAge < 0.20 ? sin(blinkAge / 0.20 * .pi) : 0
-            let targetEye: Float = voicing ? 1 : 0
-            eyeAmount = reduceMotion ? targetEye : eyeAmount + (targetEye - eyeAmount) * min(1, dt * (voicing ? 24 : 7))
+            // Fast close, short contact, slower reopening; a sine wave looks
+            // like the lids bobbing instead of a human blink.
+            let blink = GuideEyeMotion.blinkClosure(age: blinkAge)
+            let targetEye: Float = attending ? 1 : 0
+            eyeAmount = reduceMotion ? targetEye : eyeAmount + (targetEye - eyeAmount) * (1 - exp(-dt * (attending ? 10 : 3)))
             var aperture = eyeAmount * (reduceMotion ? 1 : 1 - blink)
+            if attending && elapsed >= nextGaze {
+                gazeTarget = Int.random(in: 0...3) == 0
+                    ? SIMD2(Float.random(in: -0.045...0.045), Float.random(in: -0.02...0.025)) : .zero
+                nextGaze = elapsed + Float.random(in: 1.8...4.2)
+            }
+            if !attending { gazeTarget = .zero }
+            gaze += ((reduceMotion ? .zero : gazeTarget) - gaze) * (1 - exp(-dt * 32))
             #if DEBUG
             if validatesOpenEyes {
                 aperture = 1
@@ -313,19 +489,26 @@ final class ZenAvatarController {
             #endif
             // Frame-rate independent coarticulation; the whole facial surface
             // eases into each sound and returns to its exact rest pose in pauses.
-            mouthPose = reduceMotion ? .init() : mouthPose.blended(toward: target, amount: 1 - exp(-dt * 18))
+            mouthPose = reduceMotion ? .init() : mouthPose.blended(toward: target, amount: 1 - exp(-dt * 38))
             updateDeformation(breath: expansion, eyes: aperture, cloth: clothAmount)
         }
 
         func resetPose() {
             mouthPose = .init()
             eyeAmount = 0
+            lastVoicedAt = -.infinity
+            wasAttending = false
+            gaze = .zero; gazeTarget = .zero
+            blinkStarted = -.infinity; nextBlink = elapsed + 3.4; nextGaze = elapsed + 2.5
             clothAmount = 0
             updateDeformation(breath: 0, eyes: 0, cloth: 0)
             head?.transform = headPose
         }
 
         func cancel() {
+            loadTicket=UUID()
+            loadedModel?.removeFromParent(); loadedModel=nil
+            deformedParts.removeAll(); eyeSurfaces.removeAll(); eyes.removeAll(); head=nil; view=nil
             loader?.cancel()
             updates?.cancel()
             loader = nil

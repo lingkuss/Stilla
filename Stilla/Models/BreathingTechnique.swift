@@ -116,6 +116,14 @@ struct BreathingTechnique: Identifiable, Codable, Hashable {
 }
 
 extension BreathingTechnique {
+    /// Shared by the audio loop and avatar. Bound restored/custom values to the
+    /// editor's range, keeping the PCM allocation below one 80-second cycle.
+    var phaseDurations: [Double] {
+        [inhale, holdIn, exhale, holdOut].map {
+            $0.isFinite && $0 > 0 ? min(20, max(0.5, $0)) : 0
+        }
+    }
+
     private func localizedValue(_ key: String, fallback: String) -> String {
         let value = Bundle.main.localizedString(forKey: key, value: key, table: nil)
         return value == key ? fallback : value

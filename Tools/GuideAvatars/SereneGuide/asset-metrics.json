@@ -1,0 +1,12 @@
+{
+  "triangles": 65578,
+  "mesh_objects": 11,
+  "texture_dimensions": [
+    1024,
+    1024
+  ],
+  "usdz_bytes": 5174176,
+  "anatomy": "portrait-measured facial surface; closed resting eyelids",
+  "face_fit": "468 portrait landmarks; independent geometry and speech displacement",
+  "hair": "flow-shaped crown, colour-traced silhouette, tapered edge wisps; groom v2"
+}

@@ -9,9 +9,8 @@ generates the next stretch of the path and moves the camera over 5.5 seconds.
 **Stay here** hides the reading and navigation controls. The camera is stationary
 at rest. Closing and returning restores the last completed arrival.
 
-This is an exploration prototype. Walking does not award meditation progress,
-change the destination catalog, or start audio/timers. The existing Borobudur
-journey remains independent.
+This is an exploration prototype. Walking does not award meditation progress
+or start audio/timers.
 
 ## Structure
 

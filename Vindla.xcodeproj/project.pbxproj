@@ -7,6 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A72002000000000000000001 /* CustomGuideMeditations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72002000000000000000001 /* CustomGuideMeditations.swift */; };
+        A72001 /* CustomGuideImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72001; };
+        A71007 /* guide-voice-previews.json in Resources */ = {isa = PBXBuildFile; fileRef = B71007; };
+        A71006 /* CustomGuideVoicePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71006; };
+        F4B8AF86AA5500BC34170001 /* CustomGuideVoiceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B8AF86AA5500BC34170002; };
+        A71001 /* CustomGuideDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71001; };
+        A71002 /* CustomGuidePreviewPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71002; };
+        A71003 /* CustomGuideCreatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71003; };
+        A71004 /* GuideCreationSilhouette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71004; };
+        A60009 /* GardenCrystalOptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60009; };
+        A60008 /* GardenTrees.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60008 /* GardenTrees.swift */; };
+        A60007 /* GardenCrystals.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60007 /* GardenCrystals.swift */; };
+        A60006 /* GardenFlowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60006 /* GardenFlowers.swift */; };
+		A60005 /* StillnessGardenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60005; };
+		A60004 /* GardenSpecimenScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60004; };
+		A60003 /* StillnessGardenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60003; };
+		A60002 /* GardenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60002; };
+		A60001 /* StillnessGarden.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60001; };
+		A53001 /* GuideMeditationLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53001; };
+		A53002 /* GuideMeditations in Resources */ = {isa = PBXBuildFile; fileRef = B53002; };
+		A52001 /* GuideIntroductionPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52001; };
+		A52002 /* GuideIntroductions in Resources */ = {isa = PBXBuildFile; fileRef = B52002; };
+		A51002 /* SereneGuide.usdz in Resources */ = {isa = PBXBuildFile; fileRef = B51002 /* SereneGuide.usdz */; };
+		A51001 /* ShadowGuide.usdz in Resources */ = {isa = PBXBuildFile; fileRef = B51001 /* ShadowGuide.usdz */; };
 		A40008 /* MountainWorldDNA.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40008; };
 		A40007 /* MountainJourneyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40007; };
 		A40006 /* MountainRegionRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40006; };
@@ -15,11 +39,6 @@
 		A40003 /* MountainJourneyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40003 /* MountainJourneyScene.swift */; };
 		A40002 /* MountainJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40002 /* MountainJourneyView.swift */; };
 		A40001 /* MountainJourneyRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40001 /* MountainJourneyRecipe.swift */; };
-		A30005 /* Journeys in Resources */ = {isa = PBXBuildFile; fileRef = B30005 /* Journeys */; };
-		A30004 /* DestinationJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30004 /* DestinationJourneyView.swift */; };
-		A30003 /* DestinationMeditationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30003 /* DestinationMeditationContent.swift */; };
-		A30002 /* DestinationJourneyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30002 /* DestinationJourneyStore.swift */; };
-		A30001 /* DestinationJourney.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30001 /* DestinationJourney.swift */; };
 		A2000B /* ZenVoice in Resources */ = {isa = PBXBuildFile; fileRef = B2000B /* ZenVoice */; };
 		A2000A /* ZenRecordedVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000A /* ZenRecordedVoice.swift */; };
 		A20009 /* ZenVoiceLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20009 /* ZenVoiceLibrary.swift */; };
@@ -101,6 +120,30 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B72002000000000000000001 /* CustomGuideMeditations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/CustomGuideMeditations.swift; sourceTree = "<group>"; };
+        B72001 /* CustomGuideImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/CustomGuideImageGenerator.swift; sourceTree = "<group>"; };
+        B71007 /* guide-voice-previews.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/guide-voice-previews.json; sourceTree = "<group>"; };
+        B71006 /* CustomGuideVoicePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/CustomGuideVoicePickerView.swift; sourceTree = "<group>"; };
+        F4B8AF86AA5500BC34170002 /* CustomGuideVoiceCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/CustomGuideVoiceCatalog.swift; sourceTree = "<group>"; };
+        B71001 /* CustomGuideDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/CustomGuideDraft.swift; sourceTree = "<group>"; };
+        B71002 /* CustomGuidePreviewPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/CustomGuidePreviewPlayer.swift; sourceTree = "<group>"; };
+        B71003 /* CustomGuideCreatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/CustomGuideCreatorView.swift; sourceTree = "<group>"; };
+        B71004 /* GuideCreationSilhouette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/GuideCreationSilhouette.swift; sourceTree = "<group>"; };
+        B60009 /* GardenCrystalOptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/GardenCrystalOptics.swift; sourceTree = "<group>"; };
+        B60008 /* GardenTrees.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/GardenTrees.swift; sourceTree = "<group>"; };
+        B60007 /* GardenCrystals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/GardenCrystals.swift; sourceTree = "<group>"; };
+        B60006 /* GardenFlowers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/GardenFlowers.swift; sourceTree = "<group>"; };
+		B60005 /* StillnessGardenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/StillnessGardenView.swift; sourceTree = "<group>"; };
+		B60004 /* GardenSpecimenScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/GardenSpecimenScene.swift; sourceTree = "<group>"; };
+		B60003 /* StillnessGardenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/StillnessGardenStore.swift; sourceTree = "<group>"; };
+		B60002 /* GardenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/GardenGeometry.swift; sourceTree = "<group>"; };
+		B60001 /* StillnessGarden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/StillnessGarden.swift; sourceTree = "<group>"; };
+		B53001 /* GuideMeditationLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideMeditationLibrary.swift; sourceTree = "<group>"; };
+		B53002 /* GuideMeditations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/GuideMeditations; sourceTree = "<group>"; };
+		B52001 /* GuideIntroductionPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideIntroductionPlayer.swift; sourceTree = "<group>"; };
+		B52002 /* GuideIntroductions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/GuideIntroductions; sourceTree = "<group>"; };
+		B51002 /* SereneGuide.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = Resources/SereneGuide.usdz; sourceTree = "<group>"; };
+		B51001 /* ShadowGuide.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; path = Resources/ShadowGuide.usdz; sourceTree = "<group>"; };
 		B40008 /* MountainWorldDNA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainWorldDNA.swift; sourceTree = "<group>"; };
 		B40007 /* MountainJourneyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/MountainJourneyStore.swift; sourceTree = "<group>"; };
 		B40006 /* MountainRegionRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainRegionRecipe.swift; sourceTree = "<group>"; };
@@ -109,11 +152,6 @@
 		B40003 /* MountainJourneyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/MountainJourneyScene.swift; sourceTree = "<group>"; };
 		B40002 /* MountainJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/MountainJourneyView.swift; sourceTree = "<group>"; };
 		B40001 /* MountainJourneyRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/MountainJourneyRecipe.swift; sourceTree = "<group>"; };
-		B30005 /* Journeys */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/Journeys; sourceTree = "<group>"; };
-		B30004 /* DestinationJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/DestinationJourneyView.swift; sourceTree = "<group>"; };
-		B30003 /* DestinationMeditationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/DestinationMeditationContent.swift; sourceTree = "<group>"; };
-		B30002 /* DestinationJourneyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/DestinationJourneyStore.swift; sourceTree = "<group>"; };
-		B30001 /* DestinationJourney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/DestinationJourney.swift; sourceTree = "<group>"; };
 		B2000B /* ZenVoice */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/ZenVoice; sourceTree = "<group>"; };
 		B2000A /* ZenRecordedVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenRecordedVoice.swift; sourceTree = "<group>"; };
 		B20009 /* ZenVoiceLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenVoiceLibrary.swift; sourceTree = "<group>"; };
@@ -284,19 +322,32 @@
 		D10002 /* Stilla */ = {
 			isa = PBXGroup;
 			children = (
-                B30005 /* Journeys */,
+                B71001 /* CustomGuideDraft.swift */,
+                B72001 /* CustomGuideImageGenerator.swift */,
+				B72002000000000000000001 /* CustomGuideMeditations.swift */,
+                B71002 /* CustomGuidePreviewPlayer.swift */,
+                B71003 /* CustomGuideCreatorView.swift */,
+                B71004 /* GuideCreationSilhouette.swift */,
+                B71006 /* CustomGuideVoicePickerView.swift */,
+                B71007 /* guide-voice-previews.json */,
+                F4B8AF86AA5500BC34170002 /* CustomGuideVoiceCatalog.swift */,
                 B40006 /* MountainRegionRecipe.swift */,
                 B40007 /* MountainJourneyStore.swift */,
                 B40008 /* MountainWorldDNA.swift */,
+                B60005 /* StillnessGardenView.swift */,
+                B60004 /* GardenSpecimenScene.swift */,
+                B60009 /* GardenCrystalOptics.swift */,
+                B60003 /* StillnessGardenStore.swift */,
+                B60002 /* GardenGeometry.swift */,
+                B60008 /* GardenTrees.swift */,
+                B60007 /* GardenCrystals.swift */,
+                B60006 /* GardenFlowers.swift */,
+                B60001 /* StillnessGarden.swift */,
                 B40005 /* MountainLandscapeMesh.swift */,
                 B40001 /* MountainJourneyRecipe.swift */,
                 B40002 /* MountainJourneyView.swift */,
                 B40003 /* MountainJourneyScene.swift */,
                 B40004 /* MountainAtmosphere.metal */,
-                B30004 /* DestinationJourneyView.swift */,
-                B30003 /* DestinationMeditationContent.swift */,
-                B30002 /* DestinationJourneyStore.swift */,
-                B30001 /* DestinationJourney.swift */,
 				64F9FE232F7BE17400BBB344 /* Vindla.entitlements */,
 				B10001 /* VindlaApp.swift */,
 				B10002 /* MeditationManager.swift */,
@@ -307,7 +358,11 @@
 				D10007 /* Store */,
 				B10010 /* Assets.xcassets */,
 				B20002 /* ZenMinimalist.usdz */,
+				B51001 /* ShadowGuide.usdz */,
+				B51002 /* SereneGuide.usdz */,
 				B2000B /* ZenVoice */,
+				B52002 /* GuideIntroductions */,
+				B53002 /* GuideMeditations */,
 				B20008 /* ZenEyelids.png */,
 				B20007 /* ZenAvatar.metal */,
 				B10011 /* Info.plist */,
@@ -395,6 +450,8 @@
 				B10021 /* KaiBrainService.swift */,
 				B20004 /* LocalGenerationFixtures.swift */,
 				B2000A /* ZenRecordedVoice.swift */,
+				B52001 /* GuideIntroductionPlayer.swift */,
+				B53001 /* GuideMeditationLibrary.swift */,
 				B20009 /* ZenVoiceLibrary.swift */,
 				64B0B29F2F900B4B003951DC /* AppAttestAuthManager.swift */,
 				6414BCF62F883CF6009BF848 /* AppLocalization.swift */,
@@ -513,9 +570,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10010 /* Assets.xcassets in Resources */,
+                A71007 /* guide-voice-previews.json in Resources */,
 				A20002 /* ZenMinimalist.usdz in Resources */,
-                A30005 /* Journeys in Resources */,
+				A51001 /* ShadowGuide.usdz in Resources */,
+				A51002 /* SereneGuide.usdz in Resources */,
 				A2000B /* ZenVoice in Resources */,
+				A52002 /* GuideIntroductions in Resources */,
+				A53002 /* GuideMeditations in Resources */,
 				A20008 /* ZenEyelids.png in Resources */,
 				6414BCFF2F883D4C009BF848 /* Localizable.strings in Resources */,
 				6414BCFC2F883D4C009BF848 /* Localizable.strings in Resources */,
@@ -541,6 +602,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+                A71001 /* CustomGuideDraft.swift in Sources */,
+                A72001 /* CustomGuideImageGenerator.swift in Sources */,
+				A72002000000000000000001 /* CustomGuideMeditations.swift in Sources */,
+                A71002 /* CustomGuidePreviewPlayer.swift in Sources */,
+                A71003 /* CustomGuideCreatorView.swift in Sources */,
+                A71004 /* GuideCreationSilhouette.swift in Sources */,
+                A71006 /* CustomGuideVoicePickerView.swift in Sources */,
+                F4B8AF86AA5500BC34170001 /* CustomGuideVoiceCatalog.swift in Sources */,
 				A10001 /* VindlaApp.swift in Sources */,
 				64F9FE742F8082F700BBB344 /* ShareSessionCardView.swift in Sources */,
 				A10002 /* MeditationManager.swift in Sources */,
@@ -555,18 +624,25 @@
                 A40006 /* MountainRegionRecipe.swift in Sources */,
                 A40007 /* MountainJourneyStore.swift in Sources */,
                 A40008 /* MountainWorldDNA.swift in Sources */,
+                A60005 /* StillnessGardenView.swift in Sources */,
+                A60004 /* GardenSpecimenScene.swift in Sources */,
+                A60009 /* GardenCrystalOptics.swift in Sources */,
+                A60003 /* StillnessGardenStore.swift in Sources */,
+                A60002 /* GardenGeometry.swift in Sources */,
+                A60008 /* GardenTrees.swift in Sources */,
+                A60007 /* GardenCrystals.swift in Sources */,
+                A60006 /* GardenFlowers.swift in Sources */,
+                A60001 /* StillnessGarden.swift in Sources */,
                 A40005 /* MountainLandscapeMesh.swift in Sources */,
                 A40001 /* MountainJourneyRecipe.swift in Sources */,
                 A40002 /* MountainJourneyView.swift in Sources */,
                 A40003 /* MountainJourneyScene.swift in Sources */,
                 A40004 /* MountainAtmosphere.metal in Sources */,
-                A30004 /* DestinationJourneyView.swift in Sources */,
-                A30003 /* DestinationMeditationContent.swift in Sources */,
-                A30002 /* DestinationJourneyStore.swift in Sources */,
-                A30001 /* DestinationJourney.swift in Sources */,
 				A20005 /* ZenSessionView.swift in Sources */,
 				A20004 /* LocalGenerationFixtures.swift in Sources */,
 				A2000A /* ZenRecordedVoice.swift in Sources */,
+				A52001 /* GuideIntroductionPlayer.swift in Sources */,
+				A53001 /* GuideMeditationLibrary.swift in Sources */,
 				A20009 /* ZenVoiceLibrary.swift in Sources */,
 				A20003 /* ZenSessionRequest.swift in Sources */,
 				A20006 /* ZenAvatarMotion.swift in Sources */,

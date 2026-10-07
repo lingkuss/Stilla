@@ -1,0 +1,11 @@
+{
+  "triangles": 69012,
+  "mesh_objects": 12,
+  "texture_dimensions": [
+    1024,
+    1024
+  ],
+  "usdz_bytes": 6178337,
+  "shared_anatomy": "Tools/ZenAvatar/ZenMinimalist.blend",
+  "eyelid_motion": "per-vertex, independent from jaw"
+}

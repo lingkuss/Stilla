@@ -53,11 +53,11 @@ precondition(command.status == .completed, "Metal execution failed: \(String(des
 let result = output.contents().bindMemory(to: SIMD4<Float>.self, capacity: points.count * 3)
 for i in points.indices {
     precondition(simd_length(result[i * 3]) < 0.000001, "Rest pose drift")
-    precondition(simd_length(result[i * 3 + 1]) < 0.04, "Unbounded movement")
+    precondition(simd_length(result[i * 3 + 1]) < 0.06, "Breath must stay inside the renderer's deformation margin")
 }
-precondition(result[1].y < -0.02 && result[1].z > 0.012, "Chest must expand forward and visibly rise in the frontal view")
-precondition(result[4].x > 0 && result[7].x < 0, "Rib cage must expand on both sides")
-precondition(result[10].z > 0.012, "Shoulder must visibly follow the breath")
+precondition(result[1].y < -0.035 && result[1].z > 0.022, "Chest must expand forward and visibly rise in the frontal view")
+precondition(result[4].x > 0.015 && result[7].x < -0.015, "Rib cage expansion must be visible on both sides")
+precondition(result[10].z > 0.02, "Shoulder must visibly follow the breath")
 for i in 4...6 { precondition(simd_length(result[i * 3 + 1]) < 0.000001, "Hands, legs and cushion must stay still") }
 precondition(abs(result[22].y - result[23].y) > 0.0001, "Cloth should respond independently of chest expansion")
 print("PASS: production Metal on GPU — chest expansion, bilateral ribs, shoulder lift, fixed hands/legs/cushion, delayed folds and bounded/rest poses")

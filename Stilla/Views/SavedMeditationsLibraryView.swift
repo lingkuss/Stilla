@@ -46,7 +46,7 @@ struct SavedMeditationsLibraryView: View {
 
     private var availablePersonalities: [KaiPersonality] {
         let ids = Set(manager.savedMeditations.compactMap(\.kaiPersonalityID))
-        return KaiPersonality.all.filter { ids.contains($0.id) }
+        return KaiPersonality.knownPersonalities.filter { ids.contains($0.id) }
     }
 
     var body: some View {
@@ -319,7 +319,7 @@ struct SavedMeditationRow: View {
                             .frame(width: 48, height: 48)
 
                         if let personality = script.generatedPersonality {
-                            Image(personality.imageName)
+                            GuideArtwork.image(named: personality.imageName)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 48, height: 48)

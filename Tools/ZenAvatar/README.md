@@ -20,8 +20,8 @@ card. The complete input is retained for the production script generator.
 ## Local testing: no billable generation
 
 **Every Debug build uses bundled example scripts**, in Simulator and on-device.
-`KaiBrainService` compiles out its three generation network branches in Debug:
-meditation, sleep story and practice plan. Requests return before any backend URL
+`KaiBrainService` compiles out both generation network branches in Debug:
+meditation and sleep story. Requests return before any backend URL
 or App Attest authorization is accessed. There is no switch or stored preference
 that can silently turn generation back on. Local generation does not decrement
 free credits. Script-related Pro gates allow local tests without changing any
@@ -66,7 +66,10 @@ Tools/ZenAvatarTests/run.sh
 
 These compile the actual parser, models, fixture builder and service in Debug.
 Backend URL getters trap if accessed. Checks cover the requested phrases, bounds,
-focus routing, all three generators, cancellation, credits and JSON round-trips.
+focus routing, both generators, cancellation, credits and JSON round-trips.
+The service tests also check retired plan/destination cleanup: it is safe to run twice,
+preserves history, mountain progress, audio and reward records, and still decodes saved scripts from
+the former plan feature without retaining its obsolete metadata.
 
 ## Avatar construction
 

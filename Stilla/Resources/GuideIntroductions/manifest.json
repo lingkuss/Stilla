@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "clips": [
+    {
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "I am your Zen guide. There is nothing to achieve here. We begin with a breath.",
+      "file": "zen_minimalist-en.m4a",
+      "duration": 5.8,
+      "generationHash": "3d75f33346c5405011286dcda34411a7299ffb0cf5b4b21b2e44cdf32d42bb94",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "referenceLanguage": "en",
+      "engine": "mlx-community/chatterbox-multilingual-v3"
+    },
+    {
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "I am your Stillness Guide. You are welcome just as you are. Let us give your breath a little more room.",
+      "file": "serene_guide-en.m4a",
+      "duration": 8.8,
+      "generationHash": "012c4852d24c121c4c5ea16ad198469893e63668027b31072a3bcfe50c73258e",
+      "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+      "referenceLanguage": "en",
+      "engine": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-8bit"
+    },
+    {
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "I am the Shadow Guide. Even what you hide belongs here. We meet it with curiosity, at your own pace.",
+      "file": "shadow_guide-en.m4a",
+      "duration": 9.2,
+      "generationHash": "c1f284785992ad0997464d0f49cb0368a1c57fce7989bf9d6b72c6dda62423b0",
+      "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+      "referenceLanguage": "en",
+      "engine": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-8bit"
+    },
+    {
+      "guideID": "ra",
+      "language": "en",
+      "text": "I am Ra. I greet you in love and light. Let us rest for a moment in what connects us.",
+      "file": "ra-en.m4a",
+      "duration": 8.5,
+      "generationHash": "04c56ecab9c2ec422234ac23ed8f4a89fb5fd2bb10ee30f0d679b06f75d3d43b",
+      "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+      "referenceLanguage": "en",
+      "engine": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-8bit"
+    },
+    {
+      "guideID": "serene_guide",
+      "language": "sv",
+      "text": "Jag är din vägledare till stillhet. Du får landa precis som du är. Vi tar ett lugnt andetag tillsammans.",
+      "file": "serene_guide-sv.m4a",
+      "duration": 8.2,
+      "generationHash": "e601d4193135a879603b1b3152bcbe2fc2469ef4a94ea0be4aab2e45c53f75da",
+      "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+      "referenceLanguage": "en",
+      "engine": "local Piper Swedish + Chatterbox S3Gen voice conversion"
+    },
+    {
+      "guideID": "shadow_guide",
+      "language": "sv",
+      "text": "Jag är Skuggvägledaren. Hela du får finnas här. Vi möter det som känns svårt, i din takt.",
+      "file": "shadow_guide-sv.m4a",
+      "duration": 7.4,
+      "generationHash": "c0ad9cfed3c3b9206c35f58d09c12f70f5c60228b1d73dffef0398a407e52de6",
+      "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+      "referenceLanguage": "en",
+      "engine": "local Piper Swedish + Chatterbox S3Gen voice conversion"
+    },
+    {
+      "guideID": "ra",
+      "language": "sv",
+      "text": "Jag är Ra. Välkommen till en stund av kärlek och ljus. Här hör du till.",
+      "file": "ra-sv.m4a",
+      "duration": 9.0,
+      "generationHash": "477dc8430e87c9d1a825d6521f427462a8acfbd35a0efc3f28761ac0c012c78a",
+      "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+      "referenceLanguage": "en",
+      "engine": "local Piper Swedish + Chatterbox S3Gen voice conversion + language-matched Chatterbox refinement"
+    },
+    {
+      "guideID": "zen_minimalist",
+      "language": "sv",
+      "text": "Jag är Zen. Här behöver du inte prestera. Vi börjar med ett andetag.",
+      "file": "zen_minimalist-sv.m4a",
+      "duration": 5.7,
+      "generationHash": "87490b456ff4b35694c6409bc23c96209f59610d6ebde56225342c588996011d",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "referenceLanguage": "sv",
+      "engine": "local Piper Swedish + Chatterbox S3Gen voice conversion"
+    }
+  ]
+}

@@ -18,7 +18,7 @@ Vindla is an iPhone meditation app that turns how someone feels right now into a
 
 ## Short description
 
-Generic recording libraries often fail at the exact moment someone wants help: three minutes before a difficult meeting, after an argument, or when their mind will not settle at night. Vindla lets someone describe that moment, choose their available time and preferred guide, and receive a personalized meditation from Mimir. It also includes breathwork, sleep stories, soundscapes, Siri shortcuts, reminders, seven-day paths, and a simple meditation timer.
+Generic recording libraries often fail at the exact moment someone wants help: three minutes before a difficult meeting, after an argument, or when their mind will not settle at night. Vindla lets someone describe that moment, choose their available time and preferred guide, and receive a personalized meditation from Mimir. It also includes breathwork, sleep stories, soundscapes, Siri shortcuts, reminders, and a simple meditation timer.
 
 Vindla is free to start, requires no account, and keeps practice history on-device.
 
@@ -35,7 +35,7 @@ Vindla launched quietly on 2026-04-13 and only nine people found it in its first
 - Free personalized use: three Mimir sessions per month
 - Guide styles: eight
 - Practice history: stored on-device
-- Other features: breathwork, sleep stories, soundscapes, meditation timer, reminders, Siri shortcuts, Live Activities, saved journeys, and seven-day paths
+- Other features: breathwork, sleep stories, soundscapes, meditation timer, reminders, Siri shortcuts, Live Activities, saved journeys
 - App Store launch: 2026-04-13
 - Current public version: 1.0.1
 - Submitted update: 1.0.2 build 4 (Waiting for Review; automatic release selected)

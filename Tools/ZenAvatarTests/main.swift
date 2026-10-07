@@ -2,6 +2,14 @@ import Foundation
 
 func near(_ actual: Float, _ expected: Float) { precondition(abs(actual - expected) < 0.001, "\(actual) != \(expected)") }
 let box = BreathingTechnique.presets.first { $0.id == "box" }!
+precondition(box.phaseDurations == [4, 4, 4, 4], "Box audio must include both holds")
+precondition(BreathingTechnique.defaultTechnique.phaseDurations == [4, 0, 4, 0])
+for technique in BreathingTechnique.presets {
+    precondition(technique.phaseDurations == [technique.inhale, technique.holdIn, technique.exhale, technique.holdOut])
+}
+var unsafeTiming = box
+unsafeTiming.inhale = .infinity; unsafeTiming.holdIn = -1; unsafeTiming.exhale = 100000; unsafeTiming.holdOut = .nan
+precondition(unsafeTiming.phaseDurations == [0, 0, 20, 0], "Invalid stored timing must not cause unbounded audio allocation")
 near(ZenBreathMotion.sample(at: 0, technique: box).expansion, 0)
 near(ZenBreathMotion.sample(at: 2, technique: box).expansion, 0.5)
 near(ZenBreathMotion.sample(at: 4, technique: box).expansion, 1)
@@ -78,3 +86,28 @@ speech.stop()
 speech.speak(word: "andas", at: 143)
 precondition(speech.mouthOpening(at: 143.04) > 0.5)
 print("PASS: breathing phases, speech gaps/stop/restart, phoneme priority, lip closure/rounding, continuous coarticulation and sustained vowels")
+
+let track = GuideLipSyncTrack(version: 1, audioSHA256: "test", duration: 1.5, mouthCues: [
+    .init(start: 0, end: 0.3, value: "D"), .init(start: 0.3, end: 0.42, value: "A"),
+    .init(start: 0.42, end: 0.9, value: "F"), .init(start: 0.9, end: 1.1, value: "G"),
+    .init(start: 1.1, end: 1.5, value: "X")])
+precondition(track.isValid)
+precondition(track.pose(at: 0.1).opening > 0.7)
+precondition(track.pose(at: 0.34).opening < 0.001, "Bilabial consonants must seal even when audio is loud")
+precondition(track.pose(at: 0.6).rounding > 0.9)
+precondition(track.pose(at: 0.97).lipShape < -0.9)
+precondition(track.pose(at: 1.3) == .init() && track.pose(at: .nan) == .init())
+for boundary in [0.28, 0.40, 0.88, 1.08] {
+    let a = track.pose(at: boundary - 0.00001), b = track.pose(at: boundary + 0.00001)
+    precondition(abs(a.opening-b.opening) < 0.002 && abs(a.rounding-b.rounding) < 0.002 && abs(a.lipShape-b.lipShape) < 0.002)
+}
+speech.stop(); speech.speak(level: 1, at: 150); speech.speak(pose: track.pose(at: 0.34), at: 150)
+near(speech.mouthOpening(at: 150.01), 0)
+speech.speak(pose: track.pose(at: 0.6), at: 150.03)
+precondition(speech.mouthPose(at: 150.04).rounding > 0.9)
+precondition(speech.mouthPose(at: 150.3) == .init(), "Expired playback may not leave a talking face")
+speech.stop(); precondition(speech.mouthPose(at: 150.04) == .init())
+precondition(GuideEyeMotion.blinkClosure(age: 0) == 0)
+precondition(GuideEyeMotion.blinkClosure(age: 0.08) == 1)
+precondition(GuideEyeMotion.blinkClosure(age: 0.16) > 0 && GuideEyeMotion.blinkClosure(age: 0.25) == 0)
+print("PASS: audio-clock visemes, consonant closure, rounding, F/V, continuous unequal cue boundaries, stale/reset poses and asymmetric blinks")

@@ -459,7 +459,7 @@ struct KaiExperienceView: View {
                 }
             } label: {
                 HStack(alignment: .center, spacing: 16) {
-                    Image(activePersonality.imageName)
+                    GuideArtwork.image(named: activePersonality.imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 58, height: 58)
@@ -711,7 +711,7 @@ struct KaiGeneratingLoadingView: View {
                     .frame(width: 140, height: 140)
                     .rotationEffect(.degrees(rotationAmount))
 
-                Image(personality.imageName)
+                GuideArtwork.image(named: personality.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 96, height: 96)
@@ -801,7 +801,7 @@ private struct KaiPersonalityCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             ZStack(alignment: .topTrailing) {
-                Image(personality.imageName)
+                GuideArtwork.image(named: personality.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 250, height: 186)

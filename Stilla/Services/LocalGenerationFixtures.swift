@@ -37,20 +37,6 @@ enum LocalGenerationFixtures {
         return kind == .sleepStory ? script : KaiBrainService.shared.normalizeScriptDuration(script)
     }
 
-    static func journey(goal: String, minutes: Int, personality: KaiPersonality,
-                        stillnessRatio: Double, cycle: Int) -> PracticeJourneyPlan {
-        let title = localized("zen.mock.meditation.title")
-        return PracticeJourneyPlan(title: title, summary: localized("zen.mock.focus.rest"),
-            goalSummary: goal, cycleNumber: max(1, cycle), personaID: personality.id,
-            personaName: personality.localizedName, stillnessRatio: stillnessRatio,
-            steps: (1...7).map { day in
-                PracticeJourneyStep(dayNumber: day, title: title,
-                    focus: goal, purpose: localized("zen.mock.focus.rest"),
-                    meditationPrompt: goal, adaptationTip: localized("zen.mock.meditation.1"),
-                    suggestedDurationMinutes: min(30, max(1, minutes)))
-            })
-    }
-
     private static func localized(_ key: String) -> String {
         Bundle.main.localizedString(forKey: key, value: nil, table: nil)
     }

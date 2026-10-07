@@ -31,6 +31,8 @@
 	<false/>
 	<key>KAIBackendURL</key>
 	<string>$(KAI_BACKEND_URL)</string>
+	<key>KAIGuideImageBackendURL</key>
+	<string>$(KAI_GUIDE_IMAGE_BACKEND_URL)</string>
 	<key>KAIShareBackendURL</key>
 	<string>$(KAI_SHARE_BACKEND_URL)</string>
 	<key>KAIShareWebBaseURL</key>

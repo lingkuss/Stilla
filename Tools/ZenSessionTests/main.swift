@@ -7,7 +7,53 @@ struct Secrets {
     static var kaiSleepStoryBackendURL: URL? { fatalError("A local test accessed the sleep endpoint") }
 }
 @main struct LocalGenerationChecks {
+    static func verifyRetiredFeatureMigration() throws {
+        let suite = "vindla.retired-practice-tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        let script = MeditationScript(title: "Saved meditation", durationMinutes: 10,
+            steps: [ScriptStep(text: "Rest with your breath.", pauseDuration: 12)],
+            isFavorite: true, tags: ["Daily Path", "Day 3"],
+            narrationLanguage: "en", localNarrationID: "saved-narration")
+        var legacy = try JSONSerialization.jsonObject(with: JSONEncoder().encode(script)) as! [String: Any]
+        legacy["practiceJourneyPlanID"] = UUID().uuidString
+        legacy["practiceJourneyStepID"] = UUID().uuidString
+        legacy["practiceJourneyDayNumber"] = 3
+        legacy["practiceJourneyCycleNumber"] = 1
+        legacy["practiceJourneyTitle"] = "Legacy path"
+        let savedScripts = try JSONSerialization.data(withJSONObject: [legacy])
+        let memories = try JSONEncoder().encode([SessionMemory(startedAt: Date(),
+            durationSeconds: 600, reflection: "A calm moment")])
+        defaults.set(savedScripts, forKey: "savedMeditations")
+        defaults.set(memories, forKey: "recentSessionMemories")
+        defaults.set(["2026-10-01": 3000], forKey: "meditationHistory")
+        defaults.set(Data("preserved garden ledger".utf8), forKey: "vindla.stillnessGarden.v1")
+        defaults.set(Data("preserved sound choices".utf8), forKey: "mountain.prototype.meditation.preferences.v1")
+        defaults.set(Data("preserved mountain progress".utf8), forKey: "mountainJourney.region.preview.v1")
+        defaults.set(10, forKey: "durationMinutes")
+        let preserved = defaults.persistentDomain(forName: suite)!
+        let retiredKeys = ["activePracticeJourneyPlan", "completedPracticeJourneyPlans",
+            "practiceJourneyPrimaryGoal", "practiceJourneyMainObstacle", "practiceJourneyPreferredStyle",
+            "destinationJourney.progress.v1", "destinationJourney.selectedID"]
+        for key in retiredKeys { defaults.set(Data("old or malformed plan data".utf8), forKey: key) }
+
+        RetiredFeatureData.remove(from: defaults)
+        RetiredFeatureData.remove(from: defaults)
+        precondition(retiredKeys.allSatisfy { defaults.object(forKey: $0) == nil })
+        precondition(NSDictionary(dictionary: preserved).isEqual(to: defaults.persistentDomain(forName: suite)!))
+        let restored = try JSONDecoder().decode([MeditationScript].self, from: defaults.data(forKey: "savedMeditations")!)
+        precondition(restored.count == 1 && restored[0].id == script.id)
+        precondition(restored[0].title == script.title && restored[0].isFavorite)
+        precondition(restored[0].steps[0].text == script.steps[0].text && restored[0].tags == script.tags)
+        precondition(restored[0].localNarrationID == script.localNarrationID && restored[0].narrationLanguage == "en")
+        let reencoded = try JSONSerialization.jsonObject(with: JSONEncoder().encode(restored[0])) as! [String: Any]
+        precondition(!reencoded.keys.contains(where: { $0.hasPrefix("practiceJourney") }))
+        print("PASS: retired plan/destination cleanup is idempotent; saved scripts, session history, mountain progress, audio and rewards survive unchanged")
+    }
+
     static func main() async throws {
+        try verifyRetiredFeatureMigration()
         let cases: [(String, ZenSessionRequest.Kind, Int)] = [
             ("Jag vill sova", .sleepStory, 20),
             ("ge mig en avslappnad sömnberättelse", .sleepStory, 20),
@@ -58,9 +104,6 @@ struct Secrets {
         precondition(sleep.script.isSleepStory && sleep.script.durationMinutes == 20)
         precondition(sleep.script.steps.allSatisfy { $0.pauseDuration < 2 })
         precondition(!sleep.nextHeaders.isEmpty)
-        let plan = try await brain.generatePracticeJourneyPlan(goalSummary: "Lugn", preferredDurationMinutes: 10,
-            personality: .zenMinimalist, stillnessRatio: 0.5, memoryContext: nil, historyContext: nil, cycleNumber: 1)
-        precondition(plan.steps.count == 7 && plan.steps.allSatisfy { $0.suggestedDurationMinutes == 10 })
         let cancelled = Task {
             withUnsafeCurrentTask { $0?.cancel() }
             return try await brain.generateScript(mood: "", durationMinutes: 10, personality: .zenMinimalist, stillnessRatio: 0.5)
@@ -88,6 +131,6 @@ struct Secrets {
         changed.durationMinutes = 1
         precondition(!ZenVoiceLibrary.supports(changed), "Do not truncate long recordings in short sessions")
         print("PASS: local voice lookup, persona/text isolation and measured ten-minute duration")
-        print("PASS: 17 requests, duration bounds, focus, all 3 local generators, cancellation, unchanged credits and JSON round-trip. Endpoint traps were never accessed.")
+        print("PASS: 17 requests, duration bounds, focus, both local generators, cancellation, unchanged credits and JSON round-trip. Endpoint traps were never accessed.")
     }
 }

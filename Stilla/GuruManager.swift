@@ -60,9 +60,18 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
     
     func play(script: MeditationScript) {
         stop()
-        self.currentScript = ZenVoiceLibrary.timedScript(script)
+        // A guide audition may have used .ambient. Restore session playback so
+        // the meditation remains audible when the phone locks, even without ambience.
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .duckOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch { print("Could not prepare narration audio: \(error.localizedDescription)") }
+        self.currentScript = GuideMeditationLibrary.timedScript(ZenVoiceLibrary.timedScript(script))
         self.currentStepIndex = 0
         self.isPlaying = true
+
+        if let script = currentScript, hasRecordedPractice(script),
+           playRecordedPause(2, completion: { [weak self] in self?.speakNextStep() }) { return }
         
         // Wait 2 seconds before the first phrase to allow for centering
         let playbackID = self.playbackID
@@ -193,6 +202,29 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         lastMappedSourceOffset = 0
         let step = script.steps[currentStepIndex]
         MeditationManager.shared.updateLiveActivity(phrase: step.text)
+        if let clip = CustomGuideMeditationLibrary.shared.recording(for: script, step: currentStepIndex) {
+            let playbackID = self.playbackID
+            if recordedVoice.play(url: clip.url, volume: MeditationManager.shared.mimirVoiceVolume,
+                onLevel: { [weak self] level in self?.avatarSpeech.speak(level: level) },
+                onPose: { [weak self] pose in self?.avatarSpeech.speak(pose: pose) },
+                completion: { [weak self] _ in
+                    guard let self, self.playbackID == playbackID else { return }
+                    self.finishStep()
+                }) { return }
+            // A damaged custom recording must not silently switch to another voice.
+            stop(); return
+        }
+        if hasRecordedPractice(script),
+           let clip = GuideMeditationLibrary.recording(for: script, step: currentStepIndex), let url = clip.url {
+            let playbackID = self.playbackID
+            if recordedVoice.play(url: url, volume: MeditationManager.shared.mimirVoiceVolume,
+                onLevel: { [weak self] level in self?.avatarSpeech.speak(level: level) },
+                onPose: { [weak self] pose in self?.avatarSpeech.speak(pose: pose) },
+                completion: { [weak self] _ in
+                    guard let self, self.playbackID == playbackID else { return }
+                    self.finishStep()
+                }) { return }
+        }
         if ZenVoiceLibrary.supports(script), let clip = ZenVoiceLibrary.clip(for: step.text) {
             let playbackID = self.playbackID
             if recordedVoice.play(clip, volume: MeditationManager.shared.mimirVoiceVolume,
@@ -203,7 +235,7 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
                 }) { return }
         }
         let mode: NarrationMode = script.isSleepStory ? .sleepStory : .meditation
-        let utterance = makeUtterance(text: step.text, voice: selectedVoice(), mode: mode)
+        let utterance = makeUtterance(text: step.text, voice: narrationVoice(for: script), mode: mode)
         currentUtterance = utterance
         
         synthesizer.speak(utterance)
@@ -215,6 +247,12 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         currentUtterance = nil
         guard isPlaying, let script = currentScript, currentStepIndex < script.steps.count else { return }
         let pause = script.steps[currentStepIndex].pauseDuration
+        if hasRecordedPractice(script),
+           playRecordedPause(pause, completion: { [weak self] in
+               guard let self else { return }
+               self.currentStepIndex += 1
+               self.speakNextStep()
+           }) { return }
         let playbackID = self.playbackID
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: max(0.001, pause), repeats: false) { [weak self] _ in
@@ -224,6 +262,22 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
                 self.speakNextStep()
             }
         }
+    }
+
+    /// Pauses are finite parts of the media sequence, not a timer-only gap.
+    /// The file contains digital silence; there is no meter/animation work here.
+    private func playRecordedPause(_ duration: TimeInterval, completion: @escaping () -> Void) -> Bool {
+        guard let url = GuideMeditationLibrary.pauseURL else { return false }
+        let playbackID = self.playbackID
+        return recordedVoice.play(url: url, endingAfter: duration, metersAudio: false, volume: 0,
+            onLevel: { _ in }, completion: { [weak self] _ in
+                guard let self, self.isPlaying, self.playbackID == playbackID else { return }
+                completion()
+            })
+    }
+
+    private func hasRecordedPractice(_ script: MeditationScript) -> Bool {
+        CustomGuideMeditationLibrary.shared.hasCompleteRecording(script) || GuideMeditationLibrary.hasCompleteRecording(script)
     }
 
     private func selectedVoice() -> AVSpeechSynthesisVoice? {
@@ -250,6 +304,18 @@ final class GuruManager: NSObject, AVSpeechSynthesizerDelegate {
         }
 
         return savedVoice
+    }
+
+    private func narrationVoice(for script: MeditationScript) -> AVSpeechSynthesisVoice? {
+        guard let language = script.narrationLanguage else { return selectedVoice() }
+        // A missing file must not read an English script through a Swedish voice
+        // or change the user's saved voice for other sessions.
+        return AVSpeechSynthesisVoice.speechVoices().filter {
+            !$0.voiceTraits.contains(.isNoveltyVoice)
+                && !$0.voiceTraits.contains(.isPersonalVoice)
+                && Locale(identifier: $0.language).language.languageCode?.identifier == language
+        }.sorted { $0.quality.rawValue > $1.quality.rawValue }.first
+            ?? AVSpeechSynthesisVoice(language: language)
     }
 
     private func makeUtterance(

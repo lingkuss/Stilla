@@ -8,23 +8,12 @@ import HealthKit
 import ActivityKit
 import AudioToolbox
 
-enum HomeViewMode: String, Codable {
-    case hero
-    case timer
-}
-
 enum RoutineAccessGate: String, Identifiable {
     case pro
     case techniqueLibrary
     case soundLibrary
 
     var id: String { rawValue }
-}
-
-enum PracticeJourneyHomeCardState {
-    case start
-    case active(plan: PracticeJourneyPlan, step: PracticeJourneyStep)
-    case readyForNextCycle(goalSummary: String, nextCycleNumber: Int)
 }
 
 /// Central state manager for the meditation timer.
@@ -59,71 +48,45 @@ final class MeditationManager {
         durationMinutes == 0
     }
 
-    // The journey owns a per-session audio policy; persisted user settings stay untouched.
-    private(set) var activeDestinationSession: DestinationSession?
-    private(set) var destinationStepAwarded = false
-    private(set) var destinationReachedEnd = false
-
+    // Mountain sessions own their audio mix without changing global preferences.
     private(set) var activeMountainSession: MountainSessionContext?
+    private var mountainAudio: MountainMeditationPreferences.Settings?
     private(set) var mountainReachedEnd = false
-    private var hasJourneyAudioPolicy: Bool { activeDestinationSession != nil || activeMountainSession != nil }
+    private var hasMountainAudioPolicy: Bool { activeMountainSession != nil }
 
-    #if DEBUG
     @discardableResult
     func startMountainSession(address: MountainPlaceAddress, minutes: Int,
                               mode: MountainSessionContext.Mode, intention: String,
-                              ambience: SoundEngine.AmbientSound,personality: KaiPersonality = .zenMinimalist) -> Bool {
+                              ambience: SoundEngine.AmbientSound,personality: KaiPersonality = .zenMinimalist,
+                              audio: MountainMeditationPreferences.Settings? = nil) -> Bool {
         guard state == .idle, mode.durations.contains(minutes),
               !MountainJourneyStore.shared.storageUnavailable,
               MountainJourneyStore.shared.progress.current == address else { return false }
+        var script = mode == .guided ? (CustomGuideMeditationLibrary.shared.script(minutes: minutes, personality: personality)
+            ?? GuideMeditationLibrary.script(minutes: minutes, personality: personality)) : nil
+        var seconds = minutes * 60
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--mountain-test-short-session") { seconds = 8 }
+        if mode == .guided, script == nil, !CustomGuideCatalog.isCustomID(personality.id) {
+            script = LocalGenerationFixtures.script(input: intention, minutes: minutes,
+                personality: personality, kind: .meditation, stillnessRatio: 0.8)
+        }
+        #endif
+        guard mode == .silent || script != nil else { return false }
         soundEngine.stopAll()
         GuruManager.shared.stop()
-        let seconds = ProcessInfo.processInfo.arguments.contains("--mountain-test-short-session") ? 8 : minutes * 60
+        mountainAudio = audio ?? .init(ambience: ambience.rawValue, startSound: "None", endSound: "None")
         let session = MountainSessionContext(id: UUID(), address: address, mode: mode,
             durationSeconds: seconds, startedAtUptime: ProcessInfo.processInfo.systemUptime)
-        currentScript = mode == .guided ? LocalGenerationFixtures.script(input: intention, minutes: minutes,
-            personality: personality, kind: .meditation, stillnessRatio: 0.8) : nil
+        currentScript = script
         pendingKaiMoodSummary = nil
         pendingKaiIntention = nil
         start(durationMinutes: minutes, mountainSession: session)
-        if ambience != .none { soundEngine.startAmbientSound(ambience) }
         return true
     }
-    #endif
 
     func refreshMountainTimer() {
         guard state == .meditating, let session = activeMountainSession else { return }
-        elapsedSeconds = session.elapsed(at: ProcessInfo.processInfo.systemUptime)
-        remainingSeconds = max(0, session.durationSeconds - elapsedSeconds)
-        if remainingSeconds == 0 { finish(reachedEnd: true) }
-    }
-
-    @discardableResult
-    func startDestinationSession(_ destination: JourneyDestination, minutes: Int,
-                                 mode: DestinationMeditationMode) -> Bool {
-        guard state == .idle, DestinationMeditationContent.durations.contains(minutes),
-              DestinationJourneyStore.shared.canStart(destination) else { return false }
-        soundEngine.stopAll()
-        GuruManager.shared.stop()
-        var seconds = minutes * 60
-        #if DEBUG
-        // Only explicit UI-test launches shorten the clock; never compiled into Release.
-        if ProcessInfo.processInfo.arguments.contains("--journey-test-short-session") { seconds = 8 }
-        #endif
-        let session = DestinationSession(id: UUID(), destinationID: destination.id,
-            mode: mode, durationSeconds: seconds, startedAtUptime: ProcessInfo.processInfo.systemUptime)
-        destinationStepAwarded = false
-        destinationReachedEnd = false
-        currentScript = mode == .guided ? DestinationMeditationContent.script(minutes: minutes, destination: destination) : nil
-        pendingKaiMoodSummary = nil
-        pendingKaiIntention = nil
-        start(durationMinutes: minutes, destinationSession: session)
-        return true
-    }
-
-    /// A silent app can be suspended while locked. Reconcile from a monotonic clock on resume.
-    func refreshDestinationTimer() {
-        guard state == .meditating, let session = activeDestinationSession else { return }
         elapsedSeconds = session.elapsed(at: ProcessInfo.processInfo.systemUptime)
         remainingSeconds = max(0, session.durationSeconds - elapsedSeconds)
         if remainingSeconds == 0 { finish(reachedEnd: true) }
@@ -146,7 +109,7 @@ final class MeditationManager {
     var ambientSound: SoundEngine.AmbientSound {
         didSet {
             UserDefaults.standard.set(ambientSound.rawValue, forKey: "ambientSound")
-            if state == .meditating, !hasJourneyAudioPolicy {
+            if state == .meditating, !hasMountainAudioPolicy {
                 soundEngine.startAmbientSound(ambientSound)
             }
         }
@@ -230,37 +193,6 @@ final class MeditationManager {
         }
     }
 
-    var activePracticeJourneyPlan: PracticeJourneyPlan? {
-        didSet {
-            if let plan = activePracticeJourneyPlan,
-               let data = try? JSONEncoder().encode(plan) {
-                UserDefaults.standard.set(data, forKey: "activePracticeJourneyPlan")
-            } else {
-                UserDefaults.standard.removeObject(forKey: "activePracticeJourneyPlan")
-            }
-        }
-    }
-
-    var completedPracticeJourneyPlans: [PracticeJourneyPlan] {
-        didSet {
-            if let data = try? JSONEncoder().encode(completedPracticeJourneyPlans) {
-                UserDefaults.standard.set(data, forKey: "completedPracticeJourneyPlans")
-            }
-        }
-    }
-
-    var practiceJourneyPrimaryGoal: String {
-        didSet { UserDefaults.standard.set(practiceJourneyPrimaryGoal, forKey: "practiceJourneyPrimaryGoal") }
-    }
-
-    var practiceJourneyMainObstacle: String {
-        didSet { UserDefaults.standard.set(practiceJourneyMainObstacle, forKey: "practiceJourneyMainObstacle") }
-    }
-
-    var practiceJourneyPreferredStyle: String {
-        didSet { UserDefaults.standard.set(practiceJourneyPreferredStyle, forKey: "practiceJourneyPreferredStyle") }
-    }
-
     var lastCompletedSessionID: UUID?
 
     var selectedTechnique: BreathingTechnique {
@@ -320,7 +252,7 @@ final class MeditationManager {
     }
 
     var selectedKaiPersonality: KaiPersonality {
-        KaiPersonality.personality(for: selectedKaiPersonalityID)
+        KaiPersonality.all.first(where: { $0.id == selectedKaiPersonalityID }) ?? .default
     }
 
     func saveCurrentScript() {
@@ -613,24 +545,8 @@ final class MeditationManager {
         }
         self.recentSessionMemories = decodedMemories
 
-        if let data = UserDefaults.standard.data(forKey: "activePracticeJourneyPlan"),
-           let decoded = try? JSONDecoder().decode(PracticeJourneyPlan.self, from: data) {
-            self.activePracticeJourneyPlan = decoded
-        } else {
-            self.activePracticeJourneyPlan = nil
-        }
+        RetiredFeatureData.remove(from: .standard)
 
-        if let data = UserDefaults.standard.data(forKey: "completedPracticeJourneyPlans"),
-           let decoded = try? JSONDecoder().decode([PracticeJourneyPlan].self, from: data) {
-            self.completedPracticeJourneyPlans = decoded
-        } else {
-            self.completedPracticeJourneyPlans = []
-        }
-
-        self.practiceJourneyPrimaryGoal = UserDefaults.standard.string(forKey: "practiceJourneyPrimaryGoal") ?? ""
-        self.practiceJourneyMainObstacle = UserDefaults.standard.string(forKey: "practiceJourneyMainObstacle") ?? ""
-        self.practiceJourneyPreferredStyle = UserDefaults.standard.string(forKey: "practiceJourneyPreferredStyle") ?? ""
-        
         // Load techniques
         if let data = UserDefaults.standard.data(forKey: "selectedTechnique"),
            let technique = try? JSONDecoder().decode(BreathingTechnique.self, from: data) {
@@ -684,13 +600,12 @@ final class MeditationManager {
     }
 
     func start(durationMinutes minutes: Int, isShared: Bool = false,
-               destinationSession: DestinationSession? = nil, mountainSession: MountainSessionContext? = nil) {
+               mountainSession: MountainSessionContext? = nil) {
         guard state != .meditating else { return }
-        activeDestinationSession = destinationSession
+        rewardSessionID = mountainSession?.id ?? UUID()
         activeMountainSession = mountainSession
+        if mountainSession == nil { mountainAudio = nil }
         mountainReachedEnd = false
-        destinationStepAwarded = false
-        destinationReachedEnd = false
         let isSleepStorySession = currentScript?.isSleepStory == true
         self.isSharedSession = isShared
         self.durationMinutes = minutes
@@ -704,10 +619,6 @@ final class MeditationManager {
             remainingSeconds = totalSeconds
             elapsedSeconds = 0
         }
-        if let journey = activeDestinationSession {
-            totalSeconds = journey.durationSeconds
-            remainingSeconds = totalSeconds
-        }
         if let session = activeMountainSession {
             totalSeconds = session.durationSeconds
             remainingSeconds = totalSeconds
@@ -719,13 +630,24 @@ final class MeditationManager {
         activeSessionIntention = normalizedMemoryText(pendingKaiIntention)
         pendingKaiMoodSummary = nil
         pendingKaiIntention = nil
-        if !isSleepStorySession, !hasJourneyAudioPolicy {
+        if let audio = mountainAudio, activeMountainSession != nil {
+            soundEngine.prepareMeditationAudio(toneVolume: audio.cueVolume, ambientVolume: audio.ambienceVolume)
+            soundEngine.playSound(SoundEngine.Sound(rawValue: audio.startSound) ?? .none)
+            soundEngine.startAmbientSound(SoundEngine.AmbientSound(rawValue: audio.ambience) ?? .none)
+            if audio.breathingCues { soundEngine.startBreathingLoop(technique: selectedTechnique) }
+            #if DEBUG
+            print("Mountain audio: start=\(audio.startSound), end=\(audio.endSound), ambience=\(audio.ambience), breathing=\(audio.breathingCues)")
+            #endif
+        } else {
+            soundEngine.prepareMeditationAudio(toneVolume: toneVolume, ambientVolume: ambientVolume)
+        }
+        if !isSleepStorySession, !hasMountainAudioPolicy {
             soundEngine.playSound(startSound)
         }
-        if ambientSound != .none, !hasJourneyAudioPolicy {
+        if ambientSound != .none, !hasMountainAudioPolicy {
             soundEngine.startAmbientSound(ambientSound)
         }
-        if hapticEnabled, !hasJourneyAudioPolicy {
+        if hapticEnabled, !hasMountainAudioPolicy {
             sessionHapticGenerator.prepare()
             sessionHapticGenerator.impactOccurred()
         }
@@ -733,7 +655,7 @@ final class MeditationManager {
         if let script = currentScript {
             // Start Live Activity before speech begins so updates find an active activity
             startLiveActivity(initialPhrase: script.steps.first?.text ?? String(localized: "session.live_activity.focusing_inward"))
-            if isGuruEnabled || activeDestinationSession?.mode == .guided || activeMountainSession?.mode == .guided {
+            if isGuruEnabled || activeMountainSession?.mode == .guided {
                 GuruManager.shared.play(script: script)
             }
         } else {
@@ -912,27 +834,26 @@ final class MeditationManager {
 
     func stop() {
         refreshMountainTimer()
-        refreshDestinationTimer()
         guard state == .meditating else { return }
         finish()
     }
 
-    func reset() {
+    func reset(preservingMountainEndingAudio: Bool = false) {
+        let preserveEnding = preservingMountainEndingAudio && activeMountainSession != nil && state == .complete
         timer?.invalidate()
         timer = nil
-        activeDestinationSession = nil
         activeMountainSession = nil
+        mountainAudio = nil
         mountainReachedEnd = false
-        destinationStepAwarded = false
-        destinationReachedEnd = false
         state = .idle
+        rewardSessionID = nil
         remainingSeconds = 0
         elapsedSeconds = 0
         sessionStartDate = nil
         isSharedSession = false // Ensure we return to personal mode
         currentScript = nil // Clear the shared script content
         endLiveActivity()
-        soundEngine.stopAll()
+        if !preserveEnding { soundEngine.stopAll() }
         GuruManager.shared.stop()
     }
 
@@ -965,7 +886,8 @@ final class MeditationManager {
     }
 
     func playBreathingCue(phase: String, duration: Double) {
-        guard activeDestinationSession == nil else { return }
+        // Mountain sessions own a continuous audio cycle, independent of views.
+        guard activeMountainSession == nil else { return }
         let hasSoundAccess = canPlayBreathingSounds
         let isBreathTransition = (phase == "Inhale" || phase == "Exhale")
 
@@ -999,6 +921,7 @@ final class MeditationManager {
         }
     }
 
+    private var rewardSessionID: UUID?
     private var sessionStartDate: Date?
     private var lastSessionStartDate: Date?
     private var activeSessionMoodSummary: String?
@@ -1011,10 +934,6 @@ final class MeditationManager {
         }
         if activeMountainSession != nil {
             refreshMountainTimer()
-            return
-        }
-        if activeDestinationSession != nil {
-            refreshDestinationTimer()
             return
         }
         if isOpenEnded {
@@ -1033,14 +952,12 @@ final class MeditationManager {
             mountainReachedEnd = reachedEnd
             MountainJourneyStore.shared.complete(session, at: ProcessInfo.processInfo.systemUptime, reachedEnd: reachedEnd)
         }
-        if let session = activeDestinationSession {
-            destinationReachedEnd = reachedEnd
-            destinationStepAwarded = DestinationJourneyStore.shared.complete(session,
-                elapsedSeconds: session.elapsed(at: ProcessInfo.processInfo.systemUptime), reachedEnd: reachedEnd)
-        }
         let wasSleepStorySession = currentScript?.isSleepStory == true
         let sessionSeconds = isOpenEnded ? elapsedSeconds : (totalSeconds - remainingSeconds)
-        var completedSessionMemoryID: UUID?
+        if let rewardSessionID, StillnessGarden.qualifies(reachedEnd: reachedEnd,
+            openEnded: isOpenEnded, elapsedSeconds: sessionSeconds, sleepStory: wasSleepStorySession) {
+            StillnessGardenStore.shared.record(sessionID: rewardSessionID)
+        }
         if let startDate = sessionStartDate,
            sessionSeconds > 0,
            !isSharedSession, // Skip memory logging for shared sessions
@@ -1057,12 +974,8 @@ final class MeditationManager {
             )
             recentSessionMemories = Array(([memory] + recentSessionMemories).prefix(3))
             lastCompletedSessionID = memory.id
-            completedSessionMemoryID = memory.id
         } else {
             lastCompletedSessionID = nil
-        }
-        if sessionSeconds > 0, let script = currentScript {
-            completeJourneyStepIfNeeded(for: script, sessionMemoryID: completedSessionMemoryID)
         }
         if sessionSeconds > 0 {
             bestSessionSecondsStored = max(bestSessionSecondsStored, sessionSeconds)
@@ -1073,22 +986,30 @@ final class MeditationManager {
         timer = nil
         state = .complete
         if !isOpenEnded { remainingSeconds = 0 }
+        if activeMountainSession != nil { soundEngine.stopMeditationSignals() }
+        else { soundEngine.stopBreathingSounds() }
         soundEngine.stopAmbientSoundWithFadeOut()
-        if !wasSleepStorySession, !hasJourneyAudioPolicy {
+        if activeMountainSession != nil, let audio = mountainAudio, reachedEnd {
+            soundEngine.playSound(SoundEngine.Sound(rawValue: audio.endSound) ?? .none)
+            #if DEBUG
+            print("Mountain audio: completed, end=\(audio.endSound)")
+            #endif
+        }
+        if !wasSleepStorySession, !hasMountainAudioPolicy {
             soundEngine.playSound(endSound)
         }
         GuruManager.shared.stop()
         endLiveActivity()
-        if hapticEnabled, !hasJourneyAudioPolicy {
+        if hapticEnabled, !hasMountainAudioPolicy {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
         
         // Finalize HealthKit session record
         if let startDate = sessionStartDate, sessionSeconds > 0 {
-            let endDate = !hasJourneyAudioPolicy ? Date()
+            let endDate = !hasMountainAudioPolicy ? Date()
                 : startDate.addingTimeInterval(TimeInterval(sessionSeconds))
             HealthManager.shared.saveMindfulMinute(startDate: startDate, endDate: endDate,
-                requestPermission: !hasJourneyAudioPolicy)
+                requestPermission: !hasMountainAudioPolicy)
         }
         activeSessionMoodSummary = nil
         activeSessionIntention = nil
@@ -1099,81 +1020,6 @@ final class MeditationManager {
 extension MeditationManager {
     var latestSessionMemory: SessionMemory? {
         recentSessionMemories.first
-    }
-
-    var practiceJourneyHomeCardState: PracticeJourneyHomeCardState {
-        if let plan = activePracticeJourneyPlan,
-           let step = plan.nextStep {
-            return .active(plan: plan, step: step)
-        }
-
-        if !completedPracticeJourneyPlans.isEmpty {
-            return .readyForNextCycle(
-                goalSummary: latestPracticeJourneyGoalSummary ?? practiceJourneyGoalSeed,
-                nextCycleNumber: (completedPracticeJourneyPlans.first?.cycleNumber ?? 0) + 1
-            )
-        }
-
-        return .start
-    }
-
-    var practiceJourneyNeedsOnboarding: Bool {
-        activePracticeJourneyPlan == nil &&
-        completedPracticeJourneyPlans.isEmpty &&
-        normalizedMemoryText(practiceJourneyPrimaryGoal) == nil
-    }
-
-    var currentPracticeJourneyStep: PracticeJourneyStep? {
-        activePracticeJourneyPlan?.nextStep
-    }
-
-    var latestPracticeJourneyGoalSummary: String? {
-        activePracticeJourneyPlan?.goalSummary ?? completedPracticeJourneyPlans.first?.goalSummary
-    }
-
-    var practiceJourneyPlanForOverview: PracticeJourneyPlan? {
-        activePracticeJourneyPlan ?? completedPracticeJourneyPlans.first
-    }
-
-    var practiceJourneyGoalSeed: String {
-        if let explicitGoal = normalizedMemoryText(practiceJourneyPrimaryGoal) {
-            var parts = ["Primary goal: \(explicitGoal)."]
-            if let obstacle = normalizedMemoryText(practiceJourneyMainObstacle) {
-                parts.append("Main obstacle: \(obstacle).")
-            }
-            if let preferredStyle = normalizedMemoryText(practiceJourneyPreferredStyle) {
-                parts.append("Preferred meditation technique: \(preferredStyle).")
-            }
-            return parts.joined(separator: " ")
-        }
-
-        if let activeGoal = normalizedMemoryText(activePracticeJourneyPlan?.goalSummary) {
-            return activeGoal
-        }
-
-        if let archivedGoal = normalizedMemoryText(completedPracticeJourneyPlans.first?.goalSummary) {
-            return archivedGoal
-        }
-
-        if let recentMemory = latestSessionMemory {
-            var parts: [String] = []
-            if let intention = normalizedMemoryText(recentMemory.intention) {
-                parts.append("Primary intention: \(intention).")
-            }
-            if let mood = normalizedMemoryText(recentMemory.moodSummary) {
-                parts.append("Recent mood or need: \(mood).")
-            }
-            if let reflection = normalizedMemoryText(recentMemory.reflection) {
-                parts.append("What is helping lately: \(reflection).")
-            }
-
-            let derived = parts.joined(separator: " ")
-            if !derived.isEmpty {
-                return derived
-            }
-        }
-
-        return "Build a steady daily meditation practice that feels approachable, grounding, and easy to return to."
     }
 
     var lastSessionStartTime: Date? {
@@ -1190,44 +1036,9 @@ extension MeditationManager {
         updated.reflectionDate = Date()
         memories[index] = updated
         recentSessionMemories = memories
-        attachReflectionToJourneyStep(trimmed, sessionID: sessionID)
     }
 
-    func attachJourneyCheckIn(tags: [String], reflection: String?, to sessionID: UUID) {
-        var seenTags = Set<String>()
-        let normalizedTags = tags.compactMap { rawTag -> String? in
-            let tag = rawTag.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !tag.isEmpty, !seenTags.contains(tag) else { return nil }
-            seenTags.insert(tag)
-            return tag
-        }
-        let trimmedReflection = normalizedMemoryText(reflection)
-
-        if let trimmedReflection {
-            attachReflection(trimmedReflection, to: sessionID)
-        }
-
-        guard !normalizedTags.isEmpty else { return }
-        attachCheckInTagsToJourneyStep(normalizedTags, sessionID: sessionID)
-    }
-
-    func savePracticeJourneyPlan(_ plan: PracticeJourneyPlan) {
-        activePracticeJourneyPlan = plan
-    }
-
-    func savePracticeJourneyPreferences(
-        goal: String,
-        obstacle: String?,
-        preferredStyle: String?,
-        preferredDurationMinutes: Int
-    ) {
-        practiceJourneyPrimaryGoal = normalizedMemoryText(goal) ?? ""
-        practiceJourneyMainObstacle = normalizedMemoryText(obstacle) ?? ""
-        practiceJourneyPreferredStyle = normalizedMemoryText(preferredStyle) ?? ""
-        durationMinutes = preferredDurationMinutes.clamped(to: 1...180)
-    }
-
-    var practiceJourneyPreferredOnboardingDuration: Int {
+    var preferredGuidedSessionDuration: Int {
         let preferred = durationMinutes == 0 ? 10 : durationMinutes
         let clamped = preferred.clamped(to: 1...KaiBrainService.maxAIGenerationDurationMinutes)
         let available = allDurations
@@ -1238,82 +1049,16 @@ extension MeditationManager {
         return available.contains(clamped) ? clamped : (available.first(where: { $0 >= clamped }) ?? available.last ?? clamped)
     }
 
-    func clearPracticeJourneyPlan() {
-        activePracticeJourneyPlan = nil
-    }
-
-    func practiceJourneyHistoryContext(limit: Int = 2) -> String? {
-        let plans = completedPracticeJourneyPlans.prefix(limit)
-        guard !plans.isEmpty else { return nil }
-
-        let entries = plans.map { plan in
-            let completedTitles = plan.steps
-                .filter { $0.isCompleted }
-                .map { "Day \($0.dayNumber): \($0.title)" }
-                .joined(separator: ", ")
-            return "Cycle \(plan.cycleNumber) goal: \(plan.goalSummary). Completed: \(completedTitles)"
-        }
-
-        return entries.joined(separator: " || ")
-    }
-
-    func startTodayPracticeJourneyStep() async throws {
-        isGeneratingGuidedSession = true
-        defer { isGeneratingGuidedSession = false }
-
-        let personality = selectedKaiPersonality
-        let stillnessRatio = preferredStillnessRatio
-        let plan = try await ensurePracticeJourneyPlanForHome(
-            personality: personality,
-            stillnessRatio: stillnessRatio
-        )
-
-        guard let step = plan.nextStep else {
-            throw KaiBrainService.BrainError.invalidResponse
-        }
-
-        let journeyPrompt = buildJourneyMeditationPrompt(plan: plan, step: step)
-
-        var script = try await KaiBrainService.shared.generateScript(
-            mood: journeyPrompt,
-            durationMinutes: step.suggestedDurationMinutes,
-            personality: personality,
-            stillnessRatio: stillnessRatio
-        )
-
-        script.kaiPersonalityID = personality.id
-        script.kaiPersonalityName = personality.localizedName
-        script.practiceJourneyPlanID = plan.id
-        script.practiceJourneyStepID = step.id
-        script.practiceJourneyDayNumber = step.dayNumber
-        script.practiceJourneyCycleNumber = plan.cycleNumber
-        script.practiceJourneyTitle = plan.title
-        if script.tags.contains(where: { $0.caseInsensitiveCompare("Daily Path") == .orderedSame }) == false {
-            script.tags.append("Daily Path")
-        }
-        if script.tags.contains(where: { $0.caseInsensitiveCompare("Day \(step.dayNumber)") == .orderedSame }) == false {
-            script.tags.append("Day \(step.dayNumber)")
-        }
-
-        GuruManager.shared.play(script: script)
-        currentScript = script
-        durationMinutes = step.suggestedDurationMinutes
-        isGuruEnabled = true
-        pendingKaiMoodSummary = step.focus
-        pendingKaiIntention = "Day \(step.dayNumber): \(step.title)"
-        start(durationMinutes: step.suggestedDurationMinutes)
-    }
-
     func startQuickMoodSessionFromHome(moodText: String) async throws {
         isGeneratingGuidedSession = true
         defer { isGeneratingGuidedSession = false }
 
         let trimmedMood = moodText.trimmingCharacters(in: .whitespacesAndNewlines)
         let personality = selectedKaiPersonality
-        let resolvedDuration = practiceJourneyPreferredOnboardingDuration
+        let resolvedDuration = preferredGuidedSessionDuration
 
         var prompt = trimmedMood.isEmpty ? "Calm" : trimmedMood
-        if let memoryContext = practiceJourneyMemoryContextString() {
+        if let memoryContext = recentSessionMemoryContext() {
             if trimmedMood.isEmpty {
                 prompt = "Memory context: \(memoryContext)"
             } else {
@@ -1354,35 +1099,7 @@ extension MeditationManager {
         return trimmed.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
     }
 
-    private var preferredPracticeJourneyDurationMinutes: Int {
-        let base = durationMinutes == 0 ? 10 : durationMinutes
-        return min(max(3, base), KaiBrainService.maxAIGenerationDurationMinutes)
-    }
-
-    private func ensurePracticeJourneyPlanForHome(
-        personality: KaiPersonality,
-        stillnessRatio: Double
-    ) async throws -> PracticeJourneyPlan {
-        if let activePlan = activePracticeJourneyPlan,
-           activePlan.nextStep != nil {
-            return activePlan
-        }
-
-        let cycleNumber = (completedPracticeJourneyPlans.first?.cycleNumber ?? 0) + 1
-        let plan = try await KaiBrainService.shared.generatePracticeJourneyPlan(
-            goalSummary: practiceJourneyGoalSeed,
-            preferredDurationMinutes: preferredPracticeJourneyDurationMinutes,
-            personality: personality,
-            stillnessRatio: stillnessRatio,
-            memoryContext: practiceJourneyMemoryContextString(),
-            historyContext: practiceJourneyHistoryContext(),
-            cycleNumber: cycleNumber
-        )
-        savePracticeJourneyPlan(plan)
-        return plan
-    }
-
-    private func practiceJourneyMemoryContextString() -> String? {
+    private func recentSessionMemoryContext() -> String? {
         let memories = Array(recentSessionMemories.prefix(3))
         guard !memories.isEmpty else { return nil }
 
@@ -1403,127 +1120,7 @@ extension MeditationManager {
         return entries.joined(separator: " || ")
     }
 
-    private func buildJourneyMeditationPrompt(plan: PracticeJourneyPlan, step: PracticeJourneyStep) -> String {
-        var parts: [String] = []
-        parts.append("Practice journey: \(plan.title).")
-        parts.append("Cycle \(plan.cycleNumber), day \(step.dayNumber) of 7.")
-        parts.append("Goal summary: \(plan.goalSummary).")
-        parts.append("Today's focus: \(step.focus).")
-        parts.append("Why it matters: \(step.purpose).")
-        parts.append("Meditation direction: \(step.meditationPrompt).")
-        parts.append("Adaptation tip if the user feels resistance, low energy, or overwhelm: \(step.adaptationTip).")
-        if let previousStep = previousCompletedStep(before: step, in: plan),
-           let completion = previousStep.completion {
-            var checkInParts: [String] = []
-            if let tags = completion.checkInTags, !tags.isEmpty {
-                checkInParts.append("selected check-in: \(tags.joined(separator: ", "))")
-            }
-            if let reflection = normalizedMemoryText(completion.reflection) {
-                checkInParts.append("reflection: \(reflection)")
-            }
-            if !checkInParts.isEmpty {
-                parts.append("Yesterday's response from day \(previousStep.dayNumber): \(checkInParts.joined(separator: "; ")). Adapt today's session so it clearly responds to this without over-explaining.")
-            }
-        }
 
-        return parts.joined(separator: " ")
-    }
-
-    private func previousCompletedStep(before step: PracticeJourneyStep, in plan: PracticeJourneyPlan) -> PracticeJourneyStep? {
-        plan.steps
-            .filter { $0.dayNumber < step.dayNumber && $0.isCompleted }
-            .sorted { $0.dayNumber > $1.dayNumber }
-            .first
-    }
-
-    private func completeJourneyStepIfNeeded(for script: MeditationScript, sessionMemoryID: UUID?) {
-        guard let planID = script.practiceJourneyPlanID,
-              let stepID = script.practiceJourneyStepID,
-              var plan = activePracticeJourneyPlan,
-              plan.id == planID,
-              let index = plan.steps.firstIndex(where: { $0.id == stepID }) else {
-            return
-        }
-
-        if plan.steps[index].completion == nil {
-            plan.steps[index].completion = PracticeJourneyStepCompletion(
-                completedAt: Date(),
-                sessionMemoryID: sessionMemoryID
-            )
-        }
-
-        if plan.isCompleted {
-            plan.completedAt = Date()
-            completedPracticeJourneyPlans = Array(([plan] + completedPracticeJourneyPlans).prefix(8))
-            activePracticeJourneyPlan = nil
-        } else {
-            activePracticeJourneyPlan = plan
-        }
-    }
-
-    private func attachReflectionToJourneyStep(_ reflection: String, sessionID: UUID) {
-        guard var activePlan = activePracticeJourneyPlan else {
-            attachReflectionToCompletedJourney(reflection, sessionID: sessionID)
-            return
-        }
-
-        if let stepIndex = activePlan.steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) {
-            activePlan.steps[stepIndex].completion?.reflection = reflection
-            activePracticeJourneyPlan = activePlan
-            return
-        }
-
-        attachReflectionToCompletedJourney(reflection, sessionID: sessionID)
-    }
-
-    private func attachReflectionToCompletedJourney(_ reflection: String, sessionID: UUID) {
-        guard let planIndex = completedPracticeJourneyPlans.firstIndex(where: { plan in
-            plan.steps.contains(where: { $0.completion?.sessionMemoryID == sessionID })
-        }) else {
-            return
-        }
-
-        var plans = completedPracticeJourneyPlans
-        guard let stepIndex = plans[planIndex].steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) else {
-            return
-        }
-
-        plans[planIndex].steps[stepIndex].completion?.reflection = reflection
-        completedPracticeJourneyPlans = plans
-    }
-
-    private func attachCheckInTagsToJourneyStep(_ tags: [String], sessionID: UUID) {
-        guard var activePlan = activePracticeJourneyPlan else {
-            attachCheckInTagsToCompletedJourney(tags, sessionID: sessionID)
-            return
-        }
-
-        if let stepIndex = activePlan.steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) {
-            activePlan.steps[stepIndex].completion?.checkInTags = tags
-            activePlan.steps[stepIndex].completion?.checkInSavedAt = Date()
-            activePracticeJourneyPlan = activePlan
-            return
-        }
-
-        attachCheckInTagsToCompletedJourney(tags, sessionID: sessionID)
-    }
-
-    private func attachCheckInTagsToCompletedJourney(_ tags: [String], sessionID: UUID) {
-        guard let planIndex = completedPracticeJourneyPlans.firstIndex(where: { plan in
-            plan.steps.contains(where: { $0.completion?.sessionMemoryID == sessionID })
-        }) else {
-            return
-        }
-
-        var plans = completedPracticeJourneyPlans
-        guard let stepIndex = plans[planIndex].steps.firstIndex(where: { $0.completion?.sessionMemoryID == sessionID }) else {
-            return
-        }
-
-        plans[planIndex].steps[stepIndex].completion?.checkInTags = tags
-        plans[planIndex].steps[stepIndex].completion?.checkInSavedAt = Date()
-        completedPracticeJourneyPlans = plans
-    }
 }
 
 private extension Int {
@@ -1952,7 +1549,7 @@ class HealthManager {
     func saveMindfulMinute(startDate: Date, endDate: Date, requestPermission: Bool = true) {
         guard HKHealthStore.isHealthDataAvailable(),
               let mindfulType = HKObjectType.categoryType(forIdentifier: .mindfulSession) else { return }
-        // Journey completion stays quiet and uses Health only when access was already granted.
+        // Mountain completion stays quiet and uses Health only when access was already granted.
         if !requestPermission, healthStore.authorizationStatus(for: mindfulType) != .sharingAuthorized { return }
         Task {
             if requestPermission {

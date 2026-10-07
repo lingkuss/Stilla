@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "guides": [
+    {
+      "id": "zen_minimalist",
+      "seed": 42,
+      "description": "An older male meditation guide. Low, warm, grounded register, understated quiet confidence. Short precise phrases with clean pauses. Unhurried natural articulation. Gentle sentence endings. No whispering, theatrical delivery or exaggerated breathiness.",
+      "sv": "Jag är Zen. Här behöver du inte prestera. Vi börjar med ett andetag.",
+      "en": "I am your Zen guide. There is nothing to achieve here. We begin with a breath."
+    },
+    {
+      "id": "serene_guide",
+      "seed": 137,
+      "description": "A warm adult female meditation guide in her thirties. Soft rounded mezzo voice, clear and grounded, intimate conversational presence. Gentle encouraging smile in the voice, relaxed natural pace and spacious pauses. Supportive and sincere, never sugary, seductive or whispery. Clean dry studio recording with no background sound.",
+      "sv": "Jag är din vägledare till stillhet. Du får landa precis som du är. Vi tar ett lugnt andetag tillsammans.",
+      "en": "I am your Stillness Guide. You are welcome just as you are. Let us give your breath a little more room."
+    },
+    {
+      "id": "shadow_guide",
+      "seed": 219,
+      "description": "A mature male guide with a deep velvety bass-baritone and subtle natural grain. Warm, patient, steady and quietly mysterious. Slow thoughtful phrasing, calm reassurance and clear diction. An attentive companion who welcomes every feeling. Never sinister, growling, threatening or theatrical. Clean dry intimate studio recording.",
+      "sv": "Jag är Skuggvägledaren. Hela du får finnas här. Vi möter det som känns svårt, i din takt.",
+      "en": "I am the Shadow Guide. Even what you hide belongs here. We meet it with curiosity, at your own pace."
+    },
+    {
+      "id": "ra",
+      "seed": 331,
+      "description": "An ageless masculine voice with a luminous clear tenor-baritone resonance. Serene, benevolent and dignified. Measured ceremonial cadence, rounded sustained vowels, beautifully clear consonants and gentle authority. A spacious sacred presence, neither booming nor robotic. Calm connected speech, no chant, echo or sound effects. Clean dry studio recording.",
+      "sv": "Jag är Ra. Välkommen till en stund av kärlek och ljus. Här hör du till.",
+      "en": "I am Ra. I greet you in love and light. Let us rest for a moment in what connects us.",
+      "refineSwedish": true
+    }
+  ]
+}

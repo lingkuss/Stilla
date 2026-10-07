@@ -183,7 +183,7 @@ def main():
         home,
         "Meditation, shaped around you",
         "Speak your mood and let Mimir build a session for this moment.",
-        ["Mimir", "Mood guided", "7-day path"],
+        ["Mimir", "Mood guided", "Your pace"],
         "home",
         (10, 9, 20),
         (18, 28, 38),
