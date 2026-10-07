@@ -188,13 +188,6 @@
 "reflection.share_upload_error" = "Hubo un problema al guardar tu sesión en el servidor. Verifica tu conexión a internet o la configuración de Vercel KV.";
 "reflection.how_are_you_now" = "¿Cómo te sientes ahora?";
 "reflection.short_reflection_hint" = "Una breve reflexión ayuda a Mimir a recordar lo que te importa.";
-"reflection.check_in_title" = "¿QUÉ CAMBIÓ?";
-"reflection.check_in.calmer" = "Más calma";
-"reflection.check_in.restless" = "Aún inquieto";
-"reflection.check_in.sleepy" = "Con sueño";
-"reflection.check_in.clearer" = "Más claridad";
-"reflection.check_in.emotional" = "Emocional";
-"reflection.check_in.no_change" = "Sin cambios";
 "reflection.placeholder" = "Una línea es suficiente...";
 "reflection.voice_input_fallback_error" = "La entrada de voz no está disponible ahora mismo. Escribe en su lugar.";
 "reflection.reminder_prompt" = "¿Debo recordarte mañana que";
@@ -202,7 +195,7 @@
 "reflection.save_exercise" = "Guardar ejercicio en la biblioteca";
 "reflection.save" = "Guardar reflexión";
 "reflection.share_title" = "Comparte tu viaje";
-"reflection.share_subtitle" = "Deja que otros descubran su propio camino con Mimir.";
+"reflection.share_subtitle" = "Envía esta meditación a alguien que pueda necesitar un momento como este.";
 "reflection.preparing" = "Preparando...";
 "reflection.share_action" = "Compartir";
 "reflection.not_now" = "Ahora no";
@@ -257,6 +250,12 @@
 "settings.privacy_sensitive_info" = "Evita compartir detalles médicos o información personal muy sensible en los mensajes de Mimir.";
 "settings.privacy_data" = "Privacidad y datos";
 "settings.show_intro_guide" = "Mostrar guía introductoria";
+"settings.share_and_support" = "Compartir y apoyar";
+"settings.share_vindla" = "Compartir Vindla";
+"settings.share_vindla_message" = "Una meditación creada para cómo te sientes ahora mismo. Prueba Vindla en iPhone.";
+"settings.rate_vindla" = "Valorar Vindla";
+"settings.privacy_policy" = "Política de privacidad";
+"settings.terms_of_use" = "Condiciones de uso";
 "settings.chimes_help" = "Estos suaves tonos marcan el inicio y el final de tu meditación.";
 "settings.binaural_beats" = "Tonos binaurales";
 "settings.binaural_beats_help" = "Los tonos binaurales usan dos frecuencias ligeramente diferentes para guiar tus ondas cerebrales hacia estados mentales específicos.";
@@ -373,7 +372,7 @@
 "content.action.stop" = "DETENER";
 "content.action.done" = "HECHO";
 "content.mode.simple_timer" = "Temporizador simple";
-"content.mode.mimir" = "Modo Mimir";
+"content.mode.world" = "Volver al mundo";
 "content.home_proactive_fallback_body" = "Describe tu estado de ánimo. Mimir creará tu camino.";
 
 "stats.streak" = "Racha";
@@ -575,6 +574,8 @@
 
 "sleep.post_session.title" = "Historia para dormir terminada";
 "sleep.post_session.body" = "Si te gustó, guárdala en tu biblioteca y vuelve a escucharla cuando quieras.";
+"sleep.post_session.share_preview" = "Compartir una vista previa gratuita";
+"sleep.post_session.share_preview_message" = "Elige un momento para dormir y un estilo de guía en esta vista previa gratuita de Mimir, sin cuenta ni instalación.";
 "sleep.header.astronomers-attic.title" = "El ático del astrónomo";
 "sleep.header.astronomers-attic.subtitle" = "Mapas polvorientos, lentes de latón y luz de estrellas sobre madera";
 "sleep.header.midnight-tram.title" = "El último tranvía bajo la lluvia";
@@ -625,19 +626,6 @@
 "content.sleep.card_detail" = "Duérmete con viajes nocturnos relajantes.";
 "content.sleep.open_cta" = "Abrir modo nocturno";
 
-"content.today_step.guiding_week" = "GUÍA DE ESTA SEMANA";
-"content.today_step.eyebrow" = "PASO DE HOY";
-"content.today_step.start_title" = "Iniciar camino de 7 días";
-"content.today_step.day_of_week_format" = "Día %d de 7";
-"content.today_step.generate_next_title" = "Generar próximos 7 días";
-"content.today_step.week_format" = "Semana %d";
-"content.today_step.start_detail" = "Inicia un camino diario personalizado que construye constancia en la meditación paso a paso, usando la configuración actual de tu guía.";
-"content.today_step.start_practice_cta" = "Iniciar práctica de hoy";
-"content.today_step.hide_details" = "Ocultar detalles";
-"content.today_step.view_details" = "Ver detalles";
-"content.today_step.view_all_steps" = "Ver todos los pasos";
-"content.today_step.generate_week_cta_format" = "Generar semana %d";
-"content.today_step.next_week_detail_format" = "La semana %d profundizará la práctica sin añadir presión innecesaria.";
 
 "content.saved_library.eyebrow" = "BIBLIOTECA GUARDADA";
 "content.saved_library.title" = "Sesiones recientes";
@@ -648,20 +636,6 @@
 "content.saved_library.duration_format" = "%dm";
 "content.saved_library.created_prefix" = "Creada %@";
 
-"journey.overview.nav_title" = "Camino de 7 días";
-"journey.overview.week_format" = "Semana %d";
-"journey.overview.progress_complete" = "Todos los pasos completados";
-"journey.overview.progress" = "Progreso";
-"journey.overview.next_step_format" = "Próximo paso: Día %d • %@";
-"journey.overview.week_complete_detail" = "Esta semana está completa. El siguiente ciclo puede construirse a partir de tu progreso hasta ahora.";
-"journey.overview.all_steps" = "Todos los pasos";
-"journey.overview.status_today" = "Hoy";
-"journey.overview.status_done" = "Hecho";
-"journey.overview.status_ahead" = "Próximamente";
-"journey.overview.duration_recommended_format" = "%d min recomendados";
-"journey.overview.check_in_format" = "Registro: %@";
-"journey.overview.start_error_title" = "No se pudo iniciar el paso de hoy";
-"journey.overview.start_error_message" = "Vuelve a intentarlo en un momento. Tu camino diario sigue guardado.";
 
 // MARK: - Remaining UI Localization
 "settings.soundscapes" = "Paisajes sonoros";
@@ -671,55 +645,6 @@
 "ui.continue" = "Continuar";
 "ui.back" = "Atrás";
 "settings.reminder_time" = "Hora del recordatorio";
-"journey.onboarding.nav_title" = "Tu camino de 7 días";
-"journey.onboarding.step_count_format" = "Paso %d de %d";
-"journey.onboarding.goal_placeholder" = "¿Con qué quieres que te ayude esta práctica?";
-"journey.onboarding.try_one" = "Prueba una";
-"journey.onboarding.goal_option.calm" = "sentirme más tranquilo día a día";
-"journey.onboarding.goal_option.consistency" = "crear constancia sin presión";
-"journey.onboarding.goal_option.sleep" = "dormir con más facilidad";
-"journey.onboarding.goal_option.focus" = "estabilizar mi concentración";
-"journey.onboarding.obstacle_placeholder" = "¿Qué suele interponerse? Opcional.";
-"journey.onboarding.common_blockers" = "Obstáculos comunes";
-"journey.onboarding.obstacle_option.restless" = "Me inquieto";
-"journey.onboarding.obstacle_option.forget" = "Olvido volver";
-"journey.onboarding.obstacle_option.tired" = "Me siento demasiado cansado";
-"journey.onboarding.obstacle_option.overthink" = "Pienso demasiado durante la práctica";
-"journey.onboarding.obstacle_skip_help" = "Puedes omitir esto si quieres. Aun así construiremos una buena semana inicial.";
-"journey.onboarding.style_help" = "Elige el tipo de guía al que te resulte más fácil volver.";
-"journey.onboarding.duration_help" = "Elige una duración que se sienta realista para esta primera semana.";
-"journey.onboarding.guide_label" = "Guía";
-"journey.onboarding.stillness_label" = "Quietud";
-"journey.onboarding.technique_label" = "Técnica";
-"journey.onboarding.settings_help" = "Usaremos automáticamente tu guía y tus ajustes de quietud actuales, y luego daremos forma al plan según el estilo que elegiste.";
-"journey.onboarding.create_path" = "Crear mi camino";
-"journey.onboarding.suggested" = "Sugerido";
-"journey.onboarding.question.goal.title" = "¿Qué quieres obtener de esta práctica?";
-"journey.onboarding.question.obstacle.title" = "¿Qué suele interponerse?";
-"journey.onboarding.question.style.title" = "¿Qué tipo de guía se siente adecuada?";
-"journey.onboarding.question.duration.title" = "¿Qué ritmo se siente realista?";
-"journey.onboarding.question.goal.subtitle" = "Usaremos esto para dar forma al tono y la dirección de tus primeros 7 días.";
-"journey.onboarding.question.obstacle.subtitle" = "Esto ayuda a que la próxima semana se sienta más apoyadora sin volverla impredecible.";
-"journey.onboarding.question.style.subtitle" = "Aquí tienes algunas técnicas de meditación que combinan bien con distintos objetivos y niveles de energía.";
-"journey.onboarding.question.duration.subtitle" = "Empezar con la duración adecuada importa más que ser ambicioso.";
-"journey.onboarding.stillness.more_guided" = "Más guiado";
-"journey.onboarding.stillness.balanced" = "Equilibrado";
-"journey.onboarding.stillness.more_spacious" = "Más espacioso";
-"journey.onboarding.style.breath_anchor.title" = "Ancla de respiración";
-"journey.onboarding.style.breath_anchor.summary" = "Atención guiada sencilla en la respiración.";
-"journey.onboarding.style.breath_anchor.detail" = "Un gran punto de partida cuando quieres algo estable, calmante y fácil de retomar.";
-"journey.onboarding.style.body_scan.title" = "Escaneo corporal";
-"journey.onboarding.style.body_scan.summary" = "Mueve la atención por el cuerpo y suaviza la tensión.";
-"journey.onboarding.style.body_scan.detail" = "Útil cuando el estrés se manifiesta físicamente o cuando quieres sentirte más enraizado.";
-"journey.onboarding.style.self_compassion.title" = "Autocompasión";
-"journey.onboarding.style.self_compassion.summary" = "Un estilo más cálido centrado en la amabilidad y el alivio emocional.";
-"journey.onboarding.style.self_compassion.detail" = "Útil cuando la práctica debe sentirse de apoyo en lugar de orientada al rendimiento.";
-"journey.onboarding.style.visualization.title" = "Visualización guiada";
-"journey.onboarding.style.visualization.summary" = "Usa imágenes mentales para reiniciar, restaurar o reenfocar.";
-"journey.onboarding.style.visualization.detail" = "Funciona bien cuando quieres motivación, claridad o una entrada más suave a la meditación.";
-"journey.onboarding.style.open_awareness.title" = "Conciencia abierta";
-"journey.onboarding.style.open_awareness.summary" = "Más espaciosa, más quieta y menos guiada de forma estricta.";
-"journey.onboarding.style.open_awareness.detail" = "Ideal cuando quieres profundizar con el tiempo y sentir menos estructura.";
 "content.custom_section_name" = "Nombre";
 "content.custom_section_timings" = "Tiempos";
 "content.inhale" = "Inhalar";
@@ -728,3 +653,198 @@
 "content.hold_out" = "Retener (exhalación)";
 "content.custom_technique_default_name" = "Personalizada";
 "content.custom_technique_default_description" = "Técnica personalizada del usuario.";
+
+/* Práctica diaria */
+
+/* Zen Minimalist avatar */
+"zen.avatar.meet" = "Conoce a Zen Minimalist";
+"zen.avatar.title" = "Un momento de quietud.";
+"zen.avatar.sample" = "Inhala despacio. Deja que tus hombros se relajen. No hay nada que resolver ahora. Solo esta respiración.";
+"zen.avatar.listen" = "Escuchar al guía";
+"zen.avatar.stop" = "Detener la lectura";
+"zen.avatar.enable" = "Mostrar avatar durante la meditación";
+"zen.avatar.offline" = "Disponible sin conexión. Usa la voz elegida en Vindla.";
+"zen.avatar.session_active" = "Termina tu sesión para escuchar esta muestra.";
+"zen.avatar.speaking" = "Hablando";
+"zen.avatar.resting" = "En reposo";
+
+/* Zen session conversation */
+"zen.session.subtitle" = "Un momento con tu guía";
+"zen.session.story" = "Cuento para dormir";
+"zen.session.meditation" = "Meditación guiada";
+"zen.session.ready" = "Tu sesión está lista. Podemos ir a tu ritmo.";
+"zen.session.suggestion" = "¿Empezamos con diez minutos de calma, solo para ti?";
+"zen.session.duration_limit" = "Elige una sesión de 1 a 30 minutos. Se ha ajustado la duración.";
+"zen.session.preparing" = "Preparando…";
+"zen.session.start" = "Empezar sesión";
+"zen.session.input_title" = "O dime qué necesitas";
+"zen.session.placeholder" = "¿Cómo estás? ¿Qué te gustaría?";
+"zen.session.stop_recording" = "Detener grabación";
+"zen.session.record" = "Usar tu voz";
+"zen.session.create" = "Crear mi propuesta";
+"zen.session.listening" = "Te escucho…";
+"zen.session.examples" = "Prueba «Quiero dormir» o «Meditar durante 20 minutos».";
+"zen.session.local" = "Prueba local · guiones de ejemplo · sin solicitudes de IA";
+"zen.session.error" = "No se pudo preparar la sesión. Inténtalo de nuevo.";
+"zen.session.microphone_error" = "La entrada de voz no está disponible. Revisa los permisos de micrófono y voz en Ajustes, o escribe tu petición. Las pruebas locales requieren reconocimiento en el dispositivo.";
+"zen.session.entry" = "Una conversación sencilla antes de tu próxima sesión";
+"zen.mock.meditation.title" = "A moment of stillness";
+"zen.mock.meditation.opening" = "Welcome. Find a position where your body can rest. There is nothing you need to achieve here.";
+"zen.mock.meditation.1" = "Notice the support beneath you. Let your shoulders soften. Allow the breath to come and go in its own way.";
+"zen.mock.meditation.2" = "Feel the air at your nose. There is no need to change its rhythm. Simply notice it.";
+"zen.mock.meditation.3" = "When a thought arrives, you can let it be there. Then gently return your attention to your body.";
+"zen.mock.meditation.4" = "Rest for a while with what is already here. One breath. The weight of your body. The sounds around you.";
+"zen.mock.meditation.closing" = "Feel the support beneath you again. Move your fingers whenever you are ready. Carry a little of this stillness into your next moment.";
+"zen.mock.focus.rest" = "For now, let the tasks of the day wait. Notice where your body might soften just a little.";
+"zen.mock.focus.stress" = "If things feel busy, you do not need to solve everything. Find a steady sensation in your body and rest your attention there.";
+"zen.mock.focus.focus" = "We are practising returning to one thing at a time. Choose the breath as a gentle place for your attention.";
+"zen.mock.focus.sleep" = "There is nothing else to finish now. You can rest and let the story drift past.";
+"zen.mock.story.title" = "The garden at dusk";
+"zen.mock.story.opening" = "At the end of a quiet path is a small garden. The day is slowly settling down. Behind a low wall stands a cherry tree, with a single paper lantern hanging from its branches. The light is warm and soft. You do not need to follow every word. It is all right simply to rest.";
+"zen.mock.story.1" = "The gate is slightly open. Beyond it, a path of smooth stones winds through the moss. The stones still hold a little warmth from the day. Someone swept the path earlier this evening. Here and there a small leaf has landed since then, and no one has needed to move it. Everything can stay just as it is.";
+"zen.mock.story.2" = "Further into the garden stands a bench of pale wood. Beside it is a cup that still carries the faint scent of tea. One last raindrop falls from the little house into a clay pot. Then it is quiet again. Only the leaves move, so slowly that the movement is almost invisible.";
+"zen.mock.story.3" = "The lantern makes a soft circle on the gravel. At the edge of its light, a pair of sandals rests beside the steps. Nothing is waiting to be finished. Through an open window there is a folded blanket and a book set aside for the evening. The breeze passes gently through the room and out into the garden.";
+"zen.mock.story.4" = "Above the wall, the sky fades from blue to silver. The little tree is completely still for a moment. Then one branch sways slowly back and forth. The scent of damp earth lingers in the air. There is no need to hurry the night along. It arrives in its own time, gentle and quiet.";
+"zen.mock.story.closing" = "The light of the lantern grows softer. The path, the tree and the little bench rest in the dusk. There is nowhere to go and nothing to hold on to. The garden is still. Evening slowly becomes night.";
+
+
+/* Quick meditation choices */
+"mountain.choice.guided" = "Meditación guiada";
+"mountain.choice.silent" = "Meditación en silencio";
+"mountain.conversation.title" = "Habla con tu guía";
+"mountain.conversation.soon" = "Aquí podrás conversar con tu guía. Desarrollaremos esta experiencia en el siguiente paso.";
+"mountain.choice.start.hint" = "Empieza directamente con tus preferencias guardadas.";
+"mountain.choice.more" = "Más opciones";
+"mountain.choice.saved" = "Tus preferencias se guardan automáticamente para la próxima vez.";
+"mountain.choice.guided.duration" = "Duración de la meditación guiada";
+"mountain.choice.silent.duration" = "Duración de la meditación en silencio";
+"mountain.dock.meditate" = "Meditar";
+"mountain.dock.sleep" = "Dormir";
+"mountain.dock.talk" = "Hablar";
+
+"mountain.clock.dusk" = "Atardecer · 19:00";
+
+"mountain.guide.change" = "Cambiar de guía";
+
+"mountain.guide.select" = "Elegir guía";
+
+"mountain.guide.previous" = "Guía anterior";
+"mountain.guide.next" = "Siguiente guía";
+
+/* Original, personality-specific reflections for the mountain world. */
+"mountain.reflection.zen_minimalist.0" = "Una respiración. Un nuevo comienzo.";
+"mountain.reflection.zen_minimalist.1" = "Deja que lo sencillo sea suficiente.";
+"mountain.reflection.zen_minimalist.2" = "La quietud también es una forma de crecer.";
+"mountain.reflection.zen_minimalist.3" = "Empieza aquí. Con suavidad.";
+"mountain.reflection.warm_guardian.0" = "Puedes descansar, incluso antes de terminarlo todo.";
+"mountain.reflection.warm_guardian.1" = "Deja que tu amabilidad también te incluya.";
+"mountain.reflection.warm_guardian.2" = "Hay un lugar para ti, tal como eres.";
+"mountain.reflection.warm_guardian.3" = "Recibir cuidado también es valentía.";
+"mountain.reflection.modern_realist.0" = "Un pequeño paso también cuenta.";
+"mountain.reflection.modern_realist.1" = "Puedes volver a empezar en medio de un día cualquiera.";
+"mountain.reflection.modern_realist.2" = "Ten contigo la paciencia que tendrías con un amigo.";
+"mountain.reflection.modern_realist.3" = "Una pausa puede ser el paso más sabio del día.";
+"mountain.reflection.cosmic_sage.0" = "Hasta una pequeña chispa lleva luz.";
+"mountain.reflection.cosmic_sage.1" = "Hazle espacio al asombro en lo cotidiano.";
+"mountain.reflection.cosmic_sage.2" = "Perteneces al mundo que te llena de asombro.";
+"mountain.reflection.cosmic_sage.3" = "Un instante de calma puede abrir nuevos horizontes.";
+"mountain.reflection.reflective_analyst.0" = "Prestar atención es el comienzo de elegir.";
+"mountain.reflection.reflective_analyst.1" = "La curiosidad te ofrece más caminos para avanzar.";
+"mountain.reflection.reflective_analyst.2" = "Puedes comprenderte con amabilidad.";
+"mountain.reflection.reflective_analyst.3" = "Una nueva perspectiva puede empezar con una pausa.";
+"mountain.reflection.philosopher.0" = "¿Qué pequeño gesto podría darle sentido al día?";
+"mountain.reflection.philosopher.1" = "Puedes crecer sin tener todas las respuestas.";
+"mountain.reflection.philosopher.2" = "Cuidar es una forma de ampliar el mundo.";
+"mountain.reflection.philosopher.3" = "¿Qué pasa cuando te encuentras contigo con paciencia?";
+"mountain.reflection.ra.0" = "Deja que tu amabilidad sea una luz para alguien.";
+"mountain.reflection.ra.1" = "La luz que compartes también puede darte calor.";
+"mountain.reflection.ra.2" = "Cada encuentro guarda una posibilidad de amor.";
+"mountain.reflection.ra.3" = "Deja que la conexión empiece con una respiración suave.";
+"mountain.reflection.shadow_guide.0" = "También tus partes frágiles merecen calidez.";
+"mountain.reflection.shadow_guide.1" = "Puedes encontrarte contigo con suavidad, poco a poco.";
+"mountain.reflection.shadow_guide.2" = "La valentía puede ser escuchar con ternura.";
+"mountain.reflection.shadow_guide.3" = "Deja que crezca la comprensión donde antes juzgabas.";
+
+/* Stillness Guide */
+"persona.serene_guide.name" = "Guía de la quietud";
+"persona.serene_guide.short" = "Cálida, serena y alentadora.";
+"persona.serene_guide.long" = "La Guía de la quietud te invita a encontrar calma en el cuerpo y espacio en la respiración. Sus palabras son sencillas y cálidas, sin exigir que sientas algo en particular.";
+"persona.serene_guide.sample" = "Deja que los hombros se relajen. Este momento puede ser un comienzo suave.";
+"persona.serene_guide.trait.1" = "Cálida";
+"persona.serene_guide.trait.2" = "Serena";
+"persona.serene_guide.trait.3" = "Alentadora";
+"mountain.reflection.serene_guide.0" = "Hay espacio para ti en tu propia quietud.";
+"mountain.reflection.serene_guide.1" = "Deja que esta respiración sea un comienzo amable.";
+"mountain.reflection.serene_guide.2" = "Tu suavidad también puede sostenerte.";
+"mountain.reflection.serene_guide.3" = "Puedes crecer a tu propio ritmo.";
+
+// Local guide introduction previews
+"mountain.guide.voice.play" = "Escuchar presentación";
+"mountain.guide.voice.stop" = "Detener presentación";
+"mountain.guide.voice.unavailable" = "No se pudo reproducir la presentación.";
+
+"mountain.session.englishGuidance" = "Meditación guiada en inglés";
+
+/* Above the Clouds audio */
+"mountain.audio.breathing" = "Sonidos de respiración";
+"mountain.audio.breathing.help" = "Un sonido suave acompaña cuatro segundos al inhalar y cuatro al exhalar. Sigue el ritmo solo si te resulta cómodo.";
+
+/* Stillness garden */
+"garden.eyebrow" = "Colección";
+"garden.title" = "Jardín de quietud";
+"garden.subtitle" = "Pequeñas maravillas que nacen de tu tiempo interior.";
+"garden.flowers" = "Flores";
+"garden.crystals" = "Cristales";
+"garden.flower.rule" = "Cada diez meditaciones, una flor se abre.";
+"garden.crystal.rule" = "Cada 25 meditaciones, un cristal toma forma.";
+"garden.footer" = "No hay dos iguales. Cada uno, un instante tuyo.";
+"garden.close" = "Cerrar";
+"garden.storage.error" = "No se pudo leer tu jardín. Tu colección guardada se ha conservado.";
+"garden.crystal.remaining" = "%d meditaciones hasta tu próximo cristal.";
+"garden.flower.empty" = "Tu primera flor aún descansa como semilla.";
+"garden.crystal.empty" = "Instantes de quietud que poco a poco se vuelven luz.";
+"garden.empty.hint" = "Vuelve a tu práctica. Deja crecer algo hermoso.";
+"garden.specimen.number" = "N.º %d";
+"garden.orbit.hint" = "Arrastra para girar · Pellizca para explorar";
+"garden.view.above" = "Ver desde arriba";
+"garden.view.below" = "Ver desde abajo";
+"garden.reset" = "Restablecer vista";
+"garden.previous" = "Pieza anterior";
+"garden.next" = "Pieza siguiente";
+"garden.flower.poem" = "Un instante de quietud, guardado en una flor.";
+"garden.crystal.poem" = "Tiempo interior, convertido en luz.";
+"garden.earned.flower" = "Una flor ha florecido.";
+"garden.earned.crystal" = "Un cristal ha tomado forma.";
+"garden.flower.name.0" = "Primera luz";
+"garden.flower.name.1" = "Dulce despertar";
+"garden.flower.name.2" = "Calma del atardecer";
+"garden.flower.name.3" = "Pequeña maravilla";
+"garden.flower.name.4" = "Susurro del alba";
+"garden.flower.name.5" = "Tierna quietud";
+"garden.crystal.name.0" = "Luz guardada";
+"garden.crystal.name.1" = "Prisma sereno";
+"garden.crystal.name.2" = "Fragmento de luna";
+"garden.crystal.name.3" = "Cielo interior";
+"garden.crystal.name.4" = "Pausa luminosa";
+"garden.crystal.name.5" = "Resplandor lento";
+
+"garden.trees" = "Árboles de vida";
+"garden.tree.rule" = "Cada cien meditaciones, un árbol de vida echa raíces.";
+"garden.flower.remaining" = "%d meditaciones hasta tu próxima flor.";
+"garden.tree.remaining" = "%d meditaciones hasta tu próximo árbol de vida.";
+"garden.tree.empty" = "Cien momentos de calma. Un lugar donde echar raíces.";
+"garden.tree.poem" = "Raíces en tu calma. Ramas hacia la luz.";
+"garden.earned.both" = "Una flor se abre. Un cristal toma forma.";
+"garden.earned.tree" = "Un árbol de vida echa raíces. Tu jardín crece.";
+"garden.tree.name.0" = "Un lugar interior";
+"garden.tree.name.1" = "Cielo paciente";
+"garden.tree.name.2" = "Refugio dorado";
+"garden.tree.name.3" = "Raíces de luz";
+"garden.tree.name.4" = "Pertenecer en calma";
+"garden.tree.name.5" = "Cien amaneceres";
+
+/* Mountain toolbar audio */
+"mountain.audio.title" = "Sonidos";
+"sound.tap_preview" = "Toca una imagen para escuchar y elegir.";
+"mountain.audio.saved" = "Los sonidos se guardan por separado para la meditación guiada y silenciosa.";
+"mountain.audio.technique.help" = "Los sonidos de respiración siguen la técnica elegida, con silencio al retener el aire.";

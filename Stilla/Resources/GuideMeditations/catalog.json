@@ -1,0 +1,1341 @@
+{
+  "version": 1,
+  "language": "en",
+  "durations": [
+    5,
+    10,
+    15,
+    20,
+    25,
+    30
+  ],
+  "guides": [
+    {
+      "id": "zen_minimalist",
+      "name": "Zen Minimalist",
+      "editorialDirection": "Few words, concrete sensations, clean pauses. Do not turn quiet into a performance. Longer practices move from a single anchor toward open awareness.",
+      "cues": [
+        {
+          "id": "zen_minimalist.arrive",
+          "phase": "arrival",
+          "pauseWeight": 0.55,
+          "text": "Find a position you can stay in with ease. Sitting or lying down is fine. Let your eyes close, or rest your gaze. Feel what supports you."
+        },
+        {
+          "id": "zen_minimalist.one",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "For these few minutes, one breath is enough. There is no state to reach. Begin where you are."
+        },
+        {
+          "id": "zen_minimalist.return",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "We will practice returning. Attention wanders. We notice. We begin again. This is the whole practice."
+        },
+        {
+          "id": "zen_minimalist.body",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "Let the body be your place of practice. No special posture of mind is needed. Just this body, here."
+        },
+        {
+          "id": "zen_minimalist.thoughts",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "Today, leave room around thought. You do not have to stop thinking. You can notice a thought without following it."
+        },
+        {
+          "id": "zen_minimalist.holding",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "Notice how much effort you bring to being here. For this practice, experiment with doing a little less."
+        },
+        {
+          "id": "zen_minimalist.sitting",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "For a while, let experience be ordinary. Breath. Body. Sound. Nothing added. Nothing excluded."
+        },
+        {
+          "id": "zen_minimalist.breath",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Feel one breath enter. Feel it leave. Let the next breath find its own size. No counting. No holding."
+        },
+        {
+          "id": "zen_minimalist.contact",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Notice the points of contact beneath you. Weight, warmth, pressure. Let those simple sensations be enough."
+        },
+        {
+          "id": "zen_minimalist.jaw",
+          "phase": "body",
+          "pauseWeight": 0.8,
+          "text": "Unclench the jaw if it is tight. Let the hands rest. Keep only the effort needed to stay comfortable."
+        },
+        {
+          "id": "zen_minimalist.wandering",
+          "phase": "attention",
+          "pauseWeight": 1.2,
+          "text": "If attention has wandered, notice that. No correction is needed beyond returning. Feel the next breath."
+        },
+        {
+          "id": "zen_minimalist.end",
+          "phase": "attention",
+          "pauseWeight": 1.25,
+          "text": "Feel an out-breath all the way through. If a pause comes naturally, notice it. Let breathing continue without waiting for a longer pause."
+        },
+        {
+          "id": "zen_minimalist.hands",
+          "phase": "body",
+          "pauseWeight": 1.1,
+          "text": "Feel both hands. You may notice warmth, tingling, or very little. Stay with what is actually there."
+        },
+        {
+          "id": "zen_minimalist.whole",
+          "phase": "body",
+          "pauseWeight": 1.3,
+          "text": "Let attention include the whole body. There is no need to inspect every part. Receive the overall feeling of sitting or lying here."
+        },
+        {
+          "id": "zen_minimalist.sounds",
+          "phase": "awareness",
+          "pauseWeight": 1.2,
+          "text": "Let a sound arrive. Notice it changing. Notice when it ends. You do not have to name its source."
+        },
+        {
+          "id": "zen_minimalist.labels",
+          "phase": "attention",
+          "pauseWeight": 1,
+          "text": "When a thought catches you, quietly recognize: thinking. Then return to contact or breath. The label is only a small reminder."
+        },
+        {
+          "id": "zen_minimalist.unfinished",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "A thought can remain unfinished. You do not have to find its last sentence. Come back to the sensation beneath your hands."
+        },
+        {
+          "id": "zen_minimalist.pleasant",
+          "phase": "awareness",
+          "pauseWeight": 1.2,
+          "text": "Notice something pleasant, if it is here. Notice the wish to keep it. Let both the sensation and the wish change."
+        },
+        {
+          "id": "zen_minimalist.unpleasant",
+          "phase": "awareness",
+          "pauseWeight": 1,
+          "text": "If a sensation is uncomfortable, you may adjust your position. Stillness does not require enduring pain."
+        },
+        {
+          "id": "zen_minimalist.effort",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Is attention gripping its object? Ease that grip a little. Stay interested. Let the breath move by itself."
+        },
+        {
+          "id": "zen_minimalist.waiting",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Notice any waiting for the practice to become better. Waiting is another experience. Feel the body while it is here."
+        },
+        {
+          "id": "zen_minimalist.changing",
+          "phase": "awareness",
+          "pauseWeight": 1.3,
+          "text": "A sensation changes. A sound changes. A thought changes. Let attention notice movement without needing to explain it."
+        },
+        {
+          "id": "zen_minimalist.ordinary",
+          "phase": "integration",
+          "pauseWeight": 1.2,
+          "text": "This breath does not need to be remarkable. Its ordinary movement is enough to return to."
+        },
+        {
+          "id": "zen_minimalist.open",
+          "phase": "awareness",
+          "pauseWeight": 1.5,
+          "text": "Let attention widen. Body, breathing, and sound can be present together. When this feels too open, return to one point of contact."
+        },
+        {
+          "id": "zen_minimalist.noanswer",
+          "phase": "reflection",
+          "pauseWeight": 1.3,
+          "text": "Nothing needs to be solved during this pause. If a question remains, let it remain. Feel yourself supported."
+        },
+        {
+          "id": "zen_minimalist.quiet",
+          "phase": "silence",
+          "pauseWeight": 1.7,
+          "text": "I will leave a little more space now. Stay with breath, contact, or sound. Return whenever you notice you have gone away."
+        },
+        {
+          "id": "zen_minimalist.again",
+          "phase": "attention",
+          "pauseWeight": 1.2,
+          "text": "Here again. This body. This breath. Start from this moment."
+        },
+        {
+          "id": "zen_minimalist.enough",
+          "phase": "integration",
+          "pauseWeight": 1.15,
+          "text": "You do not need to decide whether this was a good meditation. Notice what is here now."
+        },
+        {
+          "id": "zen_minimalist.room",
+          "phase": "return",
+          "pauseWeight": 0.45,
+          "text": "Feel the room around you. Move the fingers or toes. Let the eyes open when you are ready."
+        },
+        {
+          "id": "zen_minimalist.close",
+          "phase": "closing",
+          "pauseWeight": 0.15,
+          "text": "The practice ends here. Take your time before moving on. One ordinary breath can be a place to return."
+        }
+      ],
+      "sessions": [
+        {
+          "id": "zen_minimalist.en.5",
+          "minutes": 5,
+          "title": "One Breath Is Enough",
+          "summary": "A spare introduction to settling and returning to one natural breath.",
+          "cueIDs": [
+            "zen_minimalist.arrive",
+            "zen_minimalist.one",
+            "zen_minimalist.breath",
+            "zen_minimalist.wandering",
+            "zen_minimalist.contact",
+            "zen_minimalist.room",
+            "zen_minimalist.close"
+          ]
+        },
+        {
+          "id": "zen_minimalist.en.10",
+          "minutes": 10,
+          "title": "The Art of Returning",
+          "summary": "Practice beginning again without judging a wandering mind.",
+          "cueIDs": [
+            "zen_minimalist.arrive",
+            "zen_minimalist.return",
+            "zen_minimalist.jaw",
+            "zen_minimalist.breath",
+            "zen_minimalist.wandering",
+            "zen_minimalist.end",
+            "zen_minimalist.contact",
+            "zen_minimalist.ordinary",
+            "zen_minimalist.room",
+            "zen_minimalist.close"
+          ]
+        },
+        {
+          "id": "zen_minimalist.en.15",
+          "minutes": 15,
+          "title": "A Body at Rest",
+          "summary": "Move from contact and small sensations to the body as a whole.",
+          "cueIDs": [
+            "zen_minimalist.arrive",
+            "zen_minimalist.body",
+            "zen_minimalist.contact",
+            "zen_minimalist.jaw",
+            "zen_minimalist.hands",
+            "zen_minimalist.breath",
+            "zen_minimalist.whole",
+            "zen_minimalist.unpleasant",
+            "zen_minimalist.wandering",
+            "zen_minimalist.quiet",
+            "zen_minimalist.room",
+            "zen_minimalist.close"
+          ]
+        },
+        {
+          "id": "zen_minimalist.en.20",
+          "minutes": 20,
+          "title": "Room Around Thought",
+          "summary": "Recognize thinking, leave thoughts unfinished, and return to direct experience.",
+          "cueIDs": [
+            "zen_minimalist.arrive",
+            "zen_minimalist.thoughts",
+            "zen_minimalist.contact",
+            "zen_minimalist.breath",
+            "zen_minimalist.wandering",
+            "zen_minimalist.labels",
+            "zen_minimalist.unfinished",
+            "zen_minimalist.hands",
+            "zen_minimalist.sounds",
+            "zen_minimalist.waiting",
+            "zen_minimalist.whole",
+            "zen_minimalist.quiet",
+            "zen_minimalist.again",
+            "zen_minimalist.room",
+            "zen_minimalist.close"
+          ]
+        },
+        {
+          "id": "zen_minimalist.en.25",
+          "minutes": 25,
+          "title": "Nothing to Hold",
+          "summary": "Explore effort, preference, and the possibility of a lighter attention.",
+          "cueIDs": [
+            "zen_minimalist.arrive",
+            "zen_minimalist.holding",
+            "zen_minimalist.contact",
+            "zen_minimalist.jaw",
+            "zen_minimalist.breath",
+            "zen_minimalist.effort",
+            "zen_minimalist.pleasant",
+            "zen_minimalist.unpleasant",
+            "zen_minimalist.labels",
+            "zen_minimalist.unfinished",
+            "zen_minimalist.waiting",
+            "zen_minimalist.changing",
+            "zen_minimalist.whole",
+            "zen_minimalist.quiet",
+            "zen_minimalist.again",
+            "zen_minimalist.enough",
+            "zen_minimalist.room",
+            "zen_minimalist.close"
+          ]
+        },
+        {
+          "id": "zen_minimalist.en.30",
+          "minutes": 30,
+          "title": "Sitting With What Is",
+          "summary": "A spacious practice of body, sound, change, and open awareness.",
+          "cueIDs": [
+            "zen_minimalist.arrive",
+            "zen_minimalist.sitting",
+            "zen_minimalist.contact",
+            "zen_minimalist.jaw",
+            "zen_minimalist.breath",
+            "zen_minimalist.hands",
+            "zen_minimalist.whole",
+            "zen_minimalist.wandering",
+            "zen_minimalist.sounds",
+            "zen_minimalist.labels",
+            "zen_minimalist.unfinished",
+            "zen_minimalist.effort",
+            "zen_minimalist.changing",
+            "zen_minimalist.noanswer",
+            "zen_minimalist.open",
+            "zen_minimalist.quiet",
+            "zen_minimalist.again",
+            "zen_minimalist.ordinary",
+            "zen_minimalist.enough",
+            "zen_minimalist.room",
+            "zen_minimalist.close"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "serene_guide",
+      "name": "Stillness Guide",
+      "editorialDirection": "Warm, grounded invitations, never demands to relax. A gentle companion rather than an inspirational speech. Include practical choices and a gradual return.",
+      "cues": [
+        {
+          "id": "serene_guide.arrive",
+          "phase": "arrival",
+          "pauseWeight": 0.55,
+          "text": "Welcome. Make yourself a little more comfortable, sitting or lying down. You can close your eyes or keep them softly open. There is no particular feeling you need to bring."
+        },
+        {
+          "id": "serene_guide.landing",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "This can be a small place to land. You do not have to put your whole day in order before you take a pause."
+        },
+        {
+          "id": "serene_guide.soften",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "We will make a little room in the body, gently. Nothing needs to loosen on command. Even noticing where you are holding is a kind beginning."
+        },
+        {
+          "id": "serene_guide.kindness",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "Today, we will explore what a kinder way of being with yourself might feel like. You do not have to believe a special phrase. We can begin with a small gesture."
+        },
+        {
+          "id": "serene_guide.rest",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "Let this be a little time in which rest does not have to be earned. Tasks may still be waiting. For now, you are allowed to put them down."
+        },
+        {
+          "id": "serene_guide.voice",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "We will listen for the tone you use with yourself, and try a gentler one. There is no need to make every thought positive."
+        },
+        {
+          "id": "serene_guide.wholeness",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "You may arrive with more than one feeling. We can make room for that. This practice does not ask you to become a simpler version of yourself."
+        },
+        {
+          "id": "serene_guide.support",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Notice what is already holding your weight. The chair, the bed, or the floor. Let your attention rest at one point where your body meets that support."
+        },
+        {
+          "id": "serene_guide.breath",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Follow a few breaths at their ordinary pace. Feel the small movement they make. If following your breath is uncomfortable, stay with your hands or the sounds around you."
+        },
+        {
+          "id": "serene_guide.shoulders",
+          "phase": "body",
+          "pauseWeight": 0.9,
+          "text": "Notice your shoulders. Perhaps they could drop a fraction, or perhaps they need to stay as they are. Let the invitation be soft enough to decline."
+        },
+        {
+          "id": "serene_guide.face",
+          "phase": "body",
+          "pauseWeight": 0.9,
+          "text": "Give a little attention to your face. The space around the eyes. The jaw. The tongue. See whether one small area can do a little less work."
+        },
+        {
+          "id": "serene_guide.hands",
+          "phase": "body",
+          "pauseWeight": 1,
+          "text": "Feel the palms and the fingertips. You might rest one hand over the other, if that is comfortable. Let it be a simple gesture of company."
+        },
+        {
+          "id": "serene_guide.feet",
+          "phase": "body",
+          "pauseWeight": 1,
+          "text": "Notice your feet and the weight of your legs. You do not need a vivid sensation. An ordinary awareness of being here is enough."
+        },
+        {
+          "id": "serene_guide.belly",
+          "phase": "body",
+          "pauseWeight": 1.1,
+          "text": "Let the belly move naturally with breathing. There is no need to draw a deeper breath. You can give the body room without directing it."
+        },
+        {
+          "id": "serene_guide.whole",
+          "phase": "body",
+          "pauseWeight": 1.3,
+          "text": "Let your attention gather the body as a whole. Some places may be easy; others may not. They can share this moment without having to match."
+        },
+        {
+          "id": "serene_guide.mind",
+          "phase": "attention",
+          "pauseWeight": 1.1,
+          "text": "If your mind has been making lists or replaying something, you have not lost your place. Let the next point of contact welcome you back."
+        },
+        {
+          "id": "serene_guide.company",
+          "phase": "kindness",
+          "pauseWeight": 1.1,
+          "text": "Imagine the tone you might use with someone you care about on a tiring day. You do not need their image. Just notice the quality of that kindness."
+        },
+        {
+          "id": "serene_guide.phrase",
+          "phase": "kindness",
+          "pauseWeight": 1.25,
+          "text": "If it feels useful, offer yourself these words: I can meet this moment gently. You can change the words, or leave them aside and feel your hands instead."
+        },
+        {
+          "id": "serene_guide.small",
+          "phase": "kindness",
+          "pauseWeight": 1.2,
+          "text": "Kindness can be very small. Adjusting a cushion. Letting a breath finish. Choosing not to scold yourself for wandering. Notice one small kindness available now."
+        },
+        {
+          "id": "serene_guide.permission",
+          "phase": "reflection",
+          "pauseWeight": 1.1,
+          "text": "Notice whether part of you is asking permission to rest. You do not have to argue with that part. Let it know this pause is brief, and you will return to your day."
+        },
+        {
+          "id": "serene_guide.unfinished",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Something may remain unfinished. Let its edges stay unfinished for now. Feel the support beneath you while the world continues beyond this pause."
+        },
+        {
+          "id": "serene_guide.weather",
+          "phase": "awareness",
+          "pauseWeight": 1.2,
+          "text": "Notice the mood of this moment without asking it to improve. Tired, clear, restless, tender, or difficult to name. Any of these can be met with care."
+        },
+        {
+          "id": "serene_guide.critic",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "If a critical thought appears, listen for its tone before its argument. Can your response be less sharp? Perhaps: This is a hard moment. I can take it one step at a time."
+        },
+        {
+          "id": "serene_guide.need",
+          "phase": "reflection",
+          "pauseWeight": 1.25,
+          "text": "Ask gently: What would be kind and realistic for me today? There may be a simple answer, or none at all. Give the question a little room."
+        },
+        {
+          "id": "serene_guide.both",
+          "phase": "awareness",
+          "pauseWeight": 1.3,
+          "text": "You can be grateful and tired. Hopeful and uncertain. Notice whether two different feelings can be here without one having to cancel the other."
+        },
+        {
+          "id": "serene_guide.boundary",
+          "phase": "integration",
+          "pauseWeight": 1.15,
+          "text": "Sometimes care is a softening. Sometimes it is a boundary. You do not need to decide which now. Just let both possibilities belong to kindness."
+        },
+        {
+          "id": "serene_guide.space",
+          "phase": "silence",
+          "pauseWeight": 1.6,
+          "text": "We will be quiet for a little while. Rest with support, breath, or sound. Whenever you need a beginning, there is one here."
+        },
+        {
+          "id": "serene_guide.returning",
+          "phase": "attention",
+          "pauseWeight": 1.1,
+          "text": "I am here again. Feel one place where your body is supported. There is nothing to catch up with."
+        },
+        {
+          "id": "serene_guide.carry",
+          "phase": "integration",
+          "pauseWeight": 1,
+          "text": "Choose one small quality to take with you, if you like. A softer tone. A little patience. Permission to pause before the next thing."
+        },
+        {
+          "id": "serene_guide.room",
+          "phase": "return",
+          "pauseWeight": 0.5,
+          "text": "Begin to notice the room. Let your eyes take in some light, if they have been closed. Move your hands or feet, and take the time you need."
+        },
+        {
+          "id": "serene_guide.close",
+          "phase": "closing",
+          "pauseWeight": 0.15,
+          "text": "Thank you for making this space. You do not have to hold on to a feeling. You can carry one small act of care into what comes next."
+        }
+      ],
+      "sessions": [
+        {
+          "id": "serene_guide.en.5",
+          "minutes": 5,
+          "title": "Permission to Arrive",
+          "summary": "Set down the day briefly and find a little support in the body.",
+          "cueIDs": [
+            "serene_guide.arrive",
+            "serene_guide.landing",
+            "serene_guide.support",
+            "serene_guide.breath",
+            "serene_guide.mind",
+            "serene_guide.room",
+            "serene_guide.close"
+          ]
+        },
+        {
+          "id": "serene_guide.en.10",
+          "minutes": 10,
+          "title": "Soften and Settle",
+          "summary": "A gentle journey through the face, shoulders, hands, and natural breath.",
+          "cueIDs": [
+            "serene_guide.arrive",
+            "serene_guide.soften",
+            "serene_guide.support",
+            "serene_guide.shoulders",
+            "serene_guide.face",
+            "serene_guide.hands",
+            "serene_guide.breath",
+            "serene_guide.mind",
+            "serene_guide.room",
+            "serene_guide.close"
+          ]
+        },
+        {
+          "id": "serene_guide.en.15",
+          "minutes": 15,
+          "title": "Kindness for This Moment",
+          "summary": "Discover a practical, believable form of self-kindness.",
+          "cueIDs": [
+            "serene_guide.arrive",
+            "serene_guide.kindness",
+            "serene_guide.support",
+            "serene_guide.breath",
+            "serene_guide.shoulders",
+            "serene_guide.hands",
+            "serene_guide.company",
+            "serene_guide.phrase",
+            "serene_guide.small",
+            "serene_guide.mind",
+            "serene_guide.space",
+            "serene_guide.room",
+            "serene_guide.close"
+          ]
+        },
+        {
+          "id": "serene_guide.en.20",
+          "minutes": 20,
+          "title": "Rest Without Earning It",
+          "summary": "Make room for rest alongside unfinished tasks and a busy mind.",
+          "cueIDs": [
+            "serene_guide.arrive",
+            "serene_guide.rest",
+            "serene_guide.support",
+            "serene_guide.feet",
+            "serene_guide.shoulders",
+            "serene_guide.face",
+            "serene_guide.breath",
+            "serene_guide.permission",
+            "serene_guide.unfinished",
+            "serene_guide.whole",
+            "serene_guide.mind",
+            "serene_guide.small",
+            "serene_guide.space",
+            "serene_guide.carry",
+            "serene_guide.room",
+            "serene_guide.close"
+          ]
+        },
+        {
+          "id": "serene_guide.en.25",
+          "minutes": 25,
+          "title": "A Gentler Inner Voice",
+          "summary": "Meet self-criticism with steadiness, care, and realistic next steps.",
+          "cueIDs": [
+            "serene_guide.arrive",
+            "serene_guide.voice",
+            "serene_guide.support",
+            "serene_guide.breath",
+            "serene_guide.hands",
+            "serene_guide.face",
+            "serene_guide.company",
+            "serene_guide.critic",
+            "serene_guide.phrase",
+            "serene_guide.weather",
+            "serene_guide.need",
+            "serene_guide.boundary",
+            "serene_guide.small",
+            "serene_guide.mind",
+            "serene_guide.space",
+            "serene_guide.returning",
+            "serene_guide.carry",
+            "serene_guide.room",
+            "serene_guide.close"
+          ]
+        },
+        {
+          "id": "serene_guide.en.30",
+          "minutes": 30,
+          "title": "Room for Your Whole Self",
+          "summary": "A spacious practice of embodiment, mixed feelings, kindness, and boundaries.",
+          "cueIDs": [
+            "serene_guide.arrive",
+            "serene_guide.wholeness",
+            "serene_guide.support",
+            "serene_guide.feet",
+            "serene_guide.hands",
+            "serene_guide.shoulders",
+            "serene_guide.belly",
+            "serene_guide.whole",
+            "serene_guide.breath",
+            "serene_guide.weather",
+            "serene_guide.both",
+            "serene_guide.company",
+            "serene_guide.phrase",
+            "serene_guide.permission",
+            "serene_guide.unfinished",
+            "serene_guide.need",
+            "serene_guide.boundary",
+            "serene_guide.space",
+            "serene_guide.returning",
+            "serene_guide.small",
+            "serene_guide.carry",
+            "serene_guide.room",
+            "serene_guide.close"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadow_guide",
+      "name": "Shadow Guide",
+      "editorialDirection": "Deep, curious, warm. Invitation rather than interpretation. Work only with mild present-day material; offer an external anchor and permission to leave every inquiry. No recovered memories or claims about hidden truths.",
+      "cues": [
+        {
+          "id": "shadow_guide.arrive",
+          "phase": "arrival",
+          "pauseWeight": 0.6,
+          "text": "Welcome. Feel the ground or the seat beneath you. Keep your eyes open if that helps you stay present. You decide how close to come to anything we explore."
+        },
+        {
+          "id": "shadow_guide.threshold",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "We will stay near the threshold today. No hidden memory needs to be found. We are simply noticing how you meet this moment."
+        },
+        {
+          "id": "shadow_guide.weather",
+          "phase": "intention",
+          "pauseWeight": 0.5,
+          "text": "Imagine your present mood as weather, if that image helps. We are not here to clear the sky. We are learning how to stand beneath it with curiosity."
+        },
+        {
+          "id": "shadow_guide.reaction",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "Choose a small, everyday irritation, if one feels manageable. Nothing overwhelming. You may also choose no example and stay with the room around you."
+        },
+        {
+          "id": "shadow_guide.protector",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "Today we can be curious about a habit that may be trying to help: staying busy, checking, or holding back. This is a possibility to explore, not an explanation you must accept."
+        },
+        {
+          "id": "shadow_guide.opposites",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "Two wishes can live in the same person. To be seen, and to stay private. To move forward, and to rest. We will make room to notice without demanding a verdict."
+        },
+        {
+          "id": "shadow_guide.welcome",
+          "phase": "intention",
+          "pauseWeight": 0.55,
+          "text": "This is a practice of making room, not forcing a door. What is ready to be noticed can be noticed. What is not ready can remain at a distance."
+        },
+        {
+          "id": "shadow_guide.ground",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Feel a clear point of contact: your feet, your hands, or your back against support. Let this be your way back whenever you want it."
+        },
+        {
+          "id": "shadow_guide.room",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Notice one sound beyond your body. If your eyes are open, notice a color or shape. The room is here alongside your inner experience."
+        },
+        {
+          "id": "shadow_guide.breath",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Let breathing continue at its own pace. You can feel it without making it deeper. Keep some attention with the support beneath you."
+        },
+        {
+          "id": "shadow_guide.name",
+          "phase": "awareness",
+          "pauseWeight": 1.1,
+          "text": "Is there a simple word for what is present? Irritation. Sadness. Ease. Uncertainty. You do not have to choose the perfect word, and you may choose none."
+        },
+        {
+          "id": "shadow_guide.distance",
+          "phase": "choice",
+          "pauseWeight": 1.1,
+          "text": "Notice how near you want to be to this feeling. A little distance is allowed. You can attend to the room instead. Curiosity does not require intensity."
+        },
+        {
+          "id": "shadow_guide.sensation",
+          "phase": "body",
+          "pauseWeight": 1.1,
+          "text": "If it feels manageable, notice one bodily sensation that comes with the feeling. Pressure, warmth, movement, or something less clear. Stay with the sensation rather than its story."
+        },
+        {
+          "id": "shadow_guide.story",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Notice the story your mind tells about this feeling. You do not need to prove or disprove it here. A story can be heard without becoming an instruction."
+        },
+        {
+          "id": "shadow_guide.mild",
+          "phase": "choice",
+          "pauseWeight": 1,
+          "text": "Keep this exploration small. If the experience becomes too much, open your eyes, look around, or stop. The practice remains yours to shape."
+        },
+        {
+          "id": "shadow_guide.judgment",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Is there a second feeling about the first one? Perhaps frustration about being anxious, or shame about being angry. Notice this extra layer without adding another judgment."
+        },
+        {
+          "id": "shadow_guide.message",
+          "phase": "reflection",
+          "pauseWeight": 1.25,
+          "text": "You might ask: Is there something I care about beneath this reaction? Perhaps fairness, rest, belonging, or space. Let any answer remain a possibility."
+        },
+        {
+          "id": "shadow_guide.protection",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "If this habit could be trying to protect something, what might that be? No answer is required. You are allowed to find the question unhelpful and return to your feet."
+        },
+        {
+          "id": "shadow_guide.thanks",
+          "phase": "kindness",
+          "pauseWeight": 1.15,
+          "text": "Where it feels sincere, acknowledge the effort: I see that you have been trying. This does not mean a habit must continue unchanged."
+        },
+        {
+          "id": "shadow_guide.cost",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Without making yourself wrong, notice whether this way of coping has a cost today. Keep the question gentle. Understanding can include both what helped and what has become tiring."
+        },
+        {
+          "id": "shadow_guide.need",
+          "phase": "reflection",
+          "pauseWeight": 1.25,
+          "text": "What might you need in this moment? A boundary, some reassurance, a pause, or simply less analysis. Let the simplest answer be enough."
+        },
+        {
+          "id": "shadow_guide.two",
+          "phase": "awareness",
+          "pauseWeight": 1.3,
+          "text": "Notice two different wishes, if they are present. Give each one a little space. You do not have to choose one in order to acknowledge both."
+        },
+        {
+          "id": "shadow_guide.speak",
+          "phase": "reflection",
+          "pauseWeight": 1.25,
+          "text": "Let one wish finish a short sentence: I would like. Then let the other have its sentence. Keep it ordinary. You are listening, not holding a trial."
+        },
+        {
+          "id": "shadow_guide.notaction",
+          "phase": "integration",
+          "pauseWeight": 1.1,
+          "text": "A feeling can be acknowledged without being acted on. You can hear anger and still choose care. You can feel fear and take only the step that is yours to take."
+        },
+        {
+          "id": "shadow_guide.unknown",
+          "phase": "awareness",
+          "pauseWeight": 1.3,
+          "text": "There may be no clear explanation. Let that be honest. You do not need a discovery to justify this time with yourself."
+        },
+        {
+          "id": "shadow_guide.whole",
+          "phase": "integration",
+          "pauseWeight": 1.25,
+          "text": "Notice whether you can be a little larger than the argument inside you. A person with many experiences, rather than one feeling that must define you."
+        },
+        {
+          "id": "shadow_guide.choice",
+          "phase": "integration",
+          "pauseWeight": 1.1,
+          "text": "Consider one small, grounded response for later. Something you could actually do, or a decision to wait. There is no need to solve the whole pattern."
+        },
+        {
+          "id": "shadow_guide.quiet",
+          "phase": "silence",
+          "pauseWeight": 1.6,
+          "text": "Let the inquiry rest now. I will leave some quiet. Stay with your hands, the ground, or the sounds in the room. Nothing else needs to surface."
+        },
+        {
+          "id": "shadow_guide.returning",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Come back to the weight of your body. Notice the room again. You may let the question go unfinished."
+        },
+        {
+          "id": "shadow_guide.closingdoor",
+          "phase": "return",
+          "pauseWeight": 0.55,
+          "text": "Let the exploration end for today. Feel your feet or move your fingers. Look around and notice something ordinary in your surroundings."
+        },
+        {
+          "id": "shadow_guide.close",
+          "phase": "closing",
+          "pauseWeight": 0.15,
+          "text": "You do not have to leave with an answer. Take this much: you can meet yourself with curiosity and still choose your own pace."
+        }
+      ],
+      "sessions": [
+        {
+          "id": "shadow_guide.en.5",
+          "minutes": 5,
+          "title": "At the Threshold",
+          "summary": "A light practice of grounding and noticing a present feeling.",
+          "cueIDs": [
+            "shadow_guide.arrive",
+            "shadow_guide.threshold",
+            "shadow_guide.ground",
+            "shadow_guide.room",
+            "shadow_guide.name",
+            "shadow_guide.distance",
+            "shadow_guide.closingdoor",
+            "shadow_guide.close"
+          ]
+        },
+        {
+          "id": "shadow_guide.en.10",
+          "minutes": 10,
+          "title": "Inner Weather",
+          "summary": "Notice a feeling, its sensations, and the freedom to step back.",
+          "cueIDs": [
+            "shadow_guide.arrive",
+            "shadow_guide.weather",
+            "shadow_guide.ground",
+            "shadow_guide.breath",
+            "shadow_guide.name",
+            "shadow_guide.sensation",
+            "shadow_guide.distance",
+            "shadow_guide.room",
+            "shadow_guide.unknown",
+            "shadow_guide.closingdoor",
+            "shadow_guide.close"
+          ]
+        },
+        {
+          "id": "shadow_guide.en.15",
+          "minutes": 15,
+          "title": "Beneath a Small Reaction",
+          "summary": "Explore a manageable irritation and what may matter beneath it.",
+          "cueIDs": [
+            "shadow_guide.arrive",
+            "shadow_guide.reaction",
+            "shadow_guide.ground",
+            "shadow_guide.room",
+            "shadow_guide.name",
+            "shadow_guide.distance",
+            "shadow_guide.sensation",
+            "shadow_guide.story",
+            "shadow_guide.mild",
+            "shadow_guide.message",
+            "shadow_guide.need",
+            "shadow_guide.returning",
+            "shadow_guide.closingdoor",
+            "shadow_guide.close"
+          ]
+        },
+        {
+          "id": "shadow_guide.en.20",
+          "minutes": 20,
+          "title": "Listening to a Protective Habit",
+          "summary": "Meet a familiar habit with curiosity, choice, and practical kindness.",
+          "cueIDs": [
+            "shadow_guide.arrive",
+            "shadow_guide.protector",
+            "shadow_guide.ground",
+            "shadow_guide.breath",
+            "shadow_guide.room",
+            "shadow_guide.distance",
+            "shadow_guide.protection",
+            "shadow_guide.story",
+            "shadow_guide.thanks",
+            "shadow_guide.cost",
+            "shadow_guide.mild",
+            "shadow_guide.need",
+            "shadow_guide.notaction",
+            "shadow_guide.quiet",
+            "shadow_guide.returning",
+            "shadow_guide.closingdoor",
+            "shadow_guide.close"
+          ]
+        },
+        {
+          "id": "shadow_guide.en.25",
+          "minutes": 25,
+          "title": "Room for Contradiction",
+          "summary": "Let different wishes be heard without demanding an immediate decision.",
+          "cueIDs": [
+            "shadow_guide.arrive",
+            "shadow_guide.opposites",
+            "shadow_guide.ground",
+            "shadow_guide.room",
+            "shadow_guide.breath",
+            "shadow_guide.name",
+            "shadow_guide.two",
+            "shadow_guide.distance",
+            "shadow_guide.speak",
+            "shadow_guide.judgment",
+            "shadow_guide.mild",
+            "shadow_guide.unknown",
+            "shadow_guide.whole",
+            "shadow_guide.notaction",
+            "shadow_guide.choice",
+            "shadow_guide.quiet",
+            "shadow_guide.returning",
+            "shadow_guide.closingdoor",
+            "shadow_guide.close"
+          ]
+        },
+        {
+          "id": "shadow_guide.en.30",
+          "minutes": 30,
+          "title": "Welcoming Without Forcing",
+          "summary": "A gradual exploration of feelings, needs, protective habits, and choice.",
+          "cueIDs": [
+            "shadow_guide.arrive",
+            "shadow_guide.welcome",
+            "shadow_guide.ground",
+            "shadow_guide.room",
+            "shadow_guide.breath",
+            "shadow_guide.name",
+            "shadow_guide.distance",
+            "shadow_guide.sensation",
+            "shadow_guide.story",
+            "shadow_guide.judgment",
+            "shadow_guide.mild",
+            "shadow_guide.protector",
+            "shadow_guide.protection",
+            "shadow_guide.thanks",
+            "shadow_guide.cost",
+            "shadow_guide.need",
+            "shadow_guide.two",
+            "shadow_guide.unknown",
+            "shadow_guide.notaction",
+            "shadow_guide.whole",
+            "shadow_guide.choice",
+            "shadow_guide.quiet",
+            "shadow_guide.returning",
+            "shadow_guide.closingdoor",
+            "shadow_guide.close"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ra",
+      "name": "Ra",
+      "editorialDirection": "Benevolent, ceremonial, and spacious. Light, catalyst, balance, and unity are contemplative images, not factual claims or promised experiences. Keep instructions understandable and return to the physical room.",
+      "cues": [
+        {
+          "id": "ra.greeting",
+          "phase": "arrival",
+          "pauseWeight": 0.4,
+          "text": "I am Ra. I greet you in the love and in the light of the one infinite creator. Welcome to this moment of contemplation."
+        },
+        {
+          "id": "ra.arrive",
+          "phase": "arrival",
+          "pauseWeight": 0.7,
+          "text": "Allow the body to find a supported position. The eyes may close or remain open. Let the breath move naturally. No special experience is required."
+        },
+        {
+          "id": "ra.spark",
+          "phase": "intention",
+          "pauseWeight": 0.6,
+          "text": "For this brief practice, consider a single point of light. It may be imagined, or simply a word that suggests warmth. If no image comes, nothing is missing."
+        },
+        {
+          "id": "ra.light",
+          "phase": "intention",
+          "pauseWeight": 0.6,
+          "text": "We contemplate love and light as qualities of attention: warmth without possession, clarity without harshness. Let these be invitations rather than states you must produce."
+        },
+        {
+          "id": "ra.belonging",
+          "phase": "intention",
+          "pauseWeight": 0.6,
+          "text": "Consider belonging, not as something you must earn, but as a question to sit beside. What supports your life in this ordinary moment?"
+        },
+        {
+          "id": "ra.catalyst",
+          "phase": "intention",
+          "pauseWeight": 0.6,
+          "text": "We use the word catalyst for an experience that gives us something to consider. Choose only a small event from today, if you wish. There is no need to revisit anything overwhelming."
+        },
+        {
+          "id": "ra.balance",
+          "phase": "intention",
+          "pauseWeight": 0.6,
+          "text": "We contemplate balance. Not perfect stillness, and not the removal of difference. Rather, the patient making of room for more than one quality of experience."
+        },
+        {
+          "id": "ra.unity",
+          "phase": "intention",
+          "pauseWeight": 0.6,
+          "text": "For a time, consider unity as an image of relationship. A body breathing within a room, within a wider living world. You need not adopt a belief to explore this image."
+        },
+        {
+          "id": "ra.ground",
+          "phase": "anchor",
+          "pauseWeight": 1,
+          "text": "Feel the weight of the body and the contact beneath it. Let the physical support be clear. Even the most spacious contemplation can begin here."
+        },
+        {
+          "id": "ra.breath",
+          "phase": "anchor",
+          "pauseWeight": 1.1,
+          "text": "Attend to one natural breath. Receiving air. Releasing air. No greater depth is needed. Let the rhythm belong to the body."
+        },
+        {
+          "id": "ra.ember",
+          "phase": "imagery",
+          "pauseWeight": 1.25,
+          "text": "If it is pleasant, imagine a small, steady light near the center of the chest. It need not brighten or spread. You may instead attend to the warmth of your hands."
+        },
+        {
+          "id": "ra.kindness",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Consider a way of looking at yourself that is neither flattering nor condemning. A clear gaze, with kindness in it. Let this be enough for now."
+        },
+        {
+          "id": "ra.receive",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "Notice something you are receiving without effort. Support beneath you. Air in the room. A moment in which you may pause. Let the noticing remain simple."
+        },
+        {
+          "id": "ra.radiance",
+          "phase": "imagery",
+          "pauseWeight": 1.3,
+          "text": "You may imagine the light making a little room around a difficult thought. It does not erase the thought. It is an image of meeting it with less harshness."
+        },
+        {
+          "id": "ra.body",
+          "phase": "body",
+          "pauseWeight": 1.2,
+          "text": "Bring attention to the whole body. Many sensations, one field of experience. Some clear, some faint. No part needs to be excluded from your awareness."
+        },
+        {
+          "id": "ra.sound",
+          "phase": "awareness",
+          "pauseWeight": 1.2,
+          "text": "Let sound enter the practice. Near or distant, pleasant or ordinary. You may notice that listening does not require holding the sound in place."
+        },
+        {
+          "id": "ra.web",
+          "phase": "reflection",
+          "pauseWeight": 1.3,
+          "text": "Consider the ordinary relationships that sustain this moment: those who grew food, made a place to rest, or offered you care. No particular person must come to mind."
+        },
+        {
+          "id": "ra.offering",
+          "phase": "kindness",
+          "pauseWeight": 1.3,
+          "text": "If you wish, offer a quiet goodwill beyond yourself. May there be a little more ease. The offering can remain small, without asking you to carry another person's life."
+        },
+        {
+          "id": "ra.selfincluded",
+          "phase": "kindness",
+          "pauseWeight": 1.2,
+          "text": "Include yourself in that goodwill. You are not outside the circle of care you imagine. Let the same patient attention return to your own body."
+        },
+        {
+          "id": "ra.event",
+          "phase": "reflection",
+          "pauseWeight": 1.2,
+          "text": "If you chose a small event, notice what it stirred. An expectation. A wish. A feeling. Let the facts of the event remain separate from the meaning your mind gives them."
+        },
+        {
+          "id": "ra.meaning",
+          "phase": "reflection",
+          "pauseWeight": 1.25,
+          "text": "You need not call a difficult experience a gift. You may simply ask what response would honor your values now. An answer may come, or it may not."
+        },
+        {
+          "id": "ra.choice",
+          "phase": "integration",
+          "pauseWeight": 1.15,
+          "text": "Consider one possible response that contains both care and clarity. It may be a kind word, a firm boundary, or time before deciding. No grand gesture is required."
+        },
+        {
+          "id": "ra.opposites",
+          "phase": "awareness",
+          "pauseWeight": 1.3,
+          "text": "Notice whether different qualities are present together: effort and ease, hope and uncertainty, movement and rest. Let them be distinct without making them enemies."
+        },
+        {
+          "id": "ra.equanimity",
+          "phase": "reflection",
+          "pauseWeight": 1.35,
+          "text": "Balance does not mean that everything feels equal. You may care deeply and still leave room to listen. Feel one steady point of contact as you consider this."
+        },
+        {
+          "id": "ra.letting",
+          "phase": "awareness",
+          "pauseWeight": 1.3,
+          "text": "Let the images become less important. There is no light you must continue to see. Return to sensation, breath, and the space around you."
+        },
+        {
+          "id": "ra.field",
+          "phase": "awareness",
+          "pauseWeight": 1.5,
+          "text": "Allow attention to widen gently. Body, sound, and breathing may be noticed together. If this feels vague or unsettling, return to your hands or the ground."
+        },
+        {
+          "id": "ra.humility",
+          "phase": "reflection",
+          "pauseWeight": 1.25,
+          "text": "Much remains unknown. You do not need to turn this contemplation into certainty. Let wonder and ordinary judgment have room beside one another."
+        },
+        {
+          "id": "ra.quiet",
+          "phase": "silence",
+          "pauseWeight": 1.65,
+          "text": "We will remain in quiet for a while. Rest with the breath or the support beneath you. The image of light may stay or leave. Both are welcome."
+        },
+        {
+          "id": "ra.returning",
+          "phase": "anchor",
+          "pauseWeight": 1.1,
+          "text": "Return gently to one breath and one point of contact. The vastness of an idea need not carry you away from this present body."
+        },
+        {
+          "id": "ra.carry",
+          "phase": "integration",
+          "pauseWeight": 1.1,
+          "text": "Let one small intention emerge, if it is useful: to meet the next person or task with a little more clarity and a little more care."
+        },
+        {
+          "id": "ra.room",
+          "phase": "return",
+          "pauseWeight": 0.55,
+          "text": "Release the contemplation. Notice the room, the light around you, and the position of your body. Move gently, and open your eyes when you are ready."
+        },
+        {
+          "id": "ra.close",
+          "phase": "closing",
+          "pauseWeight": 0.15,
+          "text": "I leave you in love and light. Go gently into the ordinary world, with room for both its mystery and its detail. Adonai."
+        }
+      ],
+      "sessions": [
+        {
+          "id": "ra.en.5",
+          "minutes": 5,
+          "title": "One Point of Light",
+          "summary": "A brief contemplation of steady warmth, grounded in natural breathing.",
+          "cueIDs": [
+            "ra.greeting",
+            "ra.arrive",
+            "ra.spark",
+            "ra.ground",
+            "ra.breath",
+            "ra.ember",
+            "ra.room",
+            "ra.close"
+          ]
+        },
+        {
+          "id": "ra.en.10",
+          "minutes": 10,
+          "title": "In Love and Light",
+          "summary": "Explore warmth and clarity as ways of paying attention.",
+          "cueIDs": [
+            "ra.greeting",
+            "ra.arrive",
+            "ra.light",
+            "ra.ground",
+            "ra.breath",
+            "ra.ember",
+            "ra.kindness",
+            "ra.radiance",
+            "ra.selfincluded",
+            "ra.room",
+            "ra.close"
+          ]
+        },
+        {
+          "id": "ra.en.15",
+          "minutes": 15,
+          "title": "Belonging to the Whole",
+          "summary": "Notice the ordinary relationships that sustain a life, including your own.",
+          "cueIDs": [
+            "ra.greeting",
+            "ra.arrive",
+            "ra.belonging",
+            "ra.ground",
+            "ra.breath",
+            "ra.receive",
+            "ra.body",
+            "ra.web",
+            "ra.offering",
+            "ra.selfincluded",
+            "ra.quiet",
+            "ra.room",
+            "ra.close"
+          ]
+        },
+        {
+          "id": "ra.en.20",
+          "minutes": 20,
+          "title": "Catalyst and Kindness",
+          "summary": "Consider a small experience and a response guided by care and clarity.",
+          "cueIDs": [
+            "ra.greeting",
+            "ra.arrive",
+            "ra.catalyst",
+            "ra.ground",
+            "ra.breath",
+            "ra.event",
+            "ra.kindness",
+            "ra.meaning",
+            "ra.body",
+            "ra.choice",
+            "ra.selfincluded",
+            "ra.quiet",
+            "ra.returning",
+            "ra.carry",
+            "ra.room",
+            "ra.close"
+          ]
+        },
+        {
+          "id": "ra.en.25",
+          "minutes": 25,
+          "title": "The Practice of Balance",
+          "summary": "Make space for contrasting feelings without losing contact with the body.",
+          "cueIDs": [
+            "ra.greeting",
+            "ra.arrive",
+            "ra.balance",
+            "ra.ground",
+            "ra.breath",
+            "ra.body",
+            "ra.opposites",
+            "ra.equanimity",
+            "ra.ember",
+            "ra.kindness",
+            "ra.radiance",
+            "ra.sound",
+            "ra.selfincluded",
+            "ra.humility",
+            "ra.letting",
+            "ra.quiet",
+            "ra.returning",
+            "ra.carry",
+            "ra.room",
+            "ra.close"
+          ]
+        },
+        {
+          "id": "ra.en.30",
+          "minutes": 30,
+          "title": "The Quiet Unity",
+          "summary": "Move from an image of light toward relationship, open awareness, and grounded care.",
+          "cueIDs": [
+            "ra.greeting",
+            "ra.arrive",
+            "ra.unity",
+            "ra.ground",
+            "ra.breath",
+            "ra.ember",
+            "ra.body",
+            "ra.receive",
+            "ra.sound",
+            "ra.web",
+            "ra.offering",
+            "ra.selfincluded",
+            "ra.opposites",
+            "ra.equanimity",
+            "ra.humility",
+            "ra.letting",
+            "ra.field",
+            "ra.quiet",
+            "ra.returning",
+            "ra.carry",
+            "ra.room",
+            "ra.close"
+          ]
+        }
+      ]
+    }
+  ]
+}

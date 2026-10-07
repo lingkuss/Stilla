@@ -2,7 +2,15 @@
   "name": "vindla",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/share", "destination": "/share.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/da", "destination": "/api/localized?locale=da" },
+    { "source": "/fr", "destination": "/api/localized?locale=fr" },
+    { "source": "/nb", "destination": "/api/localized?locale=nb" },
+    { "source": "/es", "destination": "/api/localized?locale=es" },
+    { "source": "/sv", "destination": "/api/localized?locale=sv" },
+    { "source": "/download", "destination": "/api/download" },
+    { "source": "/share", "destination": "/share.html" },
+    { "source": "/kai/share", "destination": "https://vindla-api.vercel.app/kai/share" }
   ],
   "headers": [
     {

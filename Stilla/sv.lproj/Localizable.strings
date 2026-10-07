@@ -188,13 +188,6 @@
 "reflection.share_upload_error" = "Det uppstod ett problem när din session sparades till servern. Kontrollera internetanslutningen eller Vercel KV-inställningen.";
 "reflection.how_are_you_now" = "Hur mår du nu?";
 "reflection.short_reflection_hint" = "En kort reflektion hjälper Mimir att minnas vad som är viktigt för dig.";
-"reflection.check_in_title" = "VAD FÖRÄNDRADES?";
-"reflection.check_in.calmer" = "Lugnare";
-"reflection.check_in.restless" = "Fortfarande rastlös";
-"reflection.check_in.sleepy" = "Sömnig";
-"reflection.check_in.clearer" = "Klarare";
-"reflection.check_in.emotional" = "Känslosam";
-"reflection.check_in.no_change" = "Ingen förändring";
 "reflection.placeholder" = "En rad räcker...";
 "reflection.voice_input_fallback_error" = "Röstinmatning är inte tillgänglig just nu. Skriv i stället.";
 "reflection.reminder_prompt" = "Ska jag påminna dig i morgon att";
@@ -202,7 +195,7 @@
 "reflection.save_exercise" = "Spara övning i bibliotek";
 "reflection.save" = "Spara reflektion";
 "reflection.share_title" = "Dela din resa";
-"reflection.share_subtitle" = "Låt andra upptäcka sin egen väg med Mimir.";
+"reflection.share_subtitle" = "Skicka meditationen till någon som kanske behöver en sådan stund.";
 "reflection.preparing" = "Förbereder...";
 "reflection.share_action" = "Dela";
 "reflection.not_now" = "Inte nu";
@@ -257,6 +250,12 @@
 "settings.privacy_sensitive_info" = "Undvik att dela medicinska detaljer eller mycket känslig personlig information i Mimir-prompter.";
 "settings.privacy_data" = "Integritet & data";
 "settings.show_intro_guide" = "Visa introduktionsguide";
+"settings.share_and_support" = "Dela och stöd";
+"settings.share_vindla" = "Dela Vindla";
+"settings.share_vindla_message" = "En meditation skapad för hur du mår just nu. Prova Vindla på iPhone.";
+"settings.rate_vindla" = "Betygsätt Vindla";
+"settings.privacy_policy" = "Integritetspolicy";
+"settings.terms_of_use" = "Användarvillkor";
 "settings.chimes_help" = "Dessa mjuka toner markerar början och slutet av din meditation.";
 "settings.binaural_beats" = "Binaurala beats";
 "settings.binaural_beats_help" = "Binaurala beats använder två något olika frekvenser för att guida dina hjärnvågor till specifika mentala tillstånd.";
@@ -373,7 +372,7 @@
 "content.action.stop" = "STOPPA";
 "content.action.done" = "KLAR";
 "content.mode.simple_timer" = "Enkel timer";
-"content.mode.mimir" = "Mimir-läge";
+"content.mode.world" = "Tillbaka till världen";
 "content.home_proactive_fallback_body" = "Beskriv ditt mående. Mimir kuraterar din väg.";
 
 "stats.streak" = "Streak";
@@ -575,6 +574,8 @@
 
 "sleep.post_session.title" = "Sömnsagan är klar";
 "sleep.post_session.body" = "Om du gillade den kan du spara den i biblioteket och spela upp den igen när som helst.";
+"sleep.post_session.share_preview" = "Dela en gratis förhandsvisning";
+"sleep.post_session.share_preview_message" = "Välj ett ögonblick inför sömnen och en guidestil i den här kostnadsfria Mimir-förhandsvisningen – inget konto eller installation behövs.";
 "sleep.header.astronomers-attic.title" = "Astronomens vind";
 "sleep.header.astronomers-attic.subtitle" = "Dammiga kartor, mässingslinser och stjärnljus över trä";
 "sleep.header.midnight-tram.title" = "Sista spårvagnen genom regnet";
@@ -629,98 +630,22 @@
 "content.sleep.card_detail" = "Somna in med lugnande nattresor.";
 "content.sleep.open_cta" = "Öppna nattläge";
 
-"content.today_step.guiding_week" = "GUIDAR DENNA VECKA";
-"content.today_step.eyebrow" = "DAGENS STEG";
-"content.today_step.start_title" = "Starta 7-dagarsspår";
-"content.today_step.day_of_week_format" = "Dag %d av 7";
-"content.today_step.generate_next_title" = "Skapa nästa 7 dagar";
-"content.today_step.week_format" = "Vecka %d";
-"content.today_step.start_detail" = "Starta ett personligt dagligt spår som bygger meditationsvanor steg för steg med dina nuvarande guideinställningar.";
-"content.today_step.start_practice_cta" = "Starta dagens övning";
-"content.today_step.hide_details" = "Dölj detaljer";
-"content.today_step.view_details" = "Visa detaljer";
-"content.today_step.view_all_steps" = "Visa alla steg";
-"content.today_step.generate_week_cta_format" = "Skapa vecka %d";
-"content.today_step.next_week_detail_format" = "Vecka %d fördjupar din övning utan onödig press.";
 
 "content.saved_library.eyebrow" = "SPARAT BIBLIOTEK";
 "content.saved_library.title" = "Senaste sessioner";
 "content.saved_library.detail" = "Dina senaste sparade sessioner, redo att startas igen.";
-"content.saved_library.empty" = "Inga sparade sessioner ännu. Spara en session efter din practice så visas den här.";
+"content.saved_library.empty" = "Inga sparade sessioner ännu. Spara en efter en övning så visas den här.";
 "content.saved_library.see_more" = "Visa mer";
 "content.saved_library.play" = "Spela sparad session";
 "content.saved_library.duration_format" = "%d min";
 "content.saved_library.created_prefix" = "Skapad %@";
 
-"journey.overview.nav_title" = "7-dagarsspår";
-"journey.overview.week_format" = "Vecka %d";
-"journey.overview.progress_complete" = "Alla steg klara";
-"journey.overview.progress" = "Framsteg";
-"journey.overview.next_step_format" = "Nästa steg: Dag %d • %@";
-"journey.overview.week_complete_detail" = "Den här veckan är klar. Nästa cykel kan byggas utifrån dina framsteg.";
-"journey.overview.all_steps" = "Alla steg";
-"journey.overview.status_today" = "Idag";
-"journey.overview.status_done" = "Klar";
-"journey.overview.status_ahead" = "Framöver";
-"journey.overview.duration_recommended_format" = "%d min rekommenderat";
-"journey.overview.check_in_format" = "Incheckning: %@";
-"journey.overview.start_error_title" = "Kunde inte starta dagens steg";
-"journey.overview.start_error_message" = "Försök igen om en stund. Ditt dagliga spår är fortfarande sparat.";
 
 // MARK: - Remaining UI Localization
 "ui.open" = "Öppna";
 "ui.continue" = "Fortsätt";
 "ui.back" = "Tillbaka";
 "settings.reminder_time" = "Påminnelsetid";
-"journey.onboarding.nav_title" = "Ditt 7-dagarsspår";
-"journey.onboarding.step_count_format" = "Steg %d av %d";
-"journey.onboarding.goal_placeholder" = "Vad vill du att den här övningen ska hjälpa dig med?";
-"journey.onboarding.try_one" = "Prova en";
-"journey.onboarding.goal_option.calm" = "känna mig lugnare i vardagen";
-"journey.onboarding.goal_option.consistency" = "bygga kontinuitet utan press";
-"journey.onboarding.goal_option.sleep" = "somna lättare";
-"journey.onboarding.goal_option.focus" = "stärka mitt fokus";
-"journey.onboarding.obstacle_placeholder" = "Vad brukar komma i vägen? Valfritt.";
-"journey.onboarding.common_blockers" = "Vanliga hinder";
-"journey.onboarding.obstacle_option.restless" = "Jag blir rastlös";
-"journey.onboarding.obstacle_option.forget" = "Jag glömmer att återvända";
-"journey.onboarding.obstacle_option.tired" = "Jag känner mig för trött";
-"journey.onboarding.obstacle_option.overthink" = "Jag övertänker under övningen";
-"journey.onboarding.obstacle_skip_help" = "Du kan hoppa över detta om du vill. Vi skapar ändå en bra startvecka.";
-"journey.onboarding.style_help" = "Välj den typ av guidning som känns lättast att återvända till.";
-"journey.onboarding.duration_help" = "Välj en längd som känns realistisk för den första veckan.";
-"journey.onboarding.guide_label" = "Guide";
-"journey.onboarding.stillness_label" = "Stillhet";
-"journey.onboarding.technique_label" = "Teknik";
-"journey.onboarding.settings_help" = "Vi använder automatiskt din nuvarande guide och dina stillhetsinställningar, och formar sedan planen kring stilen du valde.";
-"journey.onboarding.create_path" = "Skapa mitt spår";
-"journey.onboarding.suggested" = "Föreslagen";
-"journey.onboarding.question.goal.title" = "Vad vill du få ut av den här övningen?";
-"journey.onboarding.question.obstacle.title" = "Vad brukar komma i vägen?";
-"journey.onboarding.question.style.title" = "Vilken typ av guidning känns rätt?";
-"journey.onboarding.question.duration.title" = "Vilket tempo känns realistiskt?";
-"journey.onboarding.question.goal.subtitle" = "Vi använder detta för att forma tonen och riktningen för dina första 7 dagar.";
-"journey.onboarding.question.obstacle.subtitle" = "Det hjälper nästa vecka att kännas mer stöttande utan att göra den oförutsägbar.";
-"journey.onboarding.question.style.subtitle" = "Här är några meditationstekniker som passar olika mål och energinivåer.";
-"journey.onboarding.question.duration.subtitle" = "Att börja med rätt sessionslängd är viktigare än att vara ambitiös.";
-"journey.onboarding.stillness.more_guided" = "Mer guidat";
-"journey.onboarding.stillness.balanced" = "Balanserat";
-"journey.onboarding.stillness.more_spacious" = "Mer rymligt";
-"journey.onboarding.style.breath_anchor.title" = "Andningsankare";
-"journey.onboarding.style.breath_anchor.summary" = "Enkel guidad uppmärksamhet på andningen.";
-"journey.onboarding.style.breath_anchor.detail" = "En bra startpunkt när du vill ha något stadigt, lugnande och lätt att återvända till.";
-"journey.onboarding.style.body_scan.title" = "Kroppsskanning";
-"journey.onboarding.style.body_scan.summary" = "Flytta uppmärksamheten genom kroppen och mjuka upp spänningar.";
-"journey.onboarding.style.body_scan.detail" = "Hjälpsamt när stress känns i kroppen eller när du vill känna dig mer grundad.";
-"journey.onboarding.style.self_compassion.title" = "Självmedkänsla";
-"journey.onboarding.style.self_compassion.summary" = "En varmare stil med fokus på vänlighet och emotionell lättnad.";
-"journey.onboarding.style.self_compassion.detail" = "Användbar när övningen ska kännas stöttande snarare än prestationsdriven.";
-"journey.onboarding.style.visualization.title" = "Guidad visualisering";
-"journey.onboarding.style.visualization.summary" = "Använd inre bilder för att återställa, återhämta eller fokusera om.";
-"journey.onboarding.style.visualization.detail" = "Fungerar bra när du vill ha motivation, klarhet eller en mjukare ingång till meditation.";
-"journey.onboarding.style.open_awareness.title" = "Öppen medvetenhet";
-"journey.onboarding.style.open_awareness.summary" = "Mer rymlig, mer stilla och mindre tätt guidad.";
-"journey.onboarding.style.open_awareness.detail" = "Bäst när du vill gå djupare över tid och ha mindre struktur.";
 "content.custom_section_name" = "Namn";
 "content.custom_section_timings" = "Tider";
 "content.inhale" = "Andas in";
@@ -729,3 +654,288 @@
 "content.hold_out" = "Håll (ut)";
 "content.custom_technique_default_name" = "Anpassad";
 "content.custom_technique_default_description" = "Anpassad användarteknik.";
+
+/* Daglig övning */
+
+/* Zen Minimalist avatar */
+"zen.avatar.meet" = "Möt Zen Minimalist";
+"zen.avatar.title" = "Ett ögonblick av stillhet.";
+"zen.avatar.sample" = "Ta ett långsamt andetag in. Låt axlarna mjukna. Det finns ingenting att lösa just nu. Bara det här andetaget.";
+"zen.avatar.listen" = "Lyssna på guiden";
+"zen.avatar.stop" = "Stoppa uppläsningen";
+"zen.avatar.enable" = "Visa avatar under meditation";
+"zen.avatar.offline" = "Fungerar offline. Använder rösten du valt i Vindla.";
+"zen.avatar.session_active" = "Avsluta din session för att lyssna på provet.";
+"zen.avatar.speaking" = "Talar";
+"zen.avatar.resting" = "Vilar";
+
+/* Zen session conversation */
+"zen.session.subtitle" = "En stund med din guide";
+"zen.voice.local" = "Lokalt genererad AI-röst · Zen Minimalist";
+"zen.session.story" = "Sömnberättelse";
+"zen.session.meditation" = "Guidad meditation";
+"zen.session.ready" = "Din session är redo. Vi tar det i din takt.";
+"zen.session.suggestion" = "Ska vi börja med tio lugna minuter, bara för dig?";
+"zen.session.duration_limit" = "Välj en session på 1–30 minuter. Längden har anpassats.";
+"zen.session.preparing" = "Förbereder…";
+"zen.session.start" = "Börja sessionen";
+"zen.session.input_title" = "Eller berätta vad du behöver";
+"zen.session.placeholder" = "Hur mår du? Vad önskar du?";
+"zen.session.stop_recording" = "Avsluta inspelning";
+"zen.session.record" = "Berätta med rösten";
+"zen.session.create" = "Skapa mitt förslag";
+"zen.session.listening" = "Jag lyssnar…";
+"zen.session.examples" = "Till exempel: ”Jag vill sova” eller ”Meditera i tjugo minuter”.";
+"zen.session.local" = "Lokalt test · exempelmanus · inga AI-anrop";
+"zen.session.error" = "Det gick inte att förbereda sessionen. Försök igen.";
+"zen.session.microphone_error" = "Röstinmatning är inte tillgänglig. Kontrollera mikrofon- och talbehörighet i Inställningar, eller skriv din önskan. Lokala tester kräver taligenkänning på enheten.";
+"zen.session.entry" = "Ett enkelt samtal inför nästa session";
+"zen.mock.meditation.title" = "En stund av stillhet";
+"zen.mock.meditation.opening" = "Välkommen. Hitta en ställning där kroppen får vila. Du behöver inte åstadkomma något här.";
+"zen.mock.meditation.1" = "Lägg märke till kontakten med underlaget. Låt axlarna sjunka. Låt andetaget komma och gå av sig självt.";
+"zen.mock.meditation.2" = "Känn hur luften rör sig vid näsan. Du behöver inte ändra på rytmen. Bara märka den.";
+"zen.mock.meditation.3" = "När en tanke dyker upp kan du låta den vara där. För sedan varsamt uppmärksamheten tillbaka till kroppen.";
+"zen.mock.meditation.4" = "Vila en stund i det som redan finns. Ett andetag. Kroppens tyngd. Ljuden omkring dig.";
+"zen.mock.meditation.closing" = "Känn underlaget igen. Rör försiktigt på fingrarna när du vill. Ta med dig lite av stillheten in i nästa stund.";
+"zen.mock.focus.rest" = "Just nu får du lägga dagens uppgifter åt sidan. Känn efter var kroppen kan släppa taget en aning.";
+"zen.mock.focus.stress" = "Om det känns mycket just nu behöver du inte lösa allt. Lägg märke till en plats i kroppen som känns stadig, och vila uppmärksamheten där.";
+"zen.mock.focus.focus" = "Vi övar på att återvända till en sak i taget. Välj andetaget som en mjuk punkt för din uppmärksamhet.";
+"zen.mock.focus.sleep" = "Det finns ingenting mer att hinna med just nu. Du får vila och låta berättelsen röra sig förbi.";
+"zen.mock.story.title" = "Trädgården i skymningen";
+"zen.mock.story.opening" = "Vid slutet av en stilla stig ligger en liten trädgård. Dagen har långsamt lagt sig till ro. Bakom den låga muren står ett körsbärsträd, och i dess grenar hänger en enda papperslykta. Ljuset är varmt och mjukt. Du behöver inte följa varje ord. Det går bra att bara vila.";
+"zen.mock.story.1" = "Grinden står på glänt. På andra sidan löper en gång av släta stenar genom mossan. Stenarna håller fortfarande en aning av dagens värme. Någon har sopat gången tidigare under kvällen. Här och där har ett litet blad sedan dess landat, och ingen har haft anledning att flytta på det. Allt får ligga kvar precis som det är.";
+"zen.mock.story.2" = "Längre in i trädgården finns en bänk av ljust trä. Bredvid den står en kopp som ännu doftar svagt av te. Från taket på det lilla huset droppar en sista regndroppe ned i en kruka. Sedan blir det tyst igen. Bara löven rör sig, så långsamt att det nästan inte märks.";
+"zen.mock.story.3" = "Lyktan ritar en mjuk cirkel över gruset. Längst ute i kanten av ljuset vilar ett par sandaler bredvid trappan. Inget väntar på att bli färdigt. Genom ett öppet fönster syns en vikt filt och en bok som lagts åt sidan för kvällen. Vinden drar varsamt genom rummet och fortsätter ut i trädgården.";
+"zen.mock.story.4" = "Ovanför muren bleknar himlen från blått till silver. Det lilla trädet står alldeles stilla en stund. Sedan rör sig en gren, långsamt tillbaka och fram. Doften av fuktig jord stannar kvar i luften. Natten behöver inte skyndas på. Den kommer i sin egen takt, mjuk och stilla.";
+"zen.mock.story.closing" = "Ljuset i lyktan blir allt mjukare. Stigen, trädet och den lilla bänken vilar nu i skymningen. Det finns ingenstans att gå och ingenting att hålla kvar. Trädgården är stilla. Kvällen får långsamt bli natt.";
+
+
+/* Procedural mountain exploration */
+"mountain.title" = "Ovan molnen";
+"mountain.entry.subtitle" = "Utforska en stilla stig";
+"mountain.eyebrow" = "EN VANDRING I STILLHET";
+"mountain.place.terrace" = "Stenterrassen";
+"mountain.place.pines" = "Bland tallarna";
+"mountain.place.temple" = "Molntemplet";
+"mountain.walking" = "Lite längre upp. Lite närmare lugnet.";
+"mountain.invitation" = "Du behöver inte vara någon annanstans.";
+"mountain.rest" = "Stanna här";
+"mountain.continue" = "Vandra vidare";
+"mountain.preview.note" = "Utforska landskapet i din egen takt.";
+"mountain.return" = "Tillbaka till stigen";
+"mountain.close" = "Stäng";
+"mountain.loading" = "Förbereder din stig";
+"mountain.load.error" = "Landskapet kunde inte öppnas.";
+"mountain.retry" = "Försök igen";
+
+/* Procedural environment families */
+"mountain.biome.pine" = "Tallarnas glänta";
+"mountain.biome.moss" = "Mossträdgården";
+"mountain.biome.golden" = "Den gyllene lunden";
+"mountain.biome.ridge" = "Den öppna bergskammen";
+"mountain.biome.waterfall" = "Vid vattenfallet";
+"mountain.biome.temple" = "Tempelträdgården";
+
+// Mountain region prototype
+"mountain.region.title" = "Dimmornas dal";
+"mountain.region.number" = "Region %d";
+"mountain.region.next" = "Mot nästa dal";
+"mountain.revisit" = "Återbesök en plats";
+"mountain.place.mossGate" = "Mossporten";
+"mountain.place.pineGlade" = "Tallgläntan";
+"mountain.place.brookRavine" = "Bäckravinen";
+"mountain.place.lakeTerrace" = "Sjöterrassen";
+"mountain.place.mountainRidge" = "Bergskammen";
+"mountain.place.templeGrove" = "Tempellunden";
+"mountain.place.cloudTemple" = "Molntemplet";
+"mountain.place.mossGate.description" = "En stilla början mellan mossa och sten.";
+"mountain.place.pineGlade.description" = "Följ stigen in under tallarnas mjuka kronor.";
+"mountain.place.brookRavine.description" = "Vila vid vattnet där ravinen öppnar sig.";
+"mountain.place.lakeTerrace.description" = "Vägarna möts vid en spegel av himlen.";
+"mountain.place.mountainRidge.description" = "En öppen stig med utsikt över dalen.";
+"mountain.place.templeGrove.description" = "Vandra mellan träden mot den gamla porten.";
+"mountain.place.cloudTemple.description" = "En plats för stillhet ovanför molnen.";
+"mountain.session.guided" = "Guidad";
+"mountain.session.silent" = "Tyst";
+"mountain.session.mode" = "Meditation";
+"mountain.session.duration" = "Längd";
+"mountain.session.remaining" = "Återstående tid";
+"mountain.session.stop" = "Avsluta meditationen";
+"mountain.session.complete" = "Din stund är avslutad. Nästa stig är öppen.";
+"mountain.session.stopped" = "Tack för stunden. Stanna så länge du vill.";
+"mountain.session.return" = "Tillbaka till platsen";
+"mountain.session.unlock" = "En avslutad meditation öppnar nästa stig.";
+"mountain.session.intention" = "Vad vill du ge plats åt? (valfritt)";
+"mountain.session.mock" = "Lokalt exempel för att prova upplevelsen. Ingen AI-tjänst används.";
+"mountain.session.ambience" = "Bakgrundsljud";
+"mountain.session.begin" = "Börja meditationen";
+"mountain.session.start.error" = "En annan session pågår. Avsluta den först.";
+"mountain.sound.none" = "Av";
+"mountain.sound.rain" = "Regn";
+"mountain.sound.brown" = "Mjukt brus";
+"mountain.storage.error" = "Den sparade resan kunde inte läsas. Dina tidigare framsteg är bevarade.";
+
+// DNA landscapes
+"mountain.wild.name.0" = "Smaragdernas dal";
+"mountain.wild.name.1" = "Där bergen andas";
+"mountain.wild.name.2" = "De tusen vattenfallen";
+"mountain.wild.name.3" = "Ljusets berg";
+"mountain.wild.name.4" = "Den gömda sjön";
+"mountain.wild.name.5" = "Molnens trädgård";
+"mountain.wild.name.6" = "Himlens spegel";
+"mountain.wild.name.7" = "Gryningens rygg";
+"mountain.wild.description.0" = "En ny horisont att upptäcka.";
+"mountain.wild.description.1" = "Vatten, ljus och oändliga berg.";
+"mountain.wild.description.2" = "En stilla plats mellan himmel och jord.";
+"mountain.wild.description.3" = "Följ stigen mot det okända.";
+"mountain.wild.eyebrow" = "EN NY HORISONT";
+"mountain.preview.next" = "Nästa värld";
+"mountain.preview.next.hint" = "Utforska nästa miljö utan meditation i testversionen.";
+
+"mountain.clock.live" = "Följ lokal tid";
+"mountain.clock.dawn" = "Gryning · 06:00";
+"mountain.clock.noon" = "Mitt på dagen · 12:00";
+"mountain.clock.dusk" = "Skymning · 19:00";
+"mountain.clock.night" = "Natt · 00:00";
+"mountain.clock.live.short" = "Lokalt";
+"mountain.clock.preview" = "Förhandsvisning";
+"mountain.clock.label" = "Ljus och tid på dygnet";
+
+/* Quick meditation choices */
+"mountain.choice.guided" = "Guidad meditation";
+"mountain.choice.silent" = "Stilla meditation";
+"mountain.conversation.title" = "Prata med din guide";
+"mountain.conversation.soon" = "Här kommer du att kunna samtala med din guide. Vi formar samtalsläget i nästa steg.";
+"mountain.choice.start.hint" = "Starta direkt med dina sparade val.";
+"mountain.choice.more" = "Fler val";
+"mountain.choice.saved" = "Dina val sparas automatiskt till nästa gång.";
+"mountain.choice.guided.duration" = "Längd på guidad meditation";
+"mountain.choice.silent.duration" = "Längd på stilla meditation";
+"mountain.dock.meditate" = "Meditera";
+"mountain.dock.sleep" = "Sova";
+"mountain.dock.talk" = "Prata";
+
+"mountain.guide.change" = "Byt guide";
+
+"mountain.guide.select" = "Välj guide";
+
+"mountain.guide.previous" = "Föregående guide";
+"mountain.guide.next" = "Nästa guide";
+
+/* Original, personality-specific reflections for the mountain world. */
+"mountain.reflection.zen_minimalist.0" = "Ett andetag. En ny början.";
+"mountain.reflection.zen_minimalist.1" = "Låt det enkla vara nog.";
+"mountain.reflection.zen_minimalist.2" = "Även stillhet är ett sätt att växa.";
+"mountain.reflection.zen_minimalist.3" = "Börja här. Varsamt.";
+"mountain.reflection.warm_guardian.0" = "Du får vila, också innan allt är klart.";
+"mountain.reflection.warm_guardian.1" = "Låt din vänlighet omfatta dig själv.";
+"mountain.reflection.warm_guardian.2" = "Det finns plats för dig, precis som du är.";
+"mountain.reflection.warm_guardian.3" = "Att ta emot omsorg är också mod.";
+"mountain.reflection.modern_realist.0" = "Ett litet steg räknas också.";
+"mountain.reflection.modern_realist.1" = "Du kan börja om mitt i en vanlig dag.";
+"mountain.reflection.modern_realist.2" = "Ge dig själv samma tålamod som en vän.";
+"mountain.reflection.modern_realist.3" = "En paus kan vara dagens klokaste steg.";
+"mountain.reflection.cosmic_sage.0" = "Även en liten gnista bär ljus.";
+"mountain.reflection.cosmic_sage.1" = "Låt förundran få plats i det välbekanta.";
+"mountain.reflection.cosmic_sage.2" = "Du hör till den värld du förundras över.";
+"mountain.reflection.cosmic_sage.3" = "Det finns nya horisonter i ett stilla ögonblick.";
+"mountain.reflection.reflective_analyst.0" = "Att lägga märke till är början på att välja.";
+"mountain.reflection.reflective_analyst.1" = "Nyfikenhet ger dig fler vägar framåt.";
+"mountain.reflection.reflective_analyst.2" = "Du kan förstå dig själv med vänlighet.";
+"mountain.reflection.reflective_analyst.3" = "Ett nytt perspektiv kan börja med en paus.";
+"mountain.reflection.philosopher.0" = "Vilken liten handling kan ge dagen mening?";
+"mountain.reflection.philosopher.1" = "Du får växa utan att ha alla svar.";
+"mountain.reflection.philosopher.2" = "Omtanke är ett sätt att göra världen större.";
+"mountain.reflection.philosopher.3" = "Vad händer om du möter dig själv med tålamod?";
+"mountain.reflection.ra.0" = "Låt din vänlighet bli ett ljus för någon.";
+"mountain.reflection.ra.1" = "Det ljus du delar får också värma dig.";
+"mountain.reflection.ra.2" = "Varje möte rymmer en möjlighet till kärlek.";
+"mountain.reflection.ra.3" = "Låt samhörigheten börja med ett vänligt andetag.";
+"mountain.reflection.shadow_guide.0" = "Även det sköra i dig förtjänar värme.";
+"mountain.reflection.shadow_guide.1" = "Du får möta dig själv varsamt, en bit i taget.";
+"mountain.reflection.shadow_guide.2" = "Mod kan vara att lyssna med ömhet.";
+"mountain.reflection.shadow_guide.3" = "Låt förståelsen växa där du tidigare dömde.";
+
+/* Stillness Guide */
+"persona.serene_guide.name" = "Stillhetens guide";
+"persona.serene_guide.short" = "Varm, jordnära och varsamt uppmuntrande.";
+"persona.serene_guide.long" = "Stillhetens guide hjälper dig att hitta ro i kroppen och utrymme i andetaget. Hennes ord är enkla och varma, utan krav på att du ska känna på ett visst sätt.";
+"persona.serene_guide.sample" = "Låt axlarna mjukna. Den här stunden får vara en varsam början.";
+"persona.serene_guide.trait.1" = "Varm";
+"persona.serene_guide.trait.2" = "Jordnära";
+"persona.serene_guide.trait.3" = "Uppmuntrande";
+"mountain.reflection.serene_guide.0" = "Du får ta plats i din egen stillhet.";
+"mountain.reflection.serene_guide.1" = "Låt andetaget bli en vänlig början.";
+"mountain.reflection.serene_guide.2" = "Det mjuka i dig kan också bära.";
+"mountain.reflection.serene_guide.3" = "Du får växa i din egen takt.";
+
+// Local guide introduction previews
+"mountain.guide.voice.play" = "Lyssna på presentation";
+"mountain.guide.voice.stop" = "Stoppa presentation";
+"mountain.guide.voice.unavailable" = "Presentationen kunde inte spelas upp.";
+
+"mountain.session.englishGuidance" = "Guidad meditation på engelska";
+
+/* Above the Clouds audio */
+"mountain.audio.breathing" = "Andningsljud";
+"mountain.audio.breathing.help" = "Ett mjukt ljud följer fyra sekunder in och fyra ut. Följ bara rytmen om den känns bekväm.";
+
+/* Stillness garden */
+"garden.eyebrow" = "Samling";
+"garden.title" = "Stillhetens trädgård";
+"garden.subtitle" = "Små under, vuxna ur stunder inom dig.";
+"garden.flowers" = "Blommor";
+"garden.crystals" = "Kristaller";
+"garden.flower.rule" = "Var tionde meditation slår en blomma ut.";
+"garden.crystal.rule" = "Var tjugofemte meditation formas en kristall.";
+"garden.footer" = "Ingen är den andra lik. Var och en, en stund som är din.";
+"garden.close" = "Stäng";
+"garden.storage.error" = "Din trädgård kunde inte läsas in. Din sparade samling finns kvar.";
+"garden.crystal.remaining" = "%d meditationer till din nästa kristall.";
+"garden.flower.empty" = "Din första blomma vilar ännu som ett frö.";
+"garden.crystal.empty" = "Stilla stunder som långsamt blir till ljus.";
+"garden.empty.hint" = "Återvänd till stillheten. Låt något vackert växa.";
+"garden.specimen.number" = "Nr %d";
+"garden.orbit.hint" = "Dra för att vrida · Nyp för att utforska";
+"garden.view.above" = "Se uppifrån";
+"garden.view.below" = "Se underifrån";
+"garden.reset" = "Återställ vy";
+"garden.previous" = "Föregående föremål";
+"garden.next" = "Nästa föremål";
+"garden.flower.poem" = "En stilla stund, bevarad i blom.";
+"garden.crystal.poem" = "Tid inom dig, samlad till ljus.";
+"garden.earned.flower" = "En blomma har slagit ut.";
+"garden.earned.crystal" = "En kristall har formats.";
+"garden.flower.name.0" = "Gryningsljus";
+"garden.flower.name.1" = "Varsamt uppvaknande";
+"garden.flower.name.2" = "Kvällsro";
+"garden.flower.name.3" = "Ett litet under";
+"garden.flower.name.4" = "Gryningsviskning";
+"garden.flower.name.5" = "Stilla ömhet";
+"garden.crystal.name.0" = "Bevarat ljus";
+"garden.crystal.name.1" = "Stilla prisma";
+"garden.crystal.name.2" = "Månfragment";
+"garden.crystal.name.3" = "Inre himmel";
+"garden.crystal.name.4" = "Ljus vila";
+"garden.crystal.name.5" = "Långsam glans";
+
+"garden.trees" = "Livsträd";
+"garden.tree.rule" = "Var hundrade meditation slår ett livsträd rot.";
+"garden.flower.remaining" = "%d meditationer till din nästa blomma.";
+"garden.tree.remaining" = "%d meditationer till ditt nästa livsträd.";
+"garden.tree.empty" = "Hundra stilla stunder. En plats att slå rot.";
+"garden.tree.poem" = "Rötter i din stillhet. Grenar mot ljuset.";
+"garden.earned.both" = "En blomma slår ut. En kristall formas.";
+"garden.earned.tree" = "Ett livsträd slår rot. Din trädgård växer.";
+"garden.tree.name.0" = "En plats inom dig";
+"garden.tree.name.1" = "Tålmodig himmel";
+"garden.tree.name.2" = "Gyllene vila";
+"garden.tree.name.3" = "Rötter av ljus";
+"garden.tree.name.4" = "Stilla tillhörighet";
+"garden.tree.name.5" = "Hundra gryningar";
+
+/* Mountain toolbar audio */
+"mountain.audio.title" = "Ljud";
+"sound.tap_preview" = "Tryck på en bild för att lyssna och välja.";
+"mountain.audio.saved" = "Ljudvalen sparas separat för guidad och tyst meditation.";
+"mountain.audio.technique.help" = "Andningsljuden följer din valda teknik, med tystnad när du håller andan.";

@@ -1,0 +1,22 @@
+{
+  "id": "zen-minimalist-v2",
+  "description": "An older male meditation guide with a warm, grounded low register. Quiet confidence, unhurried but natural articulation, modest emotional range and gentle sentence endings. Intimate conversational speech, not a theatrical narrator. No whispering, chanting, exaggerated breathiness or imitated accent.",
+  "references": {
+    "sv": {
+      "language": "sv",
+      "file": "references/sv.wav",
+      "source": "Local Piper sv_SE-nst-medium; KBLab Swedish NST model (CC0)",
+      "text": "Du behöver inte åstadkomma något här. Ta ett lugnt andetag. Du kan bara vara här en stund."
+    },
+    "en": {
+      "language": "en",
+      "file": "references/en.wav",
+      "source": "Local Qwen3-TTS VoiceDesign 1.7B 8bit; original synthetic English Zen voice",
+      "text": "There is nothing you need to achieve here. Let your shoulders soften. Take your time. For this moment, you can simply be here."
+    }
+  },
+  "seed": 73,
+  "exaggeration": 0.15,
+  "cfgWeight": 0.5,
+  "temperature": 0.7
+}

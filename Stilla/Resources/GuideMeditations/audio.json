@@ -1,0 +1,2364 @@
+{
+  "version": 1,
+  "language": "en",
+  "engine": "mlx-community/chatterbox-multilingual-v3",
+  "clips": [
+    {
+      "cueID": "zen_minimalist.arrive",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Find a position you can stay in with ease. Sitting or lying down is fine. Let your eyes close, or rest your gaze. Feel what supports you.",
+      "file": "zen_minimalist.arrive.m4a",
+      "duration": 9.2,
+      "generationHash": "62b6ec0713ed2bc5c541b878d17c22c3445b2b2764513e61c9841583b12b2332",
+      "audioSHA256": "bfb538974da9cd73015ff4ccb0268efc8e41ee51584e6bd7b729118b7c677484",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Find a position you can stay in with ease. Sitting or lying down is fine. Let your eyes close, or rest your gaze. Feel what supports you."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.one",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "For these few minutes, one breath is enough. There is no state to reach. Begin where you are.",
+      "file": "zen_minimalist.one.m4a",
+      "duration": 6.7,
+      "generationHash": "e2c42a532db8899f867d60e29780fabe80a4c374627e41abc53fe461a999f291",
+      "audioSHA256": "68e0d243a9b778883a58b61cf515cc1e439a43aefdd07faed832610dbd48bff9",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "For these few minutes, one breath is enough. There is no state to reach. Begin where you are."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.return",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "We will practice returning. Attention wanders. We notice. We begin again. This is the whole practice.",
+      "file": "zen_minimalist.return.m4a",
+      "duration": 7.8,
+      "generationHash": "0eec66fa5d0212506234257ce7dd6e72da1dc60cf9b9a54a2173646781ed872c",
+      "audioSHA256": "4db7b43a554ecb9bfb76e60d54f53eb97117eebed0b4db0eed0bd59a0e778655",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "We will practice returning. Attention wanders. We notice. We begin again. This is the whole practice."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.body",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Let the body be your place of practice. No special posture of mind is needed. Just this body, here.",
+      "file": "zen_minimalist.body.m4a",
+      "duration": 7.1,
+      "generationHash": "4429f16aca05a6b8f707dfadca7aa1a4eea435cb344ecde9f5b98e31186eb066",
+      "audioSHA256": "cb6702de76d3fde2d9e40f9ea5b9f7f5da8d53921c5f69dd07333d55338a12d6",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Let the body be your place of practice. No special posture of mind is needed. Just this body, here."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.thoughts",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Today, leave room around thought. You do not have to stop thinking. You can notice a thought without following it.",
+      "file": "zen_minimalist.thoughts.m4a",
+      "duration": 7.4,
+      "generationHash": "a52be845d7838f15d6272ca418a283a709fbe5eb5a43bb8a6ad39d34bdb3188f",
+      "audioSHA256": "a592457b58ceadce5b85dbf0545364ff52109352308c5cb4c88b0566c51e2677",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Today, leave room around thought. You do not have to stop thinking. You can notice a thought without following it."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.holding",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Notice how much effort you bring to being here. For this practice, experiment with doing a little less.",
+      "file": "zen_minimalist.holding.m4a",
+      "duration": 6.2,
+      "generationHash": "02a01fc8b27e52ec9be25c6a50f8cff4dab7f063ba0da95a6dd194e6b913a879",
+      "audioSHA256": "f7af7001f13488cd60870ca8c82d728f457cda2f32a339d41cfe9b6ba7d55d46",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Notice how much effort you bring to being here. For this practice, experiment with doing a little less."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.sitting",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "For a while, let experience be ordinary. Breath. Body. Sound. Nothing added. Nothing excluded.",
+      "file": "zen_minimalist.sitting.m4a",
+      "duration": 9.8,
+      "generationHash": "025d581f2776a5f1a32bbc025d9114583500ee1311728e8271262b253a30bc00",
+      "audioSHA256": "eac1195e5c8536a2091289ac52476df81a84aff2c70eea105f52038911bbfd67",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "For a while, let experience be ordinary. Breath. Body. Sound. Nothing added. Nothing excluded."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.breath",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Feel one breath enter. Feel it leave. Let the next breath find its own size. No counting. No holding.",
+      "file": "zen_minimalist.breath.m4a",
+      "duration": 7.7,
+      "generationHash": "b562abc19ebf2cdec25210e6741c9775a63804357ff4b89fbe0c6f10d27ac3ac",
+      "audioSHA256": "cd878ca30370b08cbeda91cb2cec5c6dfc7daa1e380746dc9f0d990a24062f7b",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Feel one breath enter. Feel it leave. Let the next breath find its own size. No counting. No holding."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.contact",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Notice the points of contact beneath you. Weight, warmth, pressure. Let those simple sensations be enough.",
+      "file": "zen_minimalist.contact.m4a",
+      "duration": 6.8,
+      "generationHash": "6872a3cbfb61af4e4b5af9f18cd422fa047cb3daba37d3384d72715da7687ae0",
+      "audioSHA256": "d8e0bb847af0d07206a5ca3181e7c97cecb15cc03e84f9e7c35adc414f08a8af",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Notice the points of contact beneath you. Weight, warmth, pressure. Let those simple sensations be enough."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.jaw",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Unclench the jaw if it is tight. Let the hands rest. Keep only the effort needed to stay comfortable.",
+      "file": "zen_minimalist.jaw.m4a",
+      "duration": 6.3,
+      "generationHash": "a5b4852232925d997069bf991f0aaf455e6965f41bd9fa68732166616f6dbdc5",
+      "audioSHA256": "0833d3f1aa3b3e71113cca8b1812a7829606679daeb9a2617f814db007108005",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Unclench the jaw if it is tight. Let the hands rest. Keep only the effort needed to stay comfortable."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.wandering",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "If attention has wandered, notice that. No correction is needed beyond returning. Feel the next breath.",
+      "file": "zen_minimalist.wandering.m4a",
+      "duration": 7.2,
+      "generationHash": "d31ab27207ce148fd2727fa82b290851db666812404425de5641dd4af1fb54a2",
+      "audioSHA256": "47ab6119502244fa75ffa42a95427ec6a9a0092582d2996d006a82fe6e938fde",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "If attention has wandered, notice that. No correction is needed beyond returning. Feel the next breath."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.end",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Feel an out-breath all the way through. If a pause comes naturally, notice it. Let breathing continue without waiting for a longer pause.",
+      "file": "zen_minimalist.end.m4a",
+      "duration": 8.1,
+      "generationHash": "bea6b2e00f37e4e602728ad195d94a712d4a6ff2a35b8fd5ca1217bb82e0da66",
+      "audioSHA256": "ef37abca88572b7ac4af09a2f0a38b0ebda181aa572143276719c143dcbcce56",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Feel an out-breath all the way through. If a pause comes naturally, notice it. Let breathing continue without waiting for a longer pause."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.hands",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Feel both hands. You may notice warmth, tingling, or very little. Stay with what is actually there.",
+      "file": "zen_minimalist.hands.m4a",
+      "duration": 6.8,
+      "generationHash": "0e1e87a68926d3f1512da8158c54bb8ab8241ebf012300df95fff46e5ac6960b",
+      "audioSHA256": "7cce6eb7e315b1fc99387a0b85d84efb9bced03fe4136cd08221644beccaa373",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Feel both hands. You may notice warmth, tingling, or very little. Stay with what is actually there."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.whole",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Let attention include the whole body. There is no need to inspect every part. Receive the overall feeling of sitting or lying here.",
+      "file": "zen_minimalist.whole.m4a",
+      "duration": 8.2,
+      "generationHash": "ba2ee06af6d862c7ffca68cc28bdffa42583e8e9bd8cd4f8c53f1bf3a04b9df7",
+      "audioSHA256": "aef24dec6a5f5f780fa4c4abc52c5297093d09ff4a9021716ebbeab257bcc444",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Let attention include the whole body. There is no need to inspect every part. Receive the overall feeling of sitting or lying here."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.sounds",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Let a sound arrive. Notice it changing. Notice when it ends. You do not have to name its source.",
+      "file": "zen_minimalist.sounds.m4a",
+      "duration": 6.8,
+      "generationHash": "3fbda28f9979b4c1ee85262f68e743373b4a2f18e76ecc631ccc3d003d60a589",
+      "audioSHA256": "8e372a16dc796c369950d6c202ecf7e0479f8ae8e83e88ab37602c167b1d28c7",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Let a sound arrive. Notice it changing. Notice when it ends. You do not have to name its source."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.labels",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "When a thought catches you, quietly recognize: thinking. Then return to contact or breath. The label is only a small reminder.",
+      "file": "zen_minimalist.labels.m4a",
+      "duration": 8.5,
+      "generationHash": "6b8e8e9c9fbd9660fc484a487c0da3eee6f6de776459abfa6beed94e2bf38b4e",
+      "audioSHA256": "2e5ffe2c088ed91e56e35a48dedc6980e2cda8b41738ea422d78677cf5ec7c76",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "When a thought catches you, quietly recognize: thinking. Then return to contact or breath. The label is only a small reminder."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.unfinished",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "A thought can remain unfinished. You do not have to find its last sentence. Come back to the sensation beneath your hands.",
+      "file": "zen_minimalist.unfinished.m4a",
+      "duration": 8.4,
+      "generationHash": "008171c356c1300976b2a625e27246fe2553494f41b5871369272c63c330164f",
+      "audioSHA256": "c11de074a287f198e8ab0f856b7387df161ab01550937a7fdd3ffa08fd700cce",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "A thought can remain unfinished. You do not have to find its last sentence. Come back to the sensation beneath your hands."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.pleasant",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Notice something pleasant, if it is here. Notice the wish to keep it. Let both the sensation and the wish change.",
+      "file": "zen_minimalist.pleasant.m4a",
+      "duration": 8.2,
+      "generationHash": "cf979cf3cebb688544979f4f455356cb4f5617cc0af0285fb534a7a0321cf2d2",
+      "audioSHA256": "05abc62ad05ea008ffefc34534115a845a78bbf936fea530122c26bcba020e65",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Notice something pleasant, if it is here. Notice the wish to keep it. Let both the sensation and the wish change."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.unpleasant",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "If a sensation is uncomfortable, you may adjust your position. Stillness does not require enduring pain.",
+      "file": "zen_minimalist.unpleasant.m4a",
+      "duration": 6.7,
+      "generationHash": "95aaf4d281a1e30448a7d3d3ab79bb18d0f0cf48c17976a8570dfb8d70b87281",
+      "audioSHA256": "c1bce7239dad61a9712a05ee0212ca8adc7ecfc2deae5851c85f39ada13cf8bb",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "If a sensation is uncomfortable, you may adjust your position. Stillness does not require enduring pain."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.effort",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Is attention gripping its object? Ease that grip a little. Stay interested. Let the breath move by itself.",
+      "file": "zen_minimalist.effort.m4a",
+      "duration": 7.1,
+      "generationHash": "852afad6daedcd06ad4adcbdbe70354a287c2976ade842262c89b5b7a66ccdda",
+      "audioSHA256": "9a71db914bf03137ec87aadf2fa5381f4ca3d5ff9b587830ad9147d9610d44f4",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Is attention gripping its object? Ease that grip a little. Stay interested. Let the breath move by itself."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.waiting",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Notice any waiting for the practice to become better. Waiting is another experience. Feel the body while it is here.",
+      "file": "zen_minimalist.waiting.m4a",
+      "duration": 7.9,
+      "generationHash": "ebe14a94ce554dd92254a75b3f27533ff793c1b7ae33c40ba1c8e25d4645d5e3",
+      "audioSHA256": "f59c055c9102644e458ff552b72331e588ebbca35175f7730cea0d9c6017eeac",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Notice any waiting for the practice to become better. Waiting is another experience. Feel the body while it is here."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.changing",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "A sensation changes. A sound changes. A thought changes. Let attention notice movement without needing to explain it.",
+      "file": "zen_minimalist.changing.m4a",
+      "duration": 8.7,
+      "generationHash": "a094924f8b77084e1d3ea5f7b4fa433d655b52bdeb322aad3afd80818ccc937d",
+      "audioSHA256": "74e02914f3421118e855e6a4a4547443a9c90e986ef40957bc950ed7cf321bcf",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "A sensation changes. A sound changes. A thought changes. Let attention notice movement without needing to explain it."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.ordinary",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "This breath does not need to be remarkable. Its ordinary movement is enough to return to.",
+      "file": "zen_minimalist.ordinary.m4a",
+      "duration": 5.7,
+      "generationHash": "c379ce58fa3378b0f4b16cf503499ee5703f419fff94558208ea59df8d5426a1",
+      "audioSHA256": "0968e2b1821892e74207656c14bdb851903a265fee7f3cfe7e20ee7aee9bf926",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "This breath does not need to be remarkable. Its ordinary movement is enough to return to."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.open",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Let attention widen. Body, breathing, and sound can be present together. When this feels too open, return to one point of contact.",
+      "file": "zen_minimalist.open.m4a",
+      "duration": 8.5,
+      "generationHash": "5a8aa4c756a01f129d4620063e256961c8285d36ae87fe9ad693026cc2748642",
+      "audioSHA256": "8ea7ad6c7f9c0088aa7bfa688c8b8c87b71f137b4c72ed7974fd5946bcac0ad7",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Let attention widen. Body, breathing, and sound can be present together. When this feels too open, return to one point of contact."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.noanswer",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Nothing needs to be solved during this pause. If a question remains, let it remain. Feel yourself supported.",
+      "file": "zen_minimalist.noanswer.m4a",
+      "duration": 7.2,
+      "generationHash": "d39d492847f51fd3a9bb4d0be105f84f3f9c8dfa192b82b538186338acdab56f",
+      "audioSHA256": "50764b0d1977c70417aebfe971e1270ef51fc29a788ee7b2bb2c08b253a6e7a1",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Nothing needs to be solved during this pause. If a question remains, let it remain. Feel yourself supported."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.quiet",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "I will leave a little more space now. Stay with breath, contact, or sound. Return whenever you notice you have gone away.",
+      "file": "zen_minimalist.quiet.m4a",
+      "duration": 7.6,
+      "generationHash": "bdc130f3ec44580df66ff8fdecdb2f874fae88df188e26ae72eaddf68a4dc910",
+      "audioSHA256": "bacfc5a6f653a2a66578ec94cf71109bc624232f23d6b8422236a62aff723462",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "I will leave a little more space now. Stay with breath, contact, or sound. Return whenever you notice you have gone away."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.again",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Here again. This body. This breath. Start from this moment.",
+      "file": "zen_minimalist.again.m4a",
+      "duration": 5.0,
+      "generationHash": "b74578de9d221f9c2f93784e5bb2513140c032de716cbd90ba919f277343a4bf",
+      "audioSHA256": "df06ee45e5e98004c5f19e9c107ad79cfbc1dd58df3eafa8a01480b53d704242",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Here again. This body. This breath. Start from this moment."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.enough",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "You do not need to decide whether this was a good meditation. Notice what is here now.",
+      "file": "zen_minimalist.enough.m4a",
+      "duration": 5.7,
+      "generationHash": "c438deb5f2d914ab8d92d29b7eb78479a54f7c111df857901acefe4c26ef115d",
+      "audioSHA256": "91985e6a6a8cc8ce2396d98e223a9321d75d642177bad425948b733bd9c8bb0d",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "You do not need to decide whether this was a good meditation. Notice what is here now."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.room",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "Feel the room around you. Move the fingers or toes. Let the eyes open when you are ready.",
+      "file": "zen_minimalist.room.m4a",
+      "duration": 5.8,
+      "generationHash": "b3878cbe2da2a4bc359412f621e0834ab0dd488f0738bbb870f511c335152912",
+      "audioSHA256": "a3dd299dbfb45dff54a0a1084b8cef2deb3f8b96f7ebbf594ba2693872f64a2b",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "Feel the room around you. Move the fingers or toes. Let the eyes open when you are ready."
+      }
+    },
+    {
+      "cueID": "zen_minimalist.close",
+      "guideID": "zen_minimalist",
+      "language": "en",
+      "text": "The practice ends here. Take your time before moving on. One ordinary breath can be a place to return.",
+      "file": "zen_minimalist.close.m4a",
+      "duration": 7.2,
+      "generationHash": "597e57e71e7fedd51dc4630fde638808f0a33da8e18958ead46e0dcc1ea8bf79",
+      "audioSHA256": "eaad0db1fc5403b37dfc38050c818ef33c7a1c3d5fedd1c41db72fd9ef7b97f1",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+        "text": "The practice ends here. Take your time before moving on. One ordinary breath can be a place to return."
+      }
+    },
+    {
+      "cueID": "serene_guide.arrive",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Welcome. Make yourself a little more comfortable, sitting or lying down. You can close your eyes or keep them softly open. There is no particular feeling you need to bring.",
+      "file": "serene_guide.arrive.m4a",
+      "duration": 12.8,
+      "generationHash": "4ba30da06cc37688bbbf2453b018838a14ca7dc7c284d8213d95e2aea983b40a",
+      "audioSHA256": "3fa83ebc522a16e92cf87f3dee36dcb8748064f9124cf4b01d978f50b5ebf155",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Welcome. Make yourself a little more comfortable, sitting or lying down. You can close your eyes or keep them softly open. There is no particular feeling you need to bring."
+      }
+    },
+    {
+      "cueID": "serene_guide.landing",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "This can be a small place to land. You do not have to put your whole day in order before you take a pause.",
+      "file": "serene_guide.landing.m4a",
+      "duration": 6.4,
+      "generationHash": "14c377534b54da6ef6dd57b87ed82e8c154a63354bd83e032369f71b88a16eb5",
+      "audioSHA256": "cb4e7c6cd0a4405151740ce86121976529e3b9e6f3fe4f1caab2bd47696a73d8",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "This can be a small place to land. You do not have to put your whole day in order before you take a pause."
+      }
+    },
+    {
+      "cueID": "serene_guide.soften",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "We will make a little room in the body, gently. Nothing needs to loosen on command. Even noticing where you are holding is a kind beginning.",
+      "file": "serene_guide.soften.m4a",
+      "duration": 10.4,
+      "generationHash": "8832087b09f6ba55c62f31861239f36327c880512e7660e67981a70a79b26f4b",
+      "audioSHA256": "5c59c53377d156d80a290b2a333154fd6974b18c773fbb573c61f7a2982edf94",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "We will make a little room in the body, gently. Nothing needs to loosen on command. Even noticing where you are holding is a kind beginning."
+      }
+    },
+    {
+      "cueID": "serene_guide.kindness",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Today, we will explore what a kinder way of being with yourself might feel like. You do not have to believe a special phrase. We can begin with a small gesture.",
+      "file": "serene_guide.kindness.m4a",
+      "duration": 11.0,
+      "generationHash": "884eaeac4e0a94be3c3605b324e0199146a6e4bd0ab99c257ed72ac20155d6ff",
+      "audioSHA256": "3ffe1421bee5e87c9b43fb15903d6b59942b06387ae72b44b2223852020d81ab",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Today, we will explore what a kinder way of being with yourself might feel like. You do not have to believe a special phrase. We can begin with a small gesture."
+      }
+    },
+    {
+      "cueID": "serene_guide.rest",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Let this be a little time in which rest does not have to be earned. Tasks may still be waiting. For now, you are allowed to put them down.",
+      "file": "serene_guide.rest.m4a",
+      "duration": 10.0,
+      "generationHash": "6a8928b7a27c8966da35da152e6971e9964e8f1f8ccfa333f49e44f3352ef848",
+      "audioSHA256": "6d6161aa9ee744dc08bd6c9e3e2f371b6bdf8a46741901d1011b62fa9680b623",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Let this be a little time in which rest does not have to be earned. Tasks may still be waiting. For now, you are allowed to put them down."
+      }
+    },
+    {
+      "cueID": "serene_guide.voice",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "We will listen for the tone you use with yourself, and try a gentler one. There is no need to make every thought positive.",
+      "file": "serene_guide.voice.m4a",
+      "duration": 8.0,
+      "generationHash": "5c208e36a90a99813b579ade196d10057cf0f314e92b289e04fa6cffb03e1e94",
+      "audioSHA256": "43fa37da83627675cb8c584eb251b9c02553314c03f34a5123b669797090ceb5",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "We will listen for the tone you use with yourself, and try a gentler one. There is no need to make every thought positive."
+      }
+    },
+    {
+      "cueID": "serene_guide.wholeness",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "You may arrive with more than one feeling. We can make room for that. This practice does not ask you to become a simpler version of yourself.",
+      "file": "serene_guide.wholeness.m4a",
+      "duration": 9.1,
+      "generationHash": "913c5a59118eca79bd0da38b8c4b05d5355f669205bd50b0fb2691fd28e4b7c7",
+      "audioSHA256": "2a557d7c7501a15b518369ede58afac7c83d7297f06b89752f5f6c70cafb0941",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "You may arrive with more than one feeling. We can make room for that. This practice does not ask you to become a simpler version of yourself."
+      }
+    },
+    {
+      "cueID": "serene_guide.support",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Notice what is already holding your weight. The chair, the bed, or the floor. Let your attention rest at one point where your body meets that support.",
+      "file": "serene_guide.support.m4a",
+      "duration": 10.3,
+      "generationHash": "bd261b22777a3b9c934448f08589b5f206919329ea7fbee74351fcb411acabed",
+      "audioSHA256": "8181596a99c2da64dc0489e1263cd8b5d7f9e034ac7e72757c4a4c64180abf77",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Notice what is already holding your weight. The chair, the bed, or the floor. Let your attention rest at one point where your body meets that support."
+      }
+    },
+    {
+      "cueID": "serene_guide.breath",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Follow a few breaths at their ordinary pace. Feel the small movement they make. If following your breath is uncomfortable, stay with your hands or the sounds around you.",
+      "file": "serene_guide.breath.m4a",
+      "duration": 11.4,
+      "generationHash": "84f145d0d07e29f6e961cb624428c4149e0886ef39fba8b61c54b881dca35919",
+      "audioSHA256": "8a79f3a4d402e8961507983c3597af346caeb538419b0aa890251d7f891e87e0",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Follow a few breaths at their ordinary pace. Feel the small movement they make. If following your breath is uncomfortable, stay with your hands or the sounds around you."
+      }
+    },
+    {
+      "cueID": "serene_guide.shoulders",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Notice your shoulders. Perhaps they could drop a fraction, or perhaps they need to stay as they are. Let the invitation be soft enough to decline.",
+      "file": "serene_guide.shoulders.m4a",
+      "duration": 10.0,
+      "generationHash": "546ed855e0cd339f263c003dd03064f1e9fc3a7346415bbae0ded602f06a1041",
+      "audioSHA256": "9e22b5459f3961d7ea2d2c69c118ab7e2d8b35b85d7b9d975a5e16e29f15f467",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Notice your shoulders. Perhaps they could drop a fraction, or perhaps they need to stay as they are. Let the invitation be soft enough to decline."
+      }
+    },
+    {
+      "cueID": "serene_guide.face",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Give a little attention to your face. The space around the eyes. The jaw. The tongue. See whether one small area can do a little less work.",
+      "file": "serene_guide.face.m4a",
+      "duration": 11.8,
+      "generationHash": "eb107fdaa2017f705e0221078f8be200bdfb237c8477efb62edf5000c43a5053",
+      "audioSHA256": "3f3bcf4a19ba622471ee50bc4e0fbb8d5df793c4235b44cdfb04096565620445",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Give a little attention to your face. The space around the eyes. The jaw. The tongue. See whether one small area can do a little less work."
+      }
+    },
+    {
+      "cueID": "serene_guide.hands",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Feel the palms and the fingertips. You might rest one hand over the other, if that is comfortable. Let it be a simple gesture of company.",
+      "file": "serene_guide.hands.m4a",
+      "duration": 9.3,
+      "generationHash": "8605a3d40c2494b71816d20a5c8b2057085a04f9af73b97d99e2c7df99ff5af2",
+      "audioSHA256": "890af6915bc6e2c6e8edb48ebf3e33a24d929d2b5424d5194cbf148371a381de",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Feel the palms and the fingertips. You might rest one hand over the other, if that is comfortable. Let it be a simple gesture of company."
+      }
+    },
+    {
+      "cueID": "serene_guide.feet",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Notice your feet and the weight of your legs. You do not need a vivid sensation. An ordinary awareness of being here is enough.",
+      "file": "serene_guide.feet.m4a",
+      "duration": 9.2,
+      "generationHash": "bd48f17c601acb4f42ce3a2b8aa351b830f9f86a18e316c655f2946eeb5a9c40",
+      "audioSHA256": "10c6d1e835e5d855055a0a080465fbbb44d407a95840c40b9865c55e6c636d16",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Notice your feet and the weight of your legs. You do not need a vivid sensation. An ordinary awareness of being here is enough."
+      }
+    },
+    {
+      "cueID": "serene_guide.belly",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Let the belly move naturally with breathing. There is no need to draw a deeper breath. You can give the body room without directing it.",
+      "file": "serene_guide.belly.m4a",
+      "duration": 8.5,
+      "generationHash": "abdfdd44344aacd90c0f9eb3b8eec74974db9b8bdbfb3d4d6dcb1703ff3dddf2",
+      "audioSHA256": "8c728a24156ae4de486b740276176bb19a61910ff83f8763c1506a2c7ab9b7f6",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Let the belly move naturally with breathing. There is no need to draw a deeper breath. You can give the body room without directing it."
+      }
+    },
+    {
+      "cueID": "serene_guide.whole",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Let your attention gather the body as a whole. Some places may be easy; others may not. They can share this moment without having to match.",
+      "file": "serene_guide.whole.m4a",
+      "duration": 9.8,
+      "generationHash": "120ea69b27cad24f31ef792773ae95e9886c9da0904bf3e24e5b36c6a85f2710",
+      "audioSHA256": "f9cc5408e08af849daff4582d108673aea3e98497d55e44facc885387777be68",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Let your attention gather the body as a whole. Some places may be easy; others may not. They can share this moment without having to match."
+      }
+    },
+    {
+      "cueID": "serene_guide.mind",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "If your mind has been making lists or replaying something, you have not lost your place. Let the next point of contact welcome you back.",
+      "file": "serene_guide.mind.m4a",
+      "duration": 9.3,
+      "generationHash": "bb932dfead958457fa6f90667d47109fbe1b8bc1b4557b23724d650db1ddece8",
+      "audioSHA256": "116819478dfea2a8cf67f5c9ded5ec3a8abfd92f2df681859c90ec7b4748c339",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "If your mind has been making lists or replaying something, you have not lost your place. Let the next point of contact welcome you back."
+      }
+    },
+    {
+      "cueID": "serene_guide.company",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Imagine the tone you might use with someone you care about on a tiring day. You do not need their image. Just notice the quality of that kindness.",
+      "file": "serene_guide.company.m4a",
+      "duration": 10.0,
+      "generationHash": "d0ed36ee1635c6ca7b690357a176847cbe1b7bfa0dd065217244f4ae7b02d164",
+      "audioSHA256": "213cc5566a5b3c9a9cf66b19b8b09747b847424472204cff07fe1e68b85f2af7",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Imagine the tone you might use with someone you care about on a tiring day. You do not need their image. Just notice the quality of that kindness."
+      }
+    },
+    {
+      "cueID": "serene_guide.phrase",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "If it feels useful, offer yourself these words: I can meet this moment gently. You can change the words, or leave them aside and feel your hands instead.",
+      "file": "serene_guide.phrase.m4a",
+      "duration": 12.0,
+      "generationHash": "c6062339a3e1c94151289fcbd2ba99506932d044e3efdac4686ec74ee2d5ed03",
+      "audioSHA256": "96614d737c100ab4365ccc04d9c31ec330cad278865c35cee417d6cec073af27",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "If it feels useful, offer yourself these words: I can meet this moment gently. You can change the words, or leave them aside and feel your hands instead."
+      }
+    },
+    {
+      "cueID": "serene_guide.small",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Kindness can be very small. Adjusting a cushion. Letting a breath finish. Choosing not to scold yourself for wandering. Notice one small kindness available now.",
+      "file": "serene_guide.small.m4a",
+      "duration": 12.4,
+      "generationHash": "4547e8fb8bffd2b14310724ff0083b7f0044e26d6f3fef6d4d8eda090a2d1b13",
+      "audioSHA256": "dc0dc491f64cdbd80984b8dccb164f7cbe3f7efdbda3f075cad45b8a0339bcf9",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Kindness can be very small. Adjusting a cushion. Letting a breath finish. Choosing not to scold yourself for wandering. Notice one small kindness available now."
+      }
+    },
+    {
+      "cueID": "serene_guide.permission",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Notice whether part of you is asking permission to rest. You do not have to argue with that part. Let it know this pause is brief, and you will return to your day.",
+      "file": "serene_guide.permission.m4a",
+      "duration": 10.5,
+      "generationHash": "7ffa999d599cf114ebbc670441269a8150788c706c469150eb36a8b03f5fade5",
+      "audioSHA256": "456f84c13d3ab3e9924ffc5e5d3a07cb7252766014985bc96a301481666720fa",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Notice whether part of you is asking permission to rest. You do not have to argue with that part. Let it know this pause is brief, and you will return to your day."
+      }
+    },
+    {
+      "cueID": "serene_guide.unfinished",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Something may remain unfinished. Let its edges stay unfinished for now. Feel the support beneath you while the world continues beyond this pause.",
+      "file": "serene_guide.unfinished.m4a",
+      "duration": 11.9,
+      "generationHash": "7b2699bb5edc8f9597fa8cc256319041e2321a2e8bb222ecf32a8531cc8cfcc6",
+      "audioSHA256": "a9347b44e7d9f6dd54ae1f4b43d43e7b1d2bfe9370a9eab4065ee79b870d1cd9",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Something may remain unfinished. Let its edges stay unfinished for now. Feel the support beneath you while the world continues beyond this pause."
+      }
+    },
+    {
+      "cueID": "serene_guide.weather",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Notice the mood of this moment without asking it to improve. Tired, clear, restless, tender, or difficult to name. Any of these can be met with care.",
+      "file": "serene_guide.weather.m4a",
+      "duration": 10.3,
+      "generationHash": "34504a82e4b6aeb68c32cd569ce363e69277f524d7b45e404e70aea6b3747dbb",
+      "audioSHA256": "1489745695582ce4003837a90c089b46c15ebee4c94d6f027dcfaad0a6bc7f95",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Notice the mood of this moment without asking it to improve. Tired, clear, restless, tender, or difficult to name. Any of these can be met with care."
+      }
+    },
+    {
+      "cueID": "serene_guide.critic",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "If a critical thought appears, listen for its tone before its argument. Can your response be less sharp? Perhaps: This is a hard moment. I can take it one step at a time.",
+      "file": "serene_guide.critic.m4a",
+      "duration": 14.8,
+      "generationHash": "dfaaa2cf611e09f6c3ce4413150b0f1fb201b7b19ea50b4a3bada549325f1e5c",
+      "audioSHA256": "5f17089839e922ba5c5cad3ec040a7bcc1fc0856cdeb6cf81a53cb70615e4e9a",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "If a critical thought appears, listen for its tone before its argument. Can your response be less sharp? Perhaps: This is a hard moment. I can take it one step at a time."
+      }
+    },
+    {
+      "cueID": "serene_guide.need",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Ask gently: What would be kind and realistic for me today? There may be a simple answer, or none at all. Give the question a little room.",
+      "file": "serene_guide.need.m4a",
+      "duration": 11.4,
+      "generationHash": "6f60a1812fbd716eeb9e228e2f5aa69956b8cbeb94d87cbbdcbd466f84ed85a0",
+      "audioSHA256": "4087617411a9676a96165e4466e8a949cddfbe856537400e6c3396677c41d4ce",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Ask gently: What would be kind and realistic for me today? There may be a simple answer, or none at all. Give the question a little room."
+      }
+    },
+    {
+      "cueID": "serene_guide.both",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "You can be grateful and tired. Hopeful and uncertain. Notice whether two different feelings can be here without one having to cancel the other.",
+      "file": "serene_guide.both.m4a",
+      "duration": 9.0,
+      "generationHash": "4e1c7d843416f765c41c7ab4608178aa0bbb75bfde9e8c6c1c07221daa0a36a5",
+      "audioSHA256": "62e99aadcc597e081631c82261bdb7571e63ae1b734da74576e9791ffca24c1d",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "You can be grateful and tired. Hopeful and uncertain. Notice whether two different feelings can be here without one having to cancel the other."
+      }
+    },
+    {
+      "cueID": "serene_guide.space",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "We will be quiet for a little while. Rest with support, breath, or sound. Whenever you need a beginning, there is one here.",
+      "file": "serene_guide.space.m4a",
+      "duration": 9.6,
+      "generationHash": "31e50fa6136daa2057471363685aa365013a7f488528cee0e1be9dcd605f299d",
+      "audioSHA256": "66be3772cded23e708307ddfa8e54b5969ee6ec3358463dca88e59c6c85fa2ae",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "We will be quiet for a little while. Rest with support, breath, or sound. Whenever you need a beginning, there is one here."
+      }
+    },
+    {
+      "cueID": "serene_guide.returning",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "I am here again. Feel one place where your body is supported. There is nothing to catch up with.",
+      "file": "serene_guide.returning.m4a",
+      "duration": 7.1,
+      "generationHash": "3df8bec0af5e081650a87cf4e41292fadd4c407fb0ddf645aecf1001db6f8942",
+      "audioSHA256": "4624215b98be2f913ebd6cbf88e504c0a1ee043d147f27ded5ae2fcfb7cdb01f",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "I am here again. Feel one place where your body is supported. There is nothing to catch up with."
+      }
+    },
+    {
+      "cueID": "serene_guide.carry",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Choose one small quality to take with you, if you like. A softer tone. A little patience. Permission to pause before the next thing.",
+      "file": "serene_guide.carry.m4a",
+      "duration": 10.0,
+      "generationHash": "1125bf275d2357b41bdda2d46d9172fe0274574df9f00299801e55905bb449bd",
+      "audioSHA256": "ac9d2b2541b309966891930dd8fd1dc8d9b31d2eaf6752fb574ffd295b03bd0a",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Choose one small quality to take with you, if you like. A softer tone. A little patience. Permission to pause before the next thing."
+      }
+    },
+    {
+      "cueID": "serene_guide.room",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Begin to notice the room. Let your eyes take in some light, if they have been closed. Move your hands or feet, and take the time you need.",
+      "file": "serene_guide.room.m4a",
+      "duration": 9.4,
+      "generationHash": "2fab46ef9d4e711d2b5f8e965097b21a08ed7eee3434e6b86cc2b90c8ca90a9c",
+      "audioSHA256": "8d6830a09bdb308c2ab10c6486a5247e0e1ff4eda70a8cf47487d8f19d07556b",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Begin to notice the room. Let your eyes take in some light, if they have been closed. Move your hands or feet, and take the time you need."
+      }
+    },
+    {
+      "cueID": "serene_guide.close",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Thank you for making this space. You do not have to hold on to a feeling. You can carry one small act of care into what comes next.",
+      "file": "serene_guide.close.m4a",
+      "duration": 10.3,
+      "generationHash": "4aa88141959e29c3afb889dc79059105bc5f29389274976c1581e3e59dc6e387",
+      "audioSHA256": "fcd4ad3009e08c8baa36c1fe7ec98d198faff5d6d298972f015a00415a3cbb12",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Thank you for making this space. You do not have to hold on to a feeling. You can carry one small act of care into what comes next."
+      }
+    },
+    {
+      "cueID": "shadow_guide.arrive",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Welcome. Feel the ground or the seat beneath you. Keep your eyes open if that helps you stay present. You decide how close to come to anything we explore.",
+      "file": "shadow_guide.arrive.m4a",
+      "duration": 10.5,
+      "generationHash": "783a3e912a72261b40b749902520f8522c7cbb2097993a65e9e17cd0282f0b50",
+      "audioSHA256": "9cc4dc52c327f8f97b5cdb5ec3aa7a06d3f1681e21eb21ffb40ded82f195d9b8",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Welcome. Feel the ground or the seat beneath you. Keep your eyes open if that helps you stay present. You decide how close to come to anything we explore."
+      }
+    },
+    {
+      "cueID": "shadow_guide.threshold",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "We will stay near the threshold today. No hidden memory needs to be found. We are simply noticing how you meet this moment.",
+      "file": "shadow_guide.threshold.m4a",
+      "duration": 8.0,
+      "generationHash": "d1a7f128a2809add026158d4b411f8797fd27bb81b3873fee01b5477f2d154c8",
+      "audioSHA256": "0c5e8eb7ffc0060dbcdc588d73d174d23ea2897f6aa63f5a1a18c0924dac3811",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "We will stay near the threshold today. No hidden memory needs to be found. We are simply noticing how you meet this moment."
+      }
+    },
+    {
+      "cueID": "shadow_guide.weather",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Imagine your present mood as weather, if that image helps. We are not here to clear the sky. We are learning how to stand beneath it with curiosity.",
+      "file": "shadow_guide.weather.m4a",
+      "duration": 10.4,
+      "generationHash": "a342d5fbec7a07e0aa2ee19a16a64b4472537e18a63754189de080998be94c63",
+      "audioSHA256": "9d54d6a5132d094f7b6edba14b21ce8e0d2188ec3d20bf230f5d871ebe96c636",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Imagine your present mood as weather, if that image helps. We are not here to clear the sky. We are learning how to stand beneath it with curiosity."
+      }
+    },
+    {
+      "cueID": "shadow_guide.reaction",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Choose a small, everyday irritation, if one feels manageable. Nothing overwhelming. You may also choose no example and stay with the room around you.",
+      "file": "shadow_guide.reaction.m4a",
+      "duration": 11.8,
+      "generationHash": "bbc08fef557d7134242fcc2b1a0c7b69b77da61c64451616cd46549ab5f963fc",
+      "audioSHA256": "ce46c405f492e70210e8cdfaa7b658677cefd322e5fec18090a7e739b94ea4ba",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Choose a small, everyday irritation, if one feels manageable. Nothing overwhelming. You may also choose no example and stay with the room around you."
+      }
+    },
+    {
+      "cueID": "shadow_guide.protector",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Today we can be curious about a habit that may be trying to help: staying busy, checking, or holding back. This is a possibility to explore, not an explanation you must accept.",
+      "file": "shadow_guide.protector.m4a",
+      "duration": 12.0,
+      "generationHash": "bc54a2f2061b6c84609fcedc822416f585077ddfc95a71a9efd8163e7291c34a",
+      "audioSHA256": "cc4dc2a74fc386df54ef63ac5f7aa3346bae01657e33bdc2b45945bf05555bdf",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Today we can be curious about a habit that may be trying to help: staying busy, checking, or holding back. This is a possibility to explore, not an explanation you must accept."
+      }
+    },
+    {
+      "cueID": "shadow_guide.opposites",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Two wishes can live in the same person. To be seen, and to stay private. To move forward, and to rest. We will make room to notice without demanding a verdict.",
+      "file": "shadow_guide.opposites.m4a",
+      "duration": 10.7,
+      "generationHash": "5166f857bd925c9dc554874f4b200ba7e1d76f68fecfecfdc433c1c94525c038",
+      "audioSHA256": "17876a1cf321bd7f3b080cb88368321df65aa4ee9e98ae131748883a91e12631",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Two wishes can live in the same person. To be seen, and to stay private. To move forward, and to rest. We will make room to notice without demanding a verdict."
+      }
+    },
+    {
+      "cueID": "shadow_guide.welcome",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "This is a practice of making room, not forcing a door. What is ready to be noticed can be noticed. What is not ready can remain at a distance.",
+      "file": "shadow_guide.welcome.m4a",
+      "duration": 9.7,
+      "generationHash": "334d4a513945761787f5cd09fd9aeffefefae77c2c97521ac848460b4dff9826",
+      "audioSHA256": "40719bbc0717a35f5eaa79ffa9d171fa016a0e1eae619d0ce49f65c5c45f2a68",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "This is a practice of making room, not forcing a door. What is ready to be noticed can be noticed. What is not ready can remain at a distance."
+      }
+    },
+    {
+      "cueID": "shadow_guide.ground",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Feel a clear point of contact: your feet, your hands, or your back against support. Let this be your way back whenever you want it.",
+      "file": "shadow_guide.ground.m4a",
+      "duration": 7.6,
+      "generationHash": "296d8e384f8515d3d06d0eb195d4a0e381c3ee0db83978abbf819835362f1ac0",
+      "audioSHA256": "27df716b2f3b1967c808ea6fc1830883f2abe5fcdcd0b86ee31598c507eb458a",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Feel a clear point of contact: your feet, your hands, or your back against support. Let this be your way back whenever you want it."
+      }
+    },
+    {
+      "cueID": "shadow_guide.room",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Notice one sound beyond your body. If your eyes are open, notice a color or shape. The room is here alongside your inner experience.",
+      "file": "shadow_guide.room.m4a",
+      "duration": 9.4,
+      "generationHash": "861f2f0e5ea8c67c890204c9db113d2e9dc434168b46a6014e52086e476565a5",
+      "audioSHA256": "43ffbb9a070037917b73078ded39c3143b2454e6efd9f2d2a9c1e9cf76d71b1f",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Notice one sound beyond your body. If your eyes are open, notice a color or shape. The room is here alongside your inner experience."
+      }
+    },
+    {
+      "cueID": "shadow_guide.breath",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Let breathing continue at its own pace. You can feel it without making it deeper. Keep some attention with the support beneath you.",
+      "file": "shadow_guide.breath.m4a",
+      "duration": 8.6,
+      "generationHash": "b06c4a30f36ae73f0466eca9a6422bbf9a3b8d6e0d1edaf2082ef731acca852a",
+      "audioSHA256": "21f1b69db583a38cc2794b0284f7a647616964e5a48da68bd0071bfd89d95304",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Let breathing continue at its own pace. You can feel it without making it deeper. Keep some attention with the support beneath you."
+      }
+    },
+    {
+      "cueID": "shadow_guide.name",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Is there a simple word for what is present? Irritation. Sadness. Ease. Uncertainty. You do not have to choose the perfect word, and you may choose none.",
+      "file": "shadow_guide.name.m4a",
+      "duration": 11.5,
+      "generationHash": "9c624fc801d0a325fb46061f0360f9c7b7b58e35d0a30b30ec0a76d9894c1d2f",
+      "audioSHA256": "bda151c66d0c89da0bdccc844dcd564dbab715e87455177b2eee56963c4a22a8",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Is there a simple word for what is present? Irritation. Sadness. Ease. Uncertainty. You do not have to choose the perfect word, and you may choose none."
+      }
+    },
+    {
+      "cueID": "shadow_guide.distance",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Notice how near you want to be to this feeling. A little distance is allowed. You can attend to the room instead. Curiosity does not require intensity.",
+      "file": "shadow_guide.distance.m4a",
+      "duration": 10.3,
+      "generationHash": "3516ccc5647d6e18795e4cd64987f344fda26e659aaf6d5b42bd0459ac0c7431",
+      "audioSHA256": "683cd70ec3bd4f34ef1d73422682a4ed566bbc8f894b8674be6ba5225515a3f5",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Notice how near you want to be to this feeling. A little distance is allowed. You can attend to the room instead. Curiosity does not require intensity."
+      }
+    },
+    {
+      "cueID": "shadow_guide.sensation",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "If it feels manageable, notice one bodily sensation that comes with the feeling. Pressure, warmth, movement, or something less clear. Stay with the sensation rather than its story.",
+      "file": "shadow_guide.sensation.m4a",
+      "duration": 13.0,
+      "generationHash": "6a86b0129a43b862eeed68a4e359df3d58f0bb46f7634accd4118fd838f37a4c",
+      "audioSHA256": "96e71db71955d4d840f61aaf3afddd2df899c8866b29412ef231cc976f04a348",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "If it feels manageable, notice one bodily sensation that comes with the feeling. Pressure, warmth, movement, or something less clear. Stay with the sensation rather than its story."
+      }
+    },
+    {
+      "cueID": "shadow_guide.story",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Notice the story your mind tells about this feeling. You do not need to prove or disprove it here. A story can be heard without becoming an instruction.",
+      "file": "shadow_guide.story.m4a",
+      "duration": 9.4,
+      "generationHash": "2b43abd8cc41821500df5bca2e6a210a6c50c2ed59f02affbb409e7a398d3cfc",
+      "audioSHA256": "43d37c1322406c2c0fe61557669eccea1e434957cbf7860ad5b772f4e6d33f85",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Notice the story your mind tells about this feeling. You do not need to prove or disprove it here. A story can be heard without becoming an instruction."
+      }
+    },
+    {
+      "cueID": "shadow_guide.mild",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Keep this exploration small. If the experience becomes too much, open your eyes, look around, or stop. The practice remains yours to shape.",
+      "file": "shadow_guide.mild.m4a",
+      "duration": 10.5,
+      "generationHash": "6083c48a632c3f4d563b10825c384355b3636610b8e15f9ca306eb6857542b91",
+      "audioSHA256": "dd8ac43e8420969f9ae762d90fd286978a1ebd1c2661432e9f0e0ec6678d3afd",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Keep this exploration small. If the experience becomes too much, open your eyes, look around, or stop. The practice remains yours to shape."
+      }
+    },
+    {
+      "cueID": "shadow_guide.judgment",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Is there a second feeling about the first one? Perhaps frustration about being anxious, or shame about being angry. Notice this extra layer without adding another judgment.",
+      "file": "shadow_guide.judgment.m4a",
+      "duration": 10.9,
+      "generationHash": "68b47fb74a5da2bcc8cf0f0ca8d78ee94ef03cba2848050c3b95af0d4db4a4ec",
+      "audioSHA256": "3d567a7f0e14833e9afdfcdc307c5bffa2ae7b2bd061b5821308cce56cbd555f",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Is there a second feeling about the first one? Perhaps frustration about being anxious, or shame about being angry. Notice this extra layer without adding another judgment."
+      }
+    },
+    {
+      "cueID": "shadow_guide.message",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "You might ask: Is there something I care about beneath this reaction? Perhaps fairness, rest, belonging, or space. Let any answer remain a possibility.",
+      "file": "shadow_guide.message.m4a",
+      "duration": 11.6,
+      "generationHash": "5797db4be19c3a68310911a0c7a1577c04f192a78f7583f9c530a3f1897b2419",
+      "audioSHA256": "a077c272c8cb7074e871c4cdbafea6e4d2a20a45f88f4dabcb04029b6632f455",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "You might ask: Is there something I care about beneath this reaction? Perhaps fairness, rest, belonging, or space. Let any answer remain a possibility."
+      }
+    },
+    {
+      "cueID": "shadow_guide.protection",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "If this habit could be trying to protect something, what might that be? No answer is required. You are allowed to find the question unhelpful and return to your feet.",
+      "file": "shadow_guide.protection.m4a",
+      "duration": 10.9,
+      "generationHash": "b0f011a8394b2ecbfe18910c7b3cba463993f4caf9edbff8c90976d52e8940f6",
+      "audioSHA256": "272e3aea4719203f2ca02b8ddc169bdbf30239dba7b5e5feb0bd2a56bf3a5aee",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "If this habit could be trying to protect something, what might that be? No answer is required. You are allowed to find the question unhelpful and return to your feet."
+      }
+    },
+    {
+      "cueID": "shadow_guide.thanks",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Where it feels sincere, acknowledge the effort: I see that you have been trying. This does not mean a habit must continue unchanged.",
+      "file": "shadow_guide.thanks.m4a",
+      "duration": 9.7,
+      "generationHash": "08f357cfa05726ef3789534f96224be284d6b741c29eb7903eb1fca8a563de1d",
+      "audioSHA256": "75be181d1ebabf57a4db23a42535cb768a9b5bede18a2dd659c7672496ed00f9",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Where it feels sincere, acknowledge the effort: I see that you have been trying. This does not mean a habit must continue unchanged."
+      }
+    },
+    {
+      "cueID": "shadow_guide.cost",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Without making yourself wrong, notice whether this way of coping has a cost today. Keep the question gentle. Understanding can include both what helped and what has become tiring.",
+      "file": "shadow_guide.cost.m4a",
+      "duration": 10.0,
+      "generationHash": "824911b975ede1c83d3e32591c974aa5c7a222a52a57f7f9c8c45b8192f53669",
+      "audioSHA256": "92a20d91a6a4d7c52d5aeb82e3b255373dfd10c18db8b0e7fa39f2570d5110f6",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Without making yourself wrong, notice whether this way of coping has a cost today. Keep the question gentle. Understanding can include both what helped and what has become tiring."
+      }
+    },
+    {
+      "cueID": "shadow_guide.need",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "What might you need in this moment? A boundary, some reassurance, a pause, or simply less analysis. Let the simplest answer be enough.",
+      "file": "shadow_guide.need.m4a",
+      "duration": 9.6,
+      "generationHash": "b25683c095e9023274b284637dfc0ae311a8604683f3e5d9865c6a71c09ed473",
+      "audioSHA256": "eddc70ca694145f56cba26d0b4094e4a789279fdb45c1a9fda2d88297941e80f",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "What might you need in this moment? A boundary, some reassurance, a pause, or simply less analysis. Let the simplest answer be enough."
+      }
+    },
+    {
+      "cueID": "shadow_guide.two",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Notice two different wishes, if they are present. Give each one a little space. You do not have to choose one in order to acknowledge both.",
+      "file": "shadow_guide.two.m4a",
+      "duration": 8.9,
+      "generationHash": "bff7b139ccdcb0d7b2b2bee906be0021437aa16e3d6d56578e2b9ab1c0eaad9d",
+      "audioSHA256": "1ebef8b78fbd86c8f004bbdb24d7a50a9f1b8eda9a97359a348846e616670bab",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Notice two different wishes, if they are present. Give each one a little space. You do not have to choose one in order to acknowledge both."
+      }
+    },
+    {
+      "cueID": "shadow_guide.speak",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Let one wish finish a short sentence: I would like. Then let the other have its sentence. Keep it ordinary. You are listening, not holding a trial.",
+      "file": "shadow_guide.speak.m4a",
+      "duration": 10.2,
+      "generationHash": "2018b831b9dec60ae209332bdd6e2150a658b8ea978fdbc46b54399e4b94cd10",
+      "audioSHA256": "0be8d6c59681144e54924a8ac4c850cc52a5fac97b70696c8515a7574c884bae",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Let one wish finish a short sentence: I would like. Then let the other have its sentence. Keep it ordinary. You are listening, not holding a trial."
+      }
+    },
+    {
+      "cueID": "shadow_guide.notaction",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "A feeling can be acknowledged without being acted on. You can hear anger and still choose care. You can feel fear and take only the step that is yours to take.",
+      "file": "shadow_guide.notaction.m4a",
+      "duration": 10.9,
+      "generationHash": "3c12331245632275bb336c88966ac39c7b5dfc0f41afd875568d46101d41f156",
+      "audioSHA256": "e95a5439c1a67d38b8bad7016727994826856d383be839b6fbb201a114c0c100",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "A feeling can be acknowledged without being acted on. You can hear anger and still choose care. You can feel fear and take only the step that is yours to take."
+      }
+    },
+    {
+      "cueID": "shadow_guide.unknown",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "There may be no clear explanation. Let that be honest. You do not need a discovery to justify this time with yourself.",
+      "file": "shadow_guide.unknown.m4a",
+      "duration": 8.3,
+      "generationHash": "1b2d9f8ae3054e14371e6f02f527b26b87b46e413b43065732327b3070a6ff5e",
+      "audioSHA256": "b27bffbc887b2dc19936d75fa478cea672de5db4596609d2b9bdeca2e28dd249",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "There may be no clear explanation. Let that be honest. You do not need a discovery to justify this time with yourself."
+      }
+    },
+    {
+      "cueID": "shadow_guide.whole",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Notice whether you can be a little larger than the argument inside you. A person with many experiences, rather than one feeling that must define you.",
+      "file": "shadow_guide.whole.m4a",
+      "duration": 9.2,
+      "generationHash": "2cdb5b3d62918305514d985f6219c7628250779b24a3b983a7cec3e5582b2811",
+      "audioSHA256": "c1c7a562ab9b59559b91233c7acfd77e86344dbcee8a452e488fb4efeb4a29e4",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Notice whether you can be a little larger than the argument inside you. A person with many experiences, rather than one feeling that must define you."
+      }
+    },
+    {
+      "cueID": "shadow_guide.choice",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Consider one small, grounded response for later. Something you could actually do, or a decision to wait. There is no need to solve the whole pattern.",
+      "file": "shadow_guide.choice.m4a",
+      "duration": 10.0,
+      "generationHash": "c6a7d273ad7eafc5318036a9f4c86f46939355603acd85aa9f3260a3ba2616f0",
+      "audioSHA256": "cbd5057b60910cd3766530ac0c25c65b30be7833dfc88436ee7efe35d73c60b6",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Consider one small, grounded response for later. Something you could actually do, or a decision to wait. There is no need to solve the whole pattern."
+      }
+    },
+    {
+      "cueID": "shadow_guide.quiet",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Let the inquiry rest now. I will leave some quiet. Stay with your hands, the ground, or the sounds in the room. Nothing else needs to surface.",
+      "file": "shadow_guide.quiet.m4a",
+      "duration": 9.8,
+      "generationHash": "1f96fc9407d1af6180cde473fc70e0993f0c4e4737c12a57bb6ecf55e253212e",
+      "audioSHA256": "09cfd4406b286f53d3c6d70e72c4596c14584e2e6c8125c0b2493f9cfdf79bea",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Let the inquiry rest now. I will leave some quiet. Stay with your hands, the ground, or the sounds in the room. Nothing else needs to surface."
+      }
+    },
+    {
+      "cueID": "shadow_guide.returning",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Come back to the weight of your body. Notice the room again. You may let the question go unfinished.",
+      "file": "shadow_guide.returning.m4a",
+      "duration": 6.4,
+      "generationHash": "e986d3ab18099be31285be276f422a35edf11b8bc2d1cdd076e8c647881bb05d",
+      "audioSHA256": "a9e392598db464406ddb74d90958651369b54846338261650b01f61a35419343",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Come back to the weight of your body. Notice the room again. You may let the question go unfinished."
+      }
+    },
+    {
+      "cueID": "shadow_guide.closingdoor",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "Let the exploration end for today. Feel your feet or move your fingers. Look around and notice something ordinary in your surroundings.",
+      "file": "shadow_guide.closingdoor.m4a",
+      "duration": 10.1,
+      "generationHash": "c3f8dbab8a8bcf2e01f305ee3093123b7a43d7a8e59f27e854af5f48831d3f88",
+      "audioSHA256": "1594203a5efa6f48534eae4540715044b024d188e63967593d60c10ece1ff1f4",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "Let the exploration end for today. Feel your feet or move your fingers. Look around and notice something ordinary in your surroundings."
+      }
+    },
+    {
+      "cueID": "shadow_guide.close",
+      "guideID": "shadow_guide",
+      "language": "en",
+      "text": "You do not have to leave with an answer. Take this much: you can meet yourself with curiosity and still choose your own pace.",
+      "file": "shadow_guide.close.m4a",
+      "duration": 8.3,
+      "generationHash": "69b15ff646f4da95f5e199953be36b072f4181d574afffc189a6d2e7b85b225a",
+      "audioSHA256": "1bfda6d61c52f0f477abb65975e744c6d4852839fa4ec6824590698c321a2f66",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "42bdff53caece052e6bf61ca484997707fedd22418e08545f8afeeee7fe9ea1d",
+        "text": "You do not have to leave with an answer. Take this much: you can meet yourself with curiosity and still choose your own pace."
+      }
+    },
+    {
+      "cueID": "ra.greeting",
+      "guideID": "ra",
+      "language": "en",
+      "text": "I am Ra. I greet you in the love and in the light of the one infinite creator. Welcome to this moment of contemplation.",
+      "file": "ra.greeting.m4a",
+      "duration": 10.3,
+      "generationHash": "24f08b1dd2b5c94c6b8e88802a084b1249f602e8339085f432c1fa68e69b693c",
+      "audioSHA256": "1f7d3754622013296fec5fede53d98ab9fe57aa1140285b03d842678a16a1b98",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "I am Ra. I greet you in the love and in the light of the one infinite creator. Welcome to this moment of contemplation."
+      }
+    },
+    {
+      "cueID": "ra.arrive",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Allow the body to find a supported position. The eyes may close or remain open. Let the breath move naturally. No special experience is required.",
+      "file": "ra.arrive.m4a",
+      "duration": 13.1,
+      "generationHash": "44f7b32a44ef98ed0251c03dade509d916b81df26dfd6ed297cf974e64773e4f",
+      "audioSHA256": "670efe22a0b4181d2a2aa2f490f0280c782a0b41016af625e5d7aefd1389bad0",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Allow the body to find a supported position. The eyes may close or remain open. Let the breath move naturally. No special experience is required."
+      }
+    },
+    {
+      "cueID": "ra.spark",
+      "guideID": "ra",
+      "language": "en",
+      "text": "For this brief practice, consider a single point of light. It may be imagined, or simply a word that suggests warmth. If no image comes, nothing is missing.",
+      "file": "ra.spark.m4a",
+      "duration": 12.3,
+      "generationHash": "4a15c28e6279c813c74c130caab7bf4c51a24ad0021044708a89fa798030950a",
+      "audioSHA256": "8d06adc62962bce7c5910bd88772b830ccee9d1f4a9a4e0fc18f3e49244e17f4",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "For this brief practice, consider a single point of light. It may be imagined, or simply a word that suggests warmth. If no image comes, nothing is missing."
+      }
+    },
+    {
+      "cueID": "ra.light",
+      "guideID": "ra",
+      "language": "en",
+      "text": "We contemplate love and light as qualities of attention: warmth without possession, clarity without harshness. Let these be invitations rather than states you must produce.",
+      "file": "ra.light.m4a",
+      "duration": 12.7,
+      "generationHash": "c6687680bc2624891c99f7053b4c55f880ff07d94a1a8b7078486d367387362f",
+      "audioSHA256": "c287240d2ba07bfb8631f0947fcece20f13d866e1fe518dc4940ff50f2621911",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "We contemplate love and light as qualities of attention: warmth without possession, clarity without harshness. Let these be invitations rather than states you must produce."
+      }
+    },
+    {
+      "cueID": "ra.belonging",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Consider belonging, not as something you must earn, but as a question to sit beside. What supports your life in this ordinary moment?",
+      "file": "ra.belonging.m4a",
+      "duration": 9.0,
+      "generationHash": "e7b5e1a0db5d7e124e27aa97c49b38c3c8539109af839552ee31b73d595435e7",
+      "audioSHA256": "8550c1a667cb96f38df71acf3fdbdea3c3289319004e0940652bcb52d5352a2e",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Consider belonging, not as something you must earn, but as a question to sit beside. What supports your life in this ordinary moment?"
+      }
+    },
+    {
+      "cueID": "ra.catalyst",
+      "guideID": "ra",
+      "language": "en",
+      "text": "We use the word catalyst for an experience that gives us something to consider. Choose only a small event from today, if you wish. There is no need to revisit anything overwhelming.",
+      "file": "ra.catalyst.m4a",
+      "duration": 12.0,
+      "generationHash": "30f2e78b1fc2ab23b1aabd8b68cd5a7139fcce0d58548b245e0f2aa9faaf84f6",
+      "audioSHA256": "004b0672e10e52005765c8ff342469d1b0db856ae9c4396db242dac406efd711",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "We use the word catalyst for an experience that gives us something to consider. Choose only a small event from today, if you wish. There is no need to revisit anything overwhelming."
+      }
+    },
+    {
+      "cueID": "ra.balance",
+      "guideID": "ra",
+      "language": "en",
+      "text": "We contemplate balance. Not perfect stillness, and not the removal of difference. Rather, the patient making of room for more than one quality of experience.",
+      "file": "ra.balance.m4a",
+      "duration": 11.3,
+      "generationHash": "8dbd16d2df732efdecc8debbb274ee133d183609c54f41ad9c43d240f68ecdf4",
+      "audioSHA256": "92d0bd86da7c1cd1c5caa088f820f79c273ae0613c256fd0ec04575ce6d10d04",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "We contemplate balance. Not perfect stillness, and not the removal of difference. Rather, the patient making of room for more than one quality of experience."
+      }
+    },
+    {
+      "cueID": "ra.unity",
+      "guideID": "ra",
+      "language": "en",
+      "text": "For a time, consider unity as an image of relationship. A body breathing within a room, within a wider living world. You need not adopt a belief to explore this image.",
+      "file": "ra.unity.m4a",
+      "duration": 12.7,
+      "generationHash": "0ec0d5c4800299f22588902b3a0a966e9a07435266fe23c5ad9921479d472387",
+      "audioSHA256": "1a547f170aab1fe5daa3b8403825cf8a772bff8f3969e209df7ce9258561d2e1",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "For a time, consider unity as an image of relationship. A body breathing within a room, within a wider living world. You need not adopt a belief to explore this image."
+      }
+    },
+    {
+      "cueID": "ra.ground",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Feel the weight of the body and the contact beneath it. Let the physical support be clear. Even the most spacious contemplation can begin here.",
+      "file": "ra.ground.m4a",
+      "duration": 10.0,
+      "generationHash": "4af94aab902130b596fd1cbc48782420b1cc876f30a4a071bb30cf4faaa8ec53",
+      "audioSHA256": "2fbb6e41b283bdd12e39d66d1a67166282ea5a5fb8e6417edabbb05b19c4daa0",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Feel the weight of the body and the contact beneath it. Let the physical support be clear. Even the most spacious contemplation can begin here."
+      }
+    },
+    {
+      "cueID": "ra.breath",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Attend to one natural breath. Receiving air. Releasing air. No greater depth is needed. Let the rhythm belong to the body.",
+      "file": "ra.breath.m4a",
+      "duration": 10.5,
+      "generationHash": "37c6be27faabd162b8e7e9c050d33aa7d4da20388f7c9b823610af46e00c3e26",
+      "audioSHA256": "704bef8d8df4732da1f92f5c7128498e0301e023c2ce231288786b9f2c6b8720",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Attend to one natural breath. Receiving air. Releasing air. No greater depth is needed. Let the rhythm belong to the body."
+      }
+    },
+    {
+      "cueID": "ra.ember",
+      "guideID": "ra",
+      "language": "en",
+      "text": "If it is pleasant, imagine a small, steady light near the center of the chest. It need not brighten or spread. You may instead attend to the warmth of your hands.",
+      "file": "ra.ember.m4a",
+      "duration": 10.9,
+      "generationHash": "d4d0759e03b1481114f5b945944e372ab8ad33b3bf49dfa0e34021aa42700eda",
+      "audioSHA256": "f2cd923f320a619269190b9d4a9e6347421f897c09d0ed5f299ab1bf1b46c1fe",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "If it is pleasant, imagine a small, steady light near the center of the chest. It need not brighten or spread. You may instead attend to the warmth of your hands."
+      }
+    },
+    {
+      "cueID": "ra.kindness",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Consider a way of looking at yourself that is neither flattering nor condemning. A clear gaze, with kindness in it. Let this be enough for now.",
+      "file": "ra.kindness.m4a",
+      "duration": 9.4,
+      "generationHash": "47453d6822c3565226f08a94b5d15de987b24d22f7667cab9d8232537ed044ef",
+      "audioSHA256": "279df22a71496b041d81e1fde521839f232f53237977d98573761ac67c47deb0",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Consider a way of looking at yourself that is neither flattering nor condemning. A clear gaze, with kindness in it. Let this be enough for now."
+      }
+    },
+    {
+      "cueID": "ra.receive",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Notice something you are receiving without effort. Support beneath you. Air in the room. A moment in which you may pause. Let the noticing remain simple.",
+      "file": "ra.receive.m4a",
+      "duration": 11.1,
+      "generationHash": "abb329572abb1c56c0a0c36c5103e44c18279fdf4a89b1657b78fbcef40ee89c",
+      "audioSHA256": "65bf6249824944a95951cdaa9decbeb1e15122a24f0bb913ab1c4bafa6649b87",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Notice something you are receiving without effort. Support beneath you. Air in the room. A moment in which you may pause. Let the noticing remain simple."
+      }
+    },
+    {
+      "cueID": "ra.radiance",
+      "guideID": "ra",
+      "language": "en",
+      "text": "You may imagine the light making a little room around a difficult thought. It does not erase the thought. It is an image of meeting it with less harshness.",
+      "file": "ra.radiance.m4a",
+      "duration": 11.0,
+      "generationHash": "b39f5bea4dc2ef526eb56325b09c6c82688efa49b6682bb5b6636b94e80ece55",
+      "audioSHA256": "3fddab7d03e5679596f5de32d2eeecbf5d0dcd555dae844c3193891ac59a5af5",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "You may imagine the light making a little room around a difficult thought. It does not erase the thought. It is an image of meeting it with less harshness."
+      }
+    },
+    {
+      "cueID": "ra.body",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Bring attention to the whole body. Many sensations, one field of experience. Some clear, some faint. No part needs to be excluded from your awareness.",
+      "file": "ra.body.m4a",
+      "duration": 10.9,
+      "generationHash": "8f0c94818a23ea05b411b91d37f7ea150d79880946ca66c990779c95ef9b1a28",
+      "audioSHA256": "6224bb641abbda061c0ee78677635f7d323bde91c16eb8936e47288144f6242c",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Bring attention to the whole body. Many sensations, one field of experience. Some clear, some faint. No part needs to be excluded from your awareness."
+      }
+    },
+    {
+      "cueID": "ra.sound",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Let sound enter the practice. Near or distant, pleasant or ordinary. You may notice that listening does not require holding the sound in place.",
+      "file": "ra.sound.m4a",
+      "duration": 10.5,
+      "generationHash": "c1b6c63b03366193e90245a48362a7a9082f28113dbcc3a88f7b207162523cb3",
+      "audioSHA256": "0b32f9617b7371cc70f9c76b7123d9c2efb72c87e945b4c695ecb2a477b53663",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Let sound enter the practice. Near or distant, pleasant or ordinary. You may notice that listening does not require holding the sound in place."
+      }
+    },
+    {
+      "cueID": "ra.web",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Consider the ordinary relationships that sustain this moment: those who grew food, made a place to rest, or offered you care. No particular person must come to mind.",
+      "file": "ra.web.m4a",
+      "duration": 11.5,
+      "generationHash": "1e166bc8e12a604617dd5402b19be0ae4ab52ccb693c08c7172f63b2781fb978",
+      "audioSHA256": "b78f5a6b35797de836cd10ca50db337640a4899c5c9f32066db4a6066df4907b",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Consider the ordinary relationships that sustain this moment: those who grew food, made a place to rest, or offered you care. No particular person must come to mind."
+      }
+    },
+    {
+      "cueID": "ra.offering",
+      "guideID": "ra",
+      "language": "en",
+      "text": "If you wish, offer a quiet goodwill beyond yourself. May there be a little more ease. The offering can remain small, without asking you to carry another person's life.",
+      "file": "ra.offering.m4a",
+      "duration": 13.2,
+      "generationHash": "a762e24286b65ffcf51e5b0d770e9a9ed76c658e68a29c45fea047237b632ae4",
+      "audioSHA256": "130fd7318dc2a634910b6c29aa2561553e12442c51cee52bdd729809ef5beea2",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "If you wish, offer a quiet goodwill beyond yourself. May there be a little more ease. The offering can remain small, without asking you to carry another person's life."
+      }
+    },
+    {
+      "cueID": "ra.selfincluded",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Include yourself in that goodwill. You are not outside the circle of care you imagine. Let the same patient attention return to your own body.",
+      "file": "ra.selfincluded.m4a",
+      "duration": 11.6,
+      "generationHash": "aaba72550e021756fda6592ce00d5c3310bee51b3250c10c02d10c895ab665e7",
+      "audioSHA256": "bcc6be16e701634418cfd48a72d6f70d1f05cf16157a634019884a5921e35036",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Include yourself in that goodwill. You are not outside the circle of care you imagine. Let the same patient attention return to your own body."
+      }
+    },
+    {
+      "cueID": "ra.event",
+      "guideID": "ra",
+      "language": "en",
+      "text": "If you chose a small event, notice what it stirred. An expectation. A wish. A feeling. Let the facts of the event remain separate from the meaning your mind gives them.",
+      "file": "ra.event.m4a",
+      "duration": 12.2,
+      "generationHash": "68bcfa67dcec494f2fd3cd90aebdb6cf2445de1394c62870cdd723beee603b7e",
+      "audioSHA256": "acec400379a183f541ffada233828df2b6cc964567d57f21b8e93741352a99bc",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "If you chose a small event, notice what it stirred. An expectation. A wish. A feeling. Let the facts of the event remain separate from the meaning your mind gives them."
+      }
+    },
+    {
+      "cueID": "ra.meaning",
+      "guideID": "ra",
+      "language": "en",
+      "text": "You need not call a difficult experience a gift. You may simply ask what response would honor your values now. An answer may come, or it may not.",
+      "file": "ra.meaning.m4a",
+      "duration": 11.8,
+      "generationHash": "5363412149d5bd16355282585fafd20ccec128819e87e5e46957ec0ad8088cab",
+      "audioSHA256": "157a81cb0ca5fd0ecbdb744c93e3012ef3a7049fc2983577f0606af9e1afec54",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "You need not call a difficult experience a gift. You may simply ask what response would honor your values now. An answer may come, or it may not."
+      }
+    },
+    {
+      "cueID": "ra.choice",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Consider one possible response that contains both care and clarity. It may be a kind word, a firm boundary, or time before deciding. No grand gesture is required.",
+      "file": "ra.choice.m4a",
+      "duration": 13.1,
+      "generationHash": "02ce2cb5e8e58a5c8315d47574dab6353bc586991aada4502b6812e7961ba760",
+      "audioSHA256": "1305fc06e19b051c2c17e9884cde8ecba83dc8d1fc8bb368f416d6c340a49f00",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Consider one possible response that contains both care and clarity. It may be a kind word, a firm boundary, or time before deciding. No grand gesture is required."
+      }
+    },
+    {
+      "cueID": "ra.opposites",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Notice whether different qualities are present together: effort and ease, hope and uncertainty, movement and rest. Let them be distinct without making them enemies.",
+      "file": "ra.opposites.m4a",
+      "duration": 11.4,
+      "generationHash": "01ac77af810805f3f0a70f0efe4037645c4f74ca6922013ef865363b922abb07",
+      "audioSHA256": "7593fc5541410e4d359c492dd11e0d807fff2028f2b8c1793bb51e3fe6e89cb4",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Notice whether different qualities are present together: effort and ease, hope and uncertainty, movement and rest. Let them be distinct without making them enemies."
+      }
+    },
+    {
+      "cueID": "ra.equanimity",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Balance does not mean that everything feels equal. You may care deeply and still leave room to listen. Feel one steady point of contact as you consider this.",
+      "file": "ra.equanimity.m4a",
+      "duration": 11.6,
+      "generationHash": "77a620f967104bd6789de71026979e69955abd9f132e837db3f9c05b895fbe09",
+      "audioSHA256": "5a521ddeb617cdd2d38014742bc9b5a5d55e666b6b035eb6af591703501d325b",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Balance does not mean that everything feels equal. You may care deeply and still leave room to listen. Feel one steady point of contact as you consider this."
+      }
+    },
+    {
+      "cueID": "ra.letting",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Let the images become less important. There is no light you must continue to see. Return to sensation, breath, and the space around you.",
+      "file": "ra.letting.m4a",
+      "duration": 10.7,
+      "generationHash": "b0f0bee56fa64e04b3741902ba5cc2f965f55bc7490596618db5f2dab4b86873",
+      "audioSHA256": "d1dcf659d2461b3171ba8b5a6b72fc50e1d6c6ce5f5979164db2cfc104fc2f3e",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Let the images become less important. There is no light you must continue to see. Return to sensation, breath, and the space around you."
+      }
+    },
+    {
+      "cueID": "ra.field",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Allow attention to widen gently. Body, sound, and breathing may be noticed together. If this feels vague or unsettling, return to your hands or the ground.",
+      "file": "ra.field.m4a",
+      "duration": 12.8,
+      "generationHash": "0dcc4fd53ae5b612994e03995064f82586214a403f4324b36e89a4d07cbdb559",
+      "audioSHA256": "a9e11e2470cd4d3f93fdb07d7b94fcebbdcb1dfeb10925a786d3c4e52b350531",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Allow attention to widen gently. Body, sound, and breathing may be noticed together. If this feels vague or unsettling, return to your hands or the ground."
+      }
+    },
+    {
+      "cueID": "ra.humility",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Much remains unknown. You do not need to turn this contemplation into certainty. Let wonder and ordinary judgment have room beside one another.",
+      "file": "ra.humility.m4a",
+      "duration": 11.4,
+      "generationHash": "54a3ae58c14e9687e78694698fc2f5e6bbb42e6290510113e75e6fccb70bf21d",
+      "audioSHA256": "df4263e6f1f664f55e50505ff39ed09302983198a9551af59b1cd37f77fc7eee",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Much remains unknown. You do not need to turn this contemplation into certainty. Let wonder and ordinary judgment have room beside one another."
+      }
+    },
+    {
+      "cueID": "ra.quiet",
+      "guideID": "ra",
+      "language": "en",
+      "text": "We will remain in quiet for a while. Rest with the breath or the support beneath you. The image of light may stay or leave. Both are welcome.",
+      "file": "ra.quiet.m4a",
+      "duration": 11.4,
+      "generationHash": "a15a1e410db820455263d6671c0d3110d5887e9abd0f3515b414fa38eb8549ee",
+      "audioSHA256": "43d78a016fb64f7a43a5d0a3815d03178dca6983a9520141bd68c5d30afd89f1",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "We will remain in quiet for a while. Rest with the breath or the support beneath you. The image of light may stay or leave. Both are welcome."
+      }
+    },
+    {
+      "cueID": "ra.returning",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Return gently to one breath and one point of contact. The vastness of an idea need not carry you away from this present body.",
+      "file": "ra.returning.m4a",
+      "duration": 9.0,
+      "generationHash": "6667f8190249c28e06fc5562627ec4b6c661019aa844e075c39f667fc5c7014c",
+      "audioSHA256": "56e5934a0937ef7deebdf338b50bb886f0dbd11e68d7dbf5f5b9a56a14b7face",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Return gently to one breath and one point of contact. The vastness of an idea need not carry you away from this present body."
+      }
+    },
+    {
+      "cueID": "ra.carry",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Let one small intention emerge, if it is useful: to meet the next person or task with a little more clarity and a little more care.",
+      "file": "ra.carry.m4a",
+      "duration": 9.0,
+      "generationHash": "bbad865795f15e07c741b31da0ca9bbe6015a8ce2aaed438ea291e2fd194fc99",
+      "audioSHA256": "737f1c6434095280b650a29664a8bf7c807698e1afaaf4e9284ac2a4a050c0cb",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Let one small intention emerge, if it is useful: to meet the next person or task with a little more clarity and a little more care."
+      }
+    },
+    {
+      "cueID": "ra.room",
+      "guideID": "ra",
+      "language": "en",
+      "text": "Release the contemplation. Notice the room, the light around you, and the position of your body. Move gently, and open your eyes when you are ready.",
+      "file": "ra.room.m4a",
+      "duration": 11.3,
+      "generationHash": "6fcbfc1ea4e6661c8239e38b396a2a69c04fc4c497fa136647cb028fa4357858",
+      "audioSHA256": "a2e388ec64ead65e7825609e2ccde7916222d165c93a37d8cb367f9c775b11e5",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "Release the contemplation. Notice the room, the light around you, and the position of your body. Move gently, and open your eyes when you are ready."
+      }
+    },
+    {
+      "cueID": "ra.close",
+      "guideID": "ra",
+      "language": "en",
+      "text": "I leave you in love and light. Go gently into the ordinary world, with room for both its mystery and its detail. Adonai.",
+      "file": "ra.close.m4a",
+      "duration": 10.5,
+      "generationHash": "15845043619956e5120990085a5f88f2892973ae05d039a6c8eaee21465a3a7a",
+      "audioSHA256": "0fc3278622b740ace610c740632e66bef437b45129bad920026021bda0dc094c",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 42,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "1634c946953e4bdf76860c60b899fc7b1c120c14b7a4b364067d82c99ebf12ae",
+        "text": "I leave you in love and light. Go gently into the ordinary world, with room for both its mystery and its detail. Adonai."
+      }
+    },
+    {
+      "cueID": "serene_guide.boundary",
+      "guideID": "serene_guide",
+      "language": "en",
+      "text": "Sometimes care is a softening. Sometimes it is a boundary. You do not need to decide which now. Just let both possibilities belong to kindness.",
+      "file": "serene_guide.boundary.m4a",
+      "duration": 13.2,
+      "generationHash": "0eae5ef864d6c065e37629390098146d672423e0530902369eda5de79c6cee18",
+      "audioSHA256": "bdee88ec342f80d0354d23d635f15131fe2cbb6f5b96108da710cf939194010c",
+      "settings": {
+        "model": "mlx-community/chatterbox-multilingual-v3",
+        "seed": 91,
+        "exaggeration": 0.15,
+        "cfgWeight": 0.5,
+        "temperature": 0.7,
+        "referenceSHA256": "470722796fa343f4b3a6ab9aa3ef9af160a974882538865efe9f245c703c15a8",
+        "text": "Sometimes care is a softening. Sometimes it is a boundary. You do not need to decide which now. Just let both possibilities belong to kindness.",
+        "trimStart": 4.5
+      }
+    }
+  ]
+}

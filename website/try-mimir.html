@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try Mimir — Free Personalized Meditation Preview | Vindla</title>
+    <meta name="description" content="Choose what you need and a meditation guide style to get a free written Mimir preview. No account or app required.">
+    <link rel="canonical" href="https://vindla-three.vercel.app/try-mimir">
+    <link rel="describedby" href="/llms.txt" type="text/markdown">
+    <meta name="apple-itunes-app" content="app-id=6761864704">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vindla-three.vercel.app/try-mimir">
+    <meta property="og:title" content="Try a meditation shaped around this moment — Vindla">
+    <meta property="og:description" content="Choose what you need and a guide style. Get a free written Mimir preview with no account required.">
+    <meta property="og:image" content="https://vindla-three.vercel.app/press-assets/vindla-app-store-palm.png">
+    <meta property="og:image:alt" content="Vindla personalized meditation app preview">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Try a meditation shaped around this moment — Vindla">
+    <meta name="twitter:description" content="Choose what you need and a guide style. Get a free written Mimir preview.">
+    <meta name="twitter:image" content="https://vindla-three.vercel.app/press-assets/vindla-app-store-palm.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Mimir Meditation Preview",
+      "url": "https://vindla-three.vercel.app/try-mimir",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "description": "A free written preview of Vindla's mood and meditation-guide selection flow.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body class="mimir-preview-page">
+    <div class="page-shell mimir-preview-shell">
+        <header class="site-header mimir-preview-header">
+            <a class="brand" href="/" aria-label="Vindla Home">Vindla</a>
+            <nav class="top-nav" aria-label="Main Navigation">
+                <a href="/breathe">One-minute reset</a>
+                <a class="nav-button" href="/download?campaign=website&amp;source=mimir_preview_nav" aria-label="Download Vindla on the App Store">Get the app</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="mimir-preview-intro" aria-labelledby="mimir-preview-title">
+                <span class="eyebrow">A free Mimir preview</span>
+                <h1 id="mimir-preview-title">What do you need right now?</h1>
+                <p>Choose a moment and a guide. You will get a short written sample with no account or app required. Vindla is for general wellness, not medical care.</p>
+            </section>
+
+            <section class="mimir-builder" aria-label="Build a meditation preview">
+                <form id="mimir-preview-form">
+                    <fieldset class="mimir-choice-group">
+                        <legend><span>1</span> Choose the moment</legend>
+                        <div class="mimir-moment-grid">
+                            <label class="mimir-choice-card">
+                                <input type="radio" name="need" value="racing" checked>
+                                <span class="mimir-choice-copy">
+                                    <strong>My mind is racing</strong>
+                                    <small>Find one quieter place to stand.</small>
+                                </span>
+                            </label>
+                            <label class="mimir-choice-card">
+                                <input type="radio" name="need" value="focus">
+                                <span class="mimir-choice-copy">
+                                    <strong>I need to begin</strong>
+                                    <small>Settle into the next useful action.</small>
+                                </span>
+                            </label>
+                            <label class="mimir-choice-card">
+                                <input type="radio" name="need" value="sleep">
+                                <span class="mimir-choice-copy">
+                                    <strong>I want to unwind</strong>
+                                    <small>Let the day loosen its grip.</small>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mimir-choice-group">
+                        <legend><span>2</span> Choose the voice</legend>
+                        <div class="mimir-guide-grid">
+                            <label class="mimir-guide-card">
+                                <input type="radio" name="guide" value="zen">
+                                <img src="/kai_zen_minimalist.png" alt="" loading="lazy">
+                                <span class="mimir-choice-copy">
+                                    <strong>Zen Minimalist</strong>
+                                    <small>Sparse · quiet · direct</small>
+                                </span>
+                            </label>
+                            <label class="mimir-guide-card">
+                                <input type="radio" name="guide" value="guardian" checked>
+                                <img src="/kai_warm_guardian.png" alt="" loading="lazy">
+                                <span class="mimir-choice-copy">
+                                    <strong>Warm Guardian</strong>
+                                    <small>Gentle · reassuring · soft</small>
+                                </span>
+                            </label>
+                            <label class="mimir-guide-card">
+                                <input type="radio" name="guide" value="urban">
+                                <img src="/kai_urban_sage.png" alt="" loading="lazy">
+                                <span class="mimir-choice-copy">
+                                    <strong>The Urban Sage</strong>
+                                    <small>Grounded · candid · practical</small>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <button class="primary-button mimir-preview-button" type="submit">Show my preview</button>
+                    <p class="mimir-builder-note">The preview is prewritten. Full sessions are generated around your own words inside Vindla.</p>
+                </form>
+            </section>
+
+            <section class="mimir-result" id="mimir-result" aria-live="polite" aria-labelledby="mimir-result-title" hidden>
+                <div class="mimir-result-art" aria-hidden="true">
+                    <img id="mimir-result-image" src="/kai_warm_guardian.png" alt="">
+                </div>
+                <div class="mimir-result-copy">
+                    <span class="eyebrow">Your written preview</span>
+                    <p class="mimir-result-context" id="mimir-result-context"></p>
+                    <h2 id="mimir-result-title"></h2>
+                    <blockquote id="mimir-result-script"></blockquote>
+                    <p class="mimir-sample-disclosure">This is a short prewritten sample, not a generated session. In the app, Mimir uses your own words, available time, and guide preference to create a full meditation.</p>
+                    <div class="mimir-result-actions">
+                        <a class="primary-button" href="/download?campaign=website&amp;source=mimir_preview_result" aria-label="Create a full personalized session in Vindla">Create my full session</a>
+                        <button class="secondary-button" id="mimir-share-button" type="button">Share this preview</button>
+                        <button class="text-button" id="mimir-change-button" type="button">Change choices</button>
+                    </div>
+                    <p class="mimir-share-status" id="mimir-share-status" role="status" aria-live="polite"></p>
+                </div>
+            </section>
+
+            <section class="mimir-preview-trust" aria-labelledby="mimir-trust-title">
+                <div>
+                    <span class="eyebrow">Inside Vindla</span>
+                    <h2 id="mimir-trust-title">Your moment, with more room.</h2>
+                </div>
+                <ul>
+                    <li>Choose from eight distinct guide styles</li>
+                    <li>Set the time you actually have</li>
+                    <li>Start with three free Mimir sessions each month</li>
+                    <li>No account required; practice history stays on-device</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="site-footer mimir-preview-footer">
+            <div>
+                <a class="brand footer-brand" href="/" aria-label="Vindla Home">Vindla</a>
+                <p>Breathwork, sound, and personalized meditation in one focused iPhone experience.</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer Links">
+                <a href="/breathe">One-minute reset</a>
+                <a href="/press">Press</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+            </nav>
+        </footer>
+    </div>
+
+    <a class="mobile-install" href="/download?campaign=website&amp;source=mimir_preview_mobile" aria-label="Get Vindla free on the App Store">Get Vindla free</a>
+
+    <script>
+        (() => {
+            const previews = {
+                racing: {
+                    label: 'My mind is racing',
+                    zen: {
+                        title: 'Let one thought pass unfinished.',
+                        lines: ['Notice the speed of the mind.', 'Do not chase it.', 'Feel one breath arrive.', 'Let the next thought pass without finishing it.']
+                    },
+                    guardian: {
+                        title: 'You do not have to carry every thought at once.',
+                        lines: ['Of course your mind is busy. It has been trying to hold a lot.', 'Let your shoulders soften by one small degree.', 'Feel the next breath meet you where you are.', 'For this moment, nothing needs to be solved.']
+                    },
+                    urban: {
+                        title: 'Too many tabs open. Fair.',
+                        lines: ['Your brain is running five conversations at once.', 'No need to win an argument with it.', 'Put both feet down and notice one breath.', 'One tab can stay open. The rest can wait.']
+                    }
+                },
+                focus: {
+                    label: 'I need to begin',
+                    zen: {
+                        title: 'One task. One breath. Begin.',
+                        lines: ['Let the whole project disappear.', 'Keep only the next physical action.', 'Take one steady breath.', 'Begin before the mind asks for certainty.']
+                    },
+                    guardian: {
+                        title: 'You only need the next kind step.',
+                        lines: ['You do not have to solve the entire day right now.', 'Feel the support beneath you.', 'Name the smallest useful beginning.', 'Let that be enough for this breath.']
+                    },
+                    urban: {
+                        title: 'Make the next move obvious.',
+                        lines: ['Close the mental tabs you are not using.', 'Name the next move in plain language.', 'Take one breath with both feet on the floor.', 'Now do the small version first.']
+                    }
+                },
+                sleep: {
+                    label: 'I want to unwind',
+                    zen: {
+                        title: 'The day is complete enough.',
+                        lines: ['Let the room be quiet without improving it.', 'Release the jaw.', 'Feel the exhale lengthen on its own.', 'The unfinished can remain unfinished.']
+                    },
+                    guardian: {
+                        title: 'Nothing else needs you for these few minutes.',
+                        lines: ['You have carried enough for one day.', 'Let the bed hold the weight you no longer need to hold.', 'Allow the breath to become smaller and softer.', 'Rest does not have to be earned.']
+                    },
+                    urban: {
+                        title: 'Tomorrow can pick this up.',
+                        lines: ['The day can keep its unfinished business until morning.', 'Unclench the places still pretending to work.', 'Let one slow exhale draw a line under today.', 'You are off the clock now.']
+                    }
+                }
+            };
+
+            const guides = {
+                zen: { label: 'Zen Minimalist', image: '/kai_zen_minimalist.png' },
+                guardian: { label: 'Warm Guardian', image: '/kai_warm_guardian.png' },
+                urban: { label: 'The Urban Sage', image: '/kai_urban_sage.png' }
+            };
+
+            const form = document.getElementById('mimir-preview-form');
+            const result = document.getElementById('mimir-result');
+            const resultContext = document.getElementById('mimir-result-context');
+            const resultTitle = document.getElementById('mimir-result-title');
+            const resultScript = document.getElementById('mimir-result-script');
+            const resultImage = document.getElementById('mimir-result-image');
+            const shareButton = document.getElementById('mimir-share-button');
+            const changeButton = document.getElementById('mimir-change-button');
+            const shareStatus = document.getElementById('mimir-share-status');
+            const params = new URLSearchParams(window.location.search);
+            const allowedCampaigns = new Set(['website', 'breathing_tool', 'app_directories', 'creator_outreach', 'founder_launch']);
+            const requestedCampaign = params.get('campaign');
+            const activeCampaign = allowedCampaigns.has(requestedCampaign) ? requestedCampaign : 'website';
+
+            let activeNeed = 'racing';
+            let activeGuide = 'guardian';
+
+            const selectedValue = (name) => form.elements[name].value;
+
+            document.querySelectorAll('a[href^="/download?"]').forEach((link) => {
+                const destination = new URL(link.getAttribute('href'), window.location.origin);
+                destination.searchParams.set('campaign', activeCampaign);
+                link.setAttribute('href', `${destination.pathname}${destination.search}`);
+            });
+
+            const renderPreview = ({ shouldScroll = true } = {}) => {
+                activeNeed = selectedValue('need');
+                activeGuide = selectedValue('guide');
+                const preview = previews[activeNeed][activeGuide];
+                const guide = guides[activeGuide];
+
+                resultContext.textContent = `${previews[activeNeed].label} · ${guide.label}`;
+                resultTitle.textContent = preview.title;
+                resultImage.src = guide.image;
+                resultScript.replaceChildren(...preview.lines.map((line) => {
+                    const paragraph = document.createElement('p');
+                    paragraph.textContent = line;
+                    return paragraph;
+                }));
+                shareStatus.textContent = '';
+                result.hidden = false;
+
+                const pageURL = new URL(window.location.href);
+                pageURL.search = '';
+                pageURL.searchParams.set('need', activeNeed);
+                pageURL.searchParams.set('guide', activeGuide);
+                if (activeCampaign !== 'website') {
+                    pageURL.searchParams.set('campaign', activeCampaign);
+                }
+                window.history.replaceState({}, '', pageURL);
+
+                if (shouldScroll) {
+                    result.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+                }
+            };
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                renderPreview();
+            });
+
+            const copyShareLink = async (shareURL) => {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(shareURL);
+                    return;
+                }
+
+                const temporaryInput = document.createElement('textarea');
+                temporaryInput.value = shareURL;
+                temporaryInput.setAttribute('readonly', '');
+                temporaryInput.style.position = 'fixed';
+                temporaryInput.style.opacity = '0';
+                document.body.appendChild(temporaryInput);
+                temporaryInput.select();
+                document.execCommand('copy');
+                temporaryInput.remove();
+            };
+
+            shareButton.addEventListener('click', async () => {
+                const shareURL = new URL('/try-mimir', window.location.origin);
+                shareURL.searchParams.set('need', activeNeed);
+                shareURL.searchParams.set('guide', activeGuide);
+                if (activeCampaign !== 'website') {
+                    shareURL.searchParams.set('campaign', activeCampaign);
+                }
+                shareURL.searchParams.set('ref', 'share');
+                const shareData = {
+                    title: 'A Mimir meditation preview — Vindla',
+                    text: `${previews[activeNeed][activeGuide].title} Try a free written meditation preview.`,
+                    url: shareURL.toString()
+                };
+
+                shareStatus.textContent = '';
+                try {
+                    if (navigator.share) {
+                        await navigator.share(shareData);
+                        shareStatus.textContent = 'Shared.';
+                    } else {
+                        await copyShareLink(shareData.url);
+                        shareStatus.textContent = 'Link copied.';
+                    }
+                } catch (error) {
+                    if (error && error.name === 'AbortError') return;
+                    try {
+                        await copyShareLink(shareData.url);
+                        shareStatus.textContent = 'Link copied.';
+                    } catch {
+                        shareStatus.textContent = 'Copy the address from your browser to share this preview.';
+                    }
+                }
+            });
+
+            changeButton.addEventListener('click', () => {
+                form.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+            });
+
+            const requestedNeed = params.get('need');
+            const requestedGuide = params.get('guide');
+            if (previews[requestedNeed] && guides[requestedGuide]) {
+                form.elements.need.value = requestedNeed;
+                form.elements.guide.value = requestedGuide;
+                renderPreview({ shouldScroll: false });
+            }
+        })();
+    </script>
+</body>
+</html>

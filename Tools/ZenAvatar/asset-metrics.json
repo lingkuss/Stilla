@@ -1,0 +1,14 @@
+{
+  "triangles": 60580,
+  "mesh_objects": 9,
+  "texture_dimensions": [
+    1024,
+    1024
+  ],
+  "motion_texture_dimensions": [
+    256,
+    128
+  ],
+  "motion_texture_bytes": 17051,
+  "usdz_bytes": 4798750
+}

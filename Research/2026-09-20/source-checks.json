@@ -1,0 +1,411 @@
+{
+  "checked_at_utc": "2026-09-20T04:56:17.796245+00:00",
+  "last_run_from_automation": "2026-09-19T04:59:49.334Z",
+  "latest_available_previous_report": "2026-09-15",
+  "deduplication_basis": "All available Research/*/*.md dated 2026-09-03 through 2026-09-15; automation memory ends 2026-09-15. No missing run results inferred.",
+  "included_signal_count": 12,
+  "independent_source_groups": 6,
+  "classification_counts": {
+    "E-B": 4,
+    "E-A": 0,
+    "P": 3,
+    "N": 5
+  },
+  "verified_published_after_last_run": 0,
+  "date_caveat": "Relative Reddit ages are not converted. Apple display dates may be review updates. Absolute search-result dates are labelled separately from opened-page text verification.",
+  "rss_fetched_at_utc": "2026-09-20T04:47:41.351697+00:00",
+  "rss_feeds": [
+    {
+      "app": "vindla",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "3162af5a083a412e1122ff39b426c03ba04fb855c56d457bc6c7b3d8b547bfc4",
+      "reviews": []
+    },
+    {
+      "app": "vindla",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "94bd6804c1f1e606e5e0554049534d881c8717fa1758d13f2be65955f3f0fa87",
+      "reviews": []
+    },
+    {
+      "app": "headspace",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "471c037b9f03515753a1eaaeb3133a24a190bb235c9188c29789c132d9d7d94c",
+      "reviews": []
+    },
+    {
+      "app": "headspace",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "58d32b2392455c67da0e001a1b4c374c37c6022064ef3f29f0d6935a52be39f1",
+      "reviews": []
+    },
+    {
+      "app": "calm",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "e9f6113742f15941b4613228cbd069c9a427cd9d7ba2a2f84a67f7d970dfed89",
+      "reviews": []
+    },
+    {
+      "app": "calm",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "ecafb19bea5a3db8bf347271a081557848b2a72d6434ab1ab6ee0042b9442663",
+      "reviews": []
+    },
+    {
+      "app": "mindfully",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "393f21a9af5c983369933c0359fbfee1390206f271d9e17025110b1518a99d93",
+      "reviews": []
+    },
+    {
+      "app": "mindfully",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "67b36e398cdb24499a968c685e25c9c077b1e9e5a2ac966853d753865c55bb37",
+      "reviews": []
+    },
+    {
+      "app": "insighttimer",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "a63c145d2953e3eb7d12a05e6b8c0330be5456391f107b1b7f4f25c5f9d9666e",
+      "reviews": []
+    },
+    {
+      "app": "insighttimer",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "e876f5cae25f5b9efd7e82a09634b75963484b1e5ad6bd67e35275d0418c156e",
+      "reviews": []
+    },
+    {
+      "app": "mindfulness",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "b2d14882cf18312a9bc33291ca96df15e69266303ebca3e1d1d1b55c9fca6c19",
+      "reviews": []
+    },
+    {
+      "app": "mindfulness",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "20d74ae86059c54093f08ff89e67963fe16ae549e9aeb701d683d7890c57d3ed",
+      "reviews": []
+    },
+    {
+      "app": "breathingapp",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1285982210/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "e96907aed9745a263ecc6339856c2728074db16dbdfb9a14b8b0c5adffd67e09",
+      "reviews": []
+    },
+    {
+      "app": "breathingapp",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1285982210/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "7134ee648d0b1c2197f4187c5a68da7fa302831fc172e0a9174d3a4f8b7caab7",
+      "reviews": []
+    },
+    {
+      "app": "brainfm",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "ec44b040619cfd60ffb0f6eb5a510a01448dfeecfb8c5a24a312b74e9150b325",
+      "reviews": []
+    },
+    {
+      "app": "brainfm",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1110684238/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "75cf3e9a0ffb9a85ed4561c4913f59954e60b9002eafc4486778a3c14a12212b",
+      "reviews": []
+    },
+    {
+      "app": "bettersleep",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=314498713/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "cbbcbd5602611971a65313b96decef61adef651076c6ef795beb33a372af1b44",
+      "reviews": []
+    },
+    {
+      "app": "bettersleep",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=314498713/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "355c5f078bcd48aabc4ae783068b175f51fd2d23f24b67986e846fdd329ae785",
+      "reviews": []
+    },
+    {
+      "app": "portal",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1436994560/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "ee387d00b01bc0fef7053b6fe0165a70a3fccfcbf9f5728583c788273faa4f9e",
+      "reviews": []
+    },
+    {
+      "app": "portal",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1436994560/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "661a7b4a077218fe211de11c69ff2434722c9f50567e960f4480765799e9a962",
+      "reviews": []
+    },
+    {
+      "app": "breethe",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=920161006/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "143e810562bcffe8dc2cc90557ec205b06f65c713b4fddc8ceec6250408e6b8c",
+      "reviews": []
+    },
+    {
+      "app": "breethe",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=920161006/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "af674dd207bdd639c798e3804c27e293f714661a44cfaa906b538c952062df79",
+      "reviews": []
+    },
+    {
+      "app": "happier",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=992210239/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "0ac0ff1054c633055b2d2ee10410242b7886ec910ac558a3d1faf393174829c6",
+      "reviews": []
+    },
+    {
+      "app": "happier",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=992210239/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "f56c0910e0bb07736cdd18a2dd4ff2321a8b28b3dbb9d678e10a723dd055c777",
+      "reviews": []
+    },
+    {
+      "app": "balance",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "980da57957d08a748a5b29a3e11392b33bf333dfa1a0deb615548cc33b2c6d20",
+      "reviews": []
+    },
+    {
+      "app": "balance",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "a103ffe0736a0b4e6c747880d8d66cb223e55e3f2c58749384264a9bc71a8d3a",
+      "reviews": []
+    },
+    {
+      "app": "breathwrk",
+      "country": "se",
+      "url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "cd9b130859623a1770d9d692a59a555073a089f8b612e96adbd9d7b00449574b",
+      "reviews": []
+    },
+    {
+      "app": "breathwrk",
+      "country": "us",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1481804500/sortby=mostrecent/json",
+      "count": 0,
+      "sha256": "225a03b7c3f02854c80fd6b1f60eced25734909845f985fc69348756e6a19ead",
+      "reviews": []
+    }
+  ],
+  "supplementary_fetch_errors": [
+    {
+      "source": "Reddit direct JSON, Slumber",
+      "error": "HTTP 403: Blocked"
+    },
+    {
+      "source": "Apple direct HTML, Breathwrk",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "source": "web open, Mindfully review URL",
+      "error": "not accessible"
+    }
+  ],
+  "signals": [
+    {
+      "id": "A1",
+      "source_urls": [
+        "https://www.reddit.com/r/sleephackers/comments/1wk51ep/slumber_app_is_underrated/"
+      ],
+      "source_and_author": "[Slumber, trådstart](https://www.reddit.com/r/sleephackers/comments/1wk51ep/slumber_app_is_underrated/), Aero_N_autical",
+      "date_note": "Exakt datum okänt; sidan visar **1d ago** vid hämtning 2026-09-20. Ingen omräkning till kalenderdatum",
+      "problem_paraphrase": "Betalar för Slumber och värdesätter uttryckligen att AI hålls borta.",
+      "payment_classification_and_limit": "**E-B.** Flera motiv: även utbud/förnyelse nämns. Uppfattningen om AI-frånvaro är användarens, inte en verifierad produktrevision."
+    },
+    {
+      "id": "A2",
+      "source_urls": [
+        "https://www.reddit.com/r/Mindfulness/comments/1pr39na/comment/o2jppsz/"
+      ],
+      "source_and_author": "[Balance-kommentar](https://www.reddit.com/r/Mindfulness/comments/1pr39na/comment/o2jppsz/), Unique-Strategy-5633",
+      "date_note": "**2026-01-30**, absolut datum i sökresultat; användartext även verifierad på öppnad sida",
+      "problem_paraphrase": "Tidigare årsköpare störs vid återkomst av rösten som upplevs artificiell; överväger YouTube.",
+      "payment_classification_and_limit": "**E-B** för tidigare årsplan. AI-tolkningen bestrids i samma tråd; tekniken är inte verifierad. Inget genomfört byte eller bevis att röstorsaken förelåg vid köpet."
+    },
+    {
+      "id": "A3",
+      "source_urls": [
+        "https://www.reddit.com/r/Headspace/comments/1r571bj/comment/o5hjup5/"
+      ],
+      "source_and_author": "[Headspace-kommentar](https://www.reddit.com/r/Headspace/comments/1r571bj/comment/o5hjup5/), MaleficentDivide3389",
+      "date_note": "Kommentarens exakta datum okänt; trådstart **2026-02-15** enligt absolut sökdatum",
+      "problem_paraphrase": "Tänker inte förnya; ogillar AI och svårnavigerad app.",
+      "payment_classification_and_limit": "**P.** Utebliven förnyelse är avsikt, inte verifierat genomförd uppsägning. Inget uttryckligt köp eller belopp."
+    },
+    {
+      "id": "V1",
+      "source_urls": [
+        "https://www.reddit.com/r/InsightTimer/comments/1t4zpa2/comment/okhw02f/"
+      ],
+      "source_and_author": "[Insight Timer, kommentar och svar](https://www.reddit.com/r/InsightTimer/comments/1t4zpa2/comment/okhw02f/), Weedster009",
+      "date_note": "**2026-05-07** för betalningssvaret enligt sökresultat; text och koppling till samma användare verifierade på öppnad sida",
+      "problem_paraphrase": "Vill hellre kunna filtrera liknamnade meditationer än få video.",
+      "payment_classification_and_limit": "**E-B.** Säger att hen betalar. Inte ett köp av filter eller ett påstående att all visualisering är dålig. Två kommentarer = en utsaga."
+    },
+    {
+      "id": "V2",
+      "source_urls": [
+        "https://www.reddit.com/r/InsightTimer/comments/1t4zpa2/comment/oo6sjxj/"
+      ],
+      "source_and_author": "[Insight Timer-kommentar](https://www.reddit.com/r/InsightTimer/comments/1t4zpa2/comment/oo6sjxj/), ParamedicMother",
+      "date_note": "**2026-05-27**, absolut datum i sökresultat; text verifierad på öppnad sida",
+      "problem_paraphrase": "Video går emot målet att minska skärmtid med meditation.",
+      "payment_classification_and_limit": "**N.** Ingen betalning uppges."
+    },
+    {
+      "id": "V3",
+      "source_urls": [
+        "https://www.reddit.com/r/InsightTimer/comments/1t4zpa2/comment/omjfxzt/"
+      ],
+      "source_and_author": "[Insight Timer-kommentar](https://www.reddit.com/r/InsightTimer/comments/1t4zpa2/comment/omjfxzt/), Better-Dragonfruit60",
+      "date_note": "**2026-05-18**, absolut datum i sökresultat; text verifierad på öppnad kommentarsida",
+      "problem_paraphrase": "Uppskattar videorna och saknar samtidigt den tidigare globala kartan.",
+      "payment_classification_and_limit": "**N.** Motbelägg mot generellt borttagande av visuella inslag; ingen betalning."
+    },
+    {
+      "id": "V4",
+      "source_urls": [
+        "https://www.reddit.com/r/Headspace/comments/1r571bj/comment/o5k9ign/"
+      ],
+      "source_and_author": "[Headspace-kommentar](https://www.reddit.com/r/Headspace/comments/1r571bj/comment/o5k9ign/), akathartos",
+      "date_note": "Kommentarens exakta datum okänt; trådstart **2026-02-15**",
+      "problem_paraphrase": "Beskriver ökad batterianvändning och dåligt utnyttjande av favoriter.",
+      "payment_classification_and_limit": "**P.** Trådstartaren diskuterar eget abonnemang/återupptaget köp efter rabatt; försiktigt klassad proxy. Batteriorsak och mätning saknas."
+    },
+    {
+      "id": "O1",
+      "source_urls": [
+        "https://www.reddit.com/r/Headspace/comments/1r571bj/comment/ocxhiid/"
+      ],
+      "source_and_author": "[Headspace-kommentar](https://www.reddit.com/r/Headspace/comments/1r571bj/comment/ocxhiid/), Snoo_47111",
+      "date_note": "Kommentarens exakta datum okänt; trådstart **2026-02-15**, kommentaren är senare",
+      "problem_paraphrase": "Nätavbrott och förlorat/ospelbart offlineinnehåll; säger sig ha avslutat och bytt till Insight Timer.",
+      "payment_classification_and_limit": "**P.** Uppgivet årsabonnemang och genomfört byte; ingen uttrycklig betaltransaktion. Flera samtidiga missnöjesorsaker."
+    },
+    {
+      "id": "B1",
+      "source_urls": [
+        "https://apps.apple.com/us/app/breathwrk-breathing-exercises/id1481804500?see-all=reviews"
+      ],
+      "source_and_author": "[Breathwrk US, “Underwhelming, lackluster, boring, no wow factor…”](https://apps.apple.com/us/app/breathwrk-breathing-exercises/id1481804500?see-all=reviews), Breannnnnaaa",
+      "date_note": "**2024-09-24**, visat recensionsdatum på Apple-sidan; kan vara uppdateringsdatum",
+      "problem_paraphrase": "Övningar slutar mitt i sista utandningen; navigeringen försvårar upptäckt.",
+      "payment_classification_and_limit": "**N.** Pris-/abonnemangskritik men inget eget köp bekräftas. Gammalt och inte ett verifierat aktuellt Breathwrk-fel."
+    },
+    {
+      "id": "B2",
+      "source_urls": [
+        "https://apps.apple.com/us/app/breathwrk-breathing-exercises/id1481804500?see-all=reviews"
+      ],
+      "source_and_author": "[Breathwrk US, “The Newest Update Ruined the App”](https://apps.apple.com/us/app/breathwrk-breathing-exercises/id1481804500?see-all=reviews), B Alan B",
+      "date_note": "**2025-07-06**, visat recensionsdatum på Apple-sidan; kan vara uppdateringsdatum",
+      "problem_paraphrase": "Ljud och bild går ur takt; upplevda inandningstider varierar.",
+      "payment_classification_and_limit": "**N.** Beskriver tidigare gratisanvändning och betalvägg, inte genomfört köp. Medicinska formuleringar används inte."
+    },
+    {
+      "id": "F1",
+      "source_urls": [
+        "https://www.reddit.com/r/UninfluencedReviews/comments/1tolul2/comment/oo3oqia/"
+      ],
+      "source_and_author": "[Fitbit/Calm-kommentar](https://www.reddit.com/r/UninfluencedReviews/comments/1tolul2/comment/oo3oqia/), cathdog888",
+      "date_note": "Kommentarens exakta datum okänt; trådstart **2026-05-26**",
+      "problem_paraphrase": "Betalar redan Fitbit Premium med Calm-videor; osäker på att köpa separat konto.",
+      "payment_classification_and_limit": "**E-B** för Fitbit, **inte** framtida betalvilja för ytterligare meditationstjänst."
+    },
+    {
+      "id": "F2",
+      "source_urls": [
+        "https://www.reddit.com/r/UninfluencedReviews/comments/1tolul2/comment/oo2nnli/"
+      ],
+      "source_and_author": "[Headspace via arbetsgivare](https://www.reddit.com/r/UninfluencedReviews/comments/1tolul2/comment/oo2nnli/), GI_Jade95",
+      "date_note": "**2026-05-26**, absolut datum i sökresultat; text verifierad på öppnad sida",
+      "problem_paraphrase": "Använder sömnberättelser med åtkomst betald genom arbetsgivarprogram.",
+      "payment_classification_and_limit": "**N** för egen betalningsvilja. Tredjepartsfinansiering är ett jämförelsealternativ, inte användarens köp eller bevis för svensk arbetsgivarmarknad."
+    }
+  ],
+  "product_audit": {
+    "scope": "Static working-copy review only; no runtime test or live App Store price/release verification",
+    "new_test_constraint": "KaiBrainService.usesLocalScripts is always true in DEBUG and false otherwise. Debug examples and entitlement bypass cannot validate real generation or production access.",
+    "files": [
+      "Products.storekit",
+      "PRESS_KIT.md",
+      "Stilla/Services/KaiBrainService.swift",
+      "Stilla/Views/ContentView.swift",
+      "Stilla/Views/ZenSessionView.swift",
+      "Stilla/Models/ZenSessionRequest.swift",
+      "Stilla/Views/VoiceSelectionView.swift",
+      "Stilla/Views/SettingsView.swift",
+      "Stilla/Views/SavedMeditationsLibraryView.swift",
+      "Stilla/Models/MeditationScript.swift",
+      "Stilla/MeditationManager.swift",
+      "Stilla/GuruManager.swift",
+      "Stilla/Info.plist"
+    ]
+  },
+  "actions_not_performed": [
+    "No product edits",
+    "No user contacts",
+    "No experiment conducted",
+    "No purchases or deployment"
+  ],
+  "validation": {
+    "local_file_links": "pass",
+    "table_rows": 5,
+    "deduplication": "pass against prior Markdown",
+    "payment_class_counts": "4 E-B, 3 P, 5 N, 0 E-A",
+    "counterevidence": "V3 included; Balance AI interpretation explicitly disputed in same thread"
+  }
+}

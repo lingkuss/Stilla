@@ -3,6 +3,16 @@ import Foundation
 final class KaiBrainService {
     static let shared = KaiBrainService()
     static let maxAIGenerationDurationMinutes = 30
+
+    /// Debug is always local, including on a physical phone. No launch argument
+    /// or stored preference can accidentally enable billable generation.
+    static var usesLocalScripts: Bool {
+        #if DEBUG
+        true
+        #else
+        false
+        #endif
+    }
     
     private let maxFreeCredits = 3
     private let freeGenMonthKey = "kai.free_gen_month"
@@ -26,16 +36,6 @@ final class KaiBrainService {
         return components.url ?? proxyURL
     }
 
-    private var practiceJourneyURL: URL {
-        guard var components = URLComponents(url: proxyURL, resolvingAgainstBaseURL: false) else {
-            return proxyURL
-        }
-        components.query = nil
-        components.fragment = nil
-        components.path = "/kai/journey/generate"
-        return components.url ?? proxyURL
-    }
-
     /// True if the user is signed into iCloud. Uses ubiquityIdentityToken which is
     /// the only reliable way to detect iCloud availability at runtime.
     private var isICloudAvailable: Bool {
@@ -45,6 +45,9 @@ final class KaiBrainService {
     /// Remaining free credits this month (0…3).
     /// Reads from iCloud KVS if available, otherwise UserDefaults.
     var freeCreditsRemaining: Int {
+        #if DEBUG
+        return maxFreeCredits
+        #else
         let currentMonth = currentMonthTag
         let storedMonth = readString(forKey: freeGenMonthKey) ?? ""
         if storedMonth != currentMonth {
@@ -52,6 +55,7 @@ final class KaiBrainService {
         }
         let used = Int(readInt64(forKey: freeGenCountKey))
         return max(0, maxFreeCredits - used)
+        #endif
     }
 
     var isFreeGenerationAvailable: Bool {
@@ -59,6 +63,9 @@ final class KaiBrainService {
     }
 
     func recordFreeGeneration() {
+        #if DEBUG
+        return
+        #else
         let currentMonth = currentMonthTag
         let storedMonth = readString(forKey: freeGenMonthKey) ?? ""
 
@@ -72,6 +79,7 @@ final class KaiBrainService {
         // Always write to both stores for consistency
         write(currentMonth, forKey: freeGenMonthKey)
         write(newCount, forKey: freeGenCountKey)
+        #endif
     }
 
     // MARK: - Private Read/Write Helpers
@@ -166,6 +174,13 @@ final class KaiBrainService {
         durationMinutes: Int,
         excluding recentTitles: [String]
     ) async throws -> SleepStoryGenerationResult {
+        #if DEBUG
+        try Task.checkCancellation()
+        let script = LocalGenerationFixtures.script(
+            input: [themeTitle, themeSubtitle].compactMap { $0 }.joined(separator: ". "),
+            minutes: durationMinutes, personality: .zenMinimalist, kind: .sleepStory)
+        return SleepStoryGenerationResult(script: script, nextHeaders: fallbackSleepStoryHeaders(excluding: recentTitles))
+        #else
         let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let request = SleepStoryGenerationRequest(
@@ -218,6 +233,7 @@ final class KaiBrainService {
             : headersFromResponse
 
         return SleepStoryGenerationResult(script: normalizedScript, nextHeaders: nextHeaders)
+        #endif
     }
 
     func fallbackSleepStoryHeaders(excluding recentTitles: [String], count: Int = 6) -> [SleepStoryHeader] {
@@ -230,80 +246,7 @@ final class KaiBrainService {
         return Array(source.shuffled().prefix(max(1, count)))
     }
 
-    func generatePracticeJourneyPlan(
-        goalSummary: String,
-        preferredDurationMinutes: Int,
-        personality: KaiPersonality,
-        stillnessRatio: Double,
-        memoryContext: String?,
-        historyContext: String?,
-        cycleNumber: Int
-    ) async throws -> PracticeJourneyPlan {
-        let localeIdentifier = AppLocalization.currentLocaleIdentifier
-        let request = PracticeJourneyGenerationRequest(
-            goalSummary: goalSummary,
-            preferredDurationMinutes: min(preferredDurationMinutes, Self.maxAIGenerationDurationMinutes),
-            personalityName: personality.name,
-            personalityPrompt: personality.promptInjection,
-            stillnessRatio: stillnessRatio,
-            locale: localeIdentifier,
-            memoryContext: memoryContext,
-            historyContext: historyContext,
-            cycleNumber: max(1, cycleNumber)
-        )
 
-        var urlRequest = URLRequest(url: practiceJourneyURL)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        try await AppAttestAuthManager.shared.authorize(&urlRequest)
-
-        urlRequest.httpBody = try JSONEncoder().encode(request)
-
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw BrainError.generationFailed
-        }
-
-        if httpResponse.statusCode == 429 {
-            throw BrainError.rateLimited
-        }
-
-        if httpResponse.statusCode != 200 {
-            if let errorLog = String(data: data, encoding: .utf8) {
-                print("❌ JOURNEY Proxy Error [\(httpResponse.statusCode)]: \(errorLog)")
-            }
-            throw BrainError.generationFailed
-        }
-
-        do {
-            let rawPlan = try JSONDecoder().decode(PracticeJourneyPlanResponse.self, from: data)
-            let steps = rawPlan.steps.enumerated().map { offset, step in
-                PracticeJourneyStep(
-                    dayNumber: step.dayNumber > 0 ? step.dayNumber : offset + 1,
-                    title: step.title,
-                    focus: step.focus,
-                    purpose: step.purpose,
-                    meditationPrompt: step.meditationPrompt,
-                    adaptationTip: step.adaptationTip,
-                    suggestedDurationMinutes: min(max(3, step.suggestedDurationMinutes), Self.maxAIGenerationDurationMinutes)
-                )
-            }
-
-            return PracticeJourneyPlan(
-                title: rawPlan.title,
-                summary: rawPlan.summary,
-                goalSummary: goalSummary,
-                cycleNumber: rawPlan.cycleNumber > 0 ? rawPlan.cycleNumber : cycleNumber,
-                personaID: personality.id,
-                personaName: personality.name,
-                stillnessRatio: stillnessRatio,
-                steps: steps
-            )
-        } catch {
-            print("❌ JOURNEY Decoding Error: \(error)")
-            throw BrainError.invalidResponse
-        }
-    }
 }
 
 struct SleepStoryGenerationResult {
@@ -313,6 +256,11 @@ struct SleepStoryGenerationResult {
 
 extension KaiBrainService {
     func generateScript(mood: String, durationMinutes: Int, personality: KaiPersonality, stillnessRatio: Double) async throws -> MeditationScript {
+        #if DEBUG
+        try Task.checkCancellation()
+        return LocalGenerationFixtures.script(input: mood, minutes: durationMinutes,
+            personality: personality, kind: .meditation, stillnessRatio: stillnessRatio)
+        #else
         let cappedDuration = min(durationMinutes, Self.maxAIGenerationDurationMinutes)
         let localeIdentifier = AppLocalization.currentLocaleIdentifier
         let languageInstruction = """
@@ -380,6 +328,7 @@ extension KaiBrainService {
             print("❌ MIMIR Decoding Error: \(error)")
             throw BrainError.invalidResponse
         }
+        #endif
     }
 
     func normalizeScriptDuration(_ script: MeditationScript) -> MeditationScript {
@@ -465,35 +414,6 @@ private struct SleepStoryGenerationRequest: Codable {
 private struct SleepStoryGenerationEnvelope: Codable {
     let story: MeditationScript
     let nextHeaders: [SleepStoryHeader]
-}
-
-private struct PracticeJourneyGenerationRequest: Codable {
-    let goalSummary: String
-    let preferredDurationMinutes: Int
-    let personalityName: String
-    let personalityPrompt: String
-    let stillnessRatio: Double
-    let locale: String
-    let memoryContext: String?
-    let historyContext: String?
-    let cycleNumber: Int
-}
-
-private struct PracticeJourneyPlanResponse: Codable {
-    let title: String
-    let summary: String
-    let cycleNumber: Int
-    let steps: [PracticeJourneyPlanStepResponse]
-}
-
-private struct PracticeJourneyPlanStepResponse: Codable {
-    let dayNumber: Int
-    let title: String
-    let focus: String
-    let purpose: String
-    let meditationPrompt: String
-    let adaptationTip: String
-    let suggestedDurationMinutes: Int
 }
 
 private extension KaiBrainService {

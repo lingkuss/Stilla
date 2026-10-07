@@ -1,0 +1,219 @@
+{
+  "checked_at_utc": "2026-09-11T04:56:10.445364+00:00",
+  "previous_run_utc": "2026-09-10T05:46:39.451000+00:00",
+  "date_note": "Apple updated is not separately verified original publication time. No complete review text is archived here. The ledger contains short paraphrases.",
+  "feeds": [
+    {
+      "app": "BetterSleep",
+      "storefront": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=314498713/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-09-09T15:00:13-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Calm",
+      "storefront": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-08-21T03:17:42-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Calm",
+      "storefront": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-09-09T14:44:38-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Endel",
+      "storefront": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1346247457/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-09-09T13:41:47-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Headspace",
+      "storefront": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-05-08T11:39:36-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Headspace",
+      "storefront": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-09-07T10:19:45-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "InsightTimer",
+      "storefront": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-08-22T00:47:19-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Mindfully",
+      "storefront": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-02-21T06:29:23-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Mindfulness",
+      "storefront": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 50,
+      "latest_updated": "2026-08-18T10:46:57-07:00",
+      "entries_updated_after_previous_run": 0
+    },
+    {
+      "app": "Vindla",
+      "storefront": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "page": 1,
+      "entries_returned": 0,
+      "latest_updated": null,
+      "entries_updated_after_previous_run": 0
+    }
+  ],
+  "selected_reviews": [
+    {
+      "ledger_id": "C1",
+      "app": "Calm",
+      "storefront": "se",
+      "review_id": "13797095353",
+      "title": "Frustrated loyal customer",
+      "updated_as_returned": "2026-02-27T19:20:33-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "C2",
+      "app": "Calm",
+      "storefront": "us",
+      "review_id": "14526834559",
+      "title": "Disappointed but hopeful",
+      "updated_as_returned": "2026-09-08T14:45:30-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "C3",
+      "app": "Calm",
+      "storefront": "us",
+      "review_id": "14526637506",
+      "title": "Daily Jay",
+      "updated_as_returned": "2026-09-08T13:32:53-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "E1",
+      "app": "Endel",
+      "storefront": "us",
+      "review_id": "14525158605",
+      "title": "Not as advertised",
+      "updated_as_returned": "2026-09-08T05:51:37-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1346247457/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "E2",
+      "app": "Endel",
+      "storefront": "us",
+      "review_id": "14506594644",
+      "title": "Where's the song?",
+      "updated_as_returned": "2026-09-03T11:03:49-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1346247457/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "E3",
+      "app": "Endel",
+      "storefront": "us",
+      "review_id": "14467662004",
+      "title": "Unimpressed",
+      "updated_as_returned": "2026-08-24T12:54:07-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1346247457/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H3",
+      "app": "Headspace",
+      "storefront": "se",
+      "review_id": "13691648123",
+      "title": "Good",
+      "updated_as_returned": "2026-01-29T21:04:02-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H4",
+      "app": "Headspace",
+      "storefront": "se",
+      "review_id": "13095271302",
+      "title": "So bad",
+      "updated_as_returned": "2025-09-03T13:24:27-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H5",
+      "app": "Headspace",
+      "storefront": "us",
+      "review_id": "14512764658",
+      "title": "Used to be free…",
+      "updated_as_returned": "2026-09-05T01:42:37-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H1",
+      "app": "Headspace",
+      "storefront": "us",
+      "review_id": "14468628043",
+      "title": "Good app but unusable on 5G",
+      "updated_as_returned": "2026-08-24T19:08:04-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "H2",
+      "app": "Headspace",
+      "storefront": "us",
+      "review_id": "14415397683",
+      "title": "Hate the app, love the product",
+      "updated_as_returned": "2026-08-11T10:15:16-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json"
+    },
+    {
+      "ledger_id": "M1",
+      "app": "Mindfully",
+      "storefront": "se",
+      "review_id": "12619532332",
+      "title": "Funkar dåligt utan internet",
+      "updated_as_returned": "2025-05-04T11:38:03-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json"
+    }
+  ]
+}

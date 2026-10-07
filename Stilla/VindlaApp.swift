@@ -29,11 +29,16 @@ struct VindlaApp: App {
     @AppStorage("app.language.override") private var appLanguageOverride = AppLocalization.LanguageOption.system.rawValue
     @Environment(\.scenePhase) private var scenePhase
     @UIApplicationDelegateAdaptor private var notificationDelegate: AppNotificationDelegate
+    #if DEBUG
+    @State private var gardenPreviewVisible = true
+    #endif
 
     init() {
         AppLocalization.applyLanguageOverrideOnLaunch()
         configureAudioSession()
         #if DEBUG
+        configureGardenTestProfile()
+        configureMountainTestAudio()
         Secrets.debugPrintResolvedConfig()
         #endif
         
@@ -43,8 +48,67 @@ struct VindlaApp: App {
         }
     }
 
+    #if DEBUG
+    /// Explicit device-test setup; normal launches preserve every sound choice.
+    private func configureMountainTestAudio() {
+        guard ProcessInfo.processInfo.arguments.contains("--mountain-enable-test-audio") else { return }
+        let defaults = UserDefaults.standard
+        let key = "mountain.prototype.meditation.preferences.v1"
+        let saved = defaults.data(forKey: key) ?? Data()
+        let backup = URL.documentsDirectory.appending(path: "MountainAudioBeforeTest.json")
+        if !saved.isEmpty && !FileManager.default.fileExists(atPath: backup.path) {
+            do { try saved.write(to: backup, options: .atomic) }
+            catch { print("Could not back up mountain audio: \(error)"); return }
+        }
+        var preferences = MountainMeditationPreferences.restore(saved)
+        let previousAmbience = SoundEngine.AmbientSound(rawValue: defaults.string(forKey: "ambientSound") ?? "") ?? .rain
+        for mode in MountainSessionContext.Mode.allCases {
+            preferences[mode].ambience = (previousAmbience == .none ? SoundEngine.AmbientSound.rain : previousAmbience).rawValue
+            preferences[mode].breathingCues = true
+            preferences[mode].ambienceVolume = 0.5
+            preferences[mode].cueVolume = 0.5
+        }
+        if let data = try? JSONEncoder().encode(preferences) { defaults.set(data, forKey: key) }
+    }
+
+    private func configureGardenTestProfile() {
+        let args = ProcessInfo.processInfo.arguments
+        let restore = args.contains("--garden-restore-profile")
+        let count = args.firstIndex(of: "--garden-mock-count").flatMap { args.indices.contains($0+1) ? Int(args[$0+1]) : nil }
+        guard restore || count != nil else { return }
+        do {
+            let store = StillnessGardenStore.shared
+            if restore { try store.restoreBeforeMock() }
+            else if let count {
+                try store.setMockMeditations(count,backupURL: URL.documentsDirectory.appending(path: "GardenProfileBeforeMock.json"))
+            }
+            let receipt: [String: Any] = ["mode": restore ? "restored" : "mock",
+                "meditations": store.meditationCount,"flowers": store.flowers.count,
+                "crystals": store.crystals.count,"trees": store.trees.count,
+                "updatedAt": Date().ISO8601Format()]
+            try JSONSerialization.data(withJSONObject: receipt,options: [.prettyPrinted,.sortedKeys])
+                .write(to: URL.documentsDirectory.appending(path: "GardenTestProfileReceipt.json"),options: .atomic)
+        } catch { print("Garden test profile could not be applied: \(error)") }
+    }
+    #endif
+
     var body: some Scene {
         WindowGroup {
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("--garden-preview") && gardenPreviewVisible {
+                GardenPreviewHost { gardenPreviewVisible = false }
+            } else if ProcessInfo.processInfo.arguments.contains("--guide-face-review") {
+                GuideFaceReviewView()
+            } else {
+                appContent
+            }
+            #else
+            appContent
+            #endif
+        }
+    }
+
+    private var appContent: some View {
             ContentView()
                 .environment(manager)
                 .environment(\.locale, AppLocalization.locale(forRawValue: appLanguageOverride))
@@ -53,6 +117,7 @@ struct VindlaApp: App {
                 }
                 .onChange(of: scenePhase) { _, newPhase in
                     guard newPhase == .active else { return }
+                    manager.refreshMountainTimer()
                     Task {
                         await StoreKitManager.shared.updateCustomerProductStatus()
                     }
@@ -60,7 +125,6 @@ struct VindlaApp: App {
                 .onOpenURL { url in
                     handleIncomingShare(url)
                 }
-        }
     }
 
     private func configureAudioSession() {
@@ -138,3 +202,22 @@ final class AppNotificationDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 }
+
+#if DEBUG
+private struct GardenPreviewHost: View {
+    let onClose: () -> Void
+    @State private var store: StillnessGardenStore = {
+        let args = ProcessInfo.processInfo.arguments
+        let count = args.firstIndex(of: "--garden-count").flatMap { args.indices.contains($0+1) ? Int(args[$0+1]) : nil } ?? 100
+        return .preview(count: count)
+    }()
+    var body: some View {
+        StillnessGardenView(store: store,onClose: onClose)
+            .task {
+                if ProcessInfo.processInfo.arguments.contains("--garden-atlas") {
+                    await GardenVisualReview.export()
+                }
+            }
+    }
+}
+#endif

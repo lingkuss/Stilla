@@ -1,0 +1,313 @@
+{
+  "clips": [
+    {
+      "key": "zen.session.suggestion",
+      "language": "en",
+      "text": "Shall we start with ten quiet minutes, just for you?",
+      "file": "en-session-suggestion.m4a",
+      "duration": 3.72,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.session.ready",
+      "language": "sv",
+      "text": "Din session är redo. Vi tar det i din takt.",
+      "file": "sv-session-ready.m4a",
+      "duration": 3.76,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.avatar.sample",
+      "language": "sv",
+      "text": "Ta ett långsamt andetag in. Låt axlarna mjukna. Det finns ingenting att lösa just nu. Bara det här andetaget.",
+      "file": "sv-avatar-sample.m4a",
+      "duration": 7.96,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.meditation.opening",
+      "language": "sv",
+      "text": "Välkommen. Hitta en ställning där kroppen får vila. Du behöver inte åstadkomma något här.",
+      "file": "sv-mock-meditation-opening.m4a",
+      "duration": 6.76,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.meditation.1",
+      "language": "sv",
+      "text": "Lägg märke till kontakten med underlaget. Låt axlarna sjunka. Låt andetaget komma och gå av sig självt.",
+      "file": "sv-mock-meditation-1.m4a",
+      "duration": 7.88,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.meditation.2",
+      "language": "sv",
+      "text": "Känn hur luften rör sig vid näsan. Du behöver inte ändra på rytmen. Bara märka den.",
+      "file": "sv-mock-meditation-2.m4a",
+      "duration": 7.88,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.meditation.3",
+      "language": "sv",
+      "text": "När en tanke dyker upp kan du låta den vara där. För sedan varsamt uppmärksamheten tillbaka till kroppen.",
+      "file": "sv-mock-meditation-3.m4a",
+      "duration": 7.36,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.meditation.4",
+      "language": "sv",
+      "text": "Vila en stund i det som redan finns. Ett andetag. Kroppens tyngd. Ljuden omkring dig.",
+      "file": "sv-mock-meditation-4.m4a",
+      "duration": 7.72,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.meditation.closing",
+      "language": "sv",
+      "text": "Känn underlaget igen. Rör försiktigt på fingrarna när du vill. Ta med dig lite av stillheten in i nästa stund.",
+      "file": "sv-mock-meditation-closing.m4a",
+      "duration": 7.72,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.focus.rest",
+      "language": "sv",
+      "text": "Just nu får du lägga dagens uppgifter åt sidan. Känn efter var kroppen kan släppa taget en aning.",
+      "file": "sv-mock-focus-rest.m4a",
+      "duration": 6.12,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.focus.stress",
+      "language": "sv",
+      "text": "Om det känns mycket just nu behöver du inte lösa allt. Lägg märke till en plats i kroppen som känns stadig, och vila uppmärksamheten där.",
+      "file": "sv-mock-focus-stress.m4a",
+      "duration": 9.24,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.focus.focus",
+      "language": "sv",
+      "text": "Vi övar på att återvända till en sak i taget. Välj andetaget som en mjuk punkt för din uppmärksamhet.",
+      "file": "sv-mock-focus-focus.m4a",
+      "duration": 7.84,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.mock.focus.sleep",
+      "language": "sv",
+      "text": "Det finns ingenting mer att hinna med just nu. Du får vila och låta berättelsen röra sig förbi.",
+      "file": "sv-mock-focus-sleep.m4a",
+      "duration": 7.6,
+      "take": {},
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "3dc6e30d3c13276742e22e280a73af1f321738b3ffbe1af5171ad1984c9a9352"
+    },
+    {
+      "key": "zen.session.ready",
+      "language": "en",
+      "text": "Your session is ready. We can take it at your pace.",
+      "file": "en-session-ready.m4a",
+      "duration": 3.32,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.avatar.sample",
+      "language": "en",
+      "text": "Take a slow breath in. Let your shoulders soften. There is nothing to solve right now. Just this breath.",
+      "file": "en-avatar-sample.m4a",
+      "duration": 6.64,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.meditation.opening",
+      "language": "en",
+      "text": "Welcome. Find a position where your body can rest. There is nothing you need to achieve here.",
+      "file": "en-mock-meditation-opening.m4a",
+      "duration": 5.88,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.meditation.1",
+      "language": "en",
+      "text": "Notice the support beneath you. Let your shoulders soften. Allow the breath to come and go in its own way.",
+      "file": "en-mock-meditation-1.m4a",
+      "duration": 6.08,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.meditation.2",
+      "language": "en",
+      "text": "Feel the air at your nose. There is no need to change its rhythm. Simply notice it.",
+      "file": "en-mock-meditation-2.m4a",
+      "duration": 5.08,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.meditation.3",
+      "language": "en",
+      "text": "When a thought arrives, you can let it be there. Then gently return your attention to your body.",
+      "file": "en-mock-meditation-3.m4a",
+      "duration": 5.6,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.meditation.4",
+      "language": "en",
+      "text": "Rest for a while with what is already here. One breath. The weight of your body. The sounds around you.",
+      "file": "en-mock-meditation-4.m4a",
+      "duration": 6.28,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.meditation.closing",
+      "language": "en",
+      "text": "Feel the support beneath you again. Move your fingers whenever you are ready. Carry a little of this stillness into your next moment.",
+      "file": "en-mock-meditation-closing.m4a",
+      "duration": 7.0,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.focus.rest",
+      "language": "en",
+      "text": "For now, let the tasks of the day wait. Notice where your body might soften just a little.",
+      "file": "en-mock-focus-rest.m4a",
+      "duration": 6.68,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.focus.stress",
+      "language": "en",
+      "text": "If things feel busy, you do not need to solve everything. Find a steady sensation in your body and rest your attention there.",
+      "file": "en-mock-focus-stress.m4a",
+      "duration": 7.64,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.focus.focus",
+      "language": "en",
+      "text": "We are practising returning to one thing at a time. Choose the breath as a gentle place for your attention.",
+      "file": "en-mock-focus-focus.m4a",
+      "duration": 6.12,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.mock.focus.sleep",
+      "language": "en",
+      "text": "There is nothing else to finish now. You can rest and let the story drift past.",
+      "file": "en-mock-focus-sleep.m4a",
+      "duration": 5.16,
+      "take": {},
+      "referenceLanguage": "en",
+      "referenceSHA256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990",
+      "generationHash": "95d64f607c800931ec0822e5242beb8a7e89696fb2994e3b755a905866fef280"
+    },
+    {
+      "key": "zen.session.suggestion",
+      "language": "sv",
+      "text": "Ska vi börja med tio lugna minuter, bara för dig?",
+      "file": "sv-session-suggestion.m4a",
+      "duration": 4.4,
+      "take": {
+        "seed": 42
+      },
+      "referenceLanguage": "sv",
+      "referenceSHA256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca",
+      "generationHash": "871c82ca03811af80b1ccc611e9ab7fe98f4535e5acedba38b77a53833218fa3"
+    }
+  ],
+  "version": 2,
+  "persona": "zen_minimalist",
+  "profile": "zen-minimalist-v2",
+  "profileHash": "49bb68109b0d905bd1f508bee21190872f8ad533a7b80a6052103b9d690dd6f1",
+  "engine": "local Chatterbox Multilingual v3 / MLX",
+  "references": {
+    "sv": {
+      "language": "sv",
+      "file": "references/sv.wav",
+      "source": "Local Piper sv_SE-nst-medium; KBLab Swedish NST model (CC0)",
+      "text": "Du behöver inte åstadkomma något här. Ta ett lugnt andetag. Du kan bara vara här en stund.",
+      "sha256": "a1fa5c235498c1e294fd04555e5ea3576e10d839f1a7b1d6869d660269d27dca"
+    },
+    "en": {
+      "language": "en",
+      "file": "references/en.wav",
+      "source": "Local Qwen3-TTS VoiceDesign 1.7B 8bit; original synthetic English Zen voice",
+      "text": "There is nothing you need to achieve here. Let your shoulders soften. Take your time. For this moment, you can simply be here.",
+      "sha256": "d227cab5ab95d69ace4c6bc8a645c4eec923d52c1cb372e6080ee84514c48990"
+    }
+  }
+}

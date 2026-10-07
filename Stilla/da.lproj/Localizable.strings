@@ -188,13 +188,6 @@
 "reflection.share_upload_error" = "Der opstod et problem med at gemme din session på serveren. Tjek din internetforbindelse eller Vercel KV-opsætningen.";
 "reflection.how_are_you_now" = "Hvordan har du det nu?";
 "reflection.short_reflection_hint" = "En kort refleksion hjælper Mimir med at huske, hvad der er vigtigt for dig.";
-"reflection.check_in_title" = "HVAD ÆNDREDE SIG?";
-"reflection.check_in.calmer" = "Roligere";
-"reflection.check_in.restless" = "Stadig urolig";
-"reflection.check_in.sleepy" = "Søvnig";
-"reflection.check_in.clearer" = "Klarere";
-"reflection.check_in.emotional" = "Følelsesladet";
-"reflection.check_in.no_change" = "Ingen ændring";
 "reflection.placeholder" = "Én linje er nok...";
 "reflection.voice_input_fallback_error" = "Stemmeindtastning er ikke tilgængelig lige nu. Skriv i stedet.";
 "reflection.reminder_prompt" = "Skal jeg minde dig i morgen om at";
@@ -202,7 +195,7 @@
 "reflection.save_exercise" = "Gem øvelse i biblioteket";
 "reflection.save" = "Gem refleksion";
 "reflection.share_title" = "Del din rejse";
-"reflection.share_subtitle" = "Lad andre opdage deres egen vej med Mimir.";
+"reflection.share_subtitle" = "Send meditationen til en, der måske har brug for et øjeblik som dette.";
 "reflection.preparing" = "Forbereder...";
 "reflection.share_action" = "Del";
 "reflection.not_now" = "Ikke nu";
@@ -257,6 +250,12 @@
 "settings.privacy_sensitive_info" = "Undgå at dele medicinske detaljer eller meget følsomme personlige oplysninger i Mimir-beskeder.";
 "settings.privacy_data" = "Privatliv og data";
 "settings.show_intro_guide" = "Vis introduktionsguide";
+"settings.share_and_support" = "Del og støt";
+"settings.share_vindla" = "Del Vindla";
+"settings.share_vindla_message" = "En meditation skabt til, hvordan du har det lige nu. Prøv Vindla på iPhone.";
+"settings.rate_vindla" = "Bedøm Vindla";
+"settings.privacy_policy" = "Privatlivspolitik";
+"settings.terms_of_use" = "Brugsvilkår";
 "settings.chimes_help" = "Disse bløde toner markerer begyndelsen og slutningen af din meditation.";
 "settings.binaural_beats" = "Binaurale toner";
 "settings.binaural_beats_help" = "Binaurale toner bruger to let forskellige frekvenser til at guide dine hjernebølger til specifikke mentale tilstande.";
@@ -373,7 +372,7 @@
 "content.action.stop" = "STOP";
 "content.action.done" = "FÆRDIG";
 "content.mode.simple_timer" = "Enkel timer";
-"content.mode.mimir" = "Mimir-tilstand";
+"content.mode.world" = "Tilbage til verden";
 "content.home_proactive_fallback_body" = "Beskriv dit humør. Mimir vil kuratere din vej.";
 
 "stats.streak" = "Stime";
@@ -575,6 +574,8 @@
 
 "sleep.post_session.title" = "Søvnhistorien er færdig";
 "sleep.post_session.body" = "Hvis du kunne lide den, kan du gemme den i biblioteket og afspille den igen når som helst.";
+"sleep.post_session.share_preview" = "Del en gratis forhåndsvisning";
+"sleep.post_session.share_preview_message" = "Vælg et øjeblik før sengetid og en guidestil i denne gratis Mimir-forhåndsvisning – ingen konto eller installation er nødvendig.";
 "sleep.header.astronomers-attic.title" = "Astronomens loftskammer";
 "sleep.header.astronomers-attic.subtitle" = "Støvede kort, messinglinser og stjernelys over træ";
 "sleep.header.midnight-tram.title" = "Den sidste sporvogn gennem regnen";
@@ -625,19 +626,6 @@
 "content.sleep.card_detail" = "Glid ind i søvnen med beroligende natlige rejser.";
 "content.sleep.open_cta" = "Åbn nattilstand";
 
-"content.today_step.guiding_week" = "VEJLEDER DENNE UGE";
-"content.today_step.eyebrow" = "DAGENS TRIN";
-"content.today_step.start_title" = "Start 7-dagesforløb";
-"content.today_step.day_of_week_format" = "Dag %d af 7";
-"content.today_step.generate_next_title" = "Generer de næste 7 dage";
-"content.today_step.week_format" = "Uge %d";
-"content.today_step.start_detail" = "Start et personligt dagligt forløb, der opbygger meditationsrutine trin for trin med dine nuværende guideindstillinger.";
-"content.today_step.start_practice_cta" = "Start dagens praksis";
-"content.today_step.hide_details" = "Skjul detaljer";
-"content.today_step.view_details" = "Vis detaljer";
-"content.today_step.view_all_steps" = "Vis alle trin";
-"content.today_step.generate_week_cta_format" = "Generer uge %d";
-"content.today_step.next_week_detail_format" = "Uge %d vil uddybe praksissen uden at tilføje unødigt pres.";
 
 "content.saved_library.eyebrow" = "GEMT BIBLIOTEK";
 "content.saved_library.title" = "Seneste sessioner";
@@ -648,20 +636,6 @@
 "content.saved_library.duration_format" = "%dm";
 "content.saved_library.created_prefix" = "Oprettet %@";
 
-"journey.overview.nav_title" = "7-dagesforløb";
-"journey.overview.week_format" = "Uge %d";
-"journey.overview.progress_complete" = "Alle trin er fuldført";
-"journey.overview.progress" = "Fremgang";
-"journey.overview.next_step_format" = "Næste trin: Dag %d • %@";
-"journey.overview.week_complete_detail" = "Denne uge er fuldført. Den næste cyklus kan bygge videre på dine fremskridt.";
-"journey.overview.all_steps" = "Alle trin";
-"journey.overview.status_today" = "I dag";
-"journey.overview.status_done" = "Færdig";
-"journey.overview.status_ahead" = "Forude";
-"journey.overview.duration_recommended_format" = "%d min anbefalet";
-"journey.overview.check_in_format" = "Indtjekning: %@";
-"journey.overview.start_error_title" = "Kunne ikke starte dagens trin";
-"journey.overview.start_error_message" = "Prøv igen om et øjeblik. Dit daglige forløb er stadig gemt.";
 
 // MARK: - Remaining UI Localization
 "settings.soundscapes" = "Lydlandskaber";
@@ -671,55 +645,6 @@
 "ui.continue" = "Fortsæt";
 "ui.back" = "Tilbage";
 "settings.reminder_time" = "Påmindelsestid";
-"journey.onboarding.nav_title" = "Din 7-dages sti";
-"journey.onboarding.step_count_format" = "Trin %d af %d";
-"journey.onboarding.goal_placeholder" = "Hvad skal denne praksis hjælpe dig med?";
-"journey.onboarding.try_one" = "Prøv en";
-"journey.onboarding.goal_option.calm" = "føle mig roligere i hverdagen";
-"journey.onboarding.goal_option.consistency" = "opbygge kontinuitet uden pres";
-"journey.onboarding.goal_option.sleep" = "falde lettere i søvn";
-"journey.onboarding.goal_option.focus" = "stabilisere mit fokus";
-"journey.onboarding.obstacle_placeholder" = "Hvad plejer at stå i vejen? Valgfrit.";
-"journey.onboarding.common_blockers" = "Almindelige forhindringer";
-"journey.onboarding.obstacle_option.restless" = "Jeg bliver rastløs";
-"journey.onboarding.obstacle_option.forget" = "Jeg glemmer at vende tilbage";
-"journey.onboarding.obstacle_option.tired" = "Jeg føler mig for træt";
-"journey.onboarding.obstacle_option.overthink" = "Jeg overtænker under praksis";
-"journey.onboarding.obstacle_skip_help" = "Du kan springe dette over, hvis du vil. Vi bygger stadig en god startuge.";
-"journey.onboarding.style_help" = "Vælg den type vejledning, der føles lettest at vende tilbage til.";
-"journey.onboarding.duration_help" = "Vælg en længde, der føles realistisk for den første uge.";
-"journey.onboarding.guide_label" = "Guide";
-"journey.onboarding.stillness_label" = "Stilhed";
-"journey.onboarding.technique_label" = "Teknik";
-"journey.onboarding.settings_help" = "Vi bruger automatisk din nuværende guide og dine stilhedsindstillinger og former derefter planen omkring den stil, du valgte.";
-"journey.onboarding.create_path" = "Opret min sti";
-"journey.onboarding.suggested" = "Foreslået";
-"journey.onboarding.question.goal.title" = "Hvad vil du have ud af denne praksis?";
-"journey.onboarding.question.obstacle.title" = "Hvad kommer normalt i vejen?";
-"journey.onboarding.question.style.title" = "Hvilken type vejledning føles rigtig?";
-"journey.onboarding.question.duration.title" = "Hvilket tempo føles realistisk?";
-"journey.onboarding.question.goal.subtitle" = "Vi bruger dette til at forme tonen og retningen for dine første 7 dage.";
-"journey.onboarding.question.obstacle.subtitle" = "Det hjælper den næste uge med at føles mere støttende uden at gøre den uforudsigelig.";
-"journey.onboarding.question.style.subtitle" = "Her er nogle meditationsteknikker, der passer godt til forskellige mål og energiniveauer.";
-"journey.onboarding.question.duration.subtitle" = "At starte med den rigtige sessionslængde er vigtigere end at være ambitiøs.";
-"journey.onboarding.stillness.more_guided" = "Mere guidet";
-"journey.onboarding.stillness.balanced" = "Balanceret";
-"journey.onboarding.stillness.more_spacious" = "Mere rummelig";
-"journey.onboarding.style.breath_anchor.title" = "Åndedrætsanker";
-"journey.onboarding.style.breath_anchor.summary" = "Enkel guidet opmærksomhed på åndedrættet.";
-"journey.onboarding.style.breath_anchor.detail" = "Et godt udgangspunkt, når du vil have noget stabilt, beroligende og let at vende tilbage til.";
-"journey.onboarding.style.body_scan.title" = "Kropsscanning";
-"journey.onboarding.style.body_scan.summary" = "Flyt opmærksomheden gennem kroppen og blødgør spændinger.";
-"journey.onboarding.style.body_scan.detail" = "Hjælpsomt når stress mærkes fysisk, eller når du vil føle dig mere jordet.";
-"journey.onboarding.style.self_compassion.title" = "Selvmedfølelse";
-"journey.onboarding.style.self_compassion.summary" = "En varmere stil med fokus på venlighed og følelsesmæssig lethed.";
-"journey.onboarding.style.self_compassion.detail" = "Nyttigt når praksis skal føles støttende frem for præstationsdrevet.";
-"journey.onboarding.style.visualization.title" = "Guidet visualisering";
-"journey.onboarding.style.visualization.summary" = "Brug indre billeder til at nulstille, genopbygge eller genfinde fokus.";
-"journey.onboarding.style.visualization.detail" = "Fungerer godt, når du ønsker motivation, klarhed eller en blødere indgang til meditation.";
-"journey.onboarding.style.open_awareness.title" = "Åben opmærksomhed";
-"journey.onboarding.style.open_awareness.summary" = "Mere rummelig, mere stille og mindre tæt guidet.";
-"journey.onboarding.style.open_awareness.detail" = "Bedst når du vil gå dybere over tid og have mindre struktur.";
 "content.custom_section_name" = "Navn";
 "content.custom_section_timings" = "Tider";
 "content.inhale" = "Indånding";
@@ -728,3 +653,198 @@
 "content.hold_out" = "Hold (ud)";
 "content.custom_technique_default_name" = "Tilpasset";
 "content.custom_technique_default_description" = "Tilpasset brugerteknik.";
+
+/* Daglig praksis */
+
+/* Zen Minimalist avatar */
+"zen.avatar.meet" = "Mød Zen Minimalist";
+"zen.avatar.title" = "Et øjebliks stilhed.";
+"zen.avatar.sample" = "Tag en langsom indånding. Lad skuldrene slappe af. Der er intet at løse lige nu. Bare dette åndedrag.";
+"zen.avatar.listen" = "Lyt til din guide";
+"zen.avatar.stop" = "Stop oplæsningen";
+"zen.avatar.enable" = "Vis avatar under meditation";
+"zen.avatar.offline" = "Virker offline. Bruger stemmen valgt i Vindla.";
+"zen.avatar.session_active" = "Afslut din session for at lytte til prøven.";
+"zen.avatar.speaking" = "Taler";
+"zen.avatar.resting" = "Hviler";
+
+/* Zen session conversation */
+"zen.session.subtitle" = "Et øjeblik med din guide";
+"zen.session.story" = "Søvnhistorie";
+"zen.session.meditation" = "Guidet meditation";
+"zen.session.ready" = "Din session er klar. Vi tager det i dit tempo.";
+"zen.session.suggestion" = "Skal vi begynde med ti rolige minutter, bare til dig?";
+"zen.session.duration_limit" = "Vælg en session på 1–30 minutter. Varigheden er tilpasset.";
+"zen.session.preparing" = "Forbereder…";
+"zen.session.start" = "Begynd sessionen";
+"zen.session.input_title" = "Eller fortæl, hvad du har brug for";
+"zen.session.placeholder" = "Hvordan har du det? Hvad ønsker du?";
+"zen.session.stop_recording" = "Stop optagelse";
+"zen.session.record" = "Brug din stemme";
+"zen.session.create" = "Lav mit forslag";
+"zen.session.listening" = "Jeg lytter…";
+"zen.session.examples" = "Prøv ”Jeg vil sove” eller ”Meditation i 20 minutter”.";
+"zen.session.local" = "Lokal test · eksempeltekster · ingen AI-kald";
+"zen.session.error" = "Sessionen kunne ikke forberedes. Prøv igen.";
+"zen.session.microphone_error" = "Stemmeinput er ikke tilgængeligt. Kontrollér mikrofon- og taletilladelser i Indstillinger, eller skriv dit ønske. Lokale test kræver talegenkendelse på enheden.";
+"zen.session.entry" = "En enkel samtale før din næste session";
+"zen.mock.meditation.title" = "A moment of stillness";
+"zen.mock.meditation.opening" = "Welcome. Find a position where your body can rest. There is nothing you need to achieve here.";
+"zen.mock.meditation.1" = "Notice the support beneath you. Let your shoulders soften. Allow the breath to come and go in its own way.";
+"zen.mock.meditation.2" = "Feel the air at your nose. There is no need to change its rhythm. Simply notice it.";
+"zen.mock.meditation.3" = "When a thought arrives, you can let it be there. Then gently return your attention to your body.";
+"zen.mock.meditation.4" = "Rest for a while with what is already here. One breath. The weight of your body. The sounds around you.";
+"zen.mock.meditation.closing" = "Feel the support beneath you again. Move your fingers whenever you are ready. Carry a little of this stillness into your next moment.";
+"zen.mock.focus.rest" = "For now, let the tasks of the day wait. Notice where your body might soften just a little.";
+"zen.mock.focus.stress" = "If things feel busy, you do not need to solve everything. Find a steady sensation in your body and rest your attention there.";
+"zen.mock.focus.focus" = "We are practising returning to one thing at a time. Choose the breath as a gentle place for your attention.";
+"zen.mock.focus.sleep" = "There is nothing else to finish now. You can rest and let the story drift past.";
+"zen.mock.story.title" = "The garden at dusk";
+"zen.mock.story.opening" = "At the end of a quiet path is a small garden. The day is slowly settling down. Behind a low wall stands a cherry tree, with a single paper lantern hanging from its branches. The light is warm and soft. You do not need to follow every word. It is all right simply to rest.";
+"zen.mock.story.1" = "The gate is slightly open. Beyond it, a path of smooth stones winds through the moss. The stones still hold a little warmth from the day. Someone swept the path earlier this evening. Here and there a small leaf has landed since then, and no one has needed to move it. Everything can stay just as it is.";
+"zen.mock.story.2" = "Further into the garden stands a bench of pale wood. Beside it is a cup that still carries the faint scent of tea. One last raindrop falls from the little house into a clay pot. Then it is quiet again. Only the leaves move, so slowly that the movement is almost invisible.";
+"zen.mock.story.3" = "The lantern makes a soft circle on the gravel. At the edge of its light, a pair of sandals rests beside the steps. Nothing is waiting to be finished. Through an open window there is a folded blanket and a book set aside for the evening. The breeze passes gently through the room and out into the garden.";
+"zen.mock.story.4" = "Above the wall, the sky fades from blue to silver. The little tree is completely still for a moment. Then one branch sways slowly back and forth. The scent of damp earth lingers in the air. There is no need to hurry the night along. It arrives in its own time, gentle and quiet.";
+"zen.mock.story.closing" = "The light of the lantern grows softer. The path, the tree and the little bench rest in the dusk. There is nowhere to go and nothing to hold on to. The garden is still. Evening slowly becomes night.";
+
+
+/* Quick meditation choices */
+"mountain.choice.guided" = "Guidet meditation";
+"mountain.choice.silent" = "Stille meditation";
+"mountain.conversation.title" = "Tal med din guide";
+"mountain.conversation.soon" = "Her vil du kunne tale med din guide. Vi udvikler samtalen i næste trin.";
+"mountain.choice.start.hint" = "Start med det samme med dine gemte valg.";
+"mountain.choice.more" = "Flere valg";
+"mountain.choice.saved" = "Dine valg gemmes automatisk til næste gang.";
+"mountain.choice.guided.duration" = "Varighed af guidet meditation";
+"mountain.choice.silent.duration" = "Varighed af stille meditation";
+"mountain.dock.meditate" = "Meditér";
+"mountain.dock.sleep" = "Sov";
+"mountain.dock.talk" = "Tal";
+
+"mountain.clock.dusk" = "Skumring · 19:00";
+
+"mountain.guide.change" = "Skift guide";
+
+"mountain.guide.select" = "Vælg guide";
+
+"mountain.guide.previous" = "Forrige guide";
+"mountain.guide.next" = "Næste guide";
+
+/* Original, personality-specific reflections for the mountain world. */
+"mountain.reflection.zen_minimalist.0" = "Ét åndedrag. En ny begyndelse.";
+"mountain.reflection.zen_minimalist.1" = "Lad det enkle være nok.";
+"mountain.reflection.zen_minimalist.2" = "Stilhed er også en måde at vokse på.";
+"mountain.reflection.zen_minimalist.3" = "Begynd her. Nænsomt.";
+"mountain.reflection.warm_guardian.0" = "Du må hvile, også før alt er færdigt.";
+"mountain.reflection.warm_guardian.1" = "Lad din venlighed også omfatte dig selv.";
+"mountain.reflection.warm_guardian.2" = "Der er plads til dig, præcis som du er.";
+"mountain.reflection.warm_guardian.3" = "At tage imod omsorg er også mod.";
+"mountain.reflection.modern_realist.0" = "Et lille skridt tæller også.";
+"mountain.reflection.modern_realist.1" = "Du kan begynde igen midt i en helt almindelig dag.";
+"mountain.reflection.modern_realist.2" = "Giv dig selv samme tålmodighed som en ven.";
+"mountain.reflection.modern_realist.3" = "En pause kan være dagens klogeste skridt.";
+"mountain.reflection.cosmic_sage.0" = "Selv en lille gnist bærer lys.";
+"mountain.reflection.cosmic_sage.1" = "Giv forundringen plads i det velkendte.";
+"mountain.reflection.cosmic_sage.2" = "Du hører til i den verden, du undres over.";
+"mountain.reflection.cosmic_sage.3" = "Et stille øjeblik kan rumme nye horisonter.";
+"mountain.reflection.reflective_analyst.0" = "At lægge mærke til er begyndelsen på at vælge.";
+"mountain.reflection.reflective_analyst.1" = "Nysgerrighed giver dig flere veje frem.";
+"mountain.reflection.reflective_analyst.2" = "Du kan forstå dig selv med venlighed.";
+"mountain.reflection.reflective_analyst.3" = "Et nyt perspektiv kan begynde med en pause.";
+"mountain.reflection.philosopher.0" = "Hvilken lille handling kan give dagen mening?";
+"mountain.reflection.philosopher.1" = "Du må vokse uden at have alle svarene.";
+"mountain.reflection.philosopher.2" = "Omsorg er en måde at gøre verden større på.";
+"mountain.reflection.philosopher.3" = "Hvad sker der, når du møder dig selv med tålmodighed?";
+"mountain.reflection.ra.0" = "Lad din venlighed blive et lys for nogen.";
+"mountain.reflection.ra.1" = "Det lys, du deler, må også varme dig.";
+"mountain.reflection.ra.2" = "Hvert møde rummer en mulighed for kærlighed.";
+"mountain.reflection.ra.3" = "Lad samhørigheden begynde med et blidt åndedrag.";
+"mountain.reflection.shadow_guide.0" = "Også det skrøbelige i dig fortjener varme.";
+"mountain.reflection.shadow_guide.1" = "Du må møde dig selv nænsomt, lidt ad gangen.";
+"mountain.reflection.shadow_guide.2" = "Mod kan være at lytte med ømhed.";
+"mountain.reflection.shadow_guide.3" = "Lad forståelsen vokse, hvor du før dømte.";
+
+/* Stillness Guide */
+"persona.serene_guide.name" = "Stilhedens guide";
+"persona.serene_guide.short" = "Varm, jordnær og nænsomt opmuntrende.";
+"persona.serene_guide.long" = "Stilhedens guide hjælper dig med at finde ro i kroppen og plads i åndedrættet. Hendes ord er enkle og varme, uden krav om at du skal føle noget bestemt.";
+"persona.serene_guide.sample" = "Lad skuldrene falde til ro. Dette øjeblik må være en nænsom begyndelse.";
+"persona.serene_guide.trait.1" = "Varm";
+"persona.serene_guide.trait.2" = "Jordnær";
+"persona.serene_guide.trait.3" = "Opmuntrende";
+"mountain.reflection.serene_guide.0" = "Der er plads til dig i din egen stilhed.";
+"mountain.reflection.serene_guide.1" = "Lad åndedrættet blive en venlig begyndelse.";
+"mountain.reflection.serene_guide.2" = "Det bløde i dig kan også bære.";
+"mountain.reflection.serene_guide.3" = "Du må vokse i dit eget tempo.";
+
+// Local guide introduction previews
+"mountain.guide.voice.play" = "Hør præsentationen";
+"mountain.guide.voice.stop" = "Stop præsentationen";
+"mountain.guide.voice.unavailable" = "Præsentationen kunne ikke afspilles.";
+
+"mountain.session.englishGuidance" = "Guidet meditation på engelsk";
+
+/* Above the Clouds audio */
+"mountain.audio.breathing" = "Åndedrætslyde";
+"mountain.audio.breathing.help" = "En blød lyd følger fire sekunder ind og fire ud. Følg kun rytmen, hvis den føles behagelig.";
+
+/* Stillness garden */
+"garden.eyebrow" = "Samling";
+"garden.title" = "Stilhedens have";
+"garden.subtitle" = "Små undere, vokset af tid i dig selv.";
+"garden.flowers" = "Blomster";
+"garden.crystals" = "Krystaller";
+"garden.flower.rule" = "Hver tiende meditation springer en blomst ud.";
+"garden.crystal.rule" = "Hver 25. meditation tager en krystal form.";
+"garden.footer" = "Ingen er ens. Hver og en, et øjeblik der er dit.";
+"garden.close" = "Luk";
+"garden.storage.error" = "Din have kunne ikke indlæses. Din gemte samling er bevaret.";
+"garden.crystal.remaining" = "%d meditationer til din næste krystal.";
+"garden.flower.empty" = "Din første blomst hviler endnu som et frø.";
+"garden.crystal.empty" = "Stille øjeblikke, der langsomt bliver til lys.";
+"garden.empty.hint" = "Vend tilbage til stilheden. Lad noget smukt gro.";
+"garden.specimen.number" = "Nr. %d";
+"garden.orbit.hint" = "Træk for at dreje · Knib for at udforske";
+"garden.view.above" = "Se ovenfra";
+"garden.view.below" = "Se nedefra";
+"garden.reset" = "Nulstil visning";
+"garden.previous" = "Forrige genstand";
+"garden.next" = "Næste genstand";
+"garden.flower.poem" = "Et stille øjeblik, bevaret i blomst.";
+"garden.crystal.poem" = "Tid i dig selv, samlet til lys.";
+"garden.earned.flower" = "En blomst er sprunget ud.";
+"garden.earned.crystal" = "En krystal har taget form.";
+"garden.flower.name.0" = "Morgenlys";
+"garden.flower.name.1" = "Blid opvågnen";
+"garden.flower.name.2" = "Aftenro";
+"garden.flower.name.3" = "Et lille under";
+"garden.flower.name.4" = "Daggryets hvisken";
+"garden.flower.name.5" = "Stille ømhed";
+"garden.crystal.name.0" = "Bevaret lys";
+"garden.crystal.name.1" = "Stille prisme";
+"garden.crystal.name.2" = "Månefragment";
+"garden.crystal.name.3" = "Indre himmel";
+"garden.crystal.name.4" = "Lys hvile";
+"garden.crystal.name.5" = "Langsom glans";
+
+"garden.trees" = "Livstræer";
+"garden.tree.rule" = "Hver hundrede meditation slår et livstræ rod.";
+"garden.flower.remaining" = "%d meditationer til din næste blomst.";
+"garden.tree.remaining" = "%d meditationer til dit næste livstræ.";
+"garden.tree.empty" = "Hundrede stille stunder. Et sted at slå rod.";
+"garden.tree.poem" = "Rødder i din stilhed. Grene mod lyset.";
+"garden.earned.both" = "En blomst springer ud. En krystal tager form.";
+"garden.earned.tree" = "Et livstræ slår rod. Din have vokser.";
+"garden.tree.name.0" = "Et sted i dig";
+"garden.tree.name.1" = "Tålmodig himmel";
+"garden.tree.name.2" = "Gyldent hvil";
+"garden.tree.name.3" = "Rødder af lys";
+"garden.tree.name.4" = "Stille tilhørsforhold";
+"garden.tree.name.5" = "Hundrede morgengry";
+
+/* Mountain toolbar audio */
+"mountain.audio.title" = "Lyd";
+"sound.tap_preview" = "Tryk på et billede for at lytte og vælge.";
+"mountain.audio.saved" = "Lydvalg gemmes separat for guidet og stille meditation.";
+"mountain.audio.technique.help" = "Åndedrætslydene følger din valgte teknik med stilhed, når du holder vejret.";

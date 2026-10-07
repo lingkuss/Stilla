@@ -1,0 +1,7 @@
+{
+  "serene_guide.boundary": {
+    "seed": 91,
+    "trimStart": 4.5,
+    "note": "Remove generated pre-roll. First scripted word begins at 4.82s; retain 0.32s lead-in."
+  }
+}

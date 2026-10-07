@@ -1,0 +1,351 @@
+{
+  "checked_at_utc": "2026-09-13T09:14:34.298575+00:00",
+  "previous_run_start_utc": "2026-09-12T04:46:48.609Z",
+  "included_signals_verified_published_after_previous_run": 0,
+  "date_note": "Apple RSS updated is not original publication date. No relative Reddit ages converted to dates. Absolute search date and opened-body verification recorded separately.",
+  "feeds": [
+    {
+      "app": "balance",
+      "app_id": "1361356590",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.814702+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "balance",
+      "app_id": "1361356590",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1361356590/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.806380+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "calm",
+      "app_id": "571800810",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.651719+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "calm",
+      "app_id": "571800810",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=571800810/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.599592+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "endel",
+      "app_id": "1346247457",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1346247457/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.875523+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "endel",
+      "app_id": "1346247457",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1346247457/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.866394+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "forest",
+      "app_id": "866450515",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=866450515/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:24.077147+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "forest",
+      "app_id": "866450515",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=866450515/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:24.063691+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "headspace",
+      "app_id": "493145008",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.607647+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "headspace",
+      "app_id": "493145008",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=493145008/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.583670+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "insighttimer",
+      "app_id": "337472899",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.553478+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "insighttimer",
+      "app_id": "337472899",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=337472899/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.651173+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "mindfully",
+      "app_id": "1519742375",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.822102+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "mindfully",
+      "app_id": "1519742375",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1519742375/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.883343+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "mindfulness",
+      "app_id": "417071430",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.634422+00:00",
+      "entries_returned": 50,
+      "latest_updated": "2026-08-18T10:46:57-07:00",
+      "empty_response_caveat": null
+    },
+    {
+      "app": "mindfulness",
+      "app_id": "417071430",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.644738+00:00",
+      "entries_returned": 50,
+      "latest_updated": "2026-08-29T09:01:45-07:00",
+      "empty_response_caveat": null
+    },
+    {
+      "app": "slumber",
+      "app_id": "1109543953",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=1109543953/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.868671+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "slumber",
+      "app_id": "1109543953",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=1109543953/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:23.876395+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "vindla",
+      "app_id": "6761864704",
+      "country": "se",
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:24.079243+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    },
+    {
+      "app": "vindla",
+      "app_id": "6761864704",
+      "country": "us",
+      "source_url": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=6761864704/sortby=mostrecent/json",
+      "fetched_at": "2026-09-13T09:05:24.137431+00:00",
+      "entries_returned": 0,
+      "latest_updated": null,
+      "empty_response_caveat": "Not evidence that reviews or changes are absent."
+    }
+  ],
+  "selected_reviews": [
+    {
+      "ledger_id": "V2",
+      "app": "Mindfulness",
+      "storefront": "se",
+      "review_id": "13717527460",
+      "title": "Love this app",
+      "updated_as_returned": "2026-02-05T17:01:21-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "summary_sv": "Fortsatt betalare med favoritlärare.",
+      "payment_class": "E-B"
+    },
+    {
+      "ledger_id": "P1",
+      "app": "Mindfulness",
+      "storefront": "se",
+      "review_id": "13387254495",
+      "title": null,
+      "updated_as_returned": "2025-11-11T19:57:13-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "summary_sv": "Uppger 999 kr debiterat för 249-kronorserbjudande.",
+      "payment_class": "E-B + P"
+    },
+    {
+      "ledger_id": "W2",
+      "app": "Mindfulness",
+      "storefront": "se",
+      "review_id": "12664879275",
+      "title": "Navigation försämrad",
+      "updated_as_returned": "2025-05-16T22:09:06-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "summary_sv": "Betalar men hittar inte tidigare enkel tidsstyrd guidning.",
+      "payment_class": "E-B"
+    },
+    {
+      "ledger_id": "W1",
+      "app": "Mindfulness",
+      "storefront": "se",
+      "review_id": "12190808556",
+      "title": "Bra",
+      "updated_as_returned": "2025-01-16T03:18:36-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "summary_sv": "Köpta jobbpauser fungerar; letande fryser ibland.",
+      "payment_class": "E-B"
+    },
+    {
+      "ledger_id": "V1",
+      "app": "Mindfulness",
+      "storefront": "se",
+      "review_id": "11827065872",
+      "title": "Röster",
+      "updated_as_returned": "2024-10-12T15:16:10-07:00",
+      "original_publication_date": null,
+      "source_url": "https://itunes.apple.com/se/rss/customerreviews/page=1/id=417071430/sortby=mostrecent/json",
+      "summary_sv": "Svensk talrytm stör; håller sig till amerikanska appar.",
+      "payment_class": "P"
+    }
+  ],
+  "selected_web_signals": [
+    {
+      "ledger_id": "S1",
+      "url": "https://www.reddit.com/r/Headspace/comments/1jbf1nt/comment/mo24jqv/",
+      "author": "Stunning_Yam_3485",
+      "date": "2025-04-20",
+      "date_basis": "Absolute date in web search rendering; text verified at opened permalink; permalink uses relative age.",
+      "group": "sleep-intro-2025-linked",
+      "payment_class": "E-B + E-A",
+      "payment_note": "Reports USD 35/year Headspace. Conditional USD 80-100/year for a multi-feature bundle and >=14-day trial; USD 50 alternative conditional bundle. One person; elicited by developer; service-offer and anti-AI caveats. CHANI payment not used as sleep purchase evidence."
+    },
+    {
+      "ledger_id": "S2",
+      "url": "https://www.reddit.com/r/Headspace/comments/1k40qo6/sleepcast_wind_downs/",
+      "author": "Odd_Junket7450",
+      "date": "2025-04-21",
+      "date_basis": "Absolute search rendering and dated Reddit archive link on opened page.",
+      "group": "sleep-intro-2025-linked",
+      "payment_class": "N",
+      "independence_note": "Same participants as S1 thread. Do not treat as a separate independent group."
+    },
+    {
+      "ledger_id": "S3",
+      "url": "https://www.reddit.com/r/Headspace/comments/qc0v9a/comment/hhgtvn2/",
+      "author": "Jickerjatt",
+      "date": null,
+      "thread_date": "2021-10-20",
+      "date_basis": "Thread date from dated archive link; exact comment date not verified.",
+      "group": "sleep-intro-2021",
+      "payment_class": "N"
+    },
+    {
+      "ledger_id": "S4",
+      "url": "https://www.reddit.com/r/Headspace/comments/qc0v9a/comment/n7z5tpa/",
+      "author": "Pristine_Choice_8358",
+      "date": "2025-08-10",
+      "date_basis": "Absolute search rendering; text verified at opened permalink; exact timestamp unavailable.",
+      "group": "sleep-intro-2021",
+      "payment_class": "N",
+      "role": "counterevidence"
+    },
+    {
+      "ledger_id": "L1",
+      "url": "https://www.reddit.com/r/Headspace/comments/1lvuyb8/comment/o42gdzi/",
+      "author": "TrippinTryptoFan",
+      "date": "2026-02-07",
+      "thread_date": "2025-07-09",
+      "date_basis": "Comment date from absolute web search rendering; subscription-cancellation question verified at opened permalink.",
+      "group": "headspace-screen",
+      "payment_class": "P",
+      "note": "Contemplated cancellation, not completed cancellation or an explicitly reported payment."
+    },
+    {
+      "ledger_id": "L2",
+      "url": "https://apps.apple.com/us/app/meditation-calm-sleep/id1467213450?platform=iphone&see-all=reviews",
+      "author": "monicajudith",
+      "title": "BEST visual guided meditation!!! AND FREE!?!",
+      "date": "2020-04-25",
+      "date_basis": "04/25/2020 visibly displayed beside review on opened Apple page.",
+      "group": "meditation-calm-sleep-app",
+      "payment_class": "N",
+      "note": "Not Calm by Calm.com. Tried paid apps does not establish purchases."
+    }
+  ],
+  "unique_conservative_source_groups": 5,
+  "selected_signal_count": 11,
+  "count_note": "Same App Store app across regions is one group. Two 2025 sleep threads merged due shared participants. Do not sum row groups.",
+  "query_families": [
+    "Current September 2026 meditation/sleep complaints and Swedish/Nordic purchase/churn",
+    "Mindfulness, Calm, Headspace, Insight Timer, Mindfully, Balance, Endel, Slumber, Forest and Vindla SE/US review feeds",
+    "Sleepcast intro selection, skipping and unwanted instructions",
+    "Paid short meditation at work",
+    "Swedish voice cadence and app switching",
+    "Screen auto-lock, playback on lock and subscriber cancellation"
+  ],
+  "limitations": [
+    "18 of 20 RSS feeds empty; incomplete coverage",
+    "Direct HTTP Reddit fetches returned 403; web tool opened pages used instead",
+    "No new Vindla user-test outcomes found in reviewed repository notes",
+    "No product code changed or runtime tests, contacts or purchases performed"
+  ]
+}

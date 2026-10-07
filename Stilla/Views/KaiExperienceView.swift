@@ -23,6 +23,7 @@ struct KaiExperienceView: View {
     @State private var suggestionWasPicked = false
     @State private var stillnessRatio: Double = 0.5
     @State private var showingStillnessInfo = false
+    @State private var showingZenAvatar = false
     
     private let speechManager = SpeechManager.shared
     
@@ -103,6 +104,9 @@ struct KaiExperienceView: View {
             }
             .sheet(isPresented: $showingPaywall) {
                 KAIPaywallView()
+            }
+            .sheet(isPresented: $showingZenAvatar) {
+                ZenSessionView()
             }
         }
     }
@@ -374,7 +378,7 @@ struct KaiExperienceView: View {
             
             let isSubscribed = StoreKitManager.shared.isVindlaProSubscribed
             
-            if !isSubscribed {
+            if !KaiBrainService.usesLocalScripts && !isSubscribed {
                 isGenerating = false
                 showingPaywall = true
                 return
@@ -455,7 +459,7 @@ struct KaiExperienceView: View {
                 }
             } label: {
                 HStack(alignment: .center, spacing: 16) {
-                    Image(activePersonality.imageName)
+                    GuideArtwork.image(named: activePersonality.imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 58, height: 58)
@@ -497,6 +501,18 @@ struct KaiExperienceView: View {
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 24)
+
+            if activePersonality.id == KaiPersonality.zenMinimalist.id {
+                Button {
+                    showingZenAvatar = true
+                } label: {
+                    Label(String(localized: "zen.avatar.meet"), systemImage: "person.crop.circle")
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+                .accessibilityIdentifier("zenAvatar.open")
+                .padding(.horizontal, 28)
+            }
 
             if isPersonalityPickerExpanded {
                 ScrollViewReader { proxy in
@@ -695,7 +711,7 @@ struct KaiGeneratingLoadingView: View {
                     .frame(width: 140, height: 140)
                     .rotationEffect(.degrees(rotationAmount))
 
-                Image(personality.imageName)
+                GuideArtwork.image(named: personality.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 96, height: 96)
@@ -785,7 +801,7 @@ private struct KaiPersonalityCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             ZStack(alignment: .topTrailing) {
-                Image(personality.imageName)
+                GuideArtwork.image(named: personality.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 250, height: 186)

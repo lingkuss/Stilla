@@ -1,0 +1,6 @@
+{
+  "designHash": "930168c8009380b42a0a1cae493ad71f137b8078a91745fcc90c0da2e6f83946",
+  "model": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-8bit",
+  "language": "en",
+  "synthetic": true
+}

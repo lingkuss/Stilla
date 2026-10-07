@@ -5,6 +5,8 @@ APP_ENV_NAME = production
 
 // NOTE: In xcconfig, `//` starts a comment, so URLs must be written as `https:/$()/...`.
 KAI_BACKEND_URL = https:/$()/vindla-api.vercel.app/kai/generate
+KAI_GUIDE_IMAGE_BACKEND_URL =
 KAI_SHARE_BACKEND_URL = https:/$()/vindla-api.vercel.app/kai/share
-KAI_SHARE_WEB_BASE_URL = https:/$()/vindla.app
+// Use the live Vercel domain until a custom Vindla domain is registered and connected.
+KAI_SHARE_WEB_BASE_URL = https:/$()/vindla-three.vercel.app
 KAI_ATTEST_BASE_URL = https:/$()/vindla-api.vercel.app/attest

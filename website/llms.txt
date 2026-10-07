@@ -1,0 +1,31 @@
+# Vindla
+
+> Vindla is a native iPhone meditation app that turns a description of how someone feels into a personalized guided session in one of four guide styles or a guide the user creates.
+
+Vindla is a consumer wellness product, not medical care. It does not diagnose, treat, or cure medical conditions. The app is free to start, requires no account, includes three personalized Mimir sessions per month, and stores practice history on-device.
+
+## Product
+
+- [Vindla homepage](https://vindla-three.vercel.app/): Product overview, features, pricing model, privacy summary, and App Store handoff.
+- [Try Mimir](https://vindla-three.vercel.app/try-mimir): Free written preview of the mood and guide-selection experience; clearly labeled as prewritten rather than AI-generated.
+- [Press kit](https://vindla-three.vercel.app/press): Verified product facts, founder story, media angles, screenshots, and contact details.
+- [Personalized meditation](https://vindla-three.vercel.app/personalized-meditation): How Mimir creates a guided session from mood, time, and guide preference.
+- [Meditation for overthinking](https://vindla-three.vercel.app/meditation-for-overthinking): Complete two-minute browser practice for racing thoughts, with a preselected Mimir preview and clear general-wellness guidance.
+- [Three-minute reset](https://vindla-three.vercel.app/three-minute-reset): Short-session use case for transitions before meetings or focused work.
+- [Personalized sleep stories](https://vindla-three.vercel.app/sleep-stories): Bedtime use case and personalized sleep-story overview.
+- [Meditation timer for iPhone](https://vindla-three.vercel.app/meditation-timer): Timer, soundscape, reminder, and Siri use cases.
+- [Free one-minute breathing reset](https://vindla-three.vercel.app/breathe): No-login 4-2-6 breathing exercise that works in the browser.
+
+## Trust and availability
+
+- [App Store](https://apps.apple.com/us/app/vindla/id6761864704): Official iPhone download page.
+- [Privacy policy](https://vindla-three.vercel.app/privacy): Data handling and privacy information.
+- [Terms](https://vindla-three.vercel.app/terms): Terms of use.
+
+## Localized product pages
+
+- [Danish](https://vindla-three.vercel.app/da): Danish product overview.
+- [French](https://vindla-three.vercel.app/fr): French product overview.
+- [Norwegian Bokmål](https://vindla-three.vercel.app/nb): Norwegian Bokmål product overview.
+- [Spanish](https://vindla-three.vercel.app/es): Spanish product overview.
+- [Swedish](https://vindla-three.vercel.app/sv): Swedish product overview.

@@ -9,7 +9,6 @@ final class SoundEngine {
     private let loopNode = AVAudioPlayerNode()
     private let breathNode = AVAudioPlayerNode()
     private let ambientMixerNode = AVAudioMixerNode()
-    private var isRunning = false
     private var ambientSourceNode: AVAudioSourceNode?
     private var currentAmbientSound: AmbientSound = .none
     private var nextAmbientSound: AmbientSound = .none
@@ -20,6 +19,7 @@ final class SoundEngine {
     private var ambientFadeTimer: Timer?
     private let defaultAmbientFadeIn: TimeInterval = 3.0
     private let defaultAmbientFadeOut: TimeInterval = 3.0
+    private var playbackGenerations: [ObjectIdentifier: UUID] = [:]
 
     
     // Generator states
@@ -57,7 +57,10 @@ final class SoundEngine {
 
     var toneVolume: Float {
         get { toneNode.volume }
-        set { toneNode.volume = newValue }
+        set {
+            toneNode.volume = newValue
+            breathNode.volume = newValue
+        }
     }
     
     var ambientVolume: Float = 0.5 {
@@ -67,22 +70,34 @@ final class SoundEngine {
     }
 
     init() {
+        configureAudioSession()
         engine.attach(toneNode)
         engine.attach(breathNode)
         engine.attach(loopNode)
         engine.attach(ambientMixerNode)
         setupAmbientSourceNode()
-        configureAudioSession()
+
+        // Build the graph once. Adding a chime or breathing cue must not
+        // reconnect an already-running graph underneath the ambience.
+        let cueFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
+        engine.connect(toneNode, to: engine.mainMixerNode, format: cueFormat)
+        engine.connect(breathNode, to: engine.mainMixerNode, format: cueFormat)
 
         engine.connect(loopNode, to: ambientMixerNode, format: nil)
         engine.connect(ambientMixerNode, to: engine.mainMixerNode, format: nil)
         loopNode.volume = 1.0
         applyAmbientMixVolume()
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--mountain-audio-diagnostics") {
+            installAudioDiagnostics()
+        }
+        #endif
     }
 
 
     private func setupAmbientSourceNode() {
-        let format = engine.mainMixerNode.outputFormat(forBus: 0)
+        // The procedural oscillators and crossfade use this sample rate.
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
         
         let sourceNode = AVAudioSourceNode { [weak self] (_, _, frameCount, audioBufferList) -> OSStatus in
             guard let self = self else { return noErr }
@@ -193,8 +208,8 @@ final class SoundEngine {
     private func configureAudioSession() {
         let session = AVAudioSession.sharedInstance()
         do {
-            // .mixWithOthers allows us to play ambient sounds alongside the Guru's voice.
-            // .duckOthers lowers the volume of other sounds (like our own ambient loops) when the Guru speaks.
+            // Narration and ambience share this playback session. Ducking applies
+            // only to audio from other apps, not our own ambient mixer.
             try session.setCategory(.playback, mode: .default, options: [.mixWithOthers, .duckOthers])
             try session.setActive(true)
         } catch {
@@ -203,6 +218,14 @@ final class SoundEngine {
     }
 
     // MARK: - Public API
+
+    /// Guide previews use an ambient audio session. Restore background playback
+    /// for meditation, including sessions with no spoken guide.
+    func prepareMeditationAudio(toneVolume: Float, ambientVolume: Float) {
+        configureAudioSession()
+        self.toneVolume = toneVolume
+        self.ambientVolume = ambientVolume
+    }
 
     func playSound(_ sound: Sound) {
         guard sound != .none else { return }
@@ -226,10 +249,12 @@ final class SoundEngine {
 
         ambientFadeTimer?.invalidate()
 
-        if !isRunning {
+        let wasRunning = engine.isRunning
+        guard startEngineIfNeeded() else { return }
+        if !wasRunning {
             currentAmbientSound = sound
-            try? engine.start()
-            isRunning = true
+            nextAmbientSound = .none
+            isTransitioning = false
             handleLoopPlayback(for: sound)
             if sound != .none {
                 ambientEnvelope = 0
@@ -241,9 +266,10 @@ final class SoundEngine {
             transitionFrames = 0
             isTransitioning = true
             handleLoopPlayback(for: sound)
-            if sound != .none, ambientEnvelope < 1.0 {
-                rampAmbientEnvelope(to: 1.0, duration: defaultAmbientFadeIn)
-            }
+        }
+        // Also recover when the same ambience is selected during its fade-out.
+        if ambientEnvelope < 1.0 {
+            rampAmbientEnvelope(to: 1.0, duration: defaultAmbientFadeIn)
         }
     }
 
@@ -297,6 +323,7 @@ final class SoundEngine {
     }
 
     func stopAll() {
+        playbackGenerations.removeAll()
         ambientFadeTimer?.invalidate()
         toneNode.stop()
         breathNode.stop()
@@ -313,9 +340,8 @@ final class SoundEngine {
         leftPhase = 0
         rightPhase = 0
 
-        if isRunning {
+        if engine.isRunning {
             engine.stop()
-            isRunning = false
         }
     }
 
@@ -515,13 +541,53 @@ final class SoundEngine {
         playBreathSound(duration: duration, isInhale: false)
     }
 
-    private func playBreathSound(duration: Double, isInhale: Bool) {
+    /// Schedule one full technique cycle in the engine, with silence during
+    /// holds. Playback continues when the world or phone screen is inactive.
+    func startBreathingLoop(technique: BreathingTechnique = .defaultTechnique) {
+        stopBreathingSounds()
+        let durations = technique.phaseDurations
+        let sampleRate = 44100.0
+        let frameCounts = durations.map { Int(($0 * sampleRate).rounded()) }
+        let totalFrames = frameCounts.reduce(0, +)
+        guard totalFrames > 0,
+              let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1),
+              let cycle = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(totalFrames)),
+              let output = cycle.floatChannelData?[0] else { return }
+        cycle.frameLength = cycle.frameCapacity
+        output.update(repeating: 0, count: totalFrames)
+        var offset = 0
+        for index in durations.indices {
+            if (index == 0 || index == 2), frameCounts[index] > 0,
+               let breath = makeBreathBuffer(duration: durations[index], isInhale: index == 0),
+               let input = breath.floatChannelData?[0] {
+                output.advanced(by: offset).update(from: input, count: min(frameCounts[index], Int(breath.frameLength)))
+            }
+            offset += frameCounts[index]
+        }
+        playBufferLooping(cycle, format: cycle.format, on: breathNode)
+        #if DEBUG
+        print("Mountain audio: breathing loop, technique=\(technique.id), phases=\(durations), playing=\(breathNode.isPlaying)")
+        #endif
+    }
+
+    func stopBreathingSounds() {
+        playbackGenerations.removeValue(forKey: ObjectIdentifier(breathNode))
+        breathNode.stop()
+    }
+
+    func stopMeditationSignals() {
+        stopBreathingSounds()
+        playbackGenerations.removeValue(forKey: ObjectIdentifier(toneNode))
+        toneNode.stop()
+    }
+
+    private func makeBreathBuffer(duration: Double, isInhale: Bool) -> AVAudioPCMBuffer? {
         let sampleRate: Double = 44100
         let clampedDuration = max(0.5, duration)
         let frameCount = Int(sampleRate * clampedDuration)
 
         let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
-        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frameCount)) else { return }
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frameCount)) else { return nil }
         buffer.frameLength = AVAudioFrameCount(frameCount)
 
         let data = buffer.floatChannelData![0]
@@ -529,7 +595,9 @@ final class SoundEngine {
         // Simple low-pass filter state
         var filtered: Double = 0
         // Breathing cues follow the same mix as chimes/signals (toneVolume).
-        let volume: Double = Double(toneVolume) * 0.16
+        // Apply the user's level on the node so an already-scheduled loop can
+        // respond to volume changes without regenerating eight seconds of PCM.
+        let volume: Double = 0.16
 
         for i in 0..<frameCount {
             let t = Double(i) / sampleRate
@@ -566,49 +634,62 @@ final class SoundEngine {
             data[i] = Float(filtered * envelope * volume * fadeIn * fadeOut)
         }
 
-        playBuffer(buffer, format: format, on: breathNode)
+        return buffer
+    }
+
+    private func playBreathSound(duration: Double, isInhale: Bool) {
+        guard let buffer = makeBreathBuffer(duration: duration, isInhale: isInhale) else { return }
+        playBuffer(buffer, format: buffer.format, on: breathNode)
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--zen-avatar-breath-diagnostics") {
+            let data = buffer.floatChannelData![0]
+            let peak = (0..<Int(buffer.frameLength)).reduce(Float(0)) { max($0, abs(data[$1])) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                guard let self else { return }
+                let renderedFrames = self.breathNode.lastRenderTime
+                    .flatMap { self.breathNode.playerTime(forNodeTime: $0)?.sampleTime } ?? 0
+                print("Zen breath audio: \(isInhale ? "Inhale" : "Exhale"), peak=\(peak), playing=\(self.breathNode.isPlaying), renderedFrames=\(renderedFrames), outputVolume=\(AVAudioSession.sharedInstance().outputVolume)")
+            }
+        }
+        #endif
     }
 
     // MARK: - Playback Helpers
 
     private func playBuffer(_ buffer: AVAudioPCMBuffer, format: AVAudioFormat, on node: AVAudioPlayerNode) {
-        engine.disconnectNodeInput(node)
-        engine.connect(node, to: engine.mainMixerNode, format: format)
+        guard startEngineIfNeeded() else { return }
 
-        do {
-            if !isRunning {
-                try engine.start()
-                isRunning = true
-            }
-        } catch {
-            print("Failed to start audio engine: \(error)")
-            return
-        }
-
-        node.scheduleBuffer(buffer, at: nil, options: []) { [weak self] in
+        let key = ObjectIdentifier(node)
+        let generation = UUID()
+        playbackGenerations[key] = generation
+        node.scheduleBuffer(buffer, at: nil, options: [], completionCallbackType: .dataPlayedBack) { [weak self, weak node] _ in
             DispatchQueue.main.async {
-                self?.stopEngineIfIdle()
+                guard let self, let node, self.playbackGenerations[key] == generation else { return }
+                self.playbackGenerations.removeValue(forKey: key)
+                node.stop()
+                self.stopEngineIfIdle()
             }
         }
         node.play()
     }
 
     private func playBufferLooping(_ buffer: AVAudioPCMBuffer, format: AVAudioFormat, on node: AVAudioPlayerNode) {
-        engine.disconnectNodeInput(node)
-        engine.connect(node, to: engine.mainMixerNode, format: format)
-
-        do {
-            if !isRunning {
-                try engine.start()
-                isRunning = true
-            }
-        } catch {
-            print("Failed to start audio engine: \(error)")
-            return
-        }
+        playbackGenerations.removeValue(forKey: ObjectIdentifier(node))
+        guard startEngineIfNeeded() else { return }
 
         node.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
         node.play()
+    }
+
+    private func startEngineIfNeeded() -> Bool {
+        if engine.isRunning { return true }
+        do {
+            try engine.start()
+            return true
+        } catch {
+            print("Failed to start audio engine: \(error)")
+            return false
+        }
     }
 }
 
@@ -656,14 +737,47 @@ private extension SoundEngine {
     }
 
     func stopEngineIfIdle() {
-        guard isRunning else { return }
-        let hasAmbient = currentAmbientSound != .none || nextAmbientSound != .none || isTransitioning || ambientEnvelope > 0.001
+        guard engine.isRunning else { return }
+        let hasAmbient = currentAmbientSound != .none || nextAmbientSound != .none || isTransitioning
         let hasActiveNodes = toneNode.isPlaying || breathNode.isPlaying || loopNode.isPlaying
         guard !hasAmbient && !hasActiveNodes else { return }
         engine.stop()
-        isRunning = false
     }
 }
+
+#if DEBUG
+private extension SoundEngine {
+    /// Opt-in simulator/device verification of rendered PCM, not just isPlaying.
+    /// No taps or metering run during normal use.
+    func installAudioDiagnostics() {
+        for (name, node) in [("ambience", ambientMixerNode as AVAudioNode),
+                             ("breathing", breathNode as AVAudioNode),
+                             ("output", engine.mainMixerNode as AVAudioNode)] {
+            var frames = 0
+            var energy = 0.0
+            var samples = 0
+            node.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, _ in
+                guard let channels = buffer.floatChannelData else { return }
+                for channel in 0..<Int(buffer.format.channelCount) {
+                    for frame in 0..<Int(buffer.frameLength) {
+                        let sample = Double(channels[channel][frame])
+                        energy += sample * sample
+                    }
+                }
+                frames += Int(buffer.frameLength)
+                samples += Int(buffer.frameLength * buffer.format.channelCount)
+                guard frames >= Int(buffer.format.sampleRate * 2) else { return }
+                let rms = sqrt(energy / Double(max(1, samples)))
+                frames = 0; samples = 0; energy = 0
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    print("Mountain audio PCM: \(name), rms=\(rms), engine=\(self.engine.isRunning), breath=\(self.breathNode.isPlaying)")
+                }
+            }
+        }
+    }
+}
+#endif
 
 extension SoundEngine.AmbientSound {
     /// Single source of truth for ambiences gated by the sound bundle purchase.

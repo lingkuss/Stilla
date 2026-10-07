@@ -6,6 +6,18 @@ enum Secrets {
         urlValue(forInfoDictionaryKey: "KAIBackendURL")
     }
 
+    static var kaiGuideImageBackendURL: URL? {
+        if let explicit = urlValue(forInfoDictionaryKey: "KAIGuideImageBackendURL"), explicit.scheme == "https" {
+            return explicit
+        }
+        guard let base = kaiBackendURL else { return nil }
+        var components = URLComponents(url: base, resolvingAgainstBaseURL: false)
+        components?.path = "/kai/guide/image"
+        components?.query = nil
+        components?.fragment = nil
+        return components?.url
+    }
+
     /// Endpoint used to persist and fetch shared sessions.
     /// Defaults to the same host as `KAIBackendURL`, with `/kai/share` path.
     static var kaiShareBackendURL: URL? {

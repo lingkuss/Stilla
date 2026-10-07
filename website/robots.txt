@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vindla.app/sitemap.xml
+Sitemap: https://vindla-three.vercel.app/sitemap.xml

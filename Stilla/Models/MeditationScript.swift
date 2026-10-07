@@ -29,11 +29,9 @@ struct MeditationScript: Identifiable, Codable {
     var suggestionOptions: [String]
     var createdAt: Date
     var contentType: ScriptContentType
-    var practiceJourneyPlanID: UUID?
-    var practiceJourneyStepID: UUID?
-    var practiceJourneyDayNumber: Int?
-    var practiceJourneyCycleNumber: Int?
-    var practiceJourneyTitle: String?
+    /// Optional for backward compatibility with saved/generated scripts.
+    var narrationLanguage: String?
+    var localNarrationID: String?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -49,11 +47,8 @@ struct MeditationScript: Identifiable, Codable {
         case suggestionOptions = "suggestions"
         case createdAt
         case contentType
-        case practiceJourneyPlanID
-        case practiceJourneyStepID
-        case practiceJourneyDayNumber
-        case practiceJourneyCycleNumber
-        case practiceJourneyTitle
+        case narrationLanguage
+        case localNarrationID
     }
 
     init(
@@ -70,11 +65,8 @@ struct MeditationScript: Identifiable, Codable {
         suggestionOptions: [String] = [],
         createdAt: Date = Date(),
         contentType: ScriptContentType = .meditation,
-        practiceJourneyPlanID: UUID? = nil,
-        practiceJourneyStepID: UUID? = nil,
-        practiceJourneyDayNumber: Int? = nil,
-        practiceJourneyCycleNumber: Int? = nil,
-        practiceJourneyTitle: String? = nil
+        narrationLanguage: String? = nil,
+        localNarrationID: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -89,11 +81,8 @@ struct MeditationScript: Identifiable, Codable {
         self.suggestionOptions = suggestionOptions
         self.createdAt = createdAt
         self.contentType = contentType
-        self.practiceJourneyPlanID = practiceJourneyPlanID
-        self.practiceJourneyStepID = practiceJourneyStepID
-        self.practiceJourneyDayNumber = practiceJourneyDayNumber
-        self.practiceJourneyCycleNumber = practiceJourneyCycleNumber
-        self.practiceJourneyTitle = practiceJourneyTitle
+        self.narrationLanguage = narrationLanguage
+        self.localNarrationID = localNarrationID
     }
 
     init(from decoder: Decoder) throws {
@@ -111,11 +100,8 @@ struct MeditationScript: Identifiable, Codable {
         suggestionOptions = try container.decodeIfPresent([String].self, forKey: .suggestionOptions) ?? []
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
         contentType = try container.decodeIfPresent(ScriptContentType.self, forKey: .contentType) ?? .meditation
-        practiceJourneyPlanID = try container.decodeIfPresent(UUID.self, forKey: .practiceJourneyPlanID)
-        practiceJourneyStepID = try container.decodeIfPresent(UUID.self, forKey: .practiceJourneyStepID)
-        practiceJourneyDayNumber = try container.decodeIfPresent(Int.self, forKey: .practiceJourneyDayNumber)
-        practiceJourneyCycleNumber = try container.decodeIfPresent(Int.self, forKey: .practiceJourneyCycleNumber)
-        practiceJourneyTitle = try container.decodeIfPresent(String.self, forKey: .practiceJourneyTitle)
+        narrationLanguage = try container.decodeIfPresent(String.self, forKey: .narrationLanguage)
+        localNarrationID = try container.decodeIfPresent(String.self, forKey: .localNarrationID)
     }
 }
 
@@ -126,7 +112,7 @@ extension MeditationScript {
 
     var generatedPersonality: KaiPersonality? {
         guard let kaiPersonalityID else { return nil }
-        return KaiPersonality.all.first(where: { $0.id == kaiPersonalityID })
+        return KaiPersonality.knownPersonalities.first(where: { $0.id == kaiPersonalityID })
     }
 
     var resolvedKaiPersonalityName: String? {
@@ -461,21 +447,98 @@ struct KaiPersonality: Identifiable, Codable, Hashable {
         isFreeTier: false
     )
 
-    static let all: [KaiPersonality] = [
-        .cosmicSage,
+    static let sereneGuide = KaiPersonality(
+        id: "serene_guide",
+        name: "Stillness Guide",
+        shortDescription: "Warm, grounded, and gently encouraging.",
+        longDescription: "The Stillness Guide invites you to find ease in the body and room in the breath. Her guidance is warm, simple, and encouraging, with no pressure to feel a particular way.",
+        traits: ["Warm", "Grounded", "Encouraging"],
+        sampleLine: "Let your shoulders soften. This moment can be a gentle beginning.",
+        promptInjection: """
+        You are a warm, grounded female meditation guide. Speak with calm clarity.
+        Use simple invitations to notice the breath, body, and support beneath the user.
+        Encourage self-kindness, patience, curiosity, and small fresh beginnings.
+        Let silence carry part of the practice. Avoid exaggerated praise and promises.
+        Welcome difficult feelings without insisting on positivity or a particular outcome.
+        Keep spiritual language optional and never present medical or supernatural claims.
+        """,
+        symbolName: "leaf.fill",
+        imageName: "kai_serene_guide",
+        isFreeTier: false
+    )
+
+    static let builtIn: [KaiPersonality] = [
         .zenMinimalist,
-        .warmGuardian,
-        .modernRealist,
-        .reflectiveAnalyst,
-        .philosopher,
-        .ra,
-        .shadowGuide
+        .sereneGuide,
+        .shadowGuide,
+        .ra
     ]
+
+    static var all: [KaiPersonality] { builtIn + CustomGuideCatalog.shared.personalities }
+
+    // Retain identity when reading old sessions; these are no longer selectable.
+    private static let archived: [KaiPersonality] = [
+        .cosmicSage, .warmGuardian, .modernRealist, .reflectiveAnalyst, .philosopher
+    ]
+    static var knownPersonalities: [KaiPersonality] { all + archived }
 
     static let `default` = zenMinimalist
 
     static func personality(for id: String) -> KaiPersonality {
-        all.first(where: { $0.id == id }) ?? .default
+        knownPersonalities.first(where: { $0.id == id }) ?? .default
+    }
+}
+
+/// A completed guide is published only after its artwork and creation brief are on disk.
+/// The locked snapshot also supports callers outside the main actor (saved scripts, shortcuts).
+final class CustomGuideCatalog: @unchecked Sendable {
+    static let shared = CustomGuideCatalog()
+    static let didChange = Notification.Name("vindla.customGuides.changed")
+    private let directory: URL
+    private let lock = NSLock()
+    private var saved: [KaiPersonality] = []
+    private var loadError: Error?
+
+    init(directory: URL = URL.applicationSupportDirectory.appending(path: "GuideCreator/Guides")) {
+        self.directory = directory
+        let manifest = directory.appendingPathComponent("guides.json")
+        if FileManager.default.fileExists(atPath: manifest.path) {
+            do {
+                let guides = try JSONDecoder().decode([KaiPersonality].self, from: Data(contentsOf: manifest))
+                guard Set(guides.map(\.id)).count == guides.count,
+                      guides.allSatisfy({ Self.isCustomID($0.id) && $0.imageName == $0.id }) else {
+                    throw CocoaError(.coderReadCorrupt)
+                }
+                saved = guides
+            } catch { loadError = error }
+        }
+    }
+
+    var personalities: [KaiPersonality] { lock.withLock { saved } }
+
+    static func isCustomID(_ id: String) -> Bool {
+        id.hasPrefix("custom-") && UUID(uuidString: String(id.dropFirst(7))) != nil
+    }
+
+    func imageURL(for imageName: String) -> URL? {
+        guard Self.isCustomID(imageName) else { return nil }
+        return directory.appendingPathComponent(imageName).appendingPathComponent("portrait.png")
+    }
+
+    func add(_ guide: KaiPersonality, image: Data, brief: Data) throws {
+        try lock.withLock {
+            if let loadError { throw loadError }
+            guard Self.isCustomID(guide.id), guide.imageName == guide.id, !image.isEmpty,
+                  let imageURL = imageURL(for: guide.imageName) else { throw CocoaError(.fileWriteInvalidFileName) }
+            // Retrying a completed save must not add a duplicate or replace an existing guide.
+            if saved.contains(where: { $0.id == guide.id }) { return }
+            try FileManager.default.createDirectory(at: imageURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try image.write(to: imageURL, options: .atomic)
+            try brief.write(to: imageURL.deletingLastPathComponent().appendingPathComponent("brief.json"), options: .atomic)
+            let next = saved + [guide]
+            try JSONEncoder().encode(next).write(to: directory.appendingPathComponent("guides.json"), options: .atomic)
+            saved = next
+        }
     }
 }
 
