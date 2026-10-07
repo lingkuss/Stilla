@@ -21,7 +21,7 @@ const LOCALES = {
     howIntro: "Du behøver ikke gennemse hundredvis af optagelser eller kende den rigtige teknik på forhånd.",
     steps: [
       ["Fortæl, hvad der sker", "Skriv naturligt: “Jeg har tre minutter før et svært møde” eller “Mine tanker kører stadig ved sengetid.”"],
-      ["Vælg tid og tone", "Vælg en realistisk varighed og en af otte guidestile, fra enkel Zen Minimalist til tryg Warm Guardian."],
+      ["Vælg tid og tone", "Vælg en realistisk varighed og en af fire guidestile, fra enkel Zen Minimalist til rolige Stillness Guide, eller en guide, du selv skaber."],
       ["Begynd denne session", "Mimir skaber struktureret vejledning til øjeblikket. Gem sessionen, hvis du vil vende tilbage til den."]
     ],
     momentsEyebrow: "Til virkelige øjeblikke",
@@ -70,7 +70,7 @@ const LOCALES = {
     howIntro: "Pas besoin de parcourir des centaines d’enregistrements ni de connaître la bonne technique à l’avance.",
     steps: [
       ["Dites ce qui se passe", "Écrivez naturellement : « J’ai trois minutes avant une réunion difficile » ou « Mon esprit continue de tourner au coucher »."],
-      ["Choisissez le temps et le ton", "Sélectionnez une durée réaliste et l’un des huit styles de guide, du sobre Zen Minimalist au rassurant Warm Guardian."],
+      ["Choisissez le temps et le ton", "Sélectionnez une durée réaliste et l’un des quatre styles de guide, du sobre Zen Minimalist au paisible Stillness Guide, ou un guide que vous créez vous-même."],
       ["Commencez cette séance", "Mimir crée un accompagnement structuré pour ce moment. Enregistrez la séance si vous souhaitez y revenir."]
     ],
     momentsEyebrow: "Pour les vrais moments",
@@ -119,7 +119,7 @@ const LOCALES = {
     howIntro: "Du trenger ikke bla gjennom hundrevis av opptak eller kjenne riktig teknikk på forhånd.",
     steps: [
       ["Fortell hva som skjer", "Skriv naturlig: «Jeg har tre minutter før et vanskelig møte» eller «Tankene mine går fortsatt ved leggetid»."],
-      ["Velg tid og tone", "Velg en realistisk varighet og én av åtte guidestiler, fra enkel Zen Minimalist til trygg Warm Guardian."],
+      ["Velg tid og tone", "Velg en realistisk varighet og én av fire guidestiler, fra enkel Zen Minimalist til rolige Stillness Guide, eller en guide du lager selv."],
       ["Begynn denne økten", "Mimir lager strukturert veiledning for øyeblikket. Lagre økten hvis du vil vende tilbake til den."]
     ],
     momentsEyebrow: "For virkelige øyeblikk",
@@ -168,7 +168,7 @@ const LOCALES = {
     howIntro: "No hace falta explorar cientos de grabaciones ni conocer de antemano la técnica adecuada.",
     steps: [
       ["Cuenta qué está pasando", "Escribe con naturalidad: «Tengo tres minutos antes de una reunión difícil» o «Mi mente sigue activa a la hora de dormir»."],
-      ["Elige tiempo y tono", "Escoge una duración realista y uno de ocho estilos de guía, desde el sencillo Zen Minimalist hasta el tranquilizador Warm Guardian."],
+      ["Elige tiempo y tono", "Escoge una duración realista y uno de cuatro estilos de guía, desde el sencillo Zen Minimalist hasta el sereno Stillness Guide, o una guía que crees tú."],
       ["Empieza esta sesión", "Mimir crea una guía estructurada para ese momento. Guarda la sesión si quieres volver a ella."]
     ],
     momentsEyebrow: "Para momentos reales",
@@ -217,7 +217,7 @@ const LOCALES = {
     howIntro: "Du behöver inte bläddra bland hundratals inspelningar eller känna till rätt teknik i förväg.",
     steps: [
       ["Berätta vad som händer", "Skriv naturligt: ”Jag har tre minuter före ett svårt möte” eller ”Mina tankar fortsätter snurra vid läggdags”."],
-      ["Välj tid och ton", "Välj en realistisk längd och en av åtta guidestilar, från avskalade Zen Minimalist till trygga Warm Guardian."],
+      ["Välj tid och ton", "Välj en realistisk längd och en av fyra guidestilar, från avskalade Zen Minimalist till lugna Stillness Guide, eller en guide du skapar själv."],
       ["Börja den här sessionen", "Mimir skapar strukturerad vägledning för stunden. Spara sessionen om du vill återvända till den."]
     ],
     momentsEyebrow: "För verkliga stunder",

@@ -1,6 +1,6 @@
 # Vindla
 
-> Vindla is a native iPhone meditation app that turns a description of how someone feels into a personalized guided session in one of eight guide styles.
+> Vindla is a native iPhone meditation app that turns a description of how someone feels into a personalized guided session in one of four guide styles or a guide the user creates.
 
 Vindla is a consumer wellness product, not medical care. It does not diagnose, treat, or cure medical conditions. The app is free to start, requires no account, includes three personalized Mimir sessions per month, and stores practice history on-device.
 

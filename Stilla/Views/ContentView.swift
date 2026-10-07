@@ -216,6 +216,13 @@ struct ContentView: View {
                 }
                 .accessibilityLabel(Text("garden.eyebrow"))
                 .accessibilityIdentifier("garden.open")
+                if manager.state == .idle {
+                    Button { showSavedMeditations = true } label: {
+                        Image(systemName: "books.vertical").frame(width: 44, height: 44)
+                    }
+                    .accessibilityLabel(Text("nav.your_library"))
+                    .accessibilityIdentifier("library.open")
+                }
                 Button { showTechniques = true } label: {
                     Image(systemName: "wind").frame(width: 44, height: 44)
                 }

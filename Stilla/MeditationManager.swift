@@ -979,7 +979,10 @@ final class MeditationManager {
         }
         if sessionSeconds > 0 {
             bestSessionSecondsStored = max(bestSessionSecondsStored, sessionSeconds)
-            ReviewPromptPolicy.recordCompletedSession(durationSeconds: sessionSeconds)
+            // Sessions stopped early are not completions; open-ended sessions end by stopping.
+            if reachedEnd || isOpenEnded {
+                ReviewPromptPolicy.recordCompletedSession(durationSeconds: sessionSeconds)
+            }
         }
         logMeditationSession(seconds: sessionSeconds)
         timer?.invalidate()
